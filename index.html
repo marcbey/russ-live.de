@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Russ Live Relaunch Prototype</title>
+    <meta name="description" content="Eigenständiger Russ-live.de Relaunch-Prototyp mit importierten Inhalten und lokalen Assets.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header" aria-label="Hauptnavigation">
+      <a class="brand" href="#start" aria-label="Russ Live Startseite">
+        <img src="assets/logos/russ-live-logo.png" alt="Russ Live">
+      </a>
+      <nav class="main-nav" aria-label="Seitennavigation">
+        <a href="unternehmen.html">Unternehmen</a>
+        <a href="#services">Services</a>
+        <a href="jobs.html">Jobs</a>
+        <a href="presse.html">Presse</a>
+        <a href="kontakt.html">Kontakt</a>
+      </nav>
+      <button class="mobile-menu-button" type="button" aria-label="Menü öffnen">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </header>
+
+    <main id="start">
+      <section class="hero" aria-labelledby="hero-title">
+        <picture>
+          <source media="(max-width: 900px)" srcset="assets/keyvisuals/Keyvisual_RussLive_hoch_mobil.jpg">
+          <img class="hero-image" src="assets/keyvisuals/Keyvisual_RussLive2.jpg" alt="Goldene Gitarre als Russ Live Keyvisual">
+        </picture>
+        <div class="hero-copy">
+          <h1 id="hero-title">Kulturproduktionen auf höchstem Niveau</h1>
+          <p id="hero-intro">Wir schaffen einzigartige emotionale Momente für bis zu 1 Million Besucher jedes Jahr.</p>
+          <a class="hero-button" href="#services">Services</a>
+        </div>
+      </section>
+
+      <section class="section services-preview" id="services" aria-labelledby="services-title">
+        <div class="section-aside">
+          <p class="eyebrow">Live Entertainment</p>
+          <h2 id="services-title">Full service für Veranstaltungen</h2>
+          <p>Von örtlicher Durchführung über Produktion, Marketing, Personal und Ticketing: Russ Live bündelt Erfahrung, Netzwerk und Umsetzungskraft.</p>
+        </div>
+        <div class="services-accordion-wrap">
+          <div class="accordion" id="services-accordion" data-render="services"></div>
+          <a class="section-button" href="services.html">Services</a>
+        </div>
+      </section>
+
+      <section class="section references-band" id="referenzen" aria-labelledby="references-title">
+        <div class="section-head">
+          <p class="eyebrow">Referenzen</p>
+          <h2 id="references-title">Projekte, auf die wir stolz sind</h2>
+        </div>
+        <div class="klassik-slider" data-render="featured-references"></div>
+      </section>
+
+      <section class="section events-strip" aria-labelledby="events-title">
+        <div>
+          <p class="eyebrow">Stuttgart-live</p>
+          <h2 id="events-title">Nächste Veranstaltungen</h2>
+          <p>Hier hängt später der read-only Adapter für die nächsten 10 Russ-live-Events. Stuttgart-live bleibt unverändert.</p>
+        </div>
+        <a class="button" href="https://stuttgart-live.de/" target="_blank" rel="noreferrer">Alle ansehen</a>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>SKS Michael Russ GmbH</strong>
+        <p>Starter-Prototyp für den eigenständigen Russ-live.de Relaunch.</p>
+      </div>
+      <nav aria-label="Footernavigation">
+        <a href="#impressum">Impressum</a>
+        <a href="#datenschutz">Datenschutz</a>
+        <a href="#agb">AGB</a>
+        <a href="#jugendschutz">Jugendschutz</a>
+      </nav>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
