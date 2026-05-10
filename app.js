@@ -1,55 +1,3 @@
-const state = {
-  content: null,
-};
-
-function textNode(tag, text, className) {
-  const element = document.createElement(tag);
-  if (className) element.className = className;
-  element.textContent = text;
-  return element;
-}
-
-function renderParagraphs(target, paragraphs) {
-  target.replaceChildren();
-  paragraphs.forEach((paragraph) => {
-    target.appendChild(textNode("p", paragraph));
-  });
-}
-
-function renderServices(services) {
-  const target = document.querySelector('[data-render="services"]');
-  if (!target) return;
-  target.replaceChildren();
-
-  services.forEach((service, index) => {
-    const item = document.createElement("article");
-    item.className = `accordion-item${index === 0 ? " is-open" : ""}`;
-
-    const trigger = document.createElement("button");
-    trigger.className = "accordion-trigger";
-    trigger.type = "button";
-    trigger.setAttribute("aria-expanded", index === 0 ? "true" : "false");
-    trigger.append(textNode("span", service.title));
-    trigger.append(textNode("span", index === 0 ? "−" : "+", "accordion-icon"));
-
-    const panel = document.createElement("div");
-    panel.className = "accordion-panel";
-    const panelInner = document.createElement("div");
-    panelInner.className = "accordion-panel-inner";
-    service.body.forEach((paragraph) => panelInner.append(textNode("p", paragraph)));
-    panel.appendChild(panelInner);
-
-    trigger.addEventListener("click", () => {
-      const open = item.classList.toggle("is-open");
-      trigger.setAttribute("aria-expanded", String(open));
-      trigger.querySelector(".accordion-icon").textContent = open ? "−" : "+";
-    });
-
-    item.append(trigger, panel);
-    target.appendChild(item);
-  });
-}
-
 function bindSmoothAnchors() {
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
     link.addEventListener("click", (event) => {
@@ -65,195 +13,294 @@ function bindSmoothAnchors() {
   });
 }
 
-function renderReferences(references) {
-  const target = document.querySelector('[data-render="references"]');
-  if (!target) return;
-  target.replaceChildren();
+function bindMobileMenu() {
+  const header = document.querySelector(".site-header");
+  const nav = document.querySelector(".main-nav");
+  const button = document.querySelector(".mobile-menu-button");
+  if (!header || !nav || !button) return;
 
-  const limit = Number(target.dataset.limit || references.length);
-  const railMode = target.dataset.mode === "rail";
-  references.slice(0, limit).forEach((reference) => {
-    const figure = document.createElement("figure");
-    figure.className = `reference-card ${railMode ? "rail-card" : ""} ${reference.size || "small"}`;
+  if (!nav.id) nav.id = "main-navigation";
+  button.setAttribute("aria-controls", nav.id);
+  button.setAttribute("aria-expanded", "false");
 
-    const image = document.createElement("img");
-    image.src = reference.image;
-    image.alt = reference.title;
-    image.loading = "lazy";
+  function setOpen(open) {
+    header.classList.toggle("is-menu-open", open);
+    button.classList.toggle("is-active", open);
+    button.setAttribute("aria-expanded", String(open));
+    button.setAttribute("aria-label", open ? "Menü schließen" : "Menü öffnen");
+  }
 
-    figure.append(image, textNode("figcaption", reference.title));
-    target.appendChild(figure);
+  button.addEventListener("click", () => {
+    setOpen(!header.classList.contains("is-menu-open"));
+  });
+
+  nav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => setOpen(false));
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setOpen(false);
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.matchMedia("(min-width: 901px)").matches) setOpen(false);
   });
 }
 
-const featuredReferences = [
-  {
-    title: "Five Finger Death Punch",
-    meta: "Rock / Metal · Porsche-Arena Stuttgart",
-    image: "assets/references/featured/bild1.jpg",
-  },
-  {
-    title: "AC/DC",
-    meta: "Stadionproduktion · Stuttgart",
-    image: "assets/references/featured/bild2.jpg",
-  },
-  {
-    title: "David Garrett",
-    meta: "Arena-Konzert · Liederhalle Stuttgart",
-    image: "assets/references/featured/bild3.jpg",
-  },
-];
+function bindAccordions() {
+  document.querySelectorAll(".accordion-item").forEach((item) => {
+    const trigger = item.querySelector(".accordion-trigger");
+    const icon = item.querySelector(".accordion-icon");
+    if (!trigger) return;
 
-function renderFeaturedReferences() {
-  const targets = document.querySelectorAll('[data-render="featured-references"]');
-  targets.forEach((target) => {
-    let activeIndex = 0;
+    trigger.addEventListener("click", () => {
+      const open = item.classList.toggle("is-open");
+      trigger.setAttribute("aria-expanded", String(open));
+      if (icon) icon.textContent = open ? "−" : "+";
+    });
+  });
+}
+
+function createReferenceMosaicFiller(left, top, width, height) {
+  const filler = document.createElement("div");
+  filler.className = "reference-mosaic-filler";
+  filler.setAttribute("aria-hidden", "true");
+  filler.style.left = `${left}px`;
+  filler.style.top = `${top}px`;
+  filler.style.width = `${width}px`;
+  filler.style.height = `${height}px`;
+  return filler;
+}
+
+function arrangeReferenceMosaic(target) {
+  if (!target) return;
+
+  target.querySelectorAll(".reference-mosaic-filler").forEach((filler) => filler.remove());
+  const cards = [...target.querySelectorAll(".reference-card:not([hidden])")];
+  if (!cards.length) {
+    target.style.height = "0";
+    return;
+  }
+
+  const gap = Number.parseFloat(getComputedStyle(target).getPropertyValue("--mosaic-gap")) || 6;
+  const columns = window.matchMedia("(max-width: 520px)").matches ? 2 : window.matchMedia("(max-width: 900px)").matches ? 3 : 4;
+  const innerWidth = target.clientWidth - gap * 2;
+  const columnWidth = (innerWidth - gap * (columns - 1)) / columns;
+  const columnHeights = Array(columns).fill(0);
+  const columnSegments = Array.from({ length: columns }, () => []);
+
+  cards.forEach((card) => {
+    const image = card.querySelector("img");
+    const span = card.classList.contains("mosaic-wide") ? Math.min(2, columns) : 1;
+    const width = columnWidth * span + gap * (span - 1);
+    const ratio = image?.naturalWidth ? image.naturalHeight / image.naturalWidth : 1;
+    const detailMinimumHeight = window.matchMedia("(max-width: 520px)").matches ? 290 : 300;
+    const height = card.classList.contains("is-flipped") ? Math.max(width * ratio, detailMinimumHeight) : width * ratio;
+
+    let column = 0;
+    let top = Number.POSITIVE_INFINITY;
+
+    for (let index = 0; index <= columns - span; index += 1) {
+      const candidateTop = Math.max(...columnHeights.slice(index, index + span));
+      if (candidateTop < top) {
+        top = candidateTop;
+        column = index;
+      }
+    }
+
+    const left = gap + column * (columnWidth + gap);
+    card.style.left = `${left}px`;
+    card.style.top = `${top}px`;
+    card.style.width = `${width}px`;
+    card.style.height = `${height}px`;
+
+    for (let index = column; index < column + span; index += 1) {
+      columnHeights[index] = top + height + gap;
+      columnSegments[index].push({ top, bottom: top + height });
+    }
+  });
+
+  const mosaicHeight = Math.max(...columnHeights);
+  target.style.height = `${mosaicHeight}px`;
+
+  columnSegments.forEach((segments, column) => {
+    let previousBottom = 0;
+    const left = gap + column * (columnWidth + gap);
+
+    segments
+      .sort((a, b) => a.top - b.top)
+      .forEach((segment) => {
+        const fillerTop = previousBottom + gap;
+        const fillerHeight = segment.top - fillerTop - gap;
+
+        if (fillerHeight > gap * 2) {
+          target.appendChild(createReferenceMosaicFiller(left, fillerTop, columnWidth, fillerHeight));
+        }
+
+        previousBottom = Math.max(previousBottom, segment.bottom);
+      });
+
+    // Interior fillers keep the dense poster-wall rhythm; trailing fillers would
+    // look like orphaned blocks before the footer.
+  });
+}
+
+function bindReferenceFilters() {
+  const nav = document.querySelector(".references-year-nav");
+  const mosaic = document.querySelector('[data-layout="mosaic"]');
+  if (!nav || !mosaic) return;
+
+  nav.querySelectorAll("button[data-year]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const year = button.dataset.year || "all";
+      nav.querySelectorAll("button").forEach((item) => item.setAttribute("aria-pressed", "false"));
+      button.setAttribute("aria-pressed", "true");
+      mosaic.querySelectorAll(".reference-card").forEach((card) => {
+        card.hidden = year !== "all" && card.dataset.year !== year;
+        if (card.hidden) {
+          card.classList.remove("is-flipped");
+          card.querySelector(".reference-card-flip")?.setAttribute("aria-pressed", "false");
+        }
+      });
+      arrangeReferenceMosaic(mosaic);
+    });
+  });
+}
+
+function bindReferenceCardFlips() {
+  const usesHover = () => window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  function setCardFlipped(card, button, flipped) {
+    const mosaic = card.closest('[data-layout="mosaic"]');
+    card.classList.toggle("is-flipped", flipped);
+    button.setAttribute("aria-pressed", String(flipped));
+    button.setAttribute(
+      "aria-label",
+      flipped
+        ? `Bild zu ${card.querySelector(".reference-card-name")?.textContent || "dieser Referenz"} anzeigen`
+        : `Details zu ${card.querySelector(".reference-card-name")?.textContent || "dieser Referenz"} anzeigen`
+    );
+    if (mosaic) arrangeReferenceMosaic(mosaic);
+  }
+
+  document.querySelectorAll(".reference-card-flip").forEach((button) => {
+    const card = button.closest(".reference-card");
+    if (!card) return;
+    let lastPointerType = "";
+
+    button.addEventListener("pointerdown", (event) => {
+      lastPointerType = event.pointerType;
+    });
+
+    button.addEventListener("touchend", () => {
+      lastPointerType = "touch";
+    }, { passive: true });
+
+    button.addEventListener("click", () => {
+      if (usesHover() || lastPointerType !== "touch") {
+        button.blur();
+        return;
+      }
+
+      setCardFlipped(card, button, !card.classList.contains("is-flipped"));
+    });
+
+    card.addEventListener("mouseenter", () => {
+      if (usesHover()) setCardFlipped(card, button, true);
+    });
+
+    card.addEventListener("mouseleave", () => {
+      if (usesHover()) setCardFlipped(card, button, false);
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    document.querySelectorAll(".reference-card.is-flipped").forEach((card) => {
+      card.classList.remove("is-flipped");
+      card.querySelector(".reference-card-flip")?.setAttribute("aria-pressed", "false");
+    });
+  });
+}
+
+function bindReferenceMosaics() {
+  const mosaics = document.querySelectorAll('[data-layout="mosaic"]');
+  if (!mosaics.length) return;
+
+  const layout = () => {
+    mosaics.forEach((mosaic) => requestAnimationFrame(() => arrangeReferenceMosaic(mosaic)));
+  };
+
+  mosaics.forEach((mosaic) => {
+    mosaic.querySelectorAll("img").forEach((image) => {
+      if (!image.complete) image.addEventListener("load", layout, { once: true });
+    });
+  });
+
+  layout();
+  window.addEventListener("resize", layout);
+}
+
+function bindSliders() {
+  document.querySelectorAll("[data-slider]").forEach((slider) => {
+    const slides = [...slider.querySelectorAll(".klassik-slide")];
+    const previousButton = slider.querySelector(".klassik-slider-arrow-prev");
+    const nextButton = slider.querySelector(".klassik-slider-arrow-next");
+    const title = slider.querySelector(".klassik-slider-meta h3");
+    const details = slider.querySelector(".klassik-slider-meta p");
+    const meta = slider.querySelector(".klassik-slider-meta");
+    let activeIndex = Math.max(0, slides.findIndex((slide) => slide.classList.contains("is-active")));
     let transitionTimer = null;
 
-    const viewport = document.createElement("div");
-    viewport.className = "klassik-slider-viewport";
+    function render() {
+      const previous = (activeIndex + slides.length - 1) % slides.length;
+      const next = (activeIndex + 1) % slides.length;
 
-    const previousButton = document.createElement("button");
-    previousButton.className = "klassik-slider-arrow klassik-slider-arrow-prev";
-    previousButton.type = "button";
-    previousButton.setAttribute("aria-label", "Vorherige Referenz");
-    previousButton.textContent = "‹";
-
-    const nextButton = document.createElement("button");
-    nextButton.className = "klassik-slider-arrow klassik-slider-arrow-next";
-    nextButton.type = "button";
-    nextButton.setAttribute("aria-label", "Nächste Referenz");
-    nextButton.textContent = "›";
-
-    const stage = document.createElement("div");
-    stage.className = "klassik-slider-stage";
-
-    const meta = document.createElement("div");
-    meta.className = "klassik-slider-meta";
-    const marker = document.createElement("span");
-    marker.className = "klassik-slider-marker";
-    const text = document.createElement("div");
-    text.className = "klassik-slider-text";
-    const title = textNode("h3", "");
-    const details = textNode("p", "");
-    const referenceLink = document.createElement("a");
-    referenceLink.className = "section-button klassik-slider-button";
-    referenceLink.href = "referenzen.html";
-    referenceLink.textContent = "Referenzen";
-    text.append(title, details);
-    meta.append(marker, text, referenceLink);
-
-    function itemFor(slide, index) {
-      const item = document.createElement("figure");
-      item.className = "klassik-slide";
-      item.dataset.index = String(index);
-      item.tabIndex = 0;
-      const image = document.createElement("img");
-      image.src = slide.image;
-      image.alt = slide.title;
-      item.appendChild(image);
-      item.addEventListener("click", () => {
-        setActive(index);
+      slides.forEach((slide, index) => {
+        const isActive = index === activeIndex;
+        slide.classList.toggle("is-active", isActive);
+        slide.classList.toggle("is-prev", index === previous);
+        slide.classList.toggle("is-next", index === next);
+        slide.classList.toggle("is-hidden", !isActive && index !== previous && index !== next);
+        slide.setAttribute("aria-hidden", isActive ? "false" : "true");
       });
-      item.addEventListener("keydown", (event) => {
+
+      if (title) title.textContent = slides[activeIndex].dataset.title || "";
+      if (details) details.textContent = slides[activeIndex].dataset.meta || "";
+      if (meta) {
+        meta.classList.remove("is-updating");
+        window.requestAnimationFrame(() => meta.classList.add("is-updating"));
+      }
+    }
+
+    function setActive(index) {
+      if (index === activeIndex || !slides.length) return;
+      activeIndex = index;
+      slider.classList.add("is-moving");
+      window.clearTimeout(transitionTimer);
+      transitionTimer = window.setTimeout(() => slider.classList.remove("is-moving"), 720);
+      render();
+    }
+
+    slides.forEach((slide, index) => {
+      slide.addEventListener("click", () => setActive(index));
+      slide.addEventListener("keydown", (event) => {
         if (event.key !== "Enter" && event.key !== " ") return;
         event.preventDefault();
         setActive(index);
       });
-      return item;
-    }
-
-    featuredReferences.forEach((slide, index) => {
-      stage.appendChild(itemFor(slide, index));
     });
 
-    function setActive(index) {
-      if (index === activeIndex) return;
-      activeIndex = index;
-      target.classList.add("is-moving");
-      window.clearTimeout(transitionTimer);
-      transitionTimer = window.setTimeout(() => {
-        target.classList.remove("is-moving");
-      }, 720);
-      render();
-    }
-
-    function render() {
-      const previous = (activeIndex + featuredReferences.length - 1) % featuredReferences.length;
-      const next = (activeIndex + 1) % featuredReferences.length;
-      stage.querySelectorAll(".klassik-slide").forEach((item) => {
-        const index = Number(item.dataset.index);
-        const isActive = index === activeIndex;
-        const isPrevious = index === previous;
-        const isNext = index === next;
-        item.classList.toggle("is-active", isActive);
-        item.classList.toggle("is-prev", isPrevious);
-        item.classList.toggle("is-next", isNext);
-        item.classList.toggle("is-hidden", !isActive && !isPrevious && !isNext);
-        item.setAttribute("aria-hidden", index === activeIndex ? "false" : "true");
-        item.setAttribute("aria-label", featuredReferences[index].title);
-      });
-      meta.classList.remove("is-updating");
-      window.requestAnimationFrame(() => meta.classList.add("is-updating"));
-      title.textContent = featuredReferences[activeIndex].title;
-      details.textContent = featuredReferences[activeIndex].meta;
-    }
-
-    previousButton.addEventListener("click", () => {
-      setActive((activeIndex + featuredReferences.length - 1) % featuredReferences.length);
-    });
-
-    nextButton.addEventListener("click", () => {
-      setActive((activeIndex + 1) % featuredReferences.length);
-    });
-
+    previousButton?.addEventListener("click", () => setActive((activeIndex + slides.length - 1) % slides.length));
+    nextButton?.addEventListener("click", () => setActive((activeIndex + 1) % slides.length));
     render();
-    viewport.append(previousButton, stage, nextButton);
-    target.replaceChildren(viewport, meta);
   });
 }
-
-function renderTeam(team) {
-  const target = document.querySelector('[data-render="team"]');
-  if (!target) return;
-  target.replaceChildren();
-
-  team.forEach((member) => {
-    const card = document.createElement("article");
-    card.className = "team-card";
-
-    const image = document.createElement("img");
-    image.src = member.image;
-    image.alt = member.name;
-    image.loading = "lazy";
-
-    card.append(image, textNode("h3", member.name), textNode("p", member.role));
-    target.appendChild(card);
-  });
-}
-
-function hydrate(content) {
-  state.content = content;
-
-  const heroTitle = document.getElementById("hero-title");
-  const heroIntro = document.getElementById("hero-intro");
-  if (heroTitle) heroTitle.textContent = "Ihr örtlicher Veranstalter für Stuttgart";
-  if (heroIntro) heroIntro.textContent = content.home.intro[0] || "";
-  renderServices(content.services);
-  renderReferences(content.references);
-  renderFeaturedReferences();
-  const about = document.querySelector('[data-render="about"]');
-  if (about) renderParagraphs(about, content.about.body);
-  renderTeam(content.team);
-  const contact = document.querySelector('[data-render="contact"]');
-  if (contact) renderParagraphs(contact, content.contact.body);
-}
-
-fetch("content/site.json")
-  .then((response) => response.json())
-  .then(hydrate)
-  .catch((error) => {
-    console.error("Could not load content/site.json", error);
-  });
 
 bindSmoothAnchors();
+bindMobileMenu();
+bindAccordions();
+bindReferenceCardFlips();
+bindReferenceFilters();
+bindReferenceMosaics();
+bindSliders();
