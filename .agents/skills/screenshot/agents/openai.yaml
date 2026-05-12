@@ -1,0 +1,9 @@
+interface:
+  display_name: "Screenshot Capture"
+  short_description: "Capture screenshots"
+  icon_small: "./assets/screenshot-small.svg"
+  icon_large: "./assets/screenshot.png"
+
+ownership:
+  name: "Codex Team"
+  url: "https://openai.com/codex/"

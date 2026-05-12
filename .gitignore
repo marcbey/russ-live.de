@@ -1,4 +1,3 @@
-/.agents/
 output/
 
 # Ignore key files for decrypting credentials and more.
