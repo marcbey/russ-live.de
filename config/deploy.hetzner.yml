@@ -1,0 +1,63 @@
+<%
+require File.expand_path("app/lib/hetzner_deploy_config.rb", Dir.pwd)
+%>
+
+# Hetzner production target for Kamal.
+# Usage: bin/kamal deploy -d hetzner
+
+deploy_timeout: 90
+
+servers:
+  web:
+    hosts:
+      - <%= HetznerDeployConfig.web_host %>
+    env:
+      clear:
+        WEB_CONCURRENCY: 2
+        RAILS_MAX_THREADS: 3
+        DB_POOL: 3
+        QUEUE_DB_POOL: 3
+  job:
+    hosts:
+      - <%= HetznerDeployConfig.web_host %>
+    cmd: bin/jobs
+    env:
+      clear:
+        JOB_CONCURRENCY: 1
+        JOB_THREADS: 3
+        DB_POOL: 3
+        QUEUE_DB_POOL: 5
+
+proxy:
+  ssl: <%= ENV.fetch("APP_SSL", "true") == "true" %>
+  host: <%= HetznerDeployConfig.app_host %>
+  app_port: 80
+
+registry:
+  server: ghcr.io
+  username: <%= ENV.fetch("KAMAL_REGISTRY_USERNAME", "marcbey") %>
+  password:
+    - KAMAL_REGISTRY_PUSH_TOKEN
+
+env:
+  secret:
+    - RAILS_MASTER_KEY
+    - RUSS_LIVE_PRIMARY_DB_PASSWORD
+    - RUSS_LIVE_OPERATIONAL_DB_PASSWORD
+    - MEDIA_PROXY_SECRET
+  clear:
+    APP_HOST: <%= HetznerDeployConfig.app_host %>
+    DB_HOST: 172.18.0.1
+    DB_PORT: 5432
+    DB_NAME: <%= ENV.fetch("DB_NAME", "stuttgart_live_de_production") %>
+    DB_USER: <%= ENV.fetch("DB_USER", "russ_live_de_reader") %>
+    OPERATIONAL_DB_USER: <%= ENV.fetch("OPERATIONAL_DB_USER", "russ_live_de") %>
+    CACHE_DB_NAME: <%= ENV.fetch("CACHE_DB_NAME", "russ_live_de_production_cache") %>
+    QUEUE_DB_NAME: <%= ENV.fetch("QUEUE_DB_NAME", "russ_live_de_production_queue") %>
+    CABLE_DB_NAME: <%= ENV.fetch("CABLE_DB_NAME", "russ_live_de_production_cable") %>
+    ACTIVE_STORAGE_SERVICE: <%= ENV.fetch("ACTIVE_STORAGE_SERVICE", "local") %>
+
+ssh:
+  user: deploy
+  keys:
+    - <%= ENV.fetch("KAMAL_SSH_KEY_PATH", File.expand_path("~/.ssh/stgt-live-hetzner-github")) %>

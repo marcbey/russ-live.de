@@ -1,0 +1,200 @@
+name: Deploy Production
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Load versioned Hetzner deploy config
+        run: |
+          ruby <<'RUBY' >> "$GITHUB_ENV"
+          require File.expand_path("app/lib/hetzner_deploy_config.rb", Dir.pwd)
+
+          puts "APP_HOST=#{HetznerDeployConfig.app_host}"
+          puts "KAMAL_WEB_HOST=#{HetznerDeployConfig.web_host}"
+          puts "KAMAL_SSH_HOST_KEY=#{HetznerDeployConfig.ssh_host_key}"
+          RUBY
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Build and push app image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ghcr.io/marcbey/russ-live-de:${{ github.sha }}
+            ghcr.io/marcbey/russ-live-de:latest
+          labels: |
+            service=russ_live_de
+            org.opencontainers.image.source=https://github.com/marcbey/russ-live.de
+
+      - name: Prepare Kamal secrets for GitHub Actions
+        run: |
+          cat > .kamal/secrets.hetzner <<'EOF'
+          KAMAL_REGISTRY_PUSH_TOKEN=$KAMAL_REGISTRY_PUSH_TOKEN
+          KAMAL_REGISTRY_PULL_PASSWORD=$KAMAL_REGISTRY_PULL_PASSWORD
+          RAILS_MASTER_KEY=$RAILS_MASTER_KEY
+          RUSS_LIVE_PRIMARY_DB_PASSWORD=$RUSS_LIVE_PRIMARY_DB_PASSWORD
+          RUSS_LIVE_OPERATIONAL_DB_PASSWORD=$RUSS_LIVE_OPERATIONAL_DB_PASSWORD
+          MEDIA_PROXY_SECRET=$MEDIA_PROXY_SECRET
+          EOF
+
+      - name: Prepare SSH access
+        env:
+          KAMAL_SSH_PRIVATE_KEY: ${{ secrets.KAMAL_SSH_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$KAMAL_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/kamal.key"
+          chmod 600 "$RUNNER_TEMP/kamal.key"
+
+          host="${KAMAL_WEB_HOST}"
+          if [ -z "${KAMAL_SSH_HOST_KEY}" ]; then
+            echo "KAMAL_SSH_HOST_KEY fehlt" >&2
+            exit 1
+          fi
+          ssh-keygen -R "$host" >/dev/null 2>&1 || true
+          printf '%s\n' "$KAMAL_SSH_HOST_KEY" >> ~/.ssh/known_hosts
+
+      - name: Ensure compatible kamal-proxy version
+        env:
+          KAMAL_SSH_KEY_PATH: ${{ runner.temp }}/kamal.key
+          KAMAL_REGISTRY_PUSH_TOKEN: ${{ github.token }}
+          KAMAL_REGISTRY_PULL_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PULL_PASSWORD }}
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          RUSS_LIVE_PRIMARY_DB_PASSWORD: ${{ secrets.RUSS_LIVE_PRIMARY_DB_PASSWORD }}
+          RUSS_LIVE_OPERATIONAL_DB_PASSWORD: ${{ secrets.RUSS_LIVE_OPERATIONAL_DB_PASSWORD }}
+          MEDIA_PROXY_SECRET: ${{ secrets.MEDIA_PROXY_SECRET }}
+          REQUIRED_KAMAL_PROXY_VERSION: v0.9.2
+          KAMAL_SKIP_REMOTE_REGISTRY_LOGIN: true
+        run: |
+          set -euo pipefail
+
+          host="${KAMAL_WEB_HOST}"
+          current_proxy_image="$(
+            ssh -i "$KAMAL_SSH_KEY_PATH" -o StrictHostKeyChecking=yes deploy@"$host" \
+              "docker inspect kamal-proxy --format '{{.Config.Image}}' 2>/dev/null || true"
+          )"
+          current_proxy_version="${current_proxy_image##*:}"
+
+          if [ -z "$current_proxy_image" ]; then
+            echo "kamal-proxy läuft noch nicht, starte ihn mit bin/kamal proxy reboot"
+            bin/kamal proxy reboot -d hetzner
+            exit 0
+          fi
+
+          if [ "$current_proxy_version" = "$REQUIRED_KAMAL_PROXY_VERSION" ]; then
+            echo "kamal-proxy ist bereits auf $current_proxy_version"
+            exit 0
+          fi
+
+          lowest_version="$(
+            printf '%s\n%s\n' "$REQUIRED_KAMAL_PROXY_VERSION" "$current_proxy_version" | sort -V | head -n1
+          )"
+          if [ "$lowest_version" = "$REQUIRED_KAMAL_PROXY_VERSION" ]; then
+            echo "kamal-proxy ist bereits kompatibel ($current_proxy_version)"
+            exit 0
+          fi
+
+          echo "kamal-proxy ist zu alt ($current_proxy_version), aktualisiere auf mindestens $REQUIRED_KAMAL_PROXY_VERSION"
+          bin/kamal proxy reboot -d hetzner
+
+      - name: Deploy with Kamal
+        env:
+          KAMAL_SSH_KEY_PATH: ${{ runner.temp }}/kamal.key
+          KAMAL_REGISTRY_PUSH_TOKEN: ${{ github.token }}
+          KAMAL_REGISTRY_PULL_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PULL_PASSWORD }}
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          RUSS_LIVE_PRIMARY_DB_PASSWORD: ${{ secrets.RUSS_LIVE_PRIMARY_DB_PASSWORD }}
+          RUSS_LIVE_OPERATIONAL_DB_PASSWORD: ${{ secrets.RUSS_LIVE_OPERATIONAL_DB_PASSWORD }}
+          MEDIA_PROXY_SECRET: ${{ secrets.MEDIA_PROXY_SECRET }}
+        run: |
+          set -euo pipefail
+
+          # GitHub-Secrets dürfen hier keine Zeilenumbrüche enthalten.
+          export KAMAL_REGISTRY_PUSH_TOKEN="$(printf '%s' "$KAMAL_REGISTRY_PUSH_TOKEN" | tr -d '\r\n')"
+          export KAMAL_REGISTRY_PULL_PASSWORD="$(printf '%s' "$KAMAL_REGISTRY_PULL_PASSWORD" | tr -d '\r\n')"
+          export RUSS_LIVE_PRIMARY_DB_PASSWORD="$(printf '%s' "$RUSS_LIVE_PRIMARY_DB_PASSWORD" | tr -d '\r\n')"
+          export RUSS_LIVE_OPERATIONAL_DB_PASSWORD="$(printf '%s' "$RUSS_LIVE_OPERATIONAL_DB_PASSWORD" | tr -d '\r\n')"
+          export MEDIA_PROXY_SECRET="$(printf '%s' "$MEDIA_PROXY_SECRET" | tr -d '\r\n')"
+          export KAMAL_SKIP_REMOTE_REGISTRY_LOGIN=true
+
+          host="${KAMAL_WEB_HOST}"
+          # Der Remote-Host braucht weiterhin ein stabiles GHCR-Credential für Pulls.
+          printf '%s' "$KAMAL_REGISTRY_PULL_PASSWORD" | \
+            ssh -i "$KAMAL_SSH_KEY_PATH" -o StrictHostKeyChecking=yes deploy@"$host" \
+              "docker login ghcr.io -u marcbey --password-stdin"
+
+          deploy_log="$RUNNER_TEMP/kamal-deploy.log"
+          max_attempts=3
+
+          run_deploy() {
+            bin/kamal deploy -d hetzner --skip_push 2>&1 | tee "$deploy_log"
+          }
+
+          transient_registry_failure() {
+            grep -Eq \
+              'TLS handshake timeout|Client\.Timeout exceeded|i/o timeout|unexpected EOF|connection reset by peer|dial tcp.*:443: connect: connection timed out' \
+              "$deploy_log"
+          }
+
+          attempt=1
+          while true; do
+            if run_deploy; then
+              exit 0
+            fi
+
+            if [ "$attempt" -ge "$max_attempts" ] || ! transient_registry_failure; then
+              break
+            fi
+
+            echo "Temporärer GHCR-Pull-Fehler erkannt, warte 15 Sekunden und versuche Deploy erneut ($attempt/$max_attempts)"
+            sleep 15
+            attempt=$((attempt + 1))
+          done
+
+          if ! grep -Fq "kamal-proxy version" "$deploy_log"; then
+            exit 1
+          fi
+
+          echo "kamal-proxy ist veraltet, führe Proxy-Reboot aus und wiederhole Deploy"
+          bin/kamal proxy reboot -d hetzner
+          bin/kamal deploy -d hetzner --skip_push

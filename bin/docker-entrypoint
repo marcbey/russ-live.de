@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
-# If running the rails server then create or migrate existing database
-if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
+# If running the Rails server then create or migrate existing databases.
+if { [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; } || [ "${1:-}" == "./bin/production-server" ]; then
   ./bin/rails db:prepare
 fi
 

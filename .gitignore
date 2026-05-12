@@ -1,5 +1,12 @@
 output/
 
+# Environment and deploy secrets
+/.env
+/.env.*
+!/.env.example
+/.kamal/secrets.*
+!/.kamal/*.example
+
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 

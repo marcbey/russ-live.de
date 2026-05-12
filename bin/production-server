@@ -1,0 +1,29 @@
+#!/bin/bash
+set -euo pipefail
+
+export PORT=3000
+export PIDFILE="${PIDFILE:-/tmp/pids/puma.pid}"
+
+mkdir -p /tmp/pids /tmp/nginx /tmp/nginx/client_body /tmp/nginx/proxy /tmp/nginx/fastcgi /tmp/nginx/uwsgi /tmp/nginx/scgi
+envsubst '${MEDIA_PROXY_SECRET}' < /rails/config/nginx.conf.template > /tmp/nginx.conf
+
+bundle exec puma -C config/puma.rb &
+puma_pid=$!
+
+nginx -c /tmp/nginx.conf -g 'daemon off;' &
+nginx_pid=$!
+
+shutdown() {
+  kill -TERM "$puma_pid" "$nginx_pid" 2>/dev/null || true
+}
+
+trap shutdown INT TERM
+
+wait -n "$puma_pid" "$nginx_pid"
+status=$?
+
+shutdown
+wait "$puma_pid" 2>/dev/null || true
+wait "$nginx_pid" 2>/dev/null || true
+
+exit "$status"

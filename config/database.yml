@@ -1,3 +1,8 @@
+<%
+default_db_pool = Integer(ENV.fetch("DB_POOL") { ENV.fetch("RAILS_MAX_THREADS") { 5 } })
+queue_db_pool = Integer(ENV.fetch("QUEUE_DB_POOL") { ENV.fetch("JOB_THREADS") { default_db_pool } })
+%>
+
 # PostgreSQL. Versions 9.5 and up are supported.
 #
 # Install the pg driver:
@@ -17,7 +22,7 @@ default: &default
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
-  max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  max_connections: <%= default_db_pool %>
 
 
 development:
@@ -87,18 +92,34 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: russ_live_production
-    username: russ_live
-    password: <%= ENV["RUSS_LIVE_DATABASE_PASSWORD"] %>
+    database: <%= ENV.fetch("DB_NAME", "stuttgart_live_de_production") %>
+    username: <%= ENV.fetch("DB_USER", "russ_live_de_reader") %>
+    password: <%= ENV["RUSS_LIVE_PRIMARY_DB_PASSWORD"] %>
+    host: <%= ENV.fetch("DB_HOST", "127.0.0.1") %>
+    port: <%= ENV.fetch("DB_PORT", 5432) %>
+    database_tasks: false
   cache:
-    <<: *primary_production
-    database: russ_live_production_cache
+    <<: *default
+    database: <%= ENV.fetch("CACHE_DB_NAME", "russ_live_de_production_cache") %>
+    username: <%= ENV.fetch("OPERATIONAL_DB_USER", "russ_live_de") %>
+    password: <%= ENV["RUSS_LIVE_OPERATIONAL_DB_PASSWORD"] %>
+    host: <%= ENV.fetch("DB_HOST", "127.0.0.1") %>
+    port: <%= ENV.fetch("DB_PORT", 5432) %>
     migrations_paths: db/cache_migrate
   queue:
-    <<: *primary_production
-    database: russ_live_production_queue
+    <<: *default
+    max_connections: <%= queue_db_pool %>
+    database: <%= ENV.fetch("QUEUE_DB_NAME", "russ_live_de_production_queue") %>
+    username: <%= ENV.fetch("OPERATIONAL_DB_USER", "russ_live_de") %>
+    password: <%= ENV["RUSS_LIVE_OPERATIONAL_DB_PASSWORD"] %>
+    host: <%= ENV.fetch("DB_HOST", "127.0.0.1") %>
+    port: <%= ENV.fetch("DB_PORT", 5432) %>
     migrations_paths: db/queue_migrate
   cable:
-    <<: *primary_production
-    database: russ_live_production_cable
+    <<: *default
+    database: <%= ENV.fetch("CABLE_DB_NAME", "russ_live_de_production_cable") %>
+    username: <%= ENV.fetch("OPERATIONAL_DB_USER", "russ_live_de") %>
+    password: <%= ENV["RUSS_LIVE_OPERATIONAL_DB_PASSWORD"] %>
+    host: <%= ENV.fetch("DB_HOST", "127.0.0.1") %>
+    port: <%= ENV.fetch("DB_PORT", 5432) %>
     migrations_paths: db/cable_migrate

@@ -6,8 +6,9 @@ Rails-Anwendung für den Relaunch von `russ-live.de`. Das Projekt wurde mit Ruby
 ## Wichtig
 
 - Dieses Projekt ist getrennt von `stuttgart-live`.
-- Es verändert keine Dateien, Datenbanken, Routen oder Assets der bestehenden Stuttgart-live-App.
-- Die Event-Verknüpfung ist nur als read-only Platzhalter vorgesehen.
+- Es verändert keine Dateien, Routen oder Assets der bestehenden Stuttgart-Live-App.
+- In Production liest es Stuttgarts Primärdatenbank nur read-only und nutzt dasselbe Active-Storage-Volume.
+- Queue, Cache und Cable sind eigene Russ-Live-Datenbanken und werden nicht mit Stuttgart geteilt.
 - Der bisherige statische Prototyp bleibt unter `statische-site/` erhalten.
 
 ## Voraussetzungen
@@ -46,6 +47,77 @@ mise exec -- bin/ci
 ```
 
 `bin/ci` bündelt die relevanten Tests, Security-Checks und Linter.
+
+## Deployment und Betrieb
+
+Production läuft auf demselben Hetzner-Host wie `stuttgart-live.de` und wird
+ebenfalls mit Kamal ausgerollt. Die öffentliche Domain
+`russ-live.schopp3r.de` zeigt auf `46.225.224.194`; `kamal-proxy` routet anhand
+des Hostnamens zum Kamal-Service `russ_live_de`.
+
+Die Runtime entspricht Stuttgart: Der Container startet `nginx` auf Port `80`
+und Puma intern auf Port `3000`. `nginx` liefert Assets und signierte
+`/media/...`-Dateien direkt aus `/rails/public` beziehungsweise
+`/rails/storage` aus.
+
+Für manuelle Produktions-Kommandos brauchst du lokal:
+
+- `config/master.key`
+- die versionierte Datei `config/deploy.hetzner.shared.yml`
+- eine lokale `.kamal/secrets.hetzner`
+- den SSH-Key `~/.ssh/stgt-live-hetzner-github` für den Benutzer `deploy`
+- eine `.env` mit `KAMAL_REGISTRY_PUSH_TOKEN`, `KAMAL_REGISTRY_PULL_PASSWORD`,
+  `RUSS_LIVE_PRIMARY_DB_PASSWORD`, `RUSS_LIVE_OPERATIONAL_DB_PASSWORD` und
+  `MEDIA_PROXY_SECRET`
+
+Vor manuellen Kamal-Eingriffen sollte immer dieser Check laufen:
+
+```bash
+mise exec -- bin/hetzner-check
+```
+
+Deployment von lokal:
+
+```bash
+mise exec -- bin/hetzner-check
+mise exec -- bin/kamal deploy -d hetzner
+```
+
+Status und Logs:
+
+```bash
+mise exec -- bin/kamal details -d hetzner
+mise exec -- bin/kamal app containers -d hetzner
+mise exec -- bin/kamal app logs -f -d hetzner -r web
+mise exec -- bin/kamal app logs -f -d hetzner -r job
+```
+
+GitHub Actions baut bei Pushes auf `main` ein Image nach
+`ghcr.io/marcbey/russ-live-de` und deployt danach mit Kamal. Im GitHub
+Environment `production` müssen diese Secrets gepflegt sein:
+
+- `KAMAL_REGISTRY_PULL_PASSWORD`
+- `KAMAL_SSH_PRIVATE_KEY`
+- `MEDIA_PROXY_SECRET`
+- `RAILS_MASTER_KEY`
+- `RUSS_LIVE_OPERATIONAL_DB_PASSWORD`
+- `RUSS_LIVE_PRIMARY_DB_PASSWORD`
+
+### Datenbankgrenzen
+
+`primary` zeigt in Production auf `stuttgart_live_de_production` und nutzt den
+read-only Benutzer `russ_live_de_reader`. Diese Datenbank wird ausschließlich
+aus dem `stuttgart-live.de`-Repository migriert.
+
+Russ Live nutzt eigene writable Operational-Datenbanken:
+
+- `russ_live_de_production_cache`
+- `russ_live_de_production_queue`
+- `russ_live_de_production_cable`
+
+Das Docker-Volume für Active Storage ist bewusst gemeinsam:
+`stuttgart_live_de_storage:/rails/storage`. Deshalb muss
+`MEDIA_PROXY_SECRET` denselben Wert wie bei Stuttgart haben.
 
 ## Statischen Prototyp aktualisieren
 
