@@ -4,5 +4,14 @@
 
 import { application } from "./application"
 
-import HelloController from "./hello_controller"
-application.register("hello", HelloController)
+import AccordionController from "./accordion_controller"
+import MobileMenuController from "./mobile_menu_controller"
+import ReferenceMosaicController from "./reference_mosaic_controller"
+import SliderController from "./slider_controller"
+import SmoothAnchorController from "./smooth_anchor_controller"
+
+application.register("accordion", AccordionController)
+application.register("mobile-menu", MobileMenuController)
+application.register("reference-mosaic", ReferenceMosaicController)
+application.register("slider", SliderController)
+application.register("smooth-anchor", SmoothAnchorController)

@@ -9,7 +9,8 @@ Rails-Anwendung für den Relaunch von `russ-live.de`. Das Projekt wurde mit Ruby
 - Es verändert keine Dateien, Routen oder Assets der bestehenden Stuttgart-Live-App.
 - In Production liest es Stuttgarts Primärdatenbank nur read-only und nutzt dasselbe Active-Storage-Volume.
 - Queue, Cache und Cable sind eigene Russ-Live-Datenbanken und werden nicht mit Stuttgart geteilt.
-- Der bisherige statische Prototyp bleibt unter `statische-site/` erhalten.
+- Die öffentlichen Rails-Seiten liefern die vormals statischen Russ-Live-Seiten aus.
+- Der bisherige statische Prototyp bleibt unter `statische-site/` als Referenz erhalten.
 
 ## Voraussetzungen
 
@@ -141,6 +142,8 @@ Danach im Browser `http://127.0.0.1:8080` öffnen.
 
 ## Asset-Struktur
 
+- `app/assets/images/russ_live`: in Rails übernommene Logos, Keyvisuals, Team-, Job- und Referenzbilder
+- `app/assets/fonts/russ_live`: lokal ausgelieferte Neue-Rational-Webfonts
 - `assets/fonts`: Neue Rational Light/SemiBold
 - `assets/keyvisuals`: Russ Live Keyvisual
 - `assets/team`: importierte Teambilder

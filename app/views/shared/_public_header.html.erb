@@ -1,0 +1,29 @@
+<header class="site-header<%= " page-header" unless public_page?(:home) %>" aria-label="Hauptnavigation" data-controller="mobile-menu">
+  <%= link_to root_path, class: "brand", aria: { label: "Russ Live Startseite" } do %>
+    <%= image_tag "russ_live/logos/russ-live-logo.png", alt: "Russ Live" %>
+  <% end %>
+
+  <nav class="main-nav" aria-label="Seitennavigation" data-mobile-menu-target="nav">
+    <div class="nav-item has-submenu">
+      <%= link_to "Unternehmen", unternehmen_path, class: public_nav_class(%i[unternehmen referenzen]) %>
+      <div class="nav-submenu" aria-label="Unternehmen Untermenü">
+        <%= link_to "Über uns", unternehmen_path, public_nav_aria(:unternehmen) || {} %>
+        <%= link_to "Referenzen", referenzen_path, public_nav_aria(:referenzen) || {} %>
+      </div>
+    </div>
+    <%= link_to "Services", services_path, public_nav_aria(:services) || {} %>
+    <%= link_to "Jobs", jobs_path, public_nav_aria(:jobs) || {} %>
+    <%= link_to "Presse", presse_path, public_nav_aria(:presse) || {} %>
+    <%= link_to "Kontakt", kontakt_path, public_nav_aria(:kontakt) || {} %>
+  </nav>
+
+  <% unless public_page?(:home) %>
+    <%= link_to "EN", root_path, class: "language", hreflang: "en", aria: { label: "Englische Version" } %>
+  <% end %>
+
+  <button class="mobile-menu-button" type="button" aria-label="Menü öffnen" data-mobile-menu-target="button" data-action="mobile-menu#toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</header>

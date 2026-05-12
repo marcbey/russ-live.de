@@ -1,7 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
   <head>
-    <title><%= content_for(:title) || "Russ Live" %></title>
+    <title><%= content_for(:title) || @page_meta&.fetch(:title, nil) || "Russ Live" %></title>
+    <% if content_for?(:description) || @page_meta&.fetch(:description, nil).present? %>
+      <meta name="description" content="<%= content_for(:description) || @page_meta[:description] %>">
+    <% end %>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Russ Live">
@@ -18,12 +21,14 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= render "shared/public_fonts" if @page_key.present? %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
 
-  <body>
+  <body class="<%= content_for(:body_class) || @page_meta&.fetch(:body_class, nil) %>" data-controller="smooth-anchor">
+    <%= render "shared/public_header" if @page_key.present? %>
     <%= yield %>
+    <%= render "shared/public_footer" if @page_key.present? %>
   </body>
 </html>
