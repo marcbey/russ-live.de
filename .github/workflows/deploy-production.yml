@@ -167,7 +167,7 @@ jobs:
           max_attempts=3
 
           run_deploy() {
-            bin/kamal deploy -d hetzner --skip_push 2>&1 | tee "$deploy_log"
+            bin/kamal deploy -d hetzner --skip_push --version "$GITHUB_SHA" 2>&1 | tee "$deploy_log"
           }
 
           transient_registry_failure() {
@@ -197,4 +197,4 @@ jobs:
 
           echo "kamal-proxy ist veraltet, führe Proxy-Reboot aus und wiederhole Deploy"
           bin/kamal proxy reboot -d hetzner
-          bin/kamal deploy -d hetzner --skip_push
+          bin/kamal deploy -d hetzner --skip_push --version "$GITHUB_SHA"
