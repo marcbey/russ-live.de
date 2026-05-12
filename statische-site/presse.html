@@ -6,9 +6,9 @@
     <title>Presse | Russ Live</title>
     <link rel="stylesheet" href="styles.css">
   </head>
-  <body>
+  <body class="press-body">
     <header class="site-header page-header" aria-label="Hauptnavigation">
-      <a class="brand" href="index.html"><img src="assets/logos/russ-live-logo.png" alt="Russ Live"></a>
+      <a class="brand" href="index.html" aria-label="Russ Live Startseite"><img src="assets/logos/russ-live-logo.png" alt="Russ Live"></a>
       <nav class="main-nav" aria-label="Seitennavigation">
         <div class="nav-item has-submenu">
           <a href="unternehmen.html">Unternehmen</a>
@@ -17,21 +17,237 @@
             <a href="referenzen.html">Referenzen</a>
           </div>
         </div>
-        <a href="services.html">Services</a><a href="jobs.html">Jobs</a><a href="presse.html" aria-current="page">Presse</a><a href="kontakt.html">Kontakt</a>
+        <a href="services.html">Services</a>
+        <a href="jobs.html">Jobs</a>
+        <a href="presse.html" aria-current="page">Presse</a>
+        <a href="kontakt.html">Kontakt</a>
       </nav>
       <a class="language" href="index.html" hreflang="en" aria-label="Englische Version">EN</a>
       <button class="mobile-menu-button" type="button" aria-label="Menü öffnen"><span></span><span></span><span></span></button>
     </header>
-    <main class="page-main">
-      <section class="section holding" aria-labelledby="press-title">
-        <p class="eyebrow">Presse</p>
-        <h1 id="press-title">Pressebereich</h1>
-        <p>Die Presse-Einträge werden lokal in Russ-live geführt. Eine spätere Vorbefüllung aus Events erfolgt nur über eine read-only Datenquelle.</p>
+
+    <main class="page-main press-page">
+      <section class="press-hero" aria-labelledby="press-title">
+        <div class="press-hero-copy">
+          <p class="eyebrow">Presse</p>
+          <h1 id="press-title">Presseinfos für Partner und Medien.</h1>
+          <p>Pressetexte, Bildmaterial und Veranstaltungsdaten zu kommenden Produktionen. Die Inhalte sind statisch vorbereitet und können später aus Stuttgart-live übernommen werden.</p>
+        </div>
+        <form class="press-search" role="search" aria-label="Künstler suchen">
+          <label for="press-search-input">Künstler suchen</label>
+          <div>
+            <input id="press-search-input" type="search" name="q" autocomplete="off" placeholder="Name eingeben" data-press-search>
+            <button type="reset" aria-label="Suche zurücksetzen">Zurücksetzen</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="section press-directory" aria-labelledby="press-directory-title">
+        <div class="press-directory-head">
+          <div>
+            <p class="eyebrow">Übersicht</p>
+            <h2 id="press-directory-title">Künstler A-Z</h2>
+          </div>
+          <p data-press-count>56 Presseeinträge</p>
+        </div>
+
+        <div class="press-letter-grid" data-press-directory>
+          <section class="press-letter-group" data-letter-group>
+            <h3>1</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="1019"><span>1019</span></a>
+            </div>
+          </section>
+          <section class="press-letter-group" data-letter-group>
+            <h3>A</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="A Tribute To Taylor Swift: Lover"><span>A Tribute To Taylor Swift: Lover</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="All Them Witches"><span>All Them Witches</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Andreas Gabalier"><span>Andreas Gabalier</span></a>
+            </div>
+          </section>
+          <section class="press-letter-group" data-letter-group>
+            <h3>B</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Blue"><span>Blue</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Brunke"><span>Brunke</span></a>
+            </div>
+          </section>
+          <section class="press-letter-group" data-letter-group>
+            <h3>C</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Call It Off"><span>Call It Off</span></a>
+            </div>
+          </section>
+          <section class="press-letter-group" data-letter-group>
+            <h3>D</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Das Lumpenpack"><span>Das Lumpenpack</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="David Garrett"><span>David Garrett</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Dirk Steffens"><span>Dirk Steffens</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Dittsche"><span>Dittsche</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Dú Maroc"><span>Dú Maroc</span></a>
+            </div>
+          </section>
+          <section class="press-letter-group" data-letter-group>
+            <h3>E</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Elif"><span>Elif</span></a>
+            </div>
+          </section>
+          <section class="press-letter-group" data-letter-group>
+            <h3>F</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Faroon"><span>Faroon</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Five Finger Death Punch"><span>Five Finger Death Punch</span></a>
+            </div>
+          </section>
+          <section class="press-letter-group" data-letter-group>
+            <h3>G</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Gestört aber Geil"><span>Gestört aber Geil</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Glueboys"><span>Glueboys</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Gregory Porter & Band"><span>Gregory Porter & Band</span></a>
+            </div>
+          </section>
+
+          <section class="press-letter-group" data-letter-group>
+            <h3>J</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Jolle"><span>Jolle</span></a>
+            </div>
+          </section>
+          <section class="press-letter-group" data-letter-group>
+            <h3>K</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Kati K"><span>Kati K</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Kiss Forever Band"><span>Kiss Forever Band</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Kolja Goldstein"><span>Kolja Goldstein</span></a>
+            </div>
+          </section>
+          <section class="press-letter-group" data-letter-group>
+            <h3>L</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Lake Street Dive"><span>Lake Street Dive</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="LEA"><span>LEA</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Levka"><span>Levka</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Lina"><span>Lina</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Luvre47"><span>Luvre47</span></a>
+            </div>
+          </section>
+          <section class="press-letter-group" data-letter-group>
+            <h3>M</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Mamma Mia! - Das Original-Musical"><span>Mamma Mia! - Das Original-Musical</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Mammoth"><span>Mammoth</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Mathias Richling"><span>Mathias Richling</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Melrose Avenue"><span>Melrose Avenue</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Mike Oldfield's Tubular Bells"><span>Mike Oldfield's Tubular Bells</span></a>
+            </div>
+          </section>
+          <section class="press-letter-group" data-letter-group>
+            <h3>N</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Niklas Dee"><span>Niklas Dee</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Nimo"><span>Nimo</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Nizi19"><span>Nizi19</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Not Scientists"><span>Not Scientists</span></a>
+            </div>
+          </section>
+
+          <section class="press-letter-group" data-letter-group>
+            <h3>P</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="PaulK"><span>PaulK</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Pitbull"><span>Pitbull</span></a>
+            </div>
+          </section>
+          <section class="press-letter-group" data-letter-group>
+            <h3>R</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Rea Garvey's Christmas Calling 2026"><span>Rea Garvey's Christmas Calling 2026</span></a>
+            </div>
+          </section>
+          <section class="press-letter-group" data-letter-group>
+            <h3>S</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Saliou"><span>Saliou</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Sascha Lange"><span>Sascha Lange</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Slaughter To Prevail"><span>Slaughter To Prevail</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Starbenders"><span>Starbenders</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Steel Panther"><span>Steel Panther</span></a>
+            </div>
+          </section>
+          <section class="press-letter-group" data-letter-group>
+            <h3>T</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="tAKiDA"><span>tAKiDA</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="The Kilkennys"><span>The Kilkennys</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="The Music Of Genesis"><span>The Music Of Genesis</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Tjark"><span>Tjark</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Truckfighters"><span>Truckfighters</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Twin Noir"><span>Twin Noir</span></a>
+            </div>
+          </section>
+          <section class="press-letter-group" data-letter-group>
+            <h3>V</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Vier Pianisten – Ein Konzert"><span>Vier Pianisten – Ein Konzert</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="voXXclub"><span>voXXclub</span></a>
+            </div>
+          </section>
+          <section class="press-letter-group" data-letter-group>
+            <h3>W</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Wilhelmine"><span>Wilhelmine</span></a>
+            </div>
+          </section>
+          <section class="press-letter-group" data-letter-group>
+            <h3>Y</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Yaris"><span>Yaris</span></a>
+            </div>
+          </section>
+          <section class="press-letter-group" data-letter-group>
+            <h3>Z</h3>
+            <div class="press-artist-list">
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Zuna"><span>Zuna</span></a>
+              <a class="press-artist-card" href="presse-detail.html" data-artist-card data-artist-name="Zymba"><span>Zymba</span></a>
+            </div>
+          </section>
+        </div>
+        <p class="press-empty" data-press-empty hidden>Kein Künstler gefunden.</p>
+      </section>
+
+      <section class="section press-contact-strip" aria-labelledby="press-contact-title">
+        <div>
+          <p class="eyebrow">Ansprechpartner</p>
+          <h2 id="press-contact-title">Pressekontakt</h2>
+          <p>Für Interview-, Akkreditierungs- und Materialanfragen ist der Pressebereich direkt vorbereitet.</p>
+        </div>
+        <article class="press-contact-card">
+          <img src="assets/team/arnulf-woock.jpg" alt="Arnulf Woock" loading="lazy">
+          <div>
+            <h3>Arnulf Woock</h3>
+            <p>Presse- & Öffentlichkeitsarbeit</p>
+            <a href="mailto:arnulfwoock@michaelrussgmbh.de">arnulfwoock@michaelrussgmbh.de</a>
+            <a href="tel:+497111635320">+49.711.16 353 20</a>
+          </div>
+        </article>
       </section>
     </main>
+
     <footer class="site-footer">
-      <div><strong>SKS Michael Russ GmbH</strong><p>Eigenständiger Russ-live.de Relaunch.</p></div>
-      <nav aria-label="Footernavigation"><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a><a href="agb.html">AGB</a><a href="jugendschutz.html">Jugendschutz</a></nav>
+      <div>
+        <strong>SKS Michael Russ GmbH</strong>
+        <p>Eigenständiger Russ-live.de Relaunch.</p>
+      </div>
+      <nav aria-label="Footernavigation">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="agb.html">AGB</a>
+        <a href="jugendschutz.html">Jugendschutz</a>
+      </nav>
     </footer>
     <script src="app.js"></script>
   </body>

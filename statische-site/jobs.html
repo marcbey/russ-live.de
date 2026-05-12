@@ -7,7 +7,7 @@
     <meta name="description" content="Cateringhilfen auf Minijob-Basis bei Russ Live: Tätigkeitsfeld, Anforderungen und Ansprechpartner für Deine Bewerbung.">
     <link rel="stylesheet" href="styles.css">
   </head>
-  <body>
+  <body class="jobs-body">
     <header class="site-header page-header" aria-label="Hauptnavigation">
       <a class="brand" href="index.html"><img src="assets/logos/russ-live-logo.png" alt="Russ Live"></a>
       <nav class="main-nav" aria-label="Seitennavigation">
@@ -27,8 +27,9 @@
       <section class="section job-hero" aria-labelledby="jobs-title">
         <div class="job-hero-copy">
           <p class="eyebrow">Jobs</p>
-          <h1 id="jobs-title">Catering - hilfen</h1>
+          <h1 id="jobs-title">Cateringhilfen</h1>
           <p>Zum nächstmöglichen Zeitpunkt, auf Minijob Basis, m/w/d</p>
+          <a class="section-button section-button-outline" href="#job-description">Zur Beschreibung</a>
           <a class="section-button" href="mailto:personal@russ-live.de">Jetzt bewerben</a>
         </div>
         <figure class="job-hero-media">
@@ -36,7 +37,19 @@
         </figure>
       </section>
 
-      <section class="section job-detail" aria-label="Jobdetails Cateringhilfen">
+      <nav class="job-profile-nav" aria-label="Jobprofile">
+        <button class="job-profile-toggle" type="button" aria-expanded="false" aria-controls="job-profile-menu">
+          <span>Cateringhilfen</span>
+        </button>
+        <div class="job-profile-menu" id="job-profile-menu">
+          <a href="jobs.html" aria-current="page">Cateringhilfen</a>
+          <a href="jobs.html">Stagehands</a>
+          <a href="jobs.html">Staplerfahrer*innen</a>
+          <a href="jobs.html">Securities</a>
+        </div>
+      </nav>
+
+      <section class="section job-detail" id="job-description" aria-label="Jobdetails Cateringhilfen">
         <article class="job-content">
           <div class="job-section">
             <p class="eyebrow">Tätigkeitsfeld</p>

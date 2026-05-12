@@ -1,5 +1,7 @@
 function bindSmoothAnchors() {
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
+    if (link.closest(".services-jump-nav")) return;
+
     link.addEventListener("click", (event) => {
       const targetId = link.getAttribute("href");
       if (!targetId || targetId === "#") return;
@@ -11,6 +13,115 @@ function bindSmoothAnchors() {
       target.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
+}
+
+function bindServicesJumpNav() {
+  const nav = document.querySelector(".services-jump-nav");
+  if (!nav) return;
+
+  const links = [...nav.querySelectorAll('a[href^="#"]')];
+  const sections = links
+    .map((link) => {
+      const target = document.querySelector(link.getAttribute("href"));
+      return target ? { link, target } : null;
+    })
+    .filter(Boolean);
+
+  if (!sections.length) return;
+
+  function getAnchorLine() {
+    return nav.getBoundingClientRect().bottom + 40;
+  }
+
+  function getStickyOffset() {
+    const top = Number.parseFloat(getComputedStyle(nav).top) || 0;
+    return top + nav.offsetHeight;
+  }
+
+  function scrollToSection(target, smooth = true) {
+    window.scrollTo({
+      top: target.getBoundingClientRect().top + window.scrollY - getStickyOffset(),
+      behavior: smooth ? "smooth" : "auto",
+    });
+  }
+
+  function setActive(activeLink) {
+    links.forEach((link) => {
+      const active = link === activeLink;
+      const wasActive = link.classList.contains("is-active");
+      link.classList.toggle("is-active", active);
+      if (active) {
+        link.setAttribute("aria-current", "true");
+        if (!wasActive) {
+          nav.scrollTo({
+            left: link.offsetLeft - (nav.clientWidth - link.clientWidth) / 2,
+            behavior: "smooth",
+          });
+        }
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+  }
+
+  function updateActive() {
+    const anchorLine = getAnchorLine();
+    let active = sections[0];
+
+    sections.forEach((section) => {
+      if (section.target.getBoundingClientRect().top <= anchorLine) {
+        active = section;
+      }
+    });
+
+    setActive(active.link);
+  }
+
+  links.forEach((link) => {
+    link.addEventListener("click", (event) => {
+      const section = sections.find((item) => item.link === link);
+      if (!section) return;
+
+      event.preventDefault();
+      setActive(link);
+      scrollToSection(section.target);
+      history.pushState(null, "", link.getAttribute("href"));
+    });
+  });
+
+  updateActive();
+  window.addEventListener("scroll", () => window.requestAnimationFrame(updateActive), { passive: true });
+  window.addEventListener("resize", updateActive);
+
+  if (window.location.hash) {
+    const section = sections.find((item) => item.link.getAttribute("href") === window.location.hash);
+    if (section) {
+      const alignInitialHash = () => {
+        scrollToSection(section.target, false);
+        setActive(section.link);
+        window.requestAnimationFrame(() => scrollToSection(section.target, false));
+      };
+
+      if (document.readyState === "complete") {
+        alignInitialHash();
+      } else {
+        window.addEventListener("load", alignInitialHash, { once: true });
+      }
+    }
+  }
+}
+
+function bindScrolledHeader() {
+  const header = document.querySelector(".page-header");
+  if (!header) return;
+
+  function updateHeader() {
+    header.classList.toggle("is-scrolled", window.scrollY > 10);
+  }
+
+  updateHeader();
+  window.addEventListener("scroll", () => window.requestAnimationFrame(updateHeader), { passive: true });
+  window.addEventListener("resize", updateHeader);
 }
 
 function bindMobileMenu() {
@@ -36,6 +147,38 @@ function bindMobileMenu() {
 
   nav.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => setOpen(false));
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setOpen(false);
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.matchMedia("(min-width: 901px)").matches) setOpen(false);
+  });
+}
+
+function bindJobProfileDropdown() {
+  const nav = document.querySelector(".job-profile-nav");
+  const button = nav?.querySelector(".job-profile-toggle");
+  const menu = nav?.querySelector(".job-profile-menu");
+  if (!nav || !button || !menu) return;
+
+  function setOpen(open) {
+    nav.classList.toggle("is-open", open);
+    button.setAttribute("aria-expanded", String(open));
+  }
+
+  button.addEventListener("click", () => {
+    setOpen(!nav.classList.contains("is-open"));
+  });
+
+  menu.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => setOpen(false));
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!nav.contains(event.target)) setOpen(false);
   });
 
   document.addEventListener("keydown", (event) => {
@@ -297,10 +440,104 @@ function bindSliders() {
   });
 }
 
+function bindPressSearch() {
+  const input = document.querySelector("[data-press-search]");
+  const cards = [...document.querySelectorAll("[data-artist-card]")];
+  const groups = [...document.querySelectorAll("[data-letter-group]")];
+  const count = document.querySelector("[data-press-count]");
+  const empty = document.querySelector("[data-press-empty]");
+  if (!input || !cards.length) return;
+
+  const normalize = (value) => value.toLocaleLowerCase("de-DE").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+  function render() {
+    const query = normalize(input.value.trim());
+    let visible = 0;
+
+    cards.forEach((card) => {
+      const name = normalize(card.dataset.artistName || card.textContent || "");
+      const matches = !query || name.includes(query);
+      card.hidden = !matches;
+      if (matches) visible += 1;
+    });
+
+    groups.forEach((group) => {
+      group.hidden = !group.querySelector("[data-artist-card]:not([hidden])");
+    });
+
+    if (count) count.textContent = `${visible} ${visible === 1 ? "Presseeintrag" : "Presseeinträge"}`;
+    if (empty) empty.hidden = visible > 0;
+  }
+
+  input.form?.addEventListener("reset", () => {
+    window.requestAnimationFrame(render);
+  });
+  input.addEventListener("input", render);
+  render();
+}
+
+function bindPressLightbox() {
+  const lightbox = document.querySelector("[data-press-lightbox]");
+  const image = document.querySelector("[data-lightbox-image]");
+  const caption = document.querySelector("[data-lightbox-caption]");
+  const download = document.querySelector("[data-lightbox-download]");
+  const triggers = [...document.querySelectorAll("[data-lightbox-src]")];
+  if (!lightbox || !image || !triggers.length) return;
+
+  let activeIndex = 0;
+
+  function render(index) {
+    activeIndex = (index + triggers.length) % triggers.length;
+    const trigger = triggers[activeIndex];
+    const src = trigger.dataset.lightboxSrc || "";
+    const alt = trigger.dataset.lightboxAlt || "Pressebild";
+    image.src = src;
+    image.alt = alt;
+    if (caption) caption.textContent = alt;
+    if (download) download.href = src;
+  }
+
+  function open(index) {
+    render(index);
+    lightbox.hidden = false;
+    document.body.style.overflow = "hidden";
+    lightbox.querySelector("[data-lightbox-close]")?.focus();
+  }
+
+  function close() {
+    lightbox.hidden = true;
+    document.body.style.overflow = "";
+  }
+
+  triggers.forEach((trigger, index) => {
+    trigger.addEventListener("click", () => open(index));
+  });
+
+  lightbox.querySelector("[data-lightbox-close]")?.addEventListener("click", close);
+  lightbox.querySelector("[data-lightbox-prev]")?.addEventListener("click", () => render(activeIndex - 1));
+  lightbox.querySelector("[data-lightbox-next]")?.addEventListener("click", () => render(activeIndex + 1));
+
+  lightbox.addEventListener("click", (event) => {
+    if (event.target === lightbox) close();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (lightbox.hidden) return;
+    if (event.key === "Escape") close();
+    if (event.key === "ArrowLeft") render(activeIndex - 1);
+    if (event.key === "ArrowRight") render(activeIndex + 1);
+  });
+}
+
 bindSmoothAnchors();
+bindServicesJumpNav();
+bindScrolledHeader();
 bindMobileMenu();
+bindJobProfileDropdown();
 bindAccordions();
 bindReferenceCardFlips();
 bindReferenceFilters();
 bindReferenceMosaics();
 bindSliders();
+bindPressSearch();
+bindPressLightbox();
