@@ -49,8 +49,8 @@ jobs:
         uses: docker/login-action@v4
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ github.token }}
+          username: marcbey
+          password: ${{ secrets.KAMAL_REGISTRY_PUSH_TOKEN }}
 
       - name: Build and push app image
         uses: docker/build-push-action@v7
@@ -97,7 +97,7 @@ jobs:
       - name: Ensure compatible kamal-proxy version
         env:
           KAMAL_SSH_KEY_PATH: ${{ runner.temp }}/kamal.key
-          KAMAL_REGISTRY_PUSH_TOKEN: ${{ github.token }}
+          KAMAL_REGISTRY_PUSH_TOKEN: ${{ secrets.KAMAL_REGISTRY_PUSH_TOKEN }}
           KAMAL_REGISTRY_PULL_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PULL_PASSWORD }}
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           RUSS_LIVE_PRIMARY_DB_PASSWORD: ${{ secrets.RUSS_LIVE_PRIMARY_DB_PASSWORD }}
@@ -140,7 +140,7 @@ jobs:
       - name: Deploy with Kamal
         env:
           KAMAL_SSH_KEY_PATH: ${{ runner.temp }}/kamal.key
-          KAMAL_REGISTRY_PUSH_TOKEN: ${{ github.token }}
+          KAMAL_REGISTRY_PUSH_TOKEN: ${{ secrets.KAMAL_REGISTRY_PUSH_TOKEN }}
           KAMAL_REGISTRY_PULL_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PULL_PASSWORD }}
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           RUSS_LIVE_PRIMARY_DB_PASSWORD: ${{ secrets.RUSS_LIVE_PRIMARY_DB_PASSWORD }}
