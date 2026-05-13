@@ -1,29 +1,201 @@
+<% company_areas = [
+  {
+    key: "live",
+    logo: "russ_live/about/russ-live-area-logo.png",
+    title: "Russ Live",
+    url: "https://www.michaelrussgmbh.de/",
+    text: "Ob Club- oder Stadion-Konzerte, Musicals, Shows oder ihr nächstes Firmenevent. Wir sind ihr starker Partner."
+  },
+  {
+    key: "artists",
+    logo: "russ_live/about/russ-artists-logo.png",
+    title: "Russ Artists",
+    url: "https://russ-artists.de/",
+    text: "Ihr engagierter Partner bei der Suche nach K&uuml;nstlern und Programmen, die Ihrem Veranstalterprofil entsprechen."
+  },
+  {
+    key: "service",
+    logo: "russ_live/about/russ-service-logo.png",
+    title: "Russ Service",
+    url: "https://www.ordnerdienste-stuttgart.de/",
+    text: "Wir sorgen f&uuml;r eine sichere Veranstaltung - Konzert - Tagung - Firmenfeier - Konferenz."
+  },
+  {
+    key: "klassik",
+    logo: "russ_live/about/russ-klassik-logo.png",
+    title: "Russ Klassik",
+    url: "https://russ-klassik.de/",
+    text: "Entdecken sie bei uns die faszinierende Welt der klassischen Musik. Meisterkonzerte f&uuml;r Stuttgart. Seit 1945."
+  }
+] %>
+
+<style>
+  @media (min-width: 1400px) {
+    .about-page .about-company-band {
+      gap: 2rem !important;
+      grid-template-columns: 21rem 1fr !important;
+    }
+
+    .about-page .about-company-band-grid {
+      gap: 2rem 3rem !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .about-page .about-company-card a {
+      border: 0 !important;
+      box-shadow: none !important;
+      min-height: 4.75rem !important;
+      padding: 0 !important;
+    }
+
+    .about-page .about-company-logo {
+      height: 4.2rem !important;
+    }
+
+    .about-page .about-company-card-live .about-company-logo img {
+      width: 12.8rem !important;
+    }
+
+    .about-page .about-company-card-artists .about-company-logo img {
+      width: 14rem !important;
+    }
+
+    .about-page .about-company-card-service .about-company-logo img {
+      width: 13.3rem !important;
+    }
+
+    .about-page .about-company-card-klassik .about-company-logo img {
+      width: 13.7rem !important;
+    }
+  }
+
+  .about-page .about-history-image {
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  .about-page .about-history-image-portrait {
+    aspect-ratio: auto !important;
+    justify-self: center !important;
+    max-width: 56rem !important;
+    width: 100% !important;
+  }
+
+  .about-page .about-history-image-portrait img {
+    display: block !important;
+    height: auto !important;
+    object-fit: contain !important;
+    width: 100% !important;
+  }
+</style>
+
 <main class="page-main about-page">
-      <section class="section about-intro" aria-labelledby="about-title">
-        <div>
-          <p class="eyebrow">Über uns</p>
-          <h1 id="about-title"><span>Veranstaltungen</span><span>mit Erfahrung,</span><span>Haltung und Nähe</span><span>zur Region.</span></h1>
-        </div>
-        <figure class="about-intro-visual" aria-hidden="true">
-          <%= image_tag "russ_live/keyvisuals/2024_SKS_RUS_Keyvisual_Live_White_RGB.jpg", alt: "" %>
-        </figure>
-      </section>
+  <section class="section about-hero" aria-labelledby="about-title">
+    <div class="about-hero-copy">
+      <p class="eyebrow">Über uns</p>
+      <h1 id="about-title">
+        <span style="display:block;white-space:nowrap;">Menschen.</span>
+        <span style="display:block;white-space:nowrap;"><em style="white-space:nowrap;">Momente.</em></span>
+        <span style="display:block;white-space:nowrap;">Seit 1945.</span>
+      </h1>
+      <p>Aus Stuttgart. Für die Welt. Seit drei Generationen gestalten wir Konzerte, die verbinden.</p>
+    </div>
 
-      <section class="section about-modules" aria-label="Über Russ Live Module">
-        <article class="about-feature">
-          <figure class="about-placeholder about-placeholder-wide"><img src="<%= image_path "russ_live/keyvisuals/Keyvisual_RussLive.jpg" %>" alt="Russ Live Produktion mit Bühne und Publikum"></figure>
-          <div><p class="eyebrow">Unternehmen</p><h2>Von der Idee bis zum Veranstaltungstag</h2><p>Ob es um Konzeption von Events, Projektplanung, technische Umsetzung, Sicherheits- und Hygienekonzepte, Ordnungsdienst, Kostenschätzungen, PR- und Presse-Know-how, Marketingstrategien, Ticketverkauf und Sales-Management oder schlicht die Personalplanung geht – wir sind Ihr Partner für die erfolgreiche Umsetzung großer Veranstaltungen und toller Ideen.</p></div>
+    <div class="about-hero-collage" aria-hidden="true">
+      <figure class="about-hero-card about-hero-card-tall">
+        <%= image_tag "russ_live/about/tina-turner-1990.jpg", alt: "" %>
+      </figure>
+      <figure class="about-hero-card about-hero-card-wide">
+        <%= image_tag "russ_live/about/u2-2002.jpg", alt: "" %>
+      </figure>
+      <figure class="about-hero-card about-hero-card-square">
+        <%= image_tag "russ_live/about/ike-tina-1971.jpg", alt: "" %>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section about-story-lead" aria-labelledby="about-story-lead-title">
+    <div class="about-story-lead-copy">
+      <h2 id="about-story-lead-title" class="sr-only">Unternehmensprofil</h2>
+      <p><strong>Michael Russ Jr.</strong> ist mit einer ruhigen Nähe, viel Herz und echtem Unternehmergeist auf die Welt von Russ Live gewachsen. Im Laufe der Jahre wurde daraus Verantwortung, Erfahrung und ein klarer Blick dafür, wie man Kultur dauerhaft möglich macht.</p>
+      <p><strong>Michaela Russ</strong> führt diesen Weg in der dritten Generation weiter. Gemeinsam steht die Familie für Produktionen, die professionell organisiert sind und trotzdem menschlich bleiben. Daraus ist ein Team entstanden, das Kultur mit Haltung, Verlässlichkeit und Leidenschaft umsetzt.</p>
+    </div>
+  </section>
+
+  <section class="about-company-band" aria-labelledby="about-company-band-title">
+    <div class="about-company-band-copy">
+      <p class="eyebrow">Konzertdirektion Russ</p>
+      <h2 id="about-company-band-title">Vier Unternehmen.<br>Eine Vision.</h2>
+      <p>Wir wollen Menschen gl&uuml;cklich machen.</p>
+      <%= link_to "Konzertdirektion", "https://www.konzertdirektion-russ.de/", class: "section-button about-company-band-button", target: "_blank", rel: "noopener noreferrer" %>
+    </div>
+
+    <div class="about-company-band-grid">
+      <% company_areas.each do |area| %>
+        <article class="about-company-card about-company-card-<%= area[:key] %>">
+          <a href="<%= area[:url] %>" target="_blank" rel="noopener noreferrer" aria-label="<%= "#{area[:title]} öffnen" %>">
+            <figure class="about-company-logo">
+              <%= image_tag area[:logo], alt: area[:title] %>
+            </figure>
+            <div class="about-company-hover-copy">
+              <h3><%= area[:title] %></h3>
+              <p><%= area[:text].html_safe %></p>
+            </div>
+          </a>
         </article>
+      <% end %>
+    </div>
+  </section>
 
-        <div class="about-card-grid">
-          <article class="about-card"><figure class="about-placeholder"><img src="<%= image_path "russ_live/team/michaela-russ.jpg" %>" alt="Michaela Russ"></figure><h2>In Stuttgart zuhause</h2><p>Die SKS Michael Russ GmbH ist in Stuttgart gegründet und in der Region zuhause. Hier liegen unsere Stärken und unser Vorteil. Kurze Wege, Kenntnis der kulturellen, gesellschaftlichen und geographischen Gegebenheiten und vielfältige persönliche Netzwerke: Wir lösen auch die schwierigsten Probleme in kurzer Zeit.</p></article>
-          <article class="about-card"><figure class="about-placeholder"><img src="<%= image_path "russ_live/team/paul-woog.jpg" %>" alt="Paul Woog"></figure><h2>Menschen im Mittelpunkt</h2><p>Unsere Veranstaltungen entstehen durch Teams, Partner und Dienstleister, die mit Erfahrung und Sorgfalt zusammenarbeiten.</p></article>
-          <article class="about-card"><figure class="about-placeholder"><img src="<%= image_path "russ_live/references/37-kultur-im-alten-schloss.jpg" %>" alt="Kultur im Alten Schloss"></figure><h2>Kultur mit Verantwortung</h2><p>Umweltschutz, Nachhaltigkeit, Diversität, Gleichberechtigung ist in der Entertainment-Branche noch nicht überall selbstverständlich, aber wir geben uns Mühe und versuchen ein gutes Vorbild zu sein. So gibt es seit den 90er Jahren zum Beispiel das VVS Kombiticket für den öffentlichen Nahverkehr für unsere großen Konzerte in Stuttgart oder auch Mehrwegbecher auf den meisten Shows sind selbstverständlich. Für unsere Zusammenarbeit mit Dienstleistern sind Integrität, Fairness, Transparenz und Partnerschaft grundlegende Werte. Wir zahlen schnellstens alle unsere Rechnungen, damit keine unserer Partner durch uns in finanzielle Schieflage gerät.</p></article>
-        </div>
+  <section class="section about-history-section about-history-section-first" aria-labelledby="about-history-title">
+    <figure class="about-history-image about-history-image-portrait">
+      <%= image_tag "russ_live/about/geschichte-v2.jpg", alt: "Michaela Russ, Michael Russ und ein historisches Familienportrait", style: "display:block;width:100%;height:auto;object-fit:contain;" %>
+    </figure>
 
-        <article class="about-feature about-feature-reverse">
-          <figure class="about-placeholder about-placeholder-wide"><img src="<%= image_path "russ_live/keyvisuals/2026_SKS_RUS_Keyvisual_Live_RGB.jpg" %>" alt="Russ Live Keyvisual"></figure>
-          <div><p class="eyebrow">Leitbild</p><h2>Kulturproduktionen mit regionalem Rückgrat</h2><p>Wir sind ein wichtiger Teil des globalen Entertainmentmarktes, aber zugleich auch ein zentral wichtiges Unternehmen für die regionale Kultur. Kunst und Kultur sind die Grundlagen unseres Schaffens und Präsentationsmöglichkeiten für internationale, wie auch nationale und regionale Künstler dauerhaft zu sichern, das ist unser Auftrag. Der Künstler, seine Musik oder sein Werk stehen daher für uns immer im Vordergrund. Urheberschutz in Bild, Wort und Ton ist die Grundlage unserer Angebote.</p></div>
-        </article>
-      </section>
-    </main>
+    <div class="about-history-copy">
+      <p class="eyebrow">Geschichte</p>
+      <h2 id="about-history-title">Unsere Geschichte. Drei Generationen. Eine Haltung.</h2>
+      <p>Was 1945 mit einer Vision begann, ist heute eine der führenden Konzertdirektionen Europas. Von Stuttgart aus hat Russ über Jahrzehnte Konzertgeschichte mitgeprägt und sich gleichzeitig die Nähe zur Region bewahrt.</p>
+      <p>Diese Verbindung aus lokaler Verwurzelung und internationalem Anspruch prägt unseren Blick bis heute: Wir denken groß, arbeiten partnerschaftlich und behalten immer die Menschen hinter jeder Produktion im Fokus.</p>
+    </div>
+  </section>
+
+  <section class="section about-history-section about-history-section-award" aria-labelledby="about-award-title">
+    <div class="about-history-copy about-history-copy-narrow">
+      <p class="eyebrow">Verantwortung</p>
+      <h2 id="about-award-title">Erfahrung, die nicht stillsteht.</h2>
+      <p>Ob Tournee, Einzelshow, Kulturformat oder Großereignis: Wir verbinden gewachsene Branchenkenntnis mit dem Anspruch, uns immer weiterzuentwickeln. Genau daraus entsteht die Mischung aus Präzision, Ruhe und Neugier, die unsere Arbeit auszeichnet.</p>
+      <p>Auszeichnungen freuen uns. Wichtiger ist uns aber, dass Künstler, Publikum, Partner und Teams sich auf uns verlassen können.</p>
+    </div>
+
+    <figure class="about-history-image about-history-image-award">
+      <%= image_tag "russ_live/about/award-top-magazin.jpg", alt: "Michael Russ Jr. mit Auszeichnung und Partner bei einer Preisverleihung" %>
+    </figure>
+  </section>
+
+  <section class="section about-history-section about-history-section-city" aria-labelledby="about-city-title">
+    <div class="about-city-visuals">
+      <figure class="about-history-image about-history-image-small">
+        <%= image_tag "russ_live/about/ike-tina-1971.jpg", alt: "Historisches Konzertfoto von Ike und Tina Turner" %>
+      </figure>
+      <figure class="about-history-image about-history-image-large">
+        <%= image_tag "russ_live/about/adac-2003.jpg", alt: "Großveranstaltung in Stuttgart mit Oldtimer-Korso" %>
+      </figure>
+    </div>
+
+    <div class="about-history-copy">
+      <p class="eyebrow">Perspektive</p>
+      <h2 id="about-city-title">Von Stuttgart in die Welt.</h2>
+      <p>Ob in der Stuttgarter Liederhalle, auf den großen Festivalflächen, in Arenen oder Open-Air-Produktionen: Wir bringen Menschen zusammen. Live. Echt. Unvergesslich.</p>
+      <p>Die Stadt ist unser Ausgangspunkt, nicht unsere Grenze. Aus ihr heraus entwickeln wir Formate, die regional verankert sind und weit darüber hinaus wirken.</p>
+    </div>
+  </section>
+
+  <section class="about-closing section" aria-labelledby="about-closing-title">
+    <div class="about-closing-copy">
+      <p class="eyebrow">Heute</p>
+      <h2 id="about-closing-title">Tradition ist für uns kein Rückblick, sondern Vertrauen in das, was als Nächstes kommt.</h2>
+      <p>Russ Live steht für Erfahrung ohne Stillstand, für Qualität ohne Attitüde und für Produktionen, die Kultur als gemeinsame Aufgabe begreifen.</p>
+    </div>
+  </section>
+</main>

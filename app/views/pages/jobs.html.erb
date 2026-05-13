@@ -1,79 +1,84 @@
 <main class="page-main job-page">
-      <section class="section job-hero" aria-labelledby="jobs-title">
-        <div class="job-hero-copy">
-          <p class="eyebrow">Jobs</p>
-          <h1 id="jobs-title">Cateringhilfen</h1>
-          <p>Zum nächstmöglichen Zeitpunkt, auf Minijob Basis, m/w/d</p>
-          <a class="section-button section-button-outline" href="#job-description">Zur Beschreibung</a>
-          <a class="section-button" href="mailto:personal@russ-live.de">Jetzt bewerben</a>
-        </div>
-        <figure class="job-hero-media">
-          <img src="<%= image_path "russ_live/jobs/cateringhilfen.jpg" %>" alt="Küchenteam bereitet frische Speisen zu">
-        </figure>
-      </section>
+  <section class="section job-overview-hero" aria-labelledby="jobs-title">
+    <div class="job-overview-hero-media">
+      <%= image_tag @job_overview_hero_image, alt: "Backstage-Moment mit Russ Live Crew vor einer beleuchteten Bühne" %>
+    </div>
 
-      <nav class="job-profile-nav" aria-label="Jobprofile" data-controller="job-profile-nav">
-        <button class="job-profile-toggle" type="button" aria-expanded="false" aria-controls="job-profile-menu" data-job-profile-nav-target="button" data-action="job-profile-nav#toggle">
-          <span>Cateringhilfen</span>
-        </button>
-        <div class="job-profile-menu" id="job-profile-menu" data-job-profile-nav-target="menu">
-          <%= link_to "Cateringhilfen", jobs_path, aria: { current: "page" } %>
-          <%= link_to "Stagehands", jobs_path %>
-          <%= link_to "Staplerfahrer*innen", jobs_path %>
-          <%= link_to "Securities", jobs_path %>
-        </div>
-      </nav>
+    <div class="job-overview-hero-copy">
+      <p class="eyebrow">Jobs</p>
+      <h1 id="jobs-title">Werde Teil unseres Event-Teams.</h1>
+      <p>Flexible Jobs bei Konzerten, Festivals und Events in Stuttgart.</p>
+      <div class="job-overview-hero-actions">
+        <a class="section-button" href="#jobs-list">Jetzt bewerben</a>
+        <a class="section-button section-button-outline-light" href="#jobs-story">Mehr erfahren</a>
+      </div>
+    </div>
+  </section>
 
-      <section class="section job-detail" id="job-description" aria-label="Jobdetails Cateringhilfen">
-        <article class="job-content">
-          <div class="job-section">
-            <p class="eyebrow">Tätigkeitsfeld</p>
-            <ul class="job-list">
-              <li>Hilfstätigkeiten bei der Speisenzubereitung</li>
-              <li>Auf- und Abbau von Buffets</li>
-              <li>Unterstützung des Küchenteams</li>
-            </ul>
-          </div>
+  <section class="section job-overview-listing" id="jobs-list" aria-labelledby="jobs-list-title">
+    <div class="job-overview-heading">
+      <div>
+        <p class="eyebrow">Aktuelle Jobs</p>
+        <h2 id="jobs-list-title">Unsere aktuellen Jobangebote</h2>
+      </div>
+      <p class="job-overview-intro">Klick auf ein Jobprofil und Du landest direkt in der bekannten Detailansicht weiter unten auf der Seite.</p>
+    </div>
 
-          <div class="job-section">
-            <p class="eyebrow">Anforderungen</p>
-            <ul class="job-list">
-              <li>Zuverlässiges, gewissenhaftes Arbeiten</li>
-              <li>Flexibilität auch spät abends oder nachts zu arbeiten</li>
-              <li>Körperliche Fitness</li>
-              <li>Team- und gute Kommunikationsfähigkeit</li>
-              <li>Schnelle Auffassungsgabe</li>
-              <li>Englischkenntnisse von Vorteil</li>
-              <li>Motivation und Lust auf Arbeiten in der Event-Branche</li>
-              <li>Gültiges allgemeines Gesundheitszeugnis</li>
-            </ul>
-          </div>
+    <div class="job-table" role="table" aria-label="Jobangebote">
+      <div class="job-table-row job-table-row-head" role="row">
+        <span role="columnheader">Position</span>
+        <span role="columnheader">Bereich</span>
+        <span role="columnheader">Einsatzort</span>
+        <span role="columnheader">Anfrage</span>
+      </div>
 
-          <div class="job-apply">
-            <h2>Wir freuen uns auf Deine Bewerbung!</h2>
-            <a class="section-button" href="mailto:personal@russ-live.de">personal@russ-live.de</a>
-          </div>
-        </article>
+      <% @jobs.each do |job| %>
+        <%= link_to job_path(job[:slug]), class: "job-table-row", role: "row" do %>
+          <span class="job-table-position" role="cell">
+            <strong><%= job[:title] %></strong>
+            <span class="job-table-badge"><%= job[:badge] %></span>
+          </span>
+          <span role="cell"><%= job[:area] %></span>
+          <span role="cell"><%= job[:location] %></span>
+          <span class="job-table-action" role="cell">
+            <span>Jetzt bewerben</span>
+            <span aria-hidden="true">→</span>
+          </span>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
 
-        <aside class="job-sidebar" aria-label="Jobs und Ansprechpartner">
-          <div class="job-nav">
-            <p class="eyebrow">Jobs</p>
-            <nav aria-label="Jobprofile">
-              <a href="<%= jobs_path %>" aria-current="page">Cateringhilfen</a>
-              <a href="<%= jobs_path %>">Stagehands</a>
-              <a href="<%= jobs_path %>">Staplerfahrer*innen</a>
-              <a href="<%= jobs_path %>">Securities</a>
-            </nav>
-          </div>
+  <section class="section job-story-grid" id="jobs-story" aria-label="Einblicke in die Arbeitswelt">
+    <article class="job-story-card">
+      <figure class="job-story-image">
+        <%= image_tag "russ_live/jobs/stage-before.jpg", alt: "Bühnenaufbau mit Traversen, Cases und Technik vor einem Event" %>
+      </figure>
+      <div class="job-story-copy">
+        <p class="eyebrow">Einzigartige Momente</p>
+        <h2>Arbeiten, wo Events entstehen.</h2>
+        <p>Vom ersten Aufbau bis zur letzten Show bist Du Teil eingespielter Teams und echter Live-Momente.</p>
+      </div>
+    </article>
 
-          <div class="job-contact">
-            <p class="eyebrow">Ansprechpartner</p>
-            <img src="<%= image_path "russ_live/team/sebastian-kraenzlein.jpg" %>" alt="Sebastian Kränzlein">
-            <h2>Sebastian Kränzlein</h2>
-            <p>Personaldisposition / Personalmarketing</p>
-            <p><a href="tel:+497111635342">Telefon +49.711.16 353 42</a></p>
-            <p><a href="mailto:sebastiankraenzlein@russ-live.de">sebastiankraenzlein@russ-live.de</a></p>
-          </div>
-        </aside>
-      </section>
-    </main>
+    <article class="job-story-band">
+      <div class="job-story-band-copy">
+        <p class="eyebrow">Mehr als nur ein Job</p>
+        <h2>Gemeinsam für unvergessliche Erlebnisse.</h2>
+        <p>Wir arbeiten mit Leidenschaft, packen gemeinsam an und schaffen Events, die in Erinnerung bleiben.</p>
+      </div>
+      <figure class="job-story-band-visual">
+        <%= image_tag "russ_live/jobs/people-enjoying-music-concert.jpg", alt: "Publikum bei einem Konzert mit erhobenen Händen" %>
+      </figure>
+    </article>
+
+    <section class="job-quotes" aria-label="Stimmen aus dem Team">
+      <% 3.times do %>
+        <blockquote class="job-quote">
+          <p>Man erlebt Events aus einer Perspektive, die sonst niemand sieht.</p>
+          <footer>Luca, Stagehand seit 2022</footer>
+        </blockquote>
+      <% end %>
+    </section>
+  </section>
+</main>

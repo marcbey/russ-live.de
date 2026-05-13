@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get "services", to: "pages#services"
   get "referenzen", to: "pages#referenzen"
   get "jobs", to: "pages#jobs"
+  get "jobs/:slug", to: "pages#job", as: :job
   get "presse", to: "pages#presse"
   get "presse/beispiel", to: "pages#press_detail", as: :press_detail
   get "kontakt", to: "pages#kontakt"

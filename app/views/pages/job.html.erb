@@ -1,0 +1,81 @@
+<main class="page-main job-page">
+  <section class="section job-template-hero" aria-labelledby="job-title">
+    <div class="job-template-hero-media">
+      <%= image_tag @selected_job[:hero_image], alt: @selected_job[:hero_image_alt] %>
+    </div>
+
+    <div class="job-template-hero-copy">
+      <p class="eyebrow">Jobprofil</p>
+      <h1 id="job-title"><%= @selected_job[:title] %></h1>
+      <p><%= @selected_job[:employment] %></p>
+      <div class="job-overview-hero-actions">
+        <a class="section-button" href="mailto:personal@russ-live.de">Jetzt bewerben</a>
+        <%= link_to "Zur Übersicht", jobs_path, class: "section-button section-button-outline-light" %>
+      </div>
+    </div>
+  </section>
+
+  <nav class="job-profile-nav" aria-label="Jobprofile" data-controller="job-profile-nav">
+    <button class="job-profile-toggle" type="button" aria-expanded="false" aria-controls="job-profile-menu" data-job-profile-nav-target="button" data-action="job-profile-nav#toggle">
+      <span><%= @selected_job[:title] %></span>
+    </button>
+    <div class="job-profile-menu" id="job-profile-menu" data-job-profile-nav-target="menu">
+      <% @jobs.each do |job| %>
+        <%= link_to job[:title], job_path(job[:slug]), aria: { current: ("page" if job[:slug] == @selected_job[:slug]) } %>
+      <% end %>
+    </div>
+  </nav>
+
+  <section class="section job-detail" id="job-detail" aria-label="<%= @selected_job[:detail_label] %>">
+    <article class="job-content">
+      <div class="job-detail-hero" id="<%= @selected_job[:detail_id] %>">
+        <p class="eyebrow">Ausgewähltes Profil</p>
+        <h2><%= @selected_job[:title] %></h2>
+        <p><%= @selected_job[:intro] %></p>
+      </div>
+
+      <div class="job-section">
+        <p class="eyebrow">Tätigkeitsfeld</p>
+        <ul class="job-list">
+          <% @selected_job[:responsibilities].each do |responsibility| %>
+            <li><%= responsibility %></li>
+          <% end %>
+        </ul>
+      </div>
+
+      <div class="job-section">
+        <p class="eyebrow">Anforderungen</p>
+        <ul class="job-list">
+          <% @selected_job[:requirements].each do |requirement| %>
+            <li><%= requirement %></li>
+          <% end %>
+        </ul>
+      </div>
+
+      <div class="job-apply">
+        <h2>Wir freuen uns auf Deine Bewerbung!</h2>
+        <a class="section-button" href="mailto:personal@russ-live.de">personal@russ-live.de</a>
+      </div>
+    </article>
+
+    <aside class="job-sidebar" aria-label="Jobs und Ansprechpartner">
+      <div class="job-nav">
+        <p class="eyebrow">Jobs</p>
+        <nav aria-label="Jobprofile">
+          <% @jobs.each do |job| %>
+            <%= link_to job[:title], job_path(job[:slug]), aria: { current: ("page" if job[:slug] == @selected_job[:slug]) } %>
+          <% end %>
+        </nav>
+      </div>
+
+      <div class="job-contact">
+        <p class="eyebrow">Ansprechpartner</p>
+        <%= image_tag @job_contact[:image], alt: @job_contact[:image_alt] %>
+        <h2><%= @job_contact[:name] %></h2>
+        <p><%= @job_contact[:role] %></p>
+        <p><a href="tel:<%= @job_contact[:phone_href] %>"><%= @job_contact[:phone_label] %></a></p>
+        <p><a href="mailto:<%= @job_contact[:email] %>"><%= @job_contact[:email] %></a></p>
+      </div>
+    </aside>
+  </section>
+</main>

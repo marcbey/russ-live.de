@@ -7,7 +7,8 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
       unternehmen_path => "Veranstaltungen",
       services_path => "Live",
       referenzen_path => "Projekte, Projekte, Projekte",
-      jobs_path => "Cateringhilfen",
+      jobs_path => "Unsere aktuellen Jobangebote",
+      job_path("stagehands") => "Jobdetails Stagehands",
       presse_path => "Presseinfos für Partner und Medien.",
       press_detail_path => "Beispiel Künstlername",
       kontakt_path => "Charlottenplatz 17",
@@ -22,5 +23,23 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
       assert_includes response.body, text
       assert_includes response.body, "/assets/russ_live/"
     end
+  end
+
+  test "renders job detail on its own page" do
+    get job_path("stagehands")
+
+    assert_response :success
+    assert_includes response.body, "Stagehands"
+    assert_includes response.body, "Jobdetails Stagehands"
+    assert_includes response.body, "Auf- und Abbau von Bühnen-, Licht- und Tontechnik"
+  end
+
+  test "jobs overview links to separate job pages" do
+    get jobs_path
+
+    assert_response :success
+    assert_includes response.body, job_path("cateringhilfen")
+    assert_includes response.body, job_path("stagehands")
+    assert_no_match(/Jobdetails Stagehands/, response.body)
   end
 end
