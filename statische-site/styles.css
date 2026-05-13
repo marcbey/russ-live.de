@@ -404,6 +404,69 @@ h3 {
   text-transform: none;
 }
 
+.home-hero {
+  background: #050505;
+  color: #fff;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: min(860px, 92svh);
+  overflow: hidden;
+  position: relative;
+}
+
+.home-hero::after {
+  background:
+    linear-gradient(90deg, rgba(5, 5, 5, .92) 0%, rgba(5, 5, 5, .66) 38%, rgba(5, 5, 5, .12) 74%),
+    linear-gradient(0deg, rgba(5, 5, 5, .78) 0%, rgba(5, 5, 5, 0) 44%);
+  content: "";
+  inset: 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.home-hero-media {
+  inset: 0;
+  position: absolute;
+}
+
+.home-hero-media img {
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+}
+
+.home-hero-copy {
+  align-self: start;
+  max-width: 980px;
+  padding: var(--hero-copy-top) var(--brand-left) clamp(72px, 9svh, 118px);
+  position: relative;
+  z-index: 2;
+}
+
+.home-hero h1 {
+  color: #fff;
+  font-size: clamp(4rem, 6.6vw, 7.2rem);
+  hyphens: none;
+  line-height: .9;
+  max-width: 980px;
+  overflow-wrap: normal;
+  text-transform: uppercase;
+}
+
+.home-hero h1 span {
+  display: block;
+}
+
+.home-hero-copy > p:last-child {
+  color: rgba(255, 255, 255, .82);
+  font-size: clamp(1.18rem, 1.45vw, 1.72rem);
+  line-height: 1.2;
+  margin: 30px 0 0;
+  max-width: 720px;
+}
+
 .section {
   margin-inline: auto;
   max-width: var(--max);
@@ -2949,6 +3012,33 @@ h3 {
     display: none;
   }
 
+  .home-hero {
+    min-height: 820px;
+  }
+
+  .home-hero::after {
+    background:
+      linear-gradient(180deg, rgba(5, 5, 5, .5) 0%, rgba(5, 5, 5, .82) 58%, rgba(5, 5, 5, .94) 100%);
+  }
+
+  .home-hero-media img {
+    object-position: 58% center;
+  }
+
+  .home-hero-copy {
+    align-self: start;
+    padding: var(--mobile-hero-content-top) var(--brand-left) 128px;
+  }
+
+  .home-hero h1 {
+    font-size: clamp(2.65rem, 10vw, 4.2rem);
+    max-width: min(680px, calc(100vw - 56px));
+  }
+
+  .home-hero-copy > p:last-child {
+    max-width: min(620px, calc(100vw - 56px));
+  }
+
   .services-hero::after {
     background:
       linear-gradient(180deg, rgba(5, 5, 5, .5) 0%, rgba(5, 5, 5, .82) 58%, rgba(5, 5, 5, .94) 100%);
@@ -3456,6 +3546,18 @@ h3 {
 
   .services-hero-copy {
     padding: var(--mobile-hero-content-top) var(--brand-left) 112px;
+  }
+
+  .home-hero {
+    min-height: 760px;
+  }
+
+  .home-hero-copy {
+    padding: var(--mobile-hero-content-top) var(--brand-left) 112px;
+  }
+
+  .home-hero h1 {
+    font-size: clamp(2.05rem, 9vw, 2.9rem);
   }
 
   .services-hero h1 {
