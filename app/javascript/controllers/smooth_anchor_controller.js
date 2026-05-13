@@ -15,6 +15,13 @@ export default class extends Controller {
         if (!target) return
 
         event.preventDefault()
+
+        if (link.dataset.anchorPosition === "flush") {
+          const targetTop = target.getBoundingClientRect().top + window.scrollY
+          window.scrollTo({ top: targetTop, behavior: "smooth" })
+          return
+        }
+
         target.scrollIntoView({ behavior: "smooth", block: "start" })
       }, { signal: this.abortController.signal })
     })

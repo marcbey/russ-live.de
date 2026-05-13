@@ -7,7 +7,8 @@ export default class extends Controller {
     this.previousButton = this.element.querySelector(".klassik-slider-arrow-prev")
     this.nextButton = this.element.querySelector(".klassik-slider-arrow-next")
     this.title = this.element.querySelector(".klassik-slider-meta h3")
-    this.details = this.element.querySelector(".klassik-slider-meta p")
+    this.dateLocation = this.element.querySelector(".klassik-slider-date-location")
+    this.partner = this.element.querySelector(".klassik-slider-partner")
     this.meta = this.element.querySelector(".klassik-slider-meta")
     this.activeIndex = Math.max(0, this.slides.findIndex((slide) => slide.classList.contains("is-active")))
 
@@ -63,7 +64,8 @@ export default class extends Controller {
     })
 
     if (this.title) this.title.textContent = this.slides[this.activeIndex].dataset.title || ""
-    if (this.details) this.details.textContent = this.slides[this.activeIndex].dataset.meta || ""
+    if (this.dateLocation) this.dateLocation.textContent = this.slides[this.activeIndex].dataset.dateLocation || ""
+    if (this.partner) this.partner.textContent = this.slides[this.activeIndex].dataset.partner || ""
     if (this.meta) {
       this.meta.classList.remove("is-updating")
       window.requestAnimationFrame(() => this.meta.classList.add("is-updating"))

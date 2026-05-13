@@ -5,8 +5,9 @@
           <%= image_tag "russ_live/keyvisuals/Keyvisual_RussLive2.jpg", alt: "Goldene Gitarre als Russ Live Keyvisual" %>
         </picture>
         <div class="home-hero-copy">
-          <h1 id="hero-title"><span>Ihr örtlicher</span><span>Veranstalter</span><span>für Stuttgart</span></h1>
-          <p id="hero-intro">Im Blick haben wir dabei immer die Künstler und das Publikum zugleich – so schaffen wir einzigartige emotionale Momente für bis zu 1 Million Besucher – jedes Jahr.</p>
+          <h1 id="hero-title"><span>Live</span><span>Enter</span><span>Tainment</span></h1>
+          <p id="hero-intro">Ihr örtlicher Veranstalter für Stuttgart. Im Blick haben wir dabei immer die Künstler und das Publikum zugleich – so schaffen wir einzigartige emotionale Momente für bis zu 1 Million Besucher – jedes Jahr.</p>
+          <a class="hero-button home-hero-button" href="#services" data-anchor-position="flush">Services</a>
         </div>
       </section>
 
@@ -96,35 +97,64 @@
           <div class="klassik-slider-viewport">
             <button class="klassik-slider-arrow klassik-slider-arrow-prev" type="button" aria-label="Vorherige Referenz">‹</button>
             <div class="klassik-slider-stage">
-              <figure class="klassik-slide is-active" data-index="0" tabindex="0" aria-hidden="false" aria-label="Five Finger Death Punch" data-title="Five Finger Death Punch" data-meta="Rock / Metal · Porsche-Arena Stuttgart">
-                <img src="<%= image_path "russ_live/references/featured/bild1.jpg" %>" alt="Five Finger Death Punch">
-              </figure>
-              <figure class="klassik-slide is-next" data-index="1" tabindex="0" aria-hidden="true" aria-label="AC/DC" data-title="AC/DC" data-meta="Stadionproduktion · Stuttgart">
-                <img src="<%= image_path "russ_live/references/featured/bild2.jpg" %>" alt="AC/DC">
-              </figure>
-              <figure class="klassik-slide is-prev" data-index="2" tabindex="0" aria-hidden="true" aria-label="David Garrett" data-title="David Garrett" data-meta="Arena-Konzert · Liederhalle Stuttgart">
-                <img src="<%= image_path "russ_live/references/featured/bild3.jpg" %>" alt="David Garrett">
-              </figure>
+              <% @home_references.each_with_index do |reference, index| %>
+                <% slide_classes = ["klassik-slide"] %>
+                <% slide_classes << "is-active" if index.zero? %>
+                <% slide_classes << "is-next" if index == 1 %>
+                <% slide_classes << "is-prev" if index == @home_references.length - 1 %>
+                <% slide_classes << "is-hidden" if index > 1 && index != @home_references.length - 1 %>
+                <figure class="<%= slide_classes.join(" ") %>" data-index="<%= index %>" tabindex="0" aria-hidden="<%= index.zero? ? "false" : "true" %>" aria-label="<%= reference[:title] %>" data-title="<%= reference[:title] %>" data-date-location="<%= reference[:date_location] %>" data-partner="<%= reference[:partner] %>">
+                  <img src="<%= image_path reference[:image] %>" alt="<%= reference[:alt] %>">
+                </figure>
+              <% end %>
             </div>
             <button class="klassik-slider-arrow klassik-slider-arrow-next" type="button" aria-label="Nächste Referenz">›</button>
           </div>
           <div class="klassik-slider-meta">
             <span class="klassik-slider-marker" aria-hidden="true"></span>
             <div class="klassik-slider-text">
-              <h3>Five Finger Death Punch</h3>
-              <p>Rock / Metal · Porsche-Arena Stuttgart</p>
+              <h3><%= @home_references.first[:title] %></h3>
+              <p class="klassik-slider-date-location"><%= @home_references.first[:date_location] %></p>
+              <p class="klassik-slider-partner"><%= @home_references.first[:partner] %></p>
             </div>
             <a class="section-button klassik-slider-button" href="<%= referenzen_path %>">Referenzen</a>
           </div>
         </div>
       </section>
 
-      <section class="section events-strip" aria-labelledby="events-title">
-        <div>
-          <p class="eyebrow">Stuttgart-live</p>
-          <h2 id="events-title">Nächste Veranstaltungen</h2>
-          <p>Hier hängt später der read-only Adapter für die nächsten 10 Russ-live-Events. Stuttgart-live bleibt unverändert.</p>
+      <section class="section home-events" aria-labelledby="events-title" data-controller="events-slider">
+        <div class="section-head home-events-head">
+          <div>
+            <p class="eyebrow">Stuttgart-live</p>
+            <h2 id="events-title">Nächste Veranstaltungen</h2>
+            <p class="home-events-intro">Vorlage für die nächsten Stuttgart-live-Termine mit Bild, Datum, Location, Titel, Subtitel und Ticket-CTA.</p>
+          </div>
+          <div class="home-events-toolbar">
+            <div class="home-events-nav" aria-label="Veranstaltungen blättern">
+              <button class="home-events-nav-button" type="button" data-action="events-slider#previous" aria-label="Vorherige Veranstaltungen">‹</button>
+              <button class="home-events-nav-button" type="button" data-action="events-slider#next" aria-label="Nächste Veranstaltungen">›</button>
+            </div>
+            <a class="button home-events-all-button" href="https://stuttgart-live.de/" target="_blank" rel="noreferrer">Alle anzeigen</a>
+          </div>
         </div>
-        <a class="button" href="https://stuttgart-live.de/" target="_blank" rel="noreferrer">Alle ansehen</a>
+
+        <div class="home-events-viewport" data-events-slider-target="viewport">
+          <div class="home-events-slider" aria-label="Vorlage Nächste Veranstaltungen">
+          <% @home_events.each do |event| %>
+            <article class="event-slider-card" data-events-slider-target="card">
+              <figure class="event-slider-image">
+                <img src="<%= image_path event[:image] %>" alt="<%= event[:title] %>">
+              </figure>
+              <div class="event-slider-copy">
+                <p class="event-slider-date-location"><%= event[:date_location] %></p>
+                <h3><%= event[:title] %></h3>
+                <p class="event-slider-tour"><%= event[:tour] %></p>
+                <a class="event-slider-button" href="<%= event[:ticket_url] %>" target="_blank" rel="noreferrer"><%= event[:ticket_label] %></a>
+              </div>
+            </article>
+          <% end %>
+          </div>
+        </div>
+        <a class="home-events-link" href="https://stuttgart-live.de/" target="_blank" rel="noreferrer">Alle Veranstaltungen auf Stuttgart-live.de</a>
       </section>
     </main>
