@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get "referenzen", to: "pages#referenzen"
   get "jobs", to: "pages#jobs"
   get "presse", to: "pages#presse"
+  get "presse/beispiel", to: "pages#press_detail", as: :press_detail
   get "kontakt", to: "pages#kontakt"
   get "impressum", to: "pages#impressum"
   get "datenschutz", to: "pages#datenschutz"
@@ -26,6 +27,7 @@ Rails.application.routes.draw do
   get "referenzen.html", to: redirect("/referenzen")
   get "jobs.html", to: redirect("/jobs")
   get "presse.html", to: redirect("/presse")
+  get "presse-detail.html", to: redirect("/presse/beispiel")
   get "kontakt.html", to: redirect("/kontakt")
   get "impressum.html", to: redirect("/impressum")
   get "datenschutz.html", to: redirect("/datenschutz")

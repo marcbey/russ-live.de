@@ -1,0 +1,76 @@
+<main class="page-main press-detail-page">
+  <section class="section press-detail-hero" aria-labelledby="press-detail-title">
+    <div class="press-detail-copy">
+      <%= link_to "Zur Presseübersicht", presse_path, class: "press-back-link" %>
+      <p class="eyebrow">Pressemappe</p>
+      <h1 id="press-detail-title">Beispiel Künstlername</h1>
+      <p>Diese Detailseite ist als statische Vorlage angelegt. Später können Künstlerdaten, Veranstaltungstermine, Pressetext und Downloads read-only aus Stuttgart-live befüllt werden.</p>
+      <div class="press-detail-actions">
+        <a class="section-button" href="https://www.stuttgart-live.de/" target="_blank" rel="noreferrer">Tickets</a>
+        <a class="press-outline-button" href="#downloads">Pressemappe downloaden</a>
+      </div>
+    </div>
+    <figure class="press-detail-image">
+      <%= image_tag "russ_live/references/02-david-garrett.jpg", alt: "Beispiel Künstlername Pressefoto" %>
+      <figcaption>Bildcredit im Dateinamen beachten</figcaption>
+    </figure>
+  </section>
+
+  <section class="section press-detail-content" aria-label="Presseinformationen">
+    <aside class="press-event-panel">
+      <p class="eyebrow">Veranstaltung</p>
+      <dl>
+        <div><dt>Datum</dt><dd>21. Mai 2026</dd></div>
+        <div><dt>Uhrzeit</dt><dd>20:00 Uhr</dd></div>
+        <div><dt>Location</dt><dd>Liederhalle Stuttgart, Hegel-Saal</dd></div>
+        <div><dt>Status</dt><dd>Aktuelle Veranstaltung</dd></div>
+        <div><dt>Zusatzinfos</dt><dd>Einlass ab 19:00 Uhr, Fotopool nach Akkreditierung.</dd></div>
+      </dl>
+    </aside>
+    <article class="press-text-panel">
+      <p class="eyebrow">Pressetext</p>
+      <h2>Kurztext für Redaktion und Vorankündigung</h2>
+      <p>Hier steht der freigegebene Pressetext des Künstlers. Der Text kann in der dynamischen Version aus Stuttgart-live übernommen und redaktionell gepflegt werden. Für die statische Vorlage ist der Bereich so angelegt, dass kurze Anreißer, längere Fließtexte und zusätzliche Hinweise gut lesbar bleiben.</p>
+      <p>Die Verwendung des Bild- und Textmaterials ist für redaktionelle Zwecke kostenfrei. Bei Pressefotos ist der im Dateinamen oder in den Metadaten hinterlegte Credit zu beachten.</p>
+    </article>
+  </section>
+
+  <section class="section press-downloads" id="downloads" aria-labelledby="press-download-title" data-controller="press-lightbox">
+    <div class="press-directory-head">
+      <div>
+        <p class="eyebrow">Downloads</p>
+        <h2 id="press-download-title">Bildergalerie</h2>
+      </div>
+      <a class="section-button" href="<%= image_path "russ_live/references/02-david-garrett.jpg" %>" download>Pressemappe downloaden</a>
+    </div>
+    <div class="press-gallery" data-press-gallery>
+      <% [
+        ["russ_live/references/02-david-garrett.jpg", "Pressefoto 1"],
+        ["russ_live/references/10-simply-red.jpg", "Pressefoto 2"],
+        ["russ_live/references/15-laura-pausini.jpg", "Pressefoto 3"]
+      ].each do |image, label| %>
+        <figure>
+          <button type="button" data-press-lightbox-target="trigger" data-lightbox-src="<%= image_path image %>" data-lightbox-alt="<%= label %>" data-action="press-lightbox#open">
+            <%= image_tag image, alt: label, loading: "lazy" %>
+          </button>
+          <figcaption><span><%= label %></span><a href="<%= image_path image %>" download>Bild downloaden</a></figcaption>
+        </figure>
+      <% end %>
+    </div>
+
+    <div class="press-lightbox" data-press-lightbox-target="lightbox" hidden>
+      <div class="press-lightbox-dialog" role="dialog" aria-modal="true" aria-label="Pressebild Vorschau">
+        <button class="press-lightbox-close" type="button" data-press-lightbox-target="close" data-action="press-lightbox#close" aria-label="Lightbox schließen">×</button>
+        <button class="press-lightbox-arrow press-lightbox-prev" type="button" data-action="press-lightbox#previous" aria-label="Vorheriges Bild">‹</button>
+        <figure>
+          <img src="" alt="" data-press-lightbox-target="image">
+          <figcaption>
+            <span data-press-lightbox-target="caption"></span>
+            <a href="#" download data-press-lightbox-target="download">Bild downloaden</a>
+          </figcaption>
+        </figure>
+        <button class="press-lightbox-arrow press-lightbox-next" type="button" data-action="press-lightbox#next" aria-label="Nächstes Bild">›</button>
+      </div>
+    </div>
+  </section>
+</main>

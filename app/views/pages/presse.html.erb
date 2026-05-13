@@ -1,7 +1,59 @@
-<main class="page-main">
-      <section class="section holding" aria-labelledby="press-title">
-        <p class="eyebrow">Presse</p>
-        <h1 id="press-title">Pressebereich</h1>
-        <p>Die Presse-Einträge werden lokal in Russ-live geführt. Eine spätere Vorbefüllung aus Events erfolgt nur über eine read-only Datenquelle.</p>
-      </section>
-    </main>
+<main class="page-main press-page" data-controller="press-search">
+  <section class="press-hero" aria-labelledby="press-title">
+    <div class="press-hero-copy">
+      <p class="eyebrow">Presse</p>
+      <h1 id="press-title">Presseinfos für Partner und Medien.</h1>
+      <p>Pressetexte, Bildmaterial und Veranstaltungsdaten zu kommenden Produktionen. Die Inhalte sind statisch vorbereitet und können später aus Stuttgart-live übernommen werden.</p>
+    </div>
+    <form class="press-search" role="search" aria-label="Künstler suchen">
+      <label for="press-search-input">Künstler suchen</label>
+      <div>
+        <input id="press-search-input" type="search" name="q" autocomplete="off" placeholder="Name eingeben" data-press-search-target="input">
+        <button type="reset" aria-label="Suche zurücksetzen">Zurücksetzen</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="section press-directory" aria-labelledby="press-directory-title">
+    <div class="press-directory-head">
+      <div>
+        <p class="eyebrow">Übersicht</p>
+        <h2 id="press-directory-title">Künstler A-Z</h2>
+      </div>
+      <p data-press-search-target="count"><%= @press_artist_count %> Presseeinträge</p>
+    </div>
+
+    <div class="press-letter-grid" data-press-directory>
+      <% @press_artist_groups.each do |letter, artists| %>
+        <section class="press-letter-group" data-letter-group data-press-search-target="group">
+          <h3><%= letter %></h3>
+          <div class="press-artist-list">
+            <% artists.each do |artist| %>
+              <%= link_to press_detail_path, class: "press-artist-card", data: { press_search_target: "card", artist_name: artist } do %>
+                <span><%= artist %></span>
+              <% end %>
+            <% end %>
+          </div>
+        </section>
+      <% end %>
+    </div>
+    <p class="press-empty" data-press-search-target="empty" hidden>Kein Künstler gefunden.</p>
+  </section>
+
+  <section class="section press-contact-strip" aria-labelledby="press-contact-title">
+    <div>
+      <p class="eyebrow">Ansprechpartner</p>
+      <h2 id="press-contact-title">Pressekontakt</h2>
+      <p>Für Interview-, Akkreditierungs- und Materialanfragen ist der Pressebereich direkt vorbereitet.</p>
+    </div>
+    <article class="press-contact-card">
+      <%= image_tag "russ_live/team/arnulf-woock.jpg", alt: "Arnulf Woock", loading: "lazy" %>
+      <div>
+        <h3>Arnulf Woock</h3>
+        <p>Presse- &amp; Öffentlichkeitsarbeit</p>
+        <a href="mailto:arnulfwoock@michaelrussgmbh.de">arnulfwoock@michaelrussgmbh.de</a>
+        <a href="tel:+497111635320">+49.711.16 353 20</a>
+      </div>
+    </article>
+  </section>
+</main>

@@ -5,6 +5,8 @@ export default class extends Controller {
     this.abortController = new AbortController()
 
     this.element.querySelectorAll('a[href^="#"]').forEach((link) => {
+      if (link.closest(".services-jump-nav")) return
+
       link.addEventListener("click", (event) => {
         const targetId = link.getAttribute("href")
         if (!targetId || targetId === "#") return

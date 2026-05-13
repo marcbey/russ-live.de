@@ -7,8 +7,8 @@ module ApplicationHelper
     keys.map(&:to_sym).include?(@page_key)
   end
 
-  def public_nav_aria(key)
-    { aria: { current: "page" } } if public_page?(key)
+  def public_nav_aria(keys)
+    { aria: { current: "page" } } if public_section?(Array(keys))
   end
 
   def public_nav_class(keys, class_name: "is-active")

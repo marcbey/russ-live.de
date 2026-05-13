@@ -5,13 +5,23 @@
 import { application } from "./application"
 
 import AccordionController from "./accordion_controller"
+import JobProfileNavController from "./job_profile_nav_controller"
 import MobileMenuController from "./mobile_menu_controller"
+import PressLightboxController from "./press_lightbox_controller"
+import PressSearchController from "./press_search_controller"
 import ReferenceMosaicController from "./reference_mosaic_controller"
+import ScrolledHeaderController from "./scrolled_header_controller"
+import ServicesJumpNavController from "./services_jump_nav_controller"
 import SliderController from "./slider_controller"
 import SmoothAnchorController from "./smooth_anchor_controller"
 
 application.register("accordion", AccordionController)
+application.register("job-profile-nav", JobProfileNavController)
 application.register("mobile-menu", MobileMenuController)
+application.register("press-lightbox", PressLightboxController)
+application.register("press-search", PressSearchController)
 application.register("reference-mosaic", ReferenceMosaicController)
+application.register("scrolled-header", ScrolledHeaderController)
+application.register("services-jump-nav", ServicesJumpNavController)
 application.register("slider", SliderController)
 application.register("smooth-anchor", SmoothAnchorController)

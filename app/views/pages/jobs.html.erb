@@ -2,8 +2,9 @@
       <section class="section job-hero" aria-labelledby="jobs-title">
         <div class="job-hero-copy">
           <p class="eyebrow">Jobs</p>
-          <h1 id="jobs-title">Catering - hilfen</h1>
+          <h1 id="jobs-title">Cateringhilfen</h1>
           <p>Zum nächstmöglichen Zeitpunkt, auf Minijob Basis, m/w/d</p>
+          <a class="section-button section-button-outline" href="#job-description">Zur Beschreibung</a>
           <a class="section-button" href="mailto:personal@russ-live.de">Jetzt bewerben</a>
         </div>
         <figure class="job-hero-media">
@@ -11,7 +12,19 @@
         </figure>
       </section>
 
-      <section class="section job-detail" aria-label="Jobdetails Cateringhilfen">
+      <nav class="job-profile-nav" aria-label="Jobprofile" data-controller="job-profile-nav">
+        <button class="job-profile-toggle" type="button" aria-expanded="false" aria-controls="job-profile-menu" data-job-profile-nav-target="button" data-action="job-profile-nav#toggle">
+          <span>Cateringhilfen</span>
+        </button>
+        <div class="job-profile-menu" id="job-profile-menu" data-job-profile-nav-target="menu">
+          <%= link_to "Cateringhilfen", jobs_path, aria: { current: "page" } %>
+          <%= link_to "Stagehands", jobs_path %>
+          <%= link_to "Staplerfahrer*innen", jobs_path %>
+          <%= link_to "Securities", jobs_path %>
+        </div>
+      </nav>
+
+      <section class="section job-detail" id="job-description" aria-label="Jobdetails Cateringhilfen">
         <article class="job-content">
           <div class="job-section">
             <p class="eyebrow">Tätigkeitsfeld</p>

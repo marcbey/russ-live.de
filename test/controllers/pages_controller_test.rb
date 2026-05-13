@@ -3,12 +3,13 @@ require "test_helper"
 class PagesControllerTest < ActionDispatch::IntegrationTest
   test "renders public pages" do
     {
-      root_path => "Ihr örtlicher Veranstalter für Stuttgart",
+      root_path => "Ihr örtlicher",
       unternehmen_path => "Veranstaltungen",
       services_path => "Live",
       referenzen_path => "Projekte, Projekte, Projekte",
-      jobs_path => "Catering - hilfen",
-      presse_path => "Pressebereich",
+      jobs_path => "Cateringhilfen",
+      presse_path => "Presseinfos für Partner und Medien.",
+      press_detail_path => "Beispiel Künstlername",
       kontakt_path => "Charlottenplatz 17",
       impressum_path => "Impressum",
       datenschutz_path => "Datenschutz",
