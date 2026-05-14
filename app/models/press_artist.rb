@@ -61,7 +61,7 @@ class PressArtist
   end
 
   def gallery_images
-    events.flat_map { |event| event.event_images.sort_by { |image| [ image.created_at || Time.zone.at(0), image.id.to_i ] } }
+    events.flat_map { |event| press_images_for(event) }
       .select { |image| image.file.attached? }
       .uniq { |image| image.file.blob_id }
   end
@@ -93,5 +93,13 @@ class PressArtist
       .compact_blank
       .min_by { |artist_name| [ artist_name.downcase, artist_name ] }
       .to_s
+  end
+
+  def press_images_for(event)
+    event_image_blob_id = event.event_image&.file&.blob_id
+
+    event.event_images
+      .sort_by { |image| [ image.created_at || Time.zone.at(0), image.id.to_i ] }
+      .reject { |image| image.file.blob_id == event_image_blob_id }
   end
 end

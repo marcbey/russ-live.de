@@ -107,7 +107,8 @@ class PressControllerTest < ActionDispatch::IntegrationTest
       publish_on_russ_live: true,
       start_at: Time.zone.local(2026, 8, 1, 20)
     )
-    create_event_image!(event:, purpose: EventImage::PURPOSE_DETAIL_HERO, alt_text: "Freigegebenes Pressefoto")
+    create_event_image!(event:, purpose: EventImage::PURPOSE_DETAIL_HERO, alt_text: "Eventbild", filename: "event-image.jpg")
+    create_event_image!(event:, purpose: EventImage::PURPOSE_SLIDER, alt_text: "Freigegebenes Pressefoto", filename: "press-image.jpg")
 
     get press_artist_path("image-artist")
 
@@ -130,7 +131,8 @@ class PressControllerTest < ActionDispatch::IntegrationTest
       publish_on_russ_live: true,
       start_at: Time.zone.local(2026, 8, 1, 20)
     )
-    create_event_image!(event:, purpose: EventImage::PURPOSE_DETAIL_HERO, alt_text: "ZIP Pressefoto")
+    create_event_image!(event:, purpose: EventImage::PURPOSE_DETAIL_HERO, alt_text: "ZIP Eventbild", filename: "event-image.jpg", content: "event image")
+    create_event_image!(event:, purpose: EventImage::PURPOSE_SLIDER, alt_text: "ZIP Pressefoto", filename: "press-image.jpg", content: "press image")
 
     get press_artist_download_path("zip-artist")
 
@@ -143,6 +145,20 @@ class PressControllerTest < ActionDispatch::IntegrationTest
       entries = zip.map { |entry| [ entry.name, entry.get_input_stream.read ] }
     end
     assert_equal [ [ "1-press-image.jpg", "press image" ] ], entries
+  end
+
+  test "download returns not found when artist only has an event image" do
+    event = create_event!(
+      artist_name: "Only Event Image",
+      normalized_artist_name: "only event image",
+      publish_on_russ_live: true,
+      start_at: Time.zone.local(2026, 8, 1, 20)
+    )
+    create_event_image!(event:, purpose: EventImage::PURPOSE_DETAIL_HERO, alt_text: "Nur Eventbild")
+
+    get press_artist_download_path("only-event-image")
+
+    assert_response :not_found
   end
 
   test "show returns not found for unknown artist slug" do
@@ -219,7 +235,7 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     ])
   end
 
-  def create_event_image!(event:, purpose:, alt_text:)
+  def create_event_image!(event:, purpose:, alt_text:, filename: "press-image.jpg", content: "press image")
     image = EventImage.insert_all!([
       {
         event_id: event.id,
@@ -231,8 +247,8 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     ], returning: %w[id]).rows.first.first.then { |id| EventImage.find(id) }
 
     blob = ActiveStorage::Blob.create_and_upload!(
-      io: StringIO.new("press image"),
-      filename: "press-image.jpg",
+      io: StringIO.new(content),
+      filename:,
       content_type: "image/jpeg",
       service_name: "test"
     )
