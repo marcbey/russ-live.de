@@ -15,7 +15,10 @@
     <figure class="press-detail-image">
       <% hero_image = @press_artist.hero_image %>
       <% if hero_image.is_a?(EventImage) %>
-        <%= image_tag hero_image.file, alt: hero_image.alt_text.presence || "#{@press_artist.name} Pressefoto" %>
+        <picture>
+          <source media="(max-width: 700px)" srcset="<%= url_for hero_image.press_variant(:hero_mobile) %>">
+          <%= image_tag hero_image.press_variant(:hero_desktop), alt: hero_image.alt_text.presence || "#{@press_artist.name} Pressefoto" %>
+        </picture>
         <% if hero_image.sub_text.present? %>
           <figcaption><%= hero_image.sub_text %></figcaption>
         <% end %>
@@ -74,8 +77,11 @@
           <% label = image.alt_text.presence || "Pressefoto #{@press_artist.name} #{index + 1}" %>
           <% download_url = rails_blob_path(image.file, disposition: "attachment") %>
           <figure>
-            <button type="button" data-press-lightbox-target="trigger" data-lightbox-src="<%= url_for image.file %>" data-lightbox-download="<%= download_url %>" data-lightbox-alt="<%= label %>" data-action="press-lightbox#open">
-              <%= image_tag image.file, alt: label, loading: "lazy" %>
+            <button type="button" data-press-lightbox-target="trigger" data-lightbox-src="<%= url_for image.press_variant(:hero_desktop) %>" data-lightbox-download="<%= download_url %>" data-lightbox-alt="<%= label %>" data-action="press-lightbox#open">
+              <picture>
+                <source media="(max-width: 700px)" srcset="<%= url_for image.press_variant(:gallery_mobile) %>">
+                <%= image_tag image.press_variant(:gallery_desktop), alt: label, loading: "lazy" %>
+              </picture>
             </button>
             <figcaption><span><%= label %></span><%= link_to "Bild downloaden", download_url, download: true %></figcaption>
           </figure>

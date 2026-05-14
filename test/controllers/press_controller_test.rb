@@ -117,6 +117,7 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_equal 2, response.body.scan("Pressemappe downloaden").size
     assert_equal 2, response.body.scan('data-turbo="false"').size
     assert_includes response.body, press_artist_download_path("image-artist")
+    assert_includes response.body, "/rails/active_storage/representations/"
     assert_includes response.body, "Bild downloaden"
     assert_includes response.body, "disposition=attachment"
     assert_includes response.body, "data-lightbox-download="
