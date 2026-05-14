@@ -2,7 +2,7 @@ module StuttgartLiveSchema
   module_function
 
   def ensure!
-    connection = ActiveRecord::Base.connection
+    connection = SharedStuttgartRecord.connection
 
     create_venues(connection)
     create_events(connection)
@@ -10,10 +10,11 @@ module StuttgartLiveSchema
     create_event_offers(connection)
     create_import_event_images(connection)
     create_app_settings(connection)
+    create_users(connection)
     create_action_text(connection)
     create_active_storage(connection)
 
-    [ AppSetting, Event, EventImage, EventOffer, ImportEventImage, Venue, ActionText::RichText, ActiveStorage::Blob, ActiveStorage::Attachment ].each(&:reset_column_information)
+    [ AppSetting, Event, EventImage, EventOffer, ImportEventImage, User, Venue, ActionText::RichText, ActiveStorage::Blob, ActiveStorage::Attachment ].each(&:reset_column_information)
   end
 
   def create_venues(connection)
@@ -110,6 +111,21 @@ module StuttgartLiveSchema
     end
 
     connection.add_index :app_settings, :key, unique: true
+  end
+
+  def create_users(connection)
+    return if connection.table_exists?(:users)
+
+    connection.create_table :users do |table|
+      table.string :email_address, null: false
+      table.string :password_digest, null: false
+      table.string :role, default: "editor", null: false
+      table.string :name
+      table.timestamps
+    end
+
+    connection.add_index :users, :email_address, unique: true
+    connection.add_index :users, :role
   end
 
   def ensure_column(connection, table_name, column_name, type, **options)

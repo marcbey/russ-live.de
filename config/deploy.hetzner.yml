@@ -50,6 +50,7 @@ env:
     DB_HOST: 172.18.0.1
     DB_PORT: 5432
     DB_NAME: <%= ENV.fetch("DB_NAME", "stuttgart_live_de_production") %>
+    RUSS_DB_NAME: <%= ENV.fetch("RUSS_DB_NAME", "russ_live_de_production") %>
     DB_USER: <%= ENV.fetch("DB_USER", "russ_live_de_reader") %>
     OPERATIONAL_DB_USER: <%= ENV.fetch("OPERATIONAL_DB_USER", "russ_live_de") %>
     CACHE_DB_NAME: <%= ENV.fetch("CACHE_DB_NAME", "russ_live_de_production_cache") %>

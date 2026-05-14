@@ -1,0 +1,37 @@
+<main class="auth-shell">
+  <section class="auth-panel" aria-labelledby="auth-title">
+    <div>
+      <p class="eyebrow">Russ Live</p>
+      <h1 id="auth-title">Login</h1>
+      <p class="auth-intro">Zugang für interne Arbeitsbereiche und kommende Pflegefunktionen.</p>
+    </div>
+
+    <%= form_with url: session_path, class: "auth-form" do |form| %>
+      <div>
+        <%= form.label :email_address, "E-Mail", class: "auth-label" %>
+        <%= form.email_field :email_address,
+                             required: true,
+                             autofocus: true,
+                             autocomplete: "username",
+                             placeholder: "name@example.com",
+                             value: params[:email_address],
+                             class: "auth-input" %>
+      </div>
+
+      <div>
+        <%= form.label :password, "Passwort", class: "auth-label" %>
+        <%= form.password_field :password,
+                                required: true,
+                                autocomplete: "current-password",
+                                placeholder: "Passwort",
+                                maxlength: 72,
+                                class: "auth-input" %>
+      </div>
+
+      <div class="auth-actions">
+        <%= form.submit "Einloggen", class: "button" %>
+        <%= link_to "Passwort vergessen", @password_reset_url, class: "auth-reset-link" %>
+      </div>
+    <% end %>
+  </section>
+</main>

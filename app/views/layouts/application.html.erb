@@ -28,6 +28,7 @@
 
   <body class="<%= content_for(:body_class) || @page_meta&.fetch(:body_class, nil) %>" data-controller="smooth-anchor">
     <%= render "shared/public_header" if @page_key.present? %>
+    <%= render "layouts/flash_messages" %>
     <%= yield %>
     <%= render "shared/public_footer" if @page_key.present? %>
   </body>

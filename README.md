@@ -8,7 +8,8 @@ Rails-Anwendung für den Relaunch von `russ-live.de`. Das Projekt wurde mit Ruby
 - Dieses Projekt ist getrennt von `stuttgart-live`.
 - Es verändert keine Dateien, Routen oder Assets der bestehenden Stuttgart-Live-App.
 - In Production liest es Stuttgarts Primärdatenbank nur read-only und nutzt dasselbe Active-Storage-Volume.
-- Queue, Cache und Cable sind eigene Russ-Live-Datenbanken und werden nicht mit Stuttgart geteilt.
+- Russ-eigene Domain-Daten, Queue, Cache und Cable sind eigene Russ-Live-Datenbanken und werden nicht mit Stuttgart geteilt.
+- Benutzer und Passwörter bleiben in Stuttgart Live; Russ Live speichert nur eigene Sessions und Login-Audit-Daten.
 - Die öffentlichen Rails-Seiten liefern die vormals statischen Russ-Live-Seiten aus.
 - Der bisherige statische Prototyp wurde entfernt. Neue Arbeiten passieren ausschließlich in der Rails-App-Struktur.
 
@@ -61,6 +62,17 @@ Bei anderer Ordnerstruktur kann der Pfad überschrieben werden:
 ```bash
 ACTIVE_STORAGE_ROOT=/pfad/zu/stuttgart-live.de/storage mise exec -- bin/dev
 ```
+
+Russ Live hat zusätzlich eine eigene writable Datenbank für Russ-Domain-Modelle.
+Lokal heißt sie standardmäßig `russ_live_development`; ihre Migrationen liegen
+unter `db/russ_migrate` und werden über `db:prepare` aus diesem Repository
+verwaltet. Falls PostgreSQL nicht mit dem aktuellen Systembenutzer laufen soll,
+können `RUSS_DB_NAME`, `OPERATIONAL_DB_USER`, `RUSS_LIVE_OPERATIONAL_DB_PASSWORD`,
+`DB_HOST` und `DB_PORT` gesetzt werden.
+
+Die Authentifizierung nutzt die Stuttgart-Live-Benutzer (`admin` und `editor`),
+legt Sessions aber in der Russ-Datenbank ab. Passwort-Reset und
+Benutzerverwaltung bleiben in Stuttgart Live.
 
 ## Entwicklung starten
 
@@ -141,9 +153,15 @@ aus dem `stuttgart-live.de`-Repository migriert.
 
 Russ Live nutzt eigene writable Operational-Datenbanken:
 
+- `russ_live_de_production`
 - `russ_live_de_production_cache`
 - `russ_live_de_production_queue`
 - `russ_live_de_production_cable`
+
+Die `russ_live_de_production`-Datenbank ist die allgemeine Russ-Domain-DB. Sie
+enthält aktuell Auth-Sessions und Login-Audit-Daten und ist für spätere
+Russ-eigene Domain-Modelle vorgesehen. Der Name kann im Deployment über
+`RUSS_DB_NAME` überschrieben werden.
 
 Das Docker-Volume für Active Storage ist bewusst gemeinsam:
 `stuttgart_live_de_storage:/rails/storage`. Deshalb muss

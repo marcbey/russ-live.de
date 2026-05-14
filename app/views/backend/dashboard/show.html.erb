@@ -1,0 +1,14 @@
+<main class="auth-shell">
+  <section class="auth-panel" aria-labelledby="backend-title">
+    <div>
+      <p class="eyebrow">Russ Live</p>
+      <h1 id="backend-title">Backend</h1>
+      <p class="auth-intro">Der geschützte Arbeitsbereich ist vorbereitet. Fachliche Pflegefunktionen folgen separat.</p>
+    </div>
+
+    <div class="auth-actions">
+      <%= link_to "Zur Website", root_path, class: "button" %>
+      <%= button_to "Ausloggen", session_path, method: :delete, class: "auth-reset-link" %>
+    </div>
+  </section>
+</main>

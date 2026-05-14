@@ -2227,6 +2227,128 @@ h3 {
   transform: translateY(-1px);
 }
 
+.flash-wrap {
+  left: 50%;
+  position: fixed;
+  top: 18px;
+  transform: translateX(-50%);
+  width: min(520px, calc(100vw - 32px));
+  z-index: 80;
+}
+
+.flash {
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .12);
+  color: var(--ink);
+  font-size: .94rem;
+  margin: 0 0 8px;
+  padding: 13px 16px;
+}
+
+.flash-alert {
+  border-color: #b42318;
+}
+
+.flash-notice {
+  border-color: #7a5a22;
+}
+
+.auth-body {
+  background:
+    linear-gradient(135deg, rgba(248, 247, 244, .94), rgba(231, 226, 216, .94)),
+    url("/assets/russ_live/keyvisuals/Keyvisual_RussLive.jpg");
+  background-position: center;
+  background-size: cover;
+  min-height: 100svh;
+}
+
+.auth-shell {
+  align-items: center;
+  display: grid;
+  min-height: 100svh;
+  padding: clamp(28px, 6vw, 84px);
+}
+
+.auth-panel {
+  background: rgba(255, 255, 255, .92);
+  border: 1px solid rgba(17, 17, 17, .14);
+  box-shadow: 0 34px 90px rgba(0, 0, 0, .16);
+  display: grid;
+  gap: 28px;
+  max-width: 560px;
+  padding: clamp(24px, 4vw, 44px);
+}
+
+.auth-panel h1 {
+  font-size: clamp(2.6rem, 7vw, 5.4rem);
+  line-height: .9;
+  margin: 8px 0 0;
+  text-transform: uppercase;
+}
+
+.auth-intro {
+  color: var(--muted);
+  font-size: clamp(1.02rem, 1.5vw, 1.24rem);
+  margin: 16px 0 0;
+}
+
+.auth-form {
+  display: grid;
+  gap: 18px;
+}
+
+.auth-label {
+  display: block;
+  font-size: .82rem;
+  font-weight: 650;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.auth-input {
+  appearance: none;
+  background: #f8f7f4;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font: inherit;
+  min-height: 54px;
+  padding: 0 15px;
+  width: 100%;
+}
+
+.auth-input:focus-visible {
+  border-color: var(--ink);
+  outline: 2px solid rgba(17, 17, 17, .16);
+}
+
+.auth-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.auth-actions form {
+  margin: 0;
+}
+
+.auth-reset-link {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-weight: 650;
+  padding: 0;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
 .home-events {
   display: grid;
   gap: 26px;

@@ -1,6 +1,8 @@
 require "zip"
 
 class PressController < ApplicationController
+  allow_unauthenticated_access
+
   PAGE_META = {
     title: "Presse | Russ Live",
     body_class: "press-body"

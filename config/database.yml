@@ -26,13 +26,22 @@ default: &default
 
 
 development:
-  <<: *default
-  database: <%= ENV.fetch("STUTTGART_LIVE_DB_NAME", "stuttgart_live_de_development") %>
-  username: <%= ENV.fetch("STUTTGART_LIVE_DB_USER", "russ_live_de_reader") %>
-  password: <%= ENV["STUTTGART_LIVE_DB_PASSWORD"] %>
-  host: <%= ENV["STUTTGART_LIVE_DB_HOST"] %>
-  port: <%= ENV.fetch("STUTTGART_LIVE_DB_PORT", 5432) %>
-  database_tasks: false
+  primary:
+    <<: *default
+    database: <%= ENV.fetch("STUTTGART_LIVE_DB_NAME", "stuttgart_live_de_development") %>
+    username: <%= ENV.fetch("STUTTGART_LIVE_DB_USER", "russ_live_de_reader") %>
+    password: <%= ENV["STUTTGART_LIVE_DB_PASSWORD"] %>
+    host: <%= ENV["STUTTGART_LIVE_DB_HOST"] %>
+    port: <%= ENV.fetch("STUTTGART_LIVE_DB_PORT", 5432) %>
+    database_tasks: false
+  russ:
+    <<: *default
+    database: <%= ENV.fetch("RUSS_DB_NAME", "russ_live_development") %>
+    username: <%= ENV["OPERATIONAL_DB_USER"] %>
+    password: <%= ENV["RUSS_LIVE_OPERATIONAL_DB_PASSWORD"] %>
+    host: <%= ENV["DB_HOST"] %>
+    port: <%= ENV.fetch("DB_PORT", 5432) %>
+    migrations_paths: db/russ_migrate
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -65,8 +74,13 @@ development:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  <<: *default
-  database: russ_live_test
+  primary:
+    <<: *default
+    database: russ_live_test
+  russ:
+    <<: *default
+    database: russ_live_test_russ
+    migrations_paths: db/russ_migrate
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -103,6 +117,14 @@ production:
     host: <%= ENV.fetch("DB_HOST", "127.0.0.1") %>
     port: <%= ENV.fetch("DB_PORT", 5432) %>
     database_tasks: false
+  russ:
+    <<: *default
+    database: <%= ENV.fetch("RUSS_DB_NAME", "russ_live_de_production") %>
+    username: <%= ENV.fetch("OPERATIONAL_DB_USER", "russ_live_de") %>
+    password: <%= ENV["RUSS_LIVE_OPERATIONAL_DB_PASSWORD"] %>
+    host: <%= ENV.fetch("DB_HOST", "127.0.0.1") %>
+    port: <%= ENV.fetch("DB_PORT", 5432) %>
+    migrations_paths: db/russ_migrate
   cache:
     <<: *default
     database: <%= ENV.fetch("CACHE_DB_NAME", "russ_live_de_production_cache") %>

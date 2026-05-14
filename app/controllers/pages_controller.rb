@@ -1,6 +1,8 @@
 require_dependency Rails.root.join("app/services/home_events_lane_pager").to_s
 
 class PagesController < ApplicationController
+  allow_unauthenticated_access
+
   PAGE_META = {
     home: {
       title: "Russ Live | Kulturproduktionen auf höchstem Niveau",
