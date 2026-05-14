@@ -2361,6 +2361,29 @@ h3 {
   width: 100%;
 }
 
+.event-slider-image-placeholder,
+.home-events-placeholder {
+  background: linear-gradient(135deg, #f1eee8, #ded8ce);
+  height: 100%;
+  width: 100%;
+}
+
+.home-events-placeholder {
+  animation: home-events-placeholder-pulse 1.4s ease-in-out infinite;
+  min-height: 360px;
+}
+
+@keyframes home-events-placeholder-pulse {
+  0%,
+  100% {
+    opacity: .62;
+  }
+
+  50% {
+    opacity: .36;
+  }
+}
+
 .event-slider-copy {
   display: grid;
   gap: 0;
@@ -2385,6 +2408,18 @@ h3 {
   font-size: .82rem;
   line-height: 1.25;
   margin: 4px 0 0;
+}
+
+.event-slider-price,
+.event-slider-status {
+  font-size: .82rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 10px 0 0;
+}
+
+.event-slider-status {
+  color: #8c1d18;
 }
 
 .event-slider-button {

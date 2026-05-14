@@ -4,6 +4,7 @@ class EventImage < SharedStuttgartRecord
   WEB_MAX_DIMENSION = 1280
   WEB_QUALITY = 82
   PRESS_VARIANT_MAX_DIMENSIONS = {
+    home_slider: 768,
     hero_mobile: 768,
     hero_desktop: WEB_MAX_DIMENSION,
     gallery_mobile: 384,
@@ -29,6 +30,10 @@ class EventImage < SharedStuttgartRecord
 
   def press_variant(size)
     file.variant(**variant_transformations(max_dimension: PRESS_VARIANT_MAX_DIMENSIONS.fetch(size.to_sym)))
+  end
+
+  def home_slider_variant
+    file.variant(**variant_transformations(max_dimension: PRESS_VARIANT_MAX_DIMENSIONS.fetch(:home_slider)))
   end
 
   private

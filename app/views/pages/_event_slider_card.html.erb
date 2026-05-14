@@ -1,0 +1,39 @@
+<% image = event.home_slider_image %>
+<% image_source = image.is_a?(EventImage) && image.file.attached? ? url_for(image.home_slider_variant) : image&.image_url %>
+<% image_alt = image.is_a?(EventImage) ? image.alt_text.presence : nil %>
+<% image_alt ||= [ event.artist_name, event.title ].compact_blank.join(" - ") %>
+<% ticket_status_label = event.public_ticket_status_label %>
+<% ticket_offer = event.public_ticket_offer %>
+<% display_price =
+  if event.min_price.present? && event.max_price.present? && event.min_price < event.max_price
+    "ab #{number_to_currency(event.min_price, unit: "€", separator: ",", delimiter: ".", format: "%n%u")}"
+  else
+    ticket_offer&.ticket_price_text.to_s.presence
+  end %>
+
+<article class="event-slider-card" data-events-slider-target="card">
+  <figure class="event-slider-image">
+    <% if image_source.present? %>
+      <img src="<%= image_source %>" alt="<%= image_alt %>" loading="lazy" decoding="async" width="500" height="515">
+    <% else %>
+      <div class="event-slider-image-placeholder" aria-hidden="true"></div>
+    <% end %>
+  </figure>
+  <div class="event-slider-copy">
+    <p class="event-slider-date-location">
+      <%= l(event.start_at.to_date, format: "%d.%m.%Y") %><%= " · #{event.venue}" if event.venue.present? %>
+    </p>
+    <h3><%= event.artist_name %></h3>
+    <% if event.title.present? %>
+      <p class="event-slider-tour"><%= event.title %></p>
+    <% end %>
+    <% if display_price.present? %>
+      <p class="event-slider-price"><%= display_price %></p>
+    <% end %>
+    <% if ticket_status_label.present? %>
+      <span class="event-slider-status"><%= ticket_status_label %></span>
+    <% else %>
+      <a class="event-slider-button" href="<%= event.public_ticket_url %>" target="_blank" rel="noreferrer">Tickets</a>
+    <% end %>
+  </div>
+</article>

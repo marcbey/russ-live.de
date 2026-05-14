@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get "referenzen", to: "pages#referenzen"
   get "jobs", to: "pages#jobs"
   get "jobs/:slug", to: "pages#job", as: :job
+  get "events/homepage_lane", to: "pages#homepage_lane", as: :homepage_lane_events
   get "presse", to: "press#index"
   get "presse/beispiel", to: redirect("/presse")
   get "presse/:slug/download", to: "press#download", as: :press_artist_download

@@ -122,39 +122,29 @@
         </div>
       </section>
 
-      <section class="section home-events" aria-labelledby="events-title" data-controller="events-slider">
+      <% if @home_events.any? %>
+      <section class="section home-events" aria-labelledby="events-title" data-controller="events-slider" data-events-slider-url-value="<%= homepage_lane_events_path %>" data-events-slider-cursor-value="<%= @home_events_next_cursor %>">
         <div class="section-head home-events-head">
           <div>
             <p class="eyebrow">Stuttgart-live</p>
             <h2 id="events-title">Nächste Veranstaltungen</h2>
-            <p class="home-events-intro">Vorlage für die nächsten Stuttgart-live-Termine mit Bild, Datum, Location, Titel, Subtitel und Ticket-CTA.</p>
+            <p class="home-events-intro">Ausgewählte SKS-Highlights von Stuttgart-live mit Bild, Datum, Location und Ticketstatus.</p>
           </div>
           <div class="home-events-toolbar">
             <div class="home-events-nav" aria-label="Veranstaltungen blättern">
               <button class="home-events-nav-button" type="button" data-action="events-slider#previous" aria-label="Vorherige Veranstaltungen">‹</button>
               <button class="home-events-nav-button" type="button" data-action="events-slider#next" aria-label="Nächste Veranstaltungen">›</button>
             </div>
-            <a class="button home-events-all-button" href="https://stuttgart-live.de/" target="_blank" rel="noreferrer">Alle anzeigen</a>
+            <a class="button home-events-all-button" href="<%= @stuttgart_live_sks_highlights_url %>" target="_blank" rel="noreferrer">Alle anzeigen</a>
           </div>
         </div>
 
-        <div class="home-events-viewport" data-events-slider-target="viewport">
-          <div class="home-events-slider" aria-label="Vorlage Nächste Veranstaltungen">
-          <% @home_events.each do |event| %>
-            <article class="event-slider-card" data-events-slider-target="card">
-              <figure class="event-slider-image">
-                <img src="<%= image_path event[:image] %>" alt="<%= event[:title] %>">
-              </figure>
-              <div class="event-slider-copy">
-                <p class="event-slider-date-location"><%= event[:date_location] %></p>
-                <h3><%= event[:title] %></h3>
-                <p class="event-slider-tour"><%= event[:tour] %></p>
-                <a class="event-slider-button" href="<%= event[:ticket_url] %>" target="_blank" rel="noreferrer"><%= event[:ticket_label] %></a>
-              </div>
-            </article>
-          <% end %>
+        <div class="home-events-viewport">
+          <div class="home-events-slider" aria-label="Nächste Veranstaltungen" data-events-slider-target="viewport">
+            <%= render "pages/event_slider_cards", events: @home_events %>
           </div>
         </div>
-        <a class="home-events-link" href="https://stuttgart-live.de/" target="_blank" rel="noreferrer">Alle Veranstaltungen auf Stuttgart-live.de</a>
+        <a class="home-events-link" href="<%= @stuttgart_live_sks_highlights_url %>" target="_blank" rel="noreferrer">Alle Veranstaltungen auf Stuttgart-live.de</a>
       </section>
+      <% end %>
     </main>

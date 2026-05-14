@@ -6,10 +6,26 @@ class EventOffer < SharedStuttgartRecord
   belongs_to :event
 
   scope :ordered, -> { order(priority_rank: :asc, id: :asc) }
-  scope :active_ticket, -> { where(sold_out: false).where.not(ticket_url: [ nil, "" ]) }
+  scope :active_ticket, lambda {
+    where(sold_out: false)
+      .where.not(ticket_url: [ nil, "" ])
+      .where("metadata ->> 'availability_status' IS NULL OR metadata ->> 'availability_status' != ?", "canceled")
+  }
 
   def active_ticket?
     !sold_out? && ticket_url.present?
+  end
+
+  def public_ticket_active?
+    active_ticket? && !canceled?
+  end
+
+  def availability_status
+    metadata.is_a?(Hash) ? metadata["availability_status"].to_s.strip : ""
+  end
+
+  def canceled?
+    availability_status == "canceled"
   end
 
   def resolved_ticket_url

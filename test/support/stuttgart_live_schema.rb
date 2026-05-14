@@ -8,10 +8,12 @@ module StuttgartLiveSchema
     create_events(connection)
     create_event_images(connection)
     create_event_offers(connection)
+    create_import_event_images(connection)
+    create_app_settings(connection)
     create_action_text(connection)
     create_active_storage(connection)
 
-    [ Event, EventImage, EventOffer, Venue, ActionText::RichText, ActiveStorage::Blob, ActiveStorage::Attachment ].each(&:reset_column_information)
+    [ AppSetting, Event, EventImage, EventOffer, ImportEventImage, Venue, ActionText::RichText, ActiveStorage::Blob, ActiveStorage::Attachment ].each(&:reset_column_information)
   end
 
   def create_venues(connection)
@@ -27,21 +29,31 @@ module StuttgartLiveSchema
   end
 
   def create_events(connection)
-    return if connection.table_exists?(:events)
-
-    connection.create_table :events do |table|
-      table.string :artist_name, null: false
-      table.string :normalized_artist_name, null: false
-      table.string :title, null: false
-      table.string :slug, null: false
-      table.string :status, default: "imported", null: false
-      table.datetime :published_at
-      table.datetime :start_at, null: false
-      table.text :event_info
-      table.boolean :publish_on_russ_live
-      table.references :venue, null: false
-      table.timestamps
+    unless connection.table_exists?(:events)
+      connection.create_table :events do |table|
+        table.string :artist_name, null: false
+        table.string :normalized_artist_name, null: false
+        table.string :title, null: false
+        table.string :slug, null: false
+        table.string :status, default: "imported", null: false
+        table.datetime :published_at
+        table.datetime :start_at, null: false
+        table.text :event_info
+        table.boolean :publish_on_russ_live
+        table.references :venue, null: false
+        table.timestamps
+      end
     end
+
+    ensure_column(connection, :events, :promoter_id, :string)
+    ensure_column(connection, :events, :promoter_name, :string)
+    ensure_column(connection, :events, :highlighted, :boolean, default: false, null: false)
+    ensure_column(connection, :events, :event_series_id, :integer)
+    ensure_column(connection, :events, :event_series_assignment, :string, default: "auto", null: false)
+    ensure_column(connection, :events, :badge_text, :string)
+    ensure_column(connection, :events, :min_price, :decimal, precision: 8, scale: 2)
+    ensure_column(connection, :events, :max_price, :decimal, precision: 8, scale: 2)
+    ensure_column(connection, :events, :primary_source, :string)
   end
 
   def create_event_images(connection)
@@ -70,6 +82,40 @@ module StuttgartLiveSchema
       table.string :ticket_url
       table.timestamps
     end
+  end
+
+  def create_import_event_images(connection)
+    return if connection.table_exists?(:import_event_images)
+
+    connection.create_table :import_event_images do |table|
+      table.string :aspect_hint
+      table.string :image_type
+      table.text :image_url
+      table.string :import_class
+      table.bigint :import_event_id
+      table.integer :position
+      table.string :role
+      table.string :source
+      table.timestamps
+    end
+  end
+
+  def create_app_settings(connection)
+    return if connection.table_exists?(:app_settings)
+
+    connection.create_table :app_settings do |table|
+      table.string :key, null: false
+      table.jsonb :value, default: {}, null: false
+      table.timestamps
+    end
+
+    connection.add_index :app_settings, :key, unique: true
+  end
+
+  def ensure_column(connection, table_name, column_name, type, **options)
+    return if connection.column_exists?(table_name, column_name)
+
+    connection.add_column(table_name, column_name, type, **options)
   end
 
   def create_action_text(connection)

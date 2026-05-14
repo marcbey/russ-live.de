@@ -1,3 +1,5 @@
+require_dependency Rails.root.join("app/services/home_events_lane_pager").to_s
+
 class PagesController < ApplicationController
   PAGE_META = {
     home: {
@@ -90,13 +92,8 @@ class PagesController < ApplicationController
     { image: "russ_live/references/38-live-sommer-autokonzerte-fuer-den-sueden.jpg", alt: "Live Sommer - Autokonzerte für den Süden", title: "Live Sommer - Autokonzerte für den Süden", date_location: "05.09.2024 · Kultur- und Kongresszentrum", partner: "Partner: Live Nation" }
   ].freeze
 
-  HOME_EVENTS = [
-    { image: "russ_live/references/09-max-giesinger.jpg", title: "Wilhelmine", date_location: "23. Mai 2026 · Im Wizemann", tour: "Alles, was du träumst Tour", ticket_label: "Tickets", ticket_url: "https://stuttgart-live.de/" },
-    { image: "russ_live/references/31-moderat.jpg", title: "Truckfighters", date_location: "25. Mai 2026 · Im Wizemann", tour: "European Run 2026", ticket_label: "Tickets", ticket_url: "https://stuttgart-live.de/" },
-    { image: "russ_live/references/24-cypress-hill.jpg", title: "Truckfighters", date_location: "26. Mai 2026 · Im Wizemann", tour: "Special Club Show", ticket_label: "Tickets", ticket_url: "https://stuttgart-live.de/" },
-    { image: "russ_live/references/33-kontra-k.jpg", title: "1019", date_location: "05. Juni 2026 · Im Wizemann", tour: "Live 2026", ticket_label: "Tickets", ticket_url: "https://stuttgart-live.de/" },
-    { image: "russ_live/references/10-simply-red.jpg", title: "Melrose Avenue", date_location: "16. Juni 2026 · Kulturquartier", tour: "Summer Nights", ticket_label: "Tickets", ticket_url: "https://stuttgart-live.de/" }
-  ].freeze
+  HOME_EVENTS_PER_PAGE = 10
+  STUTTGART_LIVE_SKS_HIGHLIGHTS_URL = "https://www.stuttgart-live.de/highlights?filter=sks".freeze
 
   JOBS = [
     {
@@ -234,11 +231,25 @@ class PagesController < ApplicationController
     image_alt: "Sebastian Kränzlein"
   }.freeze
 
-  before_action :set_page_meta
+  before_action :set_page_meta, except: :homepage_lane
 
   def home
     @home_references = HOME_REFERENCES
-    @home_events = HOME_EVENTS
+    @home_events_page = home_events_page
+    @home_events = @home_events_page.events
+    @home_events_next_cursor = @home_events_page.next_cursor
+    @stuttgart_live_sks_highlights_url = STUTTGART_LIVE_SKS_HIGHLIGHTS_URL
+  end
+
+  def homepage_lane
+    page = home_events_page(cursor: params[:cursor], per_page: params[:per_page])
+
+    response.set_header("X-Homepage-Lane-Next-Cursor", page.next_cursor.to_s)
+    response.set_header("X-Homepage-Lane-Has-More", page.next_cursor.present?.to_s)
+
+    render partial: "pages/event_slider_cards", formats: [ :html ], locals: { events: page.events }
+  rescue HomeEventsLanePager::InvalidCursor
+    head :bad_request
   end
   def unternehmen; end
   def services; end
@@ -275,5 +286,13 @@ class PagesController < ApplicationController
   def set_page_meta
     @page_key = action_name.to_sym
     @page_meta = PAGE_META.fetch(@page_key)
+  end
+
+  def home_events_page(cursor: nil, per_page: HOME_EVENTS_PER_PAGE)
+    HomeEventsLanePager.new(
+      relation: Event.homepage_sks_highlights,
+      cursor: cursor,
+      per_page: per_page.presence || HOME_EVENTS_PER_PAGE
+    ).call
   end
 end
