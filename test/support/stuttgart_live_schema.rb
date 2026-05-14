@@ -3,6 +3,7 @@ module StuttgartLiveSchema
 
   def ensure!
     connection = SharedStuttgartRecord.connection
+    connection.schema_cache.clear!
 
     create_venues(connection)
     create_events(connection)
@@ -18,7 +19,7 @@ module StuttgartLiveSchema
   end
 
   def create_venues(connection)
-    return if connection.table_exists?(:venues)
+    return if table_exists?(connection, :venues)
 
     connection.create_table :venues do |table|
       table.string :name, null: false
@@ -30,7 +31,7 @@ module StuttgartLiveSchema
   end
 
   def create_events(connection)
-    unless connection.table_exists?(:events)
+    unless table_exists?(connection, :events)
       connection.create_table :events do |table|
         table.string :artist_name, null: false
         table.string :normalized_artist_name, null: false
@@ -58,7 +59,7 @@ module StuttgartLiveSchema
   end
 
   def create_event_images(connection)
-    return if connection.table_exists?(:event_images)
+    return if table_exists?(connection, :event_images)
 
     connection.create_table :event_images do |table|
       table.references :event, null: false
@@ -70,7 +71,7 @@ module StuttgartLiveSchema
   end
 
   def create_event_offers(connection)
-    return if connection.table_exists?(:event_offers)
+    return if table_exists?(connection, :event_offers)
 
     connection.create_table :event_offers do |table|
       table.references :event, null: false
@@ -86,7 +87,7 @@ module StuttgartLiveSchema
   end
 
   def create_import_event_images(connection)
-    return if connection.table_exists?(:import_event_images)
+    return if table_exists?(connection, :import_event_images)
 
     connection.create_table :import_event_images do |table|
       table.string :aspect_hint
@@ -102,7 +103,7 @@ module StuttgartLiveSchema
   end
 
   def create_app_settings(connection)
-    return if connection.table_exists?(:app_settings)
+    return if table_exists?(connection, :app_settings)
 
     connection.create_table :app_settings do |table|
       table.string :key, null: false
@@ -114,7 +115,7 @@ module StuttgartLiveSchema
   end
 
   def create_users(connection)
-    return if connection.table_exists?(:users)
+    return if table_exists?(connection, :users)
 
     connection.create_table :users do |table|
       table.string :email_address, null: false
@@ -135,7 +136,7 @@ module StuttgartLiveSchema
   end
 
   def create_action_text(connection)
-    return if connection.table_exists?(:action_text_rich_texts)
+    return if table_exists?(connection, :action_text_rich_texts)
 
     connection.create_table :action_text_rich_texts do |table|
       table.string :name, null: false
@@ -149,27 +150,33 @@ module StuttgartLiveSchema
   end
 
   def create_active_storage(connection)
-    return if connection.table_exists?(:active_storage_blobs)
-
-    connection.create_table :active_storage_blobs do |table|
-      table.string :key, null: false
-      table.string :filename, null: false
-      table.string :content_type
-      table.text :metadata
-      table.string :service_name, null: false
-      table.bigint :byte_size, null: false
-      table.string :checksum
-      table.datetime :created_at, null: false
+    unless table_exists?(connection, :active_storage_blobs)
+      connection.create_table :active_storage_blobs do |table|
+        table.string :key, null: false
+        table.string :filename, null: false
+        table.string :content_type
+        table.text :metadata
+        table.string :service_name, null: false
+        table.bigint :byte_size, null: false
+        table.string :checksum
+        table.datetime :created_at, null: false
+      end
+      connection.add_index :active_storage_blobs, :key, unique: true
     end
-    connection.add_index :active_storage_blobs, :key, unique: true
 
-    connection.create_table :active_storage_attachments do |table|
-      table.string :name, null: false
-      table.string :record_type, null: false
-      table.bigint :record_id, null: false
-      table.references :blob, null: false
-      table.datetime :created_at, null: false
+    unless table_exists?(connection, :active_storage_attachments)
+      connection.create_table :active_storage_attachments do |table|
+        table.string :name, null: false
+        table.string :record_type, null: false
+        table.bigint :record_id, null: false
+        table.references :blob, null: false
+        table.datetime :created_at, null: false
+      end
+      connection.add_index :active_storage_attachments, [ :record_type, :record_id, :name, :blob_id ], unique: true
     end
-    connection.add_index :active_storage_attachments, [ :record_type, :record_id, :name, :blob_id ], unique: true
+  end
+
+  def table_exists?(connection, table_name)
+    connection.select_value("SELECT to_regclass(#{connection.quote(table_name.to_s)}) IS NOT NULL")
   end
 end

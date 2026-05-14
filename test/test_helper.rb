@@ -4,6 +4,8 @@ require "rails/test_help"
 require_relative "support/stuttgart_live_schema"
 require_relative "support/authentication_test_helper"
 
+StuttgartLiveSchema.ensure!
+
 module ActiveSupport
   class TestCase
     # Run tests in parallel with specified workers
