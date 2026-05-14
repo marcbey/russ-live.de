@@ -10,4 +10,12 @@ class EventImage < SharedStuttgartRecord
   scope :ordered, -> { order(created_at: :asc, id: :asc) }
   scope :slider, -> { where(purpose: PURPOSE_SLIDER) }
   scope :detail_hero, -> { where(purpose: PURPOSE_DETAIL_HERO) }
+
+  def slider?
+    purpose == PURPOSE_SLIDER
+  end
+
+  def detail_hero?
+    purpose == PURPOSE_DETAIL_HERO
+  end
 end

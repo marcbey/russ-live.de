@@ -27,14 +27,6 @@ class PagesController < ApplicationController
       description: "Jobprofil bei Russ Live.",
       body_class: "jobs-body job-detail-page-body"
     },
-    presse: {
-      title: "Presse | Russ Live",
-      body_class: "press-body"
-    },
-    press_detail: {
-      title: "Presse Detail | Russ Live",
-      body_class: "press-body"
-    },
     kontakt: {
       title: "Kontakt | Russ Live",
       description: "Kontakt zur SKS Michael Russ GmbH am Charlottenplatz in Stuttgart."
@@ -55,30 +47,6 @@ class PagesController < ApplicationController
       title: "Jugendschutz | Russ Live",
       description: "Jugendschutz der SKS Michael Russ GmbH."
     }
-  }.freeze
-
-  PRESS_ARTIST_GROUPS = {
-    "1" => [ "1019" ],
-    "A" => [ "A Tribute To Taylor Swift: Lover", "All Them Witches", "Andreas Gabalier" ],
-    "B" => [ "Blue", "Brunke" ],
-    "C" => [ "Call It Off" ],
-    "D" => [ "Das Lumpenpack", "David Garrett", "Dirk Steffens", "Dittsche", "Dú Maroc" ],
-    "E" => [ "Elif" ],
-    "F" => [ "Faroon", "Five Finger Death Punch" ],
-    "G" => [ "Gestört aber Geil", "Glueboys", "Gregory Porter & Band" ],
-    "J" => [ "Jolle" ],
-    "K" => [ "Kati K", "Kiss Forever Band", "Kolja Goldstein" ],
-    "L" => [ "Lake Street Dive", "LEA", "Levka", "Lina", "Luvre47" ],
-    "M" => [ "Mamma Mia! - Das Original-Musical", "Mammoth", "Mathias Richling", "Melrose Avenue", "Mike Oldfield's Tubular Bells" ],
-    "N" => [ "Niklas Dee", "Nimo", "Nizi19", "Not Scientists" ],
-    "P" => [ "PaulK", "Pitbull" ],
-    "R" => [ "Rea Garvey's Christmas Calling 2026" ],
-    "S" => [ "Saliou", "Sascha Lange", "Slaughter To Prevail", "Starbenders", "Steel Panther" ],
-    "T" => [ "tAKiDA", "The Kilkennys", "The Music Of Genesis", "Tjark", "Truckfighters", "Twin Noir" ],
-    "V" => [ "Vier Pianisten – Ein Konzert", "voXXclub" ],
-    "W" => [ "Wilhelmine" ],
-    "Y" => [ "Yaris" ],
-    "Z" => [ "Zuna", "Zymba" ]
   }.freeze
 
   HOME_REFERENCES = [
@@ -290,12 +258,6 @@ class PagesController < ApplicationController
       description: @selected_job[:meta_description]
     )
   end
-  def presse
-    @press_artist_groups = PRESS_ARTIST_GROUPS
-    @press_artist_count = PRESS_ARTIST_GROUPS.values.sum(&:size)
-  end
-
-  def press_detail; end
   def kontakt; end
   def impressum; end
   def datenschutz; end

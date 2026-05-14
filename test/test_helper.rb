@@ -1,6 +1,7 @@
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
+require_relative "support/stuttgart_live_schema"
 
 module ActiveSupport
   class TestCase

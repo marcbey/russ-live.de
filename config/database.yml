@@ -27,7 +27,12 @@ default: &default
 
 development:
   <<: *default
-  database: russ_live_development
+  database: <%= ENV.fetch("STUTTGART_LIVE_DB_NAME", "stuttgart_live_de_development") %>
+  username: <%= ENV.fetch("STUTTGART_LIVE_DB_USER", "russ_live_de_reader") %>
+  password: <%= ENV["STUTTGART_LIVE_DB_PASSWORD"] %>
+  host: <%= ENV["STUTTGART_LIVE_DB_HOST"] %>
+  port: <%= ENV.fetch("STUTTGART_LIVE_DB_PORT", 5432) %>
+  database_tasks: false
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.

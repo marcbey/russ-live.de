@@ -3,12 +3,12 @@
     <div class="press-hero-copy">
       <p class="eyebrow">Presse</p>
       <h1 id="press-title">Presseinfos für Partner und Medien.</h1>
-      <p>Pressetexte, Bildmaterial und Veranstaltungsdaten zu kommenden Produktionen. Die Inhalte sind statisch vorbereitet und können später aus Stuttgart-live übernommen werden.</p>
+      <p>Pressetexte, Bildmaterial und Veranstaltungsdaten zu kommenden Produktionen.</p>
     </div>
-    <form class="press-search" role="search" aria-label="Künstler suchen">
+    <form class="press-search" role="search" aria-label="Künstler suchen" data-action="submit->press-search#submit reset->press-search#reset">
       <label for="press-search-input">Künstler suchen</label>
       <div>
-        <input id="press-search-input" type="search" name="q" autocomplete="off" placeholder="Name eingeben" data-press-search-target="input">
+        <input id="press-search-input" type="search" name="q" autocomplete="off" placeholder="Name eingeben" data-press-search-target="input" data-action="input->press-search#render search->press-search#render">
         <button type="reset" aria-label="Suche zurücksetzen">Zurücksetzen</button>
       </div>
     </form>
@@ -20,7 +20,7 @@
         <p class="eyebrow">Übersicht</p>
         <h2 id="press-directory-title">Künstler A-Z</h2>
       </div>
-      <p data-press-search-target="count"><%= @press_artist_count %> Presseeinträge</p>
+      <p data-press-search-target="count"><%= @press_artist_count %> <%= @press_artist_count == 1 ? "Presseeintrag" : "Presseeinträge" %></p>
     </div>
 
     <div class="press-letter-grid" data-press-directory>
@@ -29,8 +29,8 @@
           <h3><%= letter %></h3>
           <div class="press-artist-list">
             <% artists.each do |artist| %>
-              <%= link_to press_detail_path, class: "press-artist-card", data: { press_search_target: "card", artist_name: artist } do %>
-                <span><%= artist %></span>
+              <%= link_to press_artist_path(artist.slug), class: "press-artist-card", data: { press_search_target: "card", artist_name: artist.name } do %>
+                <span><%= artist.name %></span>
               <% end %>
             <% end %>
           </div>

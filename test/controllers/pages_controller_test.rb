@@ -1,6 +1,10 @@
 require "test_helper"
 
 class PagesControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    StuttgartLiveSchema.ensure!
+  end
+
   test "renders public pages" do
     {
       root_path => "Ihr örtlicher",
@@ -10,7 +14,6 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
       jobs_path => "Unsere aktuellen Jobangebote",
       job_path("stagehands") => "Jobdetails Stagehands",
       presse_path => "Presseinfos für Partner und Medien.",
-      press_detail_path => "Beispiel Künstlername",
       kontakt_path => "Charlottenplatz 17",
       impressum_path => "Impressum",
       datenschutz_path => "Datenschutz",

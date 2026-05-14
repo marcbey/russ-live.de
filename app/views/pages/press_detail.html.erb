@@ -3,16 +3,25 @@
     <div class="press-detail-copy">
       <%= link_to "Zur Presseübersicht", presse_path, class: "press-back-link" %>
       <p class="eyebrow">Pressemappe</p>
-      <h1 id="press-detail-title">Beispiel Künstlername</h1>
-      <p>Diese Detailseite ist als statische Vorlage angelegt. Später können Künstlerdaten, Veranstaltungstermine, Pressetext und Downloads read-only aus Stuttgart-live befüllt werden.</p>
+      <h1 id="press-detail-title"><%= @press_artist.name %></h1>
+      <p>Pressetext, Bildmaterial und Veranstaltungsdaten zu <%= @press_artist.name %>.</p>
       <div class="press-detail-actions">
-        <a class="section-button" href="https://www.stuttgart-live.de/" target="_blank" rel="noreferrer">Tickets</a>
-        <a class="press-outline-button" href="#downloads">Pressemappe downloaden</a>
+        <a class="section-button" href="<%= @press_artist.ticket_url %>" target="_blank" rel="noreferrer">Tickets</a>
+        <% if @press_artist.gallery_images.any? %>
+          <%= link_to "Pressemappe downloaden", press_artist_download_path(@press_artist.slug), class: "press-outline-button", data: { turbo: false } %>
+        <% end %>
       </div>
     </div>
     <figure class="press-detail-image">
-      <%= image_tag "russ_live/references/02-david-garrett.jpg", alt: "Beispiel Künstlername Pressefoto" %>
-      <figcaption>Bildcredit im Dateinamen beachten</figcaption>
+      <% hero_image = @press_artist.hero_image %>
+      <% if hero_image.is_a?(EventImage) %>
+        <%= image_tag hero_image.file, alt: hero_image.alt_text.presence || "#{@press_artist.name} Pressefoto" %>
+        <% if hero_image.sub_text.present? %>
+          <figcaption><%= hero_image.sub_text %></figcaption>
+        <% end %>
+      <% else %>
+        <%= image_tag hero_image, alt: "#{@press_artist.name} Pressefoto" %>
+      <% end %>
     </figure>
   </section>
 
@@ -20,57 +29,73 @@
     <aside class="press-event-panel">
       <p class="eyebrow">Veranstaltung</p>
       <dl>
-        <div><dt>Datum</dt><dd>21. Mai 2026</dd></div>
-        <div><dt>Uhrzeit</dt><dd>20:00 Uhr</dd></div>
-        <div><dt>Location</dt><dd>Liederhalle Stuttgart, Hegel-Saal</dd></div>
-        <div><dt>Status</dt><dd>Aktuelle Veranstaltung</dd></div>
-        <div><dt>Zusatzinfos</dt><dd>Einlass ab 19:00 Uhr, Fotopool nach Akkreditierung.</dd></div>
+        <% primary_event = @press_artist.primary_event %>
+        <div><dt>Datum</dt><dd><%= l(primary_event.start_at.to_date, format: "%d. %B %Y") %></dd></div>
+        <div><dt>Uhrzeit</dt><dd><%= l(primary_event.start_at, format: "%H:%M Uhr") %></dd></div>
+        <% if primary_event.venue.present? %>
+          <div><dt>Location</dt><dd><%= primary_event.venue %></dd></div>
+        <% end %>
+        <div><dt>Status</dt><dd><%= primary_event.start_at.future? ? "Aktuelle Veranstaltung" : "Vergangene Veranstaltung" %></dd></div>
+        <% if @press_artist.additional_events.any? %>
+          <div>
+            <dt>Weitere Termine</dt>
+            <dd>
+              <% @press_artist.additional_events.each do |event| %>
+                <span><%= l(event.start_at.to_date, format: "%d.%m.%Y") %><%= " · #{event.venue}" if event.venue.present? %></span><br>
+              <% end %>
+            </dd>
+          </div>
+        <% end %>
       </dl>
     </aside>
     <article class="press-text-panel">
       <p class="eyebrow">Pressetext</p>
-      <h2>Kurztext für Redaktion und Vorankündigung</h2>
-      <p>Hier steht der freigegebene Pressetext des Künstlers. Der Text kann in der dynamischen Version aus Stuttgart-live übernommen und redaktionell gepflegt werden. Für die statische Vorlage ist der Bereich so angelegt, dass kurze Anreißer, längere Fließtexte und zusätzliche Hinweise gut lesbar bleiben.</p>
+      <h2><%= @press_artist.name %></h2>
+      <% if @press_artist.press_body.present? %>
+        <%= @press_artist.press_body.respond_to?(:to_trix_html) ? @press_artist.press_body : simple_format(@press_artist.press_body) %>
+      <% else %>
+        <p>Für diesen Künstler ist aktuell kein Pressetext hinterlegt.</p>
+      <% end %>
       <p>Die Verwendung des Bild- und Textmaterials ist für redaktionelle Zwecke kostenfrei. Bei Pressefotos ist der im Dateinamen oder in den Metadaten hinterlegte Credit zu beachten.</p>
     </article>
   </section>
 
-  <section class="section press-downloads" id="downloads" aria-labelledby="press-download-title" data-controller="press-lightbox">
-    <div class="press-directory-head">
-      <div>
-        <p class="eyebrow">Downloads</p>
-        <h2 id="press-download-title">Bildergalerie</h2>
+  <% if @press_artist.gallery_images.any? %>
+    <section class="section press-downloads" id="downloads" aria-labelledby="press-download-title" data-controller="press-lightbox">
+      <div class="press-directory-head">
+        <div>
+          <p class="eyebrow">Downloads</p>
+          <h2 id="press-download-title">Bildergalerie</h2>
+        </div>
+        <%= link_to "Pressemappe downloaden", press_artist_download_path(@press_artist.slug), class: "section-button", data: { turbo: false } %>
       </div>
-      <a class="section-button" href="<%= image_path "russ_live/references/02-david-garrett.jpg" %>" download>Pressemappe downloaden</a>
-    </div>
-    <div class="press-gallery" data-press-gallery>
-      <% [
-        ["russ_live/references/02-david-garrett.jpg", "Pressefoto 1"],
-        ["russ_live/references/10-simply-red.jpg", "Pressefoto 2"],
-        ["russ_live/references/15-laura-pausini.jpg", "Pressefoto 3"]
-      ].each do |image, label| %>
-        <figure>
-          <button type="button" data-press-lightbox-target="trigger" data-lightbox-src="<%= image_path image %>" data-lightbox-alt="<%= label %>" data-action="press-lightbox#open">
-            <%= image_tag image, alt: label, loading: "lazy" %>
-          </button>
-          <figcaption><span><%= label %></span><a href="<%= image_path image %>" download>Bild downloaden</a></figcaption>
-        </figure>
-      <% end %>
-    </div>
+      <div class="press-gallery" data-press-gallery>
+        <% @press_artist.gallery_images.each_with_index do |image, index| %>
+          <% label = image.alt_text.presence || "Pressefoto #{@press_artist.name} #{index + 1}" %>
+          <% download_url = rails_blob_path(image.file, disposition: "attachment") %>
+          <figure>
+            <button type="button" data-press-lightbox-target="trigger" data-lightbox-src="<%= url_for image.file %>" data-lightbox-download="<%= download_url %>" data-lightbox-alt="<%= label %>" data-action="press-lightbox#open">
+              <%= image_tag image.file, alt: label, loading: "lazy" %>
+            </button>
+            <figcaption><span><%= label %></span><%= link_to "Bild downloaden", download_url, download: true %></figcaption>
+          </figure>
+        <% end %>
+      </div>
 
-    <div class="press-lightbox" data-press-lightbox-target="lightbox" hidden>
-      <div class="press-lightbox-dialog" role="dialog" aria-modal="true" aria-label="Pressebild Vorschau">
-        <button class="press-lightbox-close" type="button" data-press-lightbox-target="close" data-action="press-lightbox#close" aria-label="Lightbox schließen">×</button>
-        <button class="press-lightbox-arrow press-lightbox-prev" type="button" data-action="press-lightbox#previous" aria-label="Vorheriges Bild">‹</button>
-        <figure>
-          <img src="" alt="" data-press-lightbox-target="image">
-          <figcaption>
-            <span data-press-lightbox-target="caption"></span>
-            <a href="#" download data-press-lightbox-target="download">Bild downloaden</a>
-          </figcaption>
-        </figure>
-        <button class="press-lightbox-arrow press-lightbox-next" type="button" data-action="press-lightbox#next" aria-label="Nächstes Bild">›</button>
+      <div class="press-lightbox" data-press-lightbox-target="lightbox" hidden>
+        <div class="press-lightbox-dialog" role="dialog" aria-modal="true" aria-label="Pressebild Vorschau">
+          <button class="press-lightbox-close" type="button" data-press-lightbox-target="close" data-action="press-lightbox#close" aria-label="Lightbox schließen">×</button>
+          <button class="press-lightbox-arrow press-lightbox-prev" type="button" data-action="press-lightbox#previous" aria-label="Vorheriges Bild">‹</button>
+          <figure>
+            <img src="" alt="" data-press-lightbox-target="image">
+            <figcaption>
+              <span data-press-lightbox-target="caption"></span>
+              <a href="#" download data-press-lightbox-target="download">Bild downloaden</a>
+            </figcaption>
+          </figure>
+          <button class="press-lightbox-arrow press-lightbox-next" type="button" data-action="press-lightbox#next" aria-label="Nächstes Bild">›</button>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  <% end %>
 </main>

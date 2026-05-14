@@ -52,11 +52,12 @@ export default class extends Controller {
 
     const trigger = this.triggerTargets[this.activeIndex]
     const src = trigger.dataset.lightboxSrc || ""
+    const download = trigger.dataset.lightboxDownload || src
     const alt = trigger.dataset.lightboxAlt || "Pressebild"
 
     this.imageTarget.src = src
     this.imageTarget.alt = alt
     this.captionTarget.textContent = alt
-    this.downloadTarget.href = src
+    this.downloadTarget.href = download
   }
 }

@@ -33,6 +33,35 @@ Falls die Datenbank separat vorbereitet werden soll:
 mise exec -- bin/rails db:prepare
 ```
 
+Für lokale Entwicklung liest `russ-live` standardmäßig die lokale
+Stuttgart-Live-Datenbank `stuttgart_live_de_development`. Diese Datenbank wird
+nicht aus diesem Repository migriert; sie muss im benachbarten
+`stuttgart-live.de`-Repository vorbereitet werden:
+
+```bash
+cd ../stuttgart-live.de
+mise exec -- bin/rails db:prepare
+```
+
+Falls PostgreSQL lokal nicht über den Standard-Socket erreichbar ist, können die
+Verbindungsdaten beim Start von `russ-live` überschrieben werden:
+
+```bash
+STUTTGART_LIVE_DB_HOST=127.0.0.1 \
+STUTTGART_LIVE_DB_PORT=5432 \
+STUTTGART_LIVE_DB_USER=russ_live_de_reader \
+STUTTGART_LIVE_DB_PASSWORD=... \
+mise exec -- bin/dev
+```
+
+Active Storage liest lokal standardmäßig aus `../stuttgart-live.de/storage`,
+damit Bilder aus der gemeinsam genutzten Stuttgart-Datenbank gefunden werden.
+Bei anderer Ordnerstruktur kann der Pfad überschrieben werden:
+
+```bash
+ACTIVE_STORAGE_ROOT=/pfad/zu/stuttgart-live.de/storage mise exec -- bin/dev
+```
+
 ## Entwicklung starten
 
 ```bash

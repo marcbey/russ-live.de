@@ -4,16 +4,16 @@ export default class extends Controller {
   static targets = ["input", "card", "group", "count", "empty"]
 
   connect() {
-    this.abortController = new AbortController()
-    this.inputTarget.addEventListener("input", () => this.render(), { signal: this.abortController.signal })
-    this.inputTarget.form?.addEventListener("reset", () => window.requestAnimationFrame(() => this.render()), {
-      signal: this.abortController.signal,
-    })
     this.render()
   }
 
-  disconnect() {
-    this.abortController?.abort()
+  submit(event) {
+    event.preventDefault()
+    this.render()
+  }
+
+  reset() {
+    window.requestAnimationFrame(() => this.render())
   }
 
   render() {
