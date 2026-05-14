@@ -77,9 +77,17 @@ test:
   primary:
     <<: *default
     database: russ_live_test
+    username: <%= ENV["DB_USER"] %>
+    password: <%= ENV["DB_PASSWORD"] %>
+    host: <%= ENV["DB_HOST"] %>
+    port: <%= ENV.fetch("DB_PORT", 5432) %>
   russ:
     <<: *default
     database: russ_live_test_russ
+    username: <%= ENV["DB_USER"] %>
+    password: <%= ENV["DB_PASSWORD"] %>
+    host: <%= ENV["DB_HOST"] %>
+    port: <%= ENV.fetch("DB_PORT", 5432) %>
     migrations_paths: db/russ_migrate
 
 # As with config/credentials.yml, you never want to store sensitive information,
