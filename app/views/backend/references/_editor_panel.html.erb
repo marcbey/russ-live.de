@@ -6,12 +6,17 @@
 <div class="editor-panel" data-controller="reference-image-crop-preview">
   <div class="editor-tabs">
     <div class="editor-tab-list" role="tablist" aria-label="Referenz bearbeiten">
-      <% { "reference" => "Referenz", "image" => "Eventbild" }.each do |tab, label| %>
-        <%= link_to label,
-                    (reference.persisted? ? backend_references_path(reference_id: reference.id, editor_tab: (tab unless tab == "reference"), status: (@status_filter unless @status_filter == "all"), query: @query_filter) : new_backend_reference_path(editor_tab: (tab unless tab == "reference"), status: (@status_filter unless @status_filter == "all"), query: @query_filter)),
-                    class: "editor-tab #{'is-active' if active_editor_tab == tab}",
-                    role: "tab",
-                    aria: { selected: (active_editor_tab == tab).to_s } %>
+      <% { "reference" => "Referenz", "image" => "Bild" }.each do |tab, label| %>
+        <%= button_tag label,
+                       type: "button",
+                       class: "editor-tab #{'is-active' if active_editor_tab == tab}",
+                       role: "tab",
+                       aria: { selected: (active_editor_tab == tab).to_s },
+                       data: {
+                         action: "reference-image-crop-preview#selectTab",
+                         reference_image_crop_preview_target: "tab",
+                         reference_image_crop_preview_tab_param: tab
+                       } %>
       <% end %>
     </div>
 
@@ -35,7 +40,7 @@
                 data: { turbo: false } do |form| %>
     <%= hidden_field_tag :status, (@status_filter unless @status_filter == "all") %>
     <%= hidden_field_tag :query, @query_filter if @query_filter.present? %>
-    <%= hidden_field_tag :editor_tab, active_editor_tab %>
+    <%= hidden_field_tag :editor_tab, active_editor_tab, data: { reference_image_crop_preview_target: "editorTab" } %>
 
     <% if reference.errors.any? || reference_image.errors.any? %>
       <div class="form-errors">
@@ -48,11 +53,19 @@
       </div>
     <% end %>
 
-    <% if active_editor_tab == "image" %>
-      <%= render "image_fields", form: form, reference: reference, reference_image: reference_image %>
-    <% else %>
+    <div class="editor-tab-panel"
+         data-reference-image-crop-preview-target="panel"
+         data-reference-image-crop-preview-tab-param="reference"
+         <%= "hidden" unless active_editor_tab == "reference" %>>
       <%= render "reference_fields", form: form, reference: reference %>
-    <% end %>
+    </div>
+
+    <div class="editor-tab-panel"
+         data-reference-image-crop-preview-target="panel"
+         data-reference-image-crop-preview-tab-param="image"
+         <%= "hidden" unless active_editor_tab == "image" %>>
+      <%= render "image_fields", form: form, reference: reference, reference_image: reference_image %>
+    </div>
   <% end %>
 
 </div>

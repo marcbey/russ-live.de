@@ -5,10 +5,13 @@ export default class extends Controller {
     "previewFrame",
     "previewImage",
     "previewBox",
+    "editorTab",
     "focusX",
     "focusY",
     "fileInput",
     "fileMeta",
+    "panel",
+    "tab",
     "zoom",
     "gridVariant",
     "zoomOutput",
@@ -108,6 +111,27 @@ export default class extends Controller {
     window.removeEventListener("pointermove", this.boundDrag)
     window.removeEventListener("pointerup", this.boundEndDrag)
     window.removeEventListener("pointercancel", this.boundEndDrag)
+  }
+
+  selectTab(event) {
+    this.showTab(event.params.tab)
+  }
+
+  showTab(selectedTab) {
+    if (!selectedTab) return
+
+    this.tabTargets.forEach((tab) => {
+      const active = tab.dataset.referenceImageCropPreviewTabParam === selectedTab
+      tab.classList.toggle("is-active", active)
+      tab.setAttribute("aria-selected", String(active))
+    })
+
+    this.panelTargets.forEach((panel) => {
+      panel.hidden = panel.dataset.referenceImageCropPreviewTabParam !== selectedTab
+    })
+
+    if (this.hasEditorTabTarget) this.editorTabTarget.value = selectedTab
+    if (selectedTab === "image") window.requestAnimationFrame(this.boundUpdate)
   }
 
   previewSelectedFile() {

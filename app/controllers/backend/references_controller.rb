@@ -27,7 +27,7 @@ module Backend
     end
 
     def create
-      @selected_reference = Reference.new(reference_params)
+      @selected_reference = Reference.new(create_reference_params)
       @selected_reference.position = next_position if @selected_reference.position.blank?
       prepare_reference_image(@selected_reference)
 
@@ -90,6 +90,17 @@ module Backend
         params.require(:reference).permit(:title, :starts_on, :location, :production, :description, :status, :position)
       end
 
+      def create_reference_params
+        params.fetch(:reference, ActionController::Parameters.new)
+          .permit(:title, :starts_on, :location, :production, :description, :status, :position)
+          .reverse_merge(
+            title: fallback_reference_title,
+            starts_on: Time.zone.today,
+            location: "Noch nicht angegeben",
+            status: "draft"
+          )
+      end
+
       def reference_image_params
         params.fetch(:reference_image, ActionController::Parameters.new).permit(
           :alt_text,
@@ -104,6 +115,12 @@ module Backend
 
       def uploaded_image
         params.dig(:reference_image, :file)
+      end
+
+      def fallback_reference_title
+        reference_image_params[:alt_text].presence ||
+          uploaded_image&.original_filename.to_s.sub(/\.[^.]+\z/, "").presence ||
+          "Neue Referenz"
       end
 
       def prepare_reference_image(reference)

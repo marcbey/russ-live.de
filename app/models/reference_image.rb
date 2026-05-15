@@ -12,7 +12,7 @@ class ReferenceImage < RussRecord
   DEFAULT_CARD_FOCUS_X = 50.0
   DEFAULT_CARD_FOCUS_Y = 50.0
   DEFAULT_CARD_ZOOM = 100.0
-  MAX_UPLOAD_SIZE = 12.megabytes
+  MAX_UPLOAD_SIZE = 50.megabytes
   IMAGE_CONTENT_TYPES = %w[image/jpeg image/png image/webp image/gif].freeze
 
   belongs_to :reference
@@ -107,7 +107,7 @@ class ReferenceImage < RussRecord
       end
 
       if upload.size.to_i > MAX_UPLOAD_SIZE
-        errors.add(:base, "Das Referenzbild darf maximal 12 MB groß sein.")
+        errors.add(:base, "Das Referenzbild darf maximal 50 MB groß sein.")
       end
 
       raise ActiveRecord::RecordInvalid, self if errors.any?

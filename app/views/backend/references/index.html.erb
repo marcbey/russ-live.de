@@ -8,7 +8,7 @@
     </div>
     <div class="backend-topbar-actions">
       <%= link_to "Neue Referenz",
-                  new_backend_reference_path(status: (@status_filter unless @status_filter == "all"), query: @query_filter, editor_tab: @active_editor_tab),
+                  new_backend_reference_path(status: (@status_filter unless @status_filter == "all"), query: @query_filter),
                   class: "button button-secondary button-compact" %>
       <%= link_to "Zur Website", referenzen_path, class: "button button-compact" %>
     </div>
@@ -52,7 +52,7 @@
         <div class="backend-reference-list">
           <% if @references.any? %>
             <% @references.each do |reference| %>
-              <%= link_to backend_references_path(status: (@status_filter unless @status_filter == "all"), query: @query_filter, reference_id: reference.id, editor_tab: @active_editor_tab),
+              <%= link_to backend_references_path(status: (@status_filter unless @status_filter == "all"), query: @query_filter, reference_id: reference.id),
                           class: "backend-reference-list-item #{'is-active' if @selected_reference&.id == reference.id}" do %>
                 <span class="backend-reference-list-title"><%= reference.title %></span>
                 <span class="backend-reference-list-meta"><%= l(reference.starts_on, format: "%d.%m.%Y") %> · <%= reference.location %></span>

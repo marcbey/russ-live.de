@@ -2684,6 +2684,10 @@ h3 {
   gap: 0;
 }
 
+.editor-tab-panel[hidden] {
+  display: none;
+}
+
 .editor-tabs {
   align-items: stretch;
   background: rgba(255, 255, 255, .96);
@@ -2703,10 +2707,15 @@ h3 {
 }
 
 .editor-tab {
+  appearance: none;
+  background: transparent;
   border-right: 1px solid var(--line);
-  font-weight: 650;
+  color: inherit;
+  cursor: pointer;
   align-items: center;
   display: inline-flex;
+  font: inherit;
+  font-weight: 650;
   line-height: 1;
   padding: 6px 12px;
   text-transform: uppercase;
@@ -2776,6 +2785,12 @@ h3 {
 .event-image-crop-sidebar {
   display: grid;
   gap: 16px;
+}
+
+.event-image-sidebar-divider {
+  border-top: 1px solid var(--line);
+  height: 0;
+  margin: 2px 0;
 }
 
 .event-image-crop-frame {

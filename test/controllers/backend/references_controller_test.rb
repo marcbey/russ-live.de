@@ -28,6 +28,35 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "KISS"
   end
 
+  test "renders both editor panels in one form with client side tabs" do
+    sign_in_as(@admin)
+    reference = create_reference!(title: "KISS")
+
+    get backend_references_path(reference_id: reference.id, editor_tab: "image")
+
+    assert_response :success
+    assert_includes response.body, 'data-action="reference-image-crop-preview#selectTab"'
+    assert_includes response.body, 'data-reference-image-crop-preview-tab-param="reference"'
+    assert_includes response.body, 'data-reference-image-crop-preview-tab-param="image"'
+    assert_includes response.body, 'name="reference[title]"'
+    assert_includes response.body, 'name="reference[location]"'
+    assert_includes response.body, 'name="reference_image[grid_variant]"'
+    assert_includes response.body, 'name="reference_image[card_zoom]"'
+  end
+
+  test "reference links open with reference tab by default" do
+    sign_in_as(@admin)
+    reference = create_reference!(title: "KISS")
+
+    get backend_references_path(reference_id: reference.id, editor_tab: "image")
+
+    assert_response :success
+    assert_includes response.body, new_backend_reference_path
+    assert_includes response.body, backend_references_path(reference_id: reference.id)
+    assert_not_includes response.body, new_backend_reference_path(editor_tab: "image")
+    assert_not_includes response.body, backend_references_path(reference_id: reference.id, editor_tab: "image")
+  end
+
   test "renders image file metadata for asset backed reference images" do
     sign_in_as(@admin)
     reference = create_reference!(title: "KISS")
@@ -53,6 +82,44 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "published", reference.status
     assert_equal "2x1", reference.reference_image.grid_variant
     assert_redirected_to backend_references_path(reference_id: reference.id, status: "published")
+  end
+
+  test "creates draft reference from image tab without reference params" do
+    sign_in_as(@admin)
+    upload = Rack::Test::UploadedFile.new(
+      Rails.root.join("app/assets/images/russ_live/references/03-neil-young.jpg"),
+      "image/jpeg"
+    )
+
+    assert_difference -> { Reference.count }, 1 do
+      assert_difference -> { ReferenceImage.count }, 1 do
+        post backend_references_path, params: {
+          editor_tab: "image",
+          reference_image: {
+            alt_text: "my-alt-text",
+            sub_text: "copy",
+            grid_variant: "1x1",
+            card_focus_x: "62.76850544574424",
+            card_focus_y: "33.54578323383503",
+            card_zoom: "280",
+            file: upload
+          }
+        }
+      end
+    end
+
+    reference = Reference.last
+    assert_equal "draft", reference.status
+    assert_equal "my-alt-text", reference.title
+    assert_equal Time.zone.today, reference.starts_on
+    assert_equal "Noch nicht angegeben", reference.location
+    assert_equal "copy", reference.reference_image.sub_text
+    assert_equal "1x1", reference.reference_image.grid_variant
+    assert_equal 62.77, reference.reference_image.card_focus_x_value
+    assert_equal 33.55, reference.reference_image.card_focus_y_value
+    assert_equal 280.0, reference.reference_image.card_zoom_value
+    assert_equal "03-neil-young.jpg", reference.reference_image.filename
+    assert_redirected_to backend_references_path(reference_id: reference.id, editor_tab: "image", status: "draft")
   end
 
   test "updates reference image crop values and hides unpublished references from public page" do
@@ -95,6 +162,37 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     assert_equal 47.98, reference.reference_image.card_focus_x_value
     assert_equal 54.67, reference.reference_image.card_focus_y_value
     assert_equal 130.0, reference.reference_image.card_zoom_value
+  end
+
+  test "updates reference and image params from one save" do
+    sign_in_as(@admin)
+    reference = create_reference!(title: "Neil Young", status: "draft")
+
+    patch backend_reference_path(reference), params: reference_payload(
+      title: "All Them Witches",
+      status: "published",
+      zoom: "180",
+      focus_x: "62.5"
+    ).deep_merge(
+      editor_tab: "image",
+      reference_image: {
+        alt_text: "All Them Witches",
+        sub_text: "Travis Shinn",
+        grid_variant: "2x2",
+        card_focus_y: "37.5"
+      }
+    )
+
+    assert_redirected_to backend_references_path(reference_id: reference.id, editor_tab: "image")
+    reference.reload
+    assert_equal "All Them Witches", reference.title
+    assert_equal "published", reference.status
+    assert_equal "2x2", reference.reference_image.grid_variant
+    assert_equal "All Them Witches", reference.reference_image.alt_text
+    assert_equal "Travis Shinn", reference.reference_image.sub_text
+    assert_equal 62.5, reference.reference_image.card_focus_x_value
+    assert_equal 37.5, reference.reference_image.card_focus_y_value
+    assert_equal 180.0, reference.reference_image.card_zoom_value
   end
 
   test "uploaded image replaces asset image and renders cache busted url" do

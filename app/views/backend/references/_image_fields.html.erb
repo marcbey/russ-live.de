@@ -1,9 +1,6 @@
 <% image_source = reference_image_source(reference_image) %>
 
 <section class="backend-section backend-section-media event-image-section">
-  <div class="backend-section-header">
-    <h2>Eventbild</h2>
-  </div>
   <div class="backend-section-body">
     <div class="event-image-crop-shell">
       <div class="event-image-crop-editor">
@@ -29,6 +26,29 @@
         </div>
 
         <aside class="event-image-crop-sidebar">
+          <div class="event-image-meta-inline-form">
+            <label class="form-label" for="reference_image_file">Bild</label>
+            <%= file_field_tag "reference_image[file]",
+                               accept: "image/*",
+                               id: "reference_image_file",
+                               class: "form-input",
+                               data: { reference_image_crop_preview_target: "fileInput" } %>
+            <% image_file_metadata = reference_image_file_metadata(reference_image) %>
+            <dl class="event-image-file-meta"
+                aria-label="Aktuelle Bilddatei"
+                data-reference-image-crop-preview-target="fileMeta"
+                <%= "hidden" if image_file_metadata.empty? %>>
+              <% image_file_metadata.each do |label, value| %>
+                <div>
+                  <dt><%= label %></dt>
+                  <dd><%= value %></dd>
+                </div>
+              <% end %>
+            </dl>
+          </div>
+
+          <div class="event-image-sidebar-divider" aria-hidden="true"></div>
+
           <div class="action-cell">
             <label class="form-label" for="reference_image_grid_variant">Grid-Variante</label>
             <%= select_tag "reference_image[grid_variant]",
@@ -63,27 +83,6 @@
           </div>
 
           <div class="event-image-meta-inline-form">
-            <label class="form-label" for="reference_image_file">Bild</label>
-            <%= file_field_tag "reference_image[file]",
-                               accept: "image/*",
-                               id: "reference_image_file",
-                               class: "form-input",
-                               data: { reference_image_crop_preview_target: "fileInput" } %>
-            <% image_file_metadata = reference_image_file_metadata(reference_image) %>
-            <dl class="event-image-file-meta"
-                aria-label="Aktuelle Bilddatei"
-                data-reference-image-crop-preview-target="fileMeta"
-                <%= "hidden" if image_file_metadata.empty? %>>
-              <% image_file_metadata.each do |label, value| %>
-                <div>
-                  <dt><%= label %></dt>
-                  <dd><%= value %></dd>
-                </div>
-              <% end %>
-            </dl>
-          </div>
-
-          <div class="event-image-meta-inline-form">
             <label class="form-label" for="reference_image_alt_text">Alt-Text</label>
             <%= text_field_tag "reference_image[alt_text]", reference_image.alt_text, id: "reference_image_alt_text", class: "form-input" %>
           </div>
@@ -92,13 +91,6 @@
             <label class="form-label" for="reference_image_sub_text">Copyright</label>
             <%= text_field_tag "reference_image[sub_text]", reference_image.sub_text, id: "reference_image_sub_text", class: "form-input", placeholder: "Copyright unter dem Bild (optional)" %>
           </div>
-
-          <% if image_source.present? %>
-            <label class="form-checkbox">
-              <%= check_box_tag "reference_image[remove_image]", "1", false %>
-              <span>Bild entfernen</span>
-            </label>
-          <% end %>
         </aside>
       </div>
     </div>
