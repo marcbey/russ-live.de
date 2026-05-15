@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_14_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_14_143000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -28,6 +28,38 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_14_120000) do
     t.index ["user_id"], name: "index_login_attempts_on_user_id"
   end
 
+  create_table "reference_images", force: :cascade do |t|
+    t.string "alt_text"
+    t.string "asset_path"
+    t.bigint "byte_size"
+    t.decimal "card_focus_x", precision: 5, scale: 2, default: "50.0", null: false
+    t.decimal "card_focus_y", precision: 5, scale: 2, default: "50.0", null: false
+    t.decimal "card_zoom", precision: 5, scale: 2, default: "100.0", null: false
+    t.string "content_type"
+    t.datetime "created_at", null: false
+    t.string "file_path"
+    t.string "filename"
+    t.string "grid_variant", default: "1x1", null: false
+    t.bigint "reference_id", null: false
+    t.string "sub_text"
+    t.datetime "updated_at", null: false
+    t.index ["reference_id"], name: "index_reference_images_on_reference_id", unique: true
+  end
+
+  create_table "references", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "location", null: false
+    t.integer "position", default: 0, null: false
+    t.string "production"
+    t.date "starts_on", null: false
+    t.string "status", default: "draft", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["position", "starts_on"], name: "index_references_on_position_and_starts_on"
+    t.index ["status"], name: "index_references_on_status"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "ip_address"
@@ -36,4 +68,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_14_120000) do
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
+
+  add_foreign_key "reference_images", "references"
 end

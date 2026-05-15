@@ -1,0 +1,94 @@
+<% image_source = reference_image_source(reference_image) %>
+
+<section class="backend-section backend-section-media event-image-section">
+  <div class="backend-section-header">
+    <h2>Eventbild</h2>
+  </div>
+  <div class="backend-section-body">
+    <div class="event-image-crop-shell">
+      <div class="event-image-crop-editor">
+        <div class="event-image-crop-frame"
+             data-reference-image-crop-preview-target="previewFrame"
+             data-action="pointerdown->reference-image-crop-preview#startDrag"
+             data-grid-variant="<%= reference_image.grid_variant %>">
+          <% if image_source.present? %>
+            <%= image_tag image_source,
+                          alt: reference_image.display_alt_text,
+                          class: "event-image-crop-preview-image",
+                          data: { reference_image_crop_preview_target: "previewImage" } %>
+          <% else %>
+            <img alt=""
+                 class="event-image-crop-preview-image is-hidden"
+                 data-reference-image-crop-preview-target="previewImage">
+          <% end %>
+          <p class="event-image-crop-placeholder<%= " is-hidden" if image_source.present? %>"
+             data-role="event-image-crop-placeholder">
+            Noch kein Referenzbild ausgewählt.
+          </p>
+          <div class="event-image-crop-box is-hidden" data-reference-image-crop-preview-target="previewBox"></div>
+        </div>
+
+        <aside class="event-image-crop-sidebar">
+          <div class="action-cell">
+            <label class="form-label" for="reference_image_grid_variant">Grid-Variante</label>
+            <%= select_tag "reference_image[grid_variant]",
+                           options_for_select(ReferenceImage::GRID_VARIANTS.map { |variant| [variant, variant] }, reference_image.grid_variant),
+                           id: "reference_image_grid_variant",
+                           class: "form-input",
+                           data: { reference_image_crop_preview_target: "gridVariant", action: "change->reference-image-crop-preview#update" } %>
+            <p class="event-image-crop-hint">Legt das Seitenverhältnis der Referenz-Kachel fest: 1x1 Standard, 2x1 breit, 1x2 hoch, 2x2 groß.</p>
+          </div>
+
+          <div class="event-image-crop-controls">
+            <p class="event-image-crop-hint">Den Ausschnitt direkt im Bild per Drag verschieben.</p>
+            <%= hidden_field_tag "reference_image[card_focus_x]",
+                                 reference_image.card_focus_x_value,
+                                 data: { reference_image_crop_preview_target: "focusX saveFocusX" } %>
+            <%= hidden_field_tag "reference_image[card_focus_y]",
+                                 reference_image.card_focus_y_value,
+                                 data: { reference_image_crop_preview_target: "focusY saveFocusY" } %>
+            <%= hidden_field_tag "reference_image[grid_variant]",
+                                 reference_image.grid_variant,
+                                 data: { reference_image_crop_preview_target: "saveGridVariant" } %>
+
+            <label class="form-label" for="reference_image_card_zoom">Zoom <span data-reference-image-crop-preview-target="zoomOutput"><%= reference_image.card_zoom_value.round %>%</span></label>
+            <%= range_field_tag "reference_image[card_zoom]",
+                                reference_image.card_zoom_value,
+                                min: 100,
+                                max: 300,
+                                step: 5,
+                                id: "reference_image_card_zoom",
+                                class: "form-range",
+                                data: { reference_image_crop_preview_target: "zoom saveZoom", action: "input->reference-image-crop-preview#update" } %>
+          </div>
+
+          <div class="event-image-meta-inline-form">
+            <label class="form-label" for="reference_image_file">Bild</label>
+            <%= file_field_tag "reference_image[file]", accept: "image/*", id: "reference_image_file", class: "form-input" %>
+          </div>
+
+          <div class="event-image-meta-inline-form">
+            <label class="form-label" for="reference_image_alt_text">Alt-Text</label>
+            <%= text_field_tag "reference_image[alt_text]", reference_image.alt_text, id: "reference_image_alt_text", class: "form-input" %>
+          </div>
+
+          <div class="event-image-meta-inline-form">
+            <label class="form-label" for="reference_image_sub_text">Copyright</label>
+            <%= text_field_tag "reference_image[sub_text]", reference_image.sub_text, id: "reference_image_sub_text", class: "form-input", placeholder: "Copyright unter dem Bild (optional)" %>
+          </div>
+
+          <% if image_source.present? %>
+            <label class="form-checkbox">
+              <%= check_box_tag "reference_image[remove_image]", "1", false %>
+              <span>Bild entfernen</span>
+            </label>
+          <% end %>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="editor-actions">
+  <%= form.submit "Speichern", class: "button" %>
+</div>

@@ -17,8 +17,8 @@ export default class extends Controller {
 
   bindFilters() {
     const nav = this.element.querySelector(".references-year-nav")
-    const mosaic = this.mosaic
-    if (!nav || !mosaic) return
+    const grid = this.referenceGrid
+    if (!nav || !grid) return
 
     nav.querySelectorAll("button[data-year]").forEach((button) => {
       button.addEventListener("click", () => {
@@ -26,7 +26,7 @@ export default class extends Controller {
         nav.querySelectorAll("button").forEach((item) => item.setAttribute("aria-pressed", "false"))
         button.setAttribute("aria-pressed", "true")
 
-        mosaic.querySelectorAll(".reference-card").forEach((card) => {
+        grid.querySelectorAll(".reference-card").forEach((card) => {
           card.hidden = year !== "all" && card.dataset.year !== year
           if (card.hidden) {
             card.classList.remove("is-flipped")
@@ -90,7 +90,22 @@ export default class extends Controller {
   }
 
   layout() {
-    window.requestAnimationFrame(() => this.arrangeReferenceMosaic(this.mosaic))
+    window.requestAnimationFrame(() => {
+      this.arrangeReferenceGrid(this.highlightGrid)
+      this.arrangeReferenceMosaic(this.mosaic)
+    })
+  }
+
+  arrangeReferenceGrid(target) {
+    if (!target) return
+
+    const styles = getComputedStyle(target)
+    const columns = styles.gridTemplateColumns.split(" ").filter(Boolean).length
+    if (!columns) return
+
+    const gap = Number.parseFloat(styles.columnGap) || 0
+    const cellSize = (target.clientWidth - gap * (columns - 1)) / columns
+    if (cellSize > 0) target.style.setProperty("--reference-grid-cell-size", `${cellSize}px`)
   }
 
   arrangeReferenceMosaic(target) {
@@ -193,5 +208,13 @@ export default class extends Controller {
 
   get mosaic() {
     return this.element.querySelector('[data-layout="mosaic"]')
+  }
+
+  get referenceGrid() {
+    return this.element.querySelector('[data-layout="mosaic"], [data-layout="grid"]')
+  }
+
+  get highlightGrid() {
+    return this.element.querySelector('[data-layout="grid"]')
   }
 }

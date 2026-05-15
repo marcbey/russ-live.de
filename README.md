@@ -74,6 +74,20 @@ Die Authentifizierung nutzt die Stuttgart-Live-Benutzer (`admin` und `editor`),
 legt Sessions aber in der Russ-Datenbank ab. Passwort-Reset und
 Benutzerverwaltung bleiben in Stuttgart Live.
 
+## Referenzenpflege
+
+Referenzen werden als Russ-eigene Domain-Daten in der `russ`-Datenbank
+verwaltet. Das Backend unter `/backend/references` bietet eine
+stuttgart-live-inspirierte Inbox mit Liste, Suche, Statusfilter und
+Editor-Panel. Pro Referenz gibt es einen eigenen Eventbild-ähnlichen Bildeditor
+mit Grid-Variante, Ausschnitt und Zoom; diese Werte steuern die Kachel auf
+`/referenzen`.
+
+Bestehende Referenzen werden beim Einspielen der Russ-Migration als
+veröffentlichte Startdaten übernommen. Neue Uploads werden im Rails-Storage
+unter `storage/reference_images` abgelegt und über Russ Live ausgeliefert; die
+readonly Stuttgart-Live-Datenbank bleibt davon unberührt.
+
 ## Entwicklung starten
 
 ```bash

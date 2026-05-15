@@ -98,24 +98,51 @@
             <button class="klassik-slider-arrow klassik-slider-arrow-prev" type="button" aria-label="Vorherige Referenz">‹</button>
             <div class="klassik-slider-stage">
               <% @home_references.each_with_index do |reference, index| %>
+                <% reference_data = reference.respond_to?(:reference_image) ? reference_home_card_data(reference) : {
+                  title: reference[:title],
+                  date_location: reference[:date_location],
+                  partner: reference[:partner],
+                  image: image_path(reference[:image]),
+                  alt: reference[:alt],
+                  image_render_data: {}
+                } %>
                 <% slide_classes = ["klassik-slide"] %>
                 <% slide_classes << "is-active" if index.zero? %>
                 <% slide_classes << "is-next" if index == 1 %>
                 <% slide_classes << "is-prev" if index == @home_references.length - 1 %>
                 <% slide_classes << "is-hidden" if index > 1 && index != @home_references.length - 1 %>
-                <figure class="<%= slide_classes.join(" ") %>" data-index="<%= index %>" tabindex="0" aria-hidden="<%= index.zero? ? "false" : "true" %>" aria-label="<%= reference[:title] %>" data-title="<%= reference[:title] %>" data-date-location="<%= reference[:date_location] %>" data-partner="<%= reference[:partner] %>">
-                  <img src="<%= image_path reference[:image] %>" alt="<%= reference[:alt] %>">
-                </figure>
+                <%= tag.figure class: slide_classes.join(" "),
+                               data: {
+                                 index: index,
+                                 title: reference_data[:title],
+                                 date_location: reference_data[:date_location],
+                                 partner: reference_data[:partner]
+                               }
+                                 .merge(reference_data[:image_render_data])
+                                 .merge(reference_data[:image_render_data].present? ? { reference_image_render_target: "frame" } : {}),
+                               tabindex: 0,
+                               aria: { hidden: index.zero? ? "false" : "true", label: reference_data[:title] } do %>
+                  <%= tag.img src: reference_data[:image],
+                              alt: reference_data[:alt],
+                              style: reference_data[:image_style].presence,
+                              data: { reference_image_render_target: "image" } %>
+                <% end %>
               <% end %>
             </div>
             <button class="klassik-slider-arrow klassik-slider-arrow-next" type="button" aria-label="Nächste Referenz">›</button>
           </div>
           <div class="klassik-slider-meta">
             <span class="klassik-slider-marker" aria-hidden="true"></span>
+            <% first_reference = @home_references.first %>
+            <% first_reference_data = first_reference.respond_to?(:reference_image) ? reference_home_card_data(first_reference) : {
+              title: first_reference[:title],
+              date_location: first_reference[:date_location],
+              partner: first_reference[:partner]
+            } %>
             <div class="klassik-slider-text">
-              <h3><%= @home_references.first[:title] %></h3>
-              <p class="klassik-slider-date-location"><%= @home_references.first[:date_location] %></p>
-              <p class="klassik-slider-partner"><%= @home_references.first[:partner] %></p>
+              <h3><%= first_reference_data[:title] %></h3>
+              <p class="klassik-slider-date-location"><%= first_reference_data[:date_location] %></p>
+              <p class="klassik-slider-partner"><%= first_reference_data[:partner] %></p>
             </div>
             <a class="section-button klassik-slider-button" href="<%= referenzen_path %>">Referenzen</a>
           </div>

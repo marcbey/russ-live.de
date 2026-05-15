@@ -3,6 +3,9 @@ require "test_helper"
 class PagesControllerTest < ActionDispatch::IntegrationTest
   setup do
     StuttgartLiveSchema.ensure!
+    RussLiveSchema.ensure!
+    ReferenceImage.delete_all
+    Reference.delete_all
     clear_stuttgart_live_records
     seed_sks_promoter_ids!
   end
@@ -28,6 +31,51 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
       assert_includes response.body, text
       assert_includes response.body, "/assets/russ_live/"
     end
+  end
+
+  test "renders reference image crop and zoom styles on public reference surfaces" do
+    reference = Reference.create!(
+      title: "NEIL YOUNG",
+      starts_on: Date.new(2024, 6, 29),
+      location: "Hanns-Martin-Schleyer-Halle",
+      production: "Wizart Promotion",
+      status: "published",
+      position: 1
+    )
+    reference.create_reference_image!(
+      asset_path: "russ_live/references/03-neil-young.jpg",
+      alt_text: "NEIL YOUNG",
+      grid_variant: "2x2",
+      card_focus_x: 35,
+      card_focus_y: 65,
+      card_zoom: 145
+    )
+
+    get referenzen_path
+
+    assert_response :success
+    assert_includes response.body, "object-position: 35.0% 65.0%"
+    assert_includes response.body, "--reference-image-focus-x: 35.0%"
+    assert_includes response.body, "--reference-image-focus-y: 65.0%"
+    assert_includes response.body, "--reference-image-zoom: 1.45"
+    assert_includes response.body, 'data-controller="reference-image-render"'
+    assert_includes response.body, 'data-reference-image-render-focus-x-value="35.0"'
+    assert_includes response.body, 'data-reference-image-render-focus-y-value="65.0"'
+    assert_includes response.body, 'data-reference-image-render-zoom-value="145.0"'
+    assert_includes response.body, 'data-reference-image-render-target="frame"'
+
+    get root_path
+
+    assert_response :success
+    assert_includes response.body, "object-position: 35.0% 65.0%"
+    assert_includes response.body, "--reference-image-focus-x: 35.0%"
+    assert_includes response.body, "--reference-image-focus-y: 65.0%"
+    assert_includes response.body, "--reference-image-zoom: 1.45"
+    assert_includes response.body, 'data-controller="reference-image-render"'
+    assert_includes response.body, 'data-reference-image-render-focus-x-value="35.0"'
+    assert_includes response.body, 'data-reference-image-render-focus-y-value="65.0"'
+    assert_includes response.body, 'data-reference-image-render-zoom-value="145.0"'
+    assert_includes response.body, 'data-reference-image-render-target="frame"'
   end
 
   test "renders job detail on its own page" do

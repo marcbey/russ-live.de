@@ -1,0 +1,35 @@
+<% reference_image = reference.reference_image %>
+<% image_source = reference_image_source(reference_image) %>
+<% dimensions = reference_card_dimensions(reference_image) %>
+
+<%= tag.figure class: "reference-card #{reference_grid_class(reference_image)}",
+               data: { year: reference.year }.merge(reference_image_render_data(reference_image)) do %>
+  <button class="reference-card-flip" type="button" aria-pressed="false" aria-label="Details zu <%= reference.title %> anzeigen">
+    <span class="reference-card-face reference-card-front" aria-hidden="true" data-reference-image-render-target="frame">
+      <% if image_source.present? %>
+        <%= image_tag image_source,
+                      alt: reference_image&.display_alt_text || reference.title,
+                      loading: "lazy",
+                      decoding: "async",
+                      width: dimensions.fetch(:width),
+                      height: dimensions.fetch(:height),
+                      style: reference_image_style(reference_image),
+                      data: { reference_image_render_target: "image" } %>
+      <% else %>
+        <span class="reference-card-placeholder"></span>
+      <% end %>
+      <span class="reference-card-title"><%= reference.title %></span>
+    </span>
+    <span class="reference-card-face reference-card-back">
+      <span class="reference-card-name"><%= reference.title %></span>
+      <span class="reference-card-meta"><strong>Datum</strong><%= l(reference.starts_on, format: "%d.%m.%Y") %></span>
+      <span class="reference-card-meta"><strong>Location</strong><%= reference.location %></span>
+      <% if reference.production.present? %>
+        <span class="reference-card-meta"><strong>Produktion</strong><%= reference.production %></span>
+      <% end %>
+      <% if reference.description.present? %>
+        <span class="reference-card-copy"><%= reference.description %></span>
+      <% end %>
+    </span>
+  </button>
+<% end %>

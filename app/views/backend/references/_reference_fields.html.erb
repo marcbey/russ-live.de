@@ -1,0 +1,39 @@
+<section class="backend-section">
+  <div class="backend-section-header">
+    <h2>Referenzdaten</h2>
+  </div>
+  <div class="backend-section-body editor-grid">
+    <div>
+      <%= form.label :title, "Titel", class: "form-label" %>
+      <%= form.text_field :title, class: "form-input" %>
+    </div>
+    <div>
+      <%= form.label :starts_on, "Datum", class: "form-label" %>
+      <%= form.date_field :starts_on, class: "form-input" %>
+    </div>
+    <div>
+      <%= form.label :location, "Location", class: "form-label" %>
+      <%= form.text_field :location, class: "form-input" %>
+    </div>
+    <div>
+      <%= form.label :production, "Produktion", class: "form-label" %>
+      <%= form.text_field :production, class: "form-input" %>
+    </div>
+    <div>
+      <%= form.label :status, "Status", class: "form-label" %>
+      <%= form.select :status, [["Entwurf", "draft"], ["Veröffentlicht", "published"]], {}, class: "form-input" %>
+    </div>
+    <div>
+      <%= form.label :position, "Sortierung", class: "form-label" %>
+      <%= form.number_field :position, class: "form-input", min: 0, step: 1 %>
+    </div>
+    <div class="editor-grid-span-full">
+      <%= form.label :description, "Beschreibung", class: "form-label" %>
+      <%= form.text_area :description, rows: 5, class: "form-textarea" %>
+    </div>
+  </div>
+</section>
+
+<div class="editor-actions">
+  <%= form.submit "Speichern", class: "button" %>
+</div>

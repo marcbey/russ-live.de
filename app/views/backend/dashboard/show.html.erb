@@ -7,6 +7,7 @@
     </div>
 
     <div class="auth-actions">
+      <%= link_to "Referenzen verwalten", backend_references_path, class: "button" %>
       <%= link_to "Zur Website", root_path, class: "button" %>
       <%= button_to "Ausloggen", session_path, method: :delete, class: "auth-reset-link" %>
     </div>

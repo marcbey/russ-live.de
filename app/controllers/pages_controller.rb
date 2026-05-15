@@ -236,7 +236,7 @@ class PagesController < ApplicationController
   before_action :set_page_meta, except: :homepage_lane
 
   def home
-    @home_references = HOME_REFERENCES
+    @home_references = Reference.published.with_image.ordered.to_a.presence || HOME_REFERENCES
     @home_events_page = home_events_page
     @home_events = @home_events_page.events
     @home_events_next_cursor = @home_events_page.next_cursor
@@ -255,7 +255,10 @@ class PagesController < ApplicationController
   end
   def unternehmen; end
   def services; end
-  def referenzen; end
+  def referenzen
+    @references = Reference.published.with_image.ordered
+    @reference_years = @references.map(&:year).compact.uniq.sort.reverse
+  end
   def jobs
     @jobs = JOBS
     @job_overview_hero_image = "russ_live/jobs/overview-hero.jpg"

@@ -1,0 +1,53 @@
+<% reference_image = reference.build_reference_image_with_defaults %>
+<% form_url = reference.persisted? ? backend_reference_path(reference) : backend_references_path %>
+<% form_method = reference.persisted? ? :patch : :post %>
+
+<div class="editor-panel" data-controller="reference-image-crop-preview">
+  <div class="editor-tabs" role="tablist" aria-label="Referenz bearbeiten">
+    <% { "reference" => "Referenz", "image" => "Eventbild" }.each do |tab, label| %>
+      <%= link_to label,
+                  (reference.persisted? ? backend_references_path(reference_id: reference.id, editor_tab: (tab unless tab == "reference"), status: (@status_filter unless @status_filter == "all"), query: @query_filter) : new_backend_reference_path(editor_tab: (tab unless tab == "reference"), status: (@status_filter unless @status_filter == "all"), query: @query_filter)),
+                  class: "editor-tab #{'is-active' if active_editor_tab == tab}",
+                  role: "tab",
+                  aria: { selected: (active_editor_tab == tab).to_s } %>
+    <% end %>
+  </div>
+
+  <%= form_with model: reference,
+                url: form_url,
+                method: form_method,
+                class: "editor-form",
+                html: { multipart: true },
+                data: { turbo: false } do |form| %>
+    <%= hidden_field_tag :status, (@status_filter unless @status_filter == "all") %>
+    <%= hidden_field_tag :query, @query_filter if @query_filter.present? %>
+    <%= hidden_field_tag :editor_tab, active_editor_tab %>
+
+    <% if reference.errors.any? || reference_image.errors.any? %>
+      <div class="form-errors">
+        <p>Bitte prüfe die markierten Angaben.</p>
+        <ul>
+          <% (reference.errors.full_messages + reference_image.errors.full_messages).uniq.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <% if active_editor_tab == "image" %>
+      <%= render "image_fields", form: form, reference: reference, reference_image: reference_image %>
+    <% else %>
+      <%= render "reference_fields", form: form, reference: reference %>
+    <% end %>
+  <% end %>
+
+  <% if reference.persisted? %>
+    <div class="editor-danger-actions">
+      <%= button_to "Referenz löschen",
+                    backend_reference_path(reference, status: (@status_filter unless @status_filter == "all"), query: @query_filter),
+                    method: :delete,
+                    class: "button button-ghost button-compact",
+                    form: { data: { turbo_confirm: "Diese Referenz wirklich löschen?" } } %>
+    </div>
+  <% end %>
+</div>
