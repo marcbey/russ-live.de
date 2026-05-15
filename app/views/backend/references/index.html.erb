@@ -16,49 +16,53 @@
 
   <div class="backend-split backend-inbox-split">
     <aside class="backend-list-column">
-      <div class="backend-status-row">
-        <% Backend::ReferencesController::FILTERS.each do |filter| %>
-          <% label = { "all" => "Alle", "draft" => "Entwürfe", "published" => "Veröffentlicht" }.fetch(filter) %>
-          <%= link_to label,
-                      backend_references_path(status: (filter unless filter == "all"), query: @query_filter),
-                      class: "status-chip #{'status-chip-active' if @status_filter == filter}" %>
+      <div class="backend-list-toolbar">
+        <div class="backend-status-row">
+          <% Backend::ReferencesController::FILTERS.each do |filter| %>
+            <% label = { "all" => "Alle", "draft" => "Entwürfe", "published" => "Veröffentlicht" }.fetch(filter) %>
+            <%= link_to label,
+                        backend_references_path(status: (filter unless filter == "all"), query: @query_filter),
+                        class: "status-chip #{'status-chip-active' if @status_filter == filter}" %>
+          <% end %>
+        </div>
+
+        <%= form_with url: backend_references_path, method: :get, class: "filter-form", data: { turbo: false } do |form| %>
+          <%= form.hidden_field :status, value: (@status_filter unless @status_filter == "all") %>
+          <div class="filter-grid">
+            <div class="filter-search-field filter-search-field-full">
+              <%= form.label :query, "Suche", class: "form-label" %>
+              <div class="filter-date-wrap">
+                <%= form.text_field :query,
+                                    value: @query_filter,
+                                    placeholder: "Titel, Ort, Produktion",
+                                    class: "form-input filter-input-with-clear",
+                                    oninput: "this.nextElementSibling.classList.toggle('filter-date-clear-visible', this.value.length > 0)" %>
+                <%= button_tag "×",
+                               type: "button",
+                               class: "filter-date-clear filter-input-clear #{'filter-date-clear-visible' if @query_filter.present?}",
+                               aria: { label: "Suche löschen" },
+                               onclick: "this.previousElementSibling.value=''; this.classList.remove('filter-date-clear-visible'); this.form.requestSubmit();" %>
+              </div>
+            </div>
+          </div>
         <% end %>
       </div>
 
-      <%= form_with url: backend_references_path, method: :get, class: "filter-form", data: { turbo: false } do |form| %>
-        <%= form.hidden_field :status, value: (@status_filter unless @status_filter == "all") %>
-        <div class="filter-grid">
-          <div class="filter-search-field filter-search-field-full">
-            <%= form.label :query, "Suche", class: "form-label" %>
-            <div class="filter-date-wrap">
-              <%= form.text_field :query,
-                                  value: @query_filter,
-                                  placeholder: "Titel, Ort, Produktion",
-                                  class: "form-input filter-input-with-clear",
-                                  oninput: "this.nextElementSibling.classList.toggle('filter-date-clear-visible', this.value.length > 0)" %>
-              <%= button_tag "×",
-                             type: "button",
-                             class: "filter-date-clear filter-input-clear #{'filter-date-clear-visible' if @query_filter.present?}",
-                             aria: { label: "Suche löschen" },
-                             onclick: "this.previousElementSibling.value=''; this.classList.remove('filter-date-clear-visible'); this.form.requestSubmit();" %>
-            </div>
-          </div>
-        </div>
-      <% end %>
-
-      <div class="backend-reference-list">
-        <% if @references.any? %>
-          <% @references.each do |reference| %>
-            <%= link_to backend_references_path(status: (@status_filter unless @status_filter == "all"), query: @query_filter, reference_id: reference.id, editor_tab: @active_editor_tab),
-                        class: "backend-reference-list-item #{'is-active' if @selected_reference&.id == reference.id}" do %>
-              <span class="backend-reference-list-title"><%= reference.title %></span>
-              <span class="backend-reference-list-meta"><%= l(reference.starts_on, format: "%d.%m.%Y") %> · <%= reference.location %></span>
-              <span class="status-badge"><%= reference.display_status %></span>
+      <div class="backend-reference-list-scroll">
+        <div class="backend-reference-list">
+          <% if @references.any? %>
+            <% @references.each do |reference| %>
+              <%= link_to backend_references_path(status: (@status_filter unless @status_filter == "all"), query: @query_filter, reference_id: reference.id, editor_tab: @active_editor_tab),
+                          class: "backend-reference-list-item #{'is-active' if @selected_reference&.id == reference.id}" do %>
+                <span class="backend-reference-list-title"><%= reference.title %></span>
+                <span class="backend-reference-list-meta"><%= l(reference.starts_on, format: "%d.%m.%Y") %> · <%= reference.location %></span>
+                <span class="status-badge"><%= reference.display_status %></span>
+              <% end %>
             <% end %>
+          <% else %>
+            <p class="empty-state">Keine Referenzen zur aktuellen Filterung.</p>
           <% end %>
-        <% else %>
-          <p class="empty-state">Keine Referenzen zur aktuellen Filterung.</p>
-        <% end %>
+        </div>
       </div>
     </aside>
 

@@ -2392,7 +2392,11 @@ h3 {
 .backend-shell {
   background: #f5f2ec;
   color: var(--ink);
-  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  height: 100svh;
+  min-height: 0;
+  overflow: hidden;
   padding: 0 clamp(18px, 3vw, 36px) 36px;
 }
 
@@ -2462,9 +2466,11 @@ h3 {
 }
 
 .backend-split {
+  flex: 1 1 auto;
   display: grid;
   gap: 24px;
   grid-template-columns: minmax(260px, 380px) minmax(0, 1fr);
+  min-height: 0;
   padding-top: 24px;
 }
 
@@ -2473,9 +2479,27 @@ h3 {
   min-width: 0;
 }
 
+.backend-editor-column {
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+
 .backend-list-column {
   display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
   gap: 0;
+  height: 100%;
+  min-height: 0;
+}
+
+.backend-list-toolbar {
+  align-self: start;
+  background: #f5f2ec;
+  display: grid;
+  gap: 0;
+  z-index: 4;
 }
 
 .backend-status-row {
@@ -2522,9 +2546,6 @@ h3 {
   display: flex;
   height: 104px;
   padding: 14px;
-  position: sticky;
-  top: 126px;
-  z-index: 5;
 }
 
 .filter-form .filter-grid {
@@ -2618,7 +2639,13 @@ h3 {
 .backend-reference-list {
   display: grid;
   gap: 8px;
-  margin-top: 16px;
+}
+
+.backend-reference-list-scroll {
+  min-height: 0;
+  overflow-y: auto;
+  padding-top: 16px;
+  scrollbar-gutter: stable;
 }
 
 .backend-reference-list-item {
@@ -2658,21 +2685,46 @@ h3 {
 }
 
 .editor-tabs {
+  align-items: stretch;
+  background: rgba(255, 255, 255, .96);
   border-bottom: 1px solid var(--line);
   display: flex;
-  gap: 0;
+  justify-content: space-between;
+  min-height: 34px;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
+.editor-tab-list {
+  align-items: stretch;
+  display: flex;
+  min-height: 34px;
 }
 
 .editor-tab {
   border-right: 1px solid var(--line);
   font-weight: 650;
-  padding: 14px 18px;
+  align-items: center;
+  display: inline-flex;
+  line-height: 1;
+  padding: 6px 12px;
   text-transform: uppercase;
 }
 
 .editor-tab.is-active {
   background: #111;
   color: #fff;
+}
+
+.editor-tabs-actions {
+  align-items: center;
+  min-height: 34px;
+  padding: 2px 6px;
+}
+
+.editor-tabs-actions .button {
+  min-height: 30px;
 }
 
 .backend-section {
@@ -2777,28 +2829,33 @@ h3 {
 }
 
 .event-image-file-meta {
-  border-top: 1px solid var(--line);
   display: grid;
-  gap: 8px;
-  margin: 12px 0 0;
-  padding-top: 12px;
+  gap: 14px;
+  margin: 14px 0 0;
 }
 
 .event-image-file-meta div {
   display: grid;
-  gap: 2px;
 }
 
 .event-image-file-meta dt {
-  color: var(--muted);
-  font-size: .72rem;
+  display: block;
+  font-size: .78rem;
   font-weight: 650;
+  margin-bottom: 7px;
   text-transform: uppercase;
 }
 
 .event-image-file-meta dd {
+  align-items: center;
+  background: #f8f7f4;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  display: flex;
   margin: 0;
+  min-height: 48px;
   overflow-wrap: anywhere;
+  padding: 0 13px;
 }
 
 .home-events {

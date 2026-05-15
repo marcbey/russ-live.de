@@ -4,14 +4,27 @@
 <% form_id = dom_id(reference, :editor_form) %>
 
 <div class="editor-panel" data-controller="reference-image-crop-preview">
-  <div class="editor-tabs" role="tablist" aria-label="Referenz bearbeiten">
-    <% { "reference" => "Referenz", "image" => "Eventbild" }.each do |tab, label| %>
-      <%= link_to label,
-                  (reference.persisted? ? backend_references_path(reference_id: reference.id, editor_tab: (tab unless tab == "reference"), status: (@status_filter unless @status_filter == "all"), query: @query_filter) : new_backend_reference_path(editor_tab: (tab unless tab == "reference"), status: (@status_filter unless @status_filter == "all"), query: @query_filter)),
-                  class: "editor-tab #{'is-active' if active_editor_tab == tab}",
-                  role: "tab",
-                  aria: { selected: (active_editor_tab == tab).to_s } %>
-    <% end %>
+  <div class="editor-tabs">
+    <div class="editor-tab-list" role="tablist" aria-label="Referenz bearbeiten">
+      <% { "reference" => "Referenz", "image" => "Eventbild" }.each do |tab, label| %>
+        <%= link_to label,
+                    (reference.persisted? ? backend_references_path(reference_id: reference.id, editor_tab: (tab unless tab == "reference"), status: (@status_filter unless @status_filter == "all"), query: @query_filter) : new_backend_reference_path(editor_tab: (tab unless tab == "reference"), status: (@status_filter unless @status_filter == "all"), query: @query_filter)),
+                    class: "editor-tab #{'is-active' if active_editor_tab == tab}",
+                    role: "tab",
+                    aria: { selected: (active_editor_tab == tab).to_s } %>
+      <% end %>
+    </div>
+
+    <div class="editor-actions editor-tabs-actions">
+      <button type="submit" form="<%= form_id %>" class="button button-compact">Speichern</button>
+      <% if reference.persisted? %>
+        <%= button_to "Referenz löschen",
+                      backend_reference_path(reference, status: (@status_filter unless @status_filter == "all"), query: @query_filter),
+                      method: :delete,
+                      class: "button button-danger button-compact",
+                      form: { data: { turbo_confirm: "Diese Referenz wirklich löschen?" } } %>
+      <% end %>
+    </div>
   </div>
 
   <%= form_with model: reference,
@@ -42,14 +55,4 @@
     <% end %>
   <% end %>
 
-  <div class="editor-actions">
-    <button type="submit" form="<%= form_id %>" class="button button-compact">Speichern</button>
-    <% if reference.persisted? %>
-      <%= button_to "Referenz löschen",
-                    backend_reference_path(reference, status: (@status_filter unless @status_filter == "all"), query: @query_filter),
-                    method: :delete,
-                    class: "button button-danger button-compact",
-                    form: { data: { turbo_confirm: "Diese Referenz wirklich löschen?" } } %>
-    <% end %>
-  </div>
 </div>
