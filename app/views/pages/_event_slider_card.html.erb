@@ -6,7 +6,7 @@
 <% ticket_offer = event.public_ticket_offer %>
 <% display_price =
   if event.min_price.present? && event.max_price.present? && event.min_price < event.max_price
-    "ab #{number_to_currency(event.min_price, unit: "€", separator: ",", delimiter: ".", format: "%n%u")}"
+    t("events.price_from", price: number_to_currency(event.min_price, unit: "€", separator: ",", delimiter: ".", format: "%n%u"))
   else
     ticket_offer&.ticket_price_text.to_s.presence
   end %>
@@ -33,7 +33,7 @@
     <% if ticket_status_label.present? %>
       <span class="event-slider-status"><%= ticket_status_label %></span>
     <% else %>
-      <a class="public-button public-button-primary event-slider-button" href="<%= event.public_ticket_url %>" target="_blank" rel="noreferrer">Tickets</a>
+      <a class="public-button public-button-primary event-slider-button" href="<%= event.public_ticket_url %>" target="_blank" rel="noreferrer"><%= t("events.tickets") %></a>
     <% end %>
   </div>
 </article>

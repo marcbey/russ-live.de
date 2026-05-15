@@ -4,41 +4,41 @@
     logo: "russ_live/about/russ-live-area-logo.png",
     title: "Russ Live",
     url: "https://www.michaelrussgmbh.de/",
-    text: "Ob Club- oder Stadion-Konzerte, Musicals, Shows oder ihr nächstes Firmenevent. Wir sind ihr starker Partner."
+    text: t("pages.about.company.areas.live")
   },
   {
     key: "artists",
     logo: "russ_live/about/russ-artists-logo.png",
     title: "Russ Artists",
     url: "https://russ-artists.de/",
-    text: "Ihr engagierter Partner bei der Suche nach Künstlern und Programmen, die Ihrem Veranstalterprofil entsprechen."
+    text: t("pages.about.company.areas.artists")
   },
   {
     key: "service",
     logo: "russ_live/about/russ-service-logo.png",
     title: "Russ Service",
     url: "https://www.ordnerdienste-stuttgart.de/",
-    text: "Wir sorgen für eine sichere Veranstaltung: Konzert, Tagung, Firmenfeier oder Konferenz."
+    text: t("pages.about.company.areas.service")
   },
   {
     key: "klassik",
     logo: "russ_live/about/russ-klassik-logo.png",
     title: "Russ Klassik",
     url: "https://russ-klassik.de/",
-    text: "Entdecken Sie bei uns die faszinierende Welt der klassischen Musik. Meisterkonzerte für Stuttgart. Seit 1945."
+    text: t("pages.about.company.areas.klassik")
   }
 ] %>
 
 <main id="main-content" class="page-main public-page about-page" tabindex="-1">
   <section class="public-hero public-hero-editorial section about-hero" aria-labelledby="about-title">
     <div class="about-hero-copy">
-      <p class="eyebrow">Über uns</p>
+      <p class="eyebrow"><%= t("pages.about.hero.eyebrow") %></p>
       <h1 id="about-title">
-        <span>Menschen.</span>
-        <span><em>Momente.</em></span>
-        <span>Seit 1945.</span>
+        <span><%= t("pages.about.hero.title_lines.people") %></span>
+        <span><em><%= t("pages.about.hero.title_lines.moments") %></em></span>
+        <span><%= t("pages.about.hero.title_lines.since") %></span>
       </h1>
-      <p>Aus Stuttgart. Für die Welt. Seit drei Generationen gestalten wir Konzerte, die verbinden.</p>
+      <p><%= t("pages.about.hero.intro") %></p>
     </div>
 
     <div class="about-hero-collage" aria-hidden="true">
@@ -56,24 +56,24 @@
 
   <section class="public-section section about-story-lead" aria-labelledby="about-story-lead-title">
     <div class="about-story-lead-copy">
-      <h2 id="about-story-lead-title" class="sr-only">Unternehmensprofil</h2>
-      <p><strong>Michael Russ Jr.</strong> ist mit einer ruhigen Nähe, viel Herz und echtem Unternehmergeist auf die Welt von Russ Live gewachsen. Im Laufe der Jahre wurde daraus Verantwortung, Erfahrung und ein klarer Blick dafür, wie man Kultur dauerhaft möglich macht.</p>
-      <p><strong>Michaela Russ</strong> führt diesen Weg in der dritten Generation weiter. Gemeinsam steht die Familie für Produktionen, die professionell organisiert sind und trotzdem menschlich bleiben. Daraus ist ein Team entstanden, das Kultur mit Haltung, Verlässlichkeit und Leidenschaft umsetzt.</p>
+      <h2 id="about-story-lead-title" class="sr-only"><%= t("pages.about.profile_title") %></h2>
+      <p><%= t("pages.about.story.first_html") %></p>
+      <p><%= t("pages.about.story.second_html") %></p>
     </div>
   </section>
 
   <section class="public-section about-company-band" aria-labelledby="about-company-band-title">
     <div class="about-company-band-copy">
-      <p class="eyebrow">Konzertdirektion Russ</p>
-      <h2 id="about-company-band-title">Vier Unternehmen.<br>Eine Vision.</h2>
-      <p>Wir wollen Menschen glücklich machen.</p>
-      <%= link_to "Konzertdirektion", "https://www.konzertdirektion-russ.de/", class: "public-button public-button-primary section-button about-company-band-button", target: "_blank", rel: "noopener noreferrer" %>
+      <p class="eyebrow"><%= t("pages.about.company.eyebrow") %></p>
+      <h2 id="about-company-band-title"><%= t("pages.about.company.title_html") %></h2>
+      <p><%= t("pages.about.company.intro") %></p>
+      <%= link_to t("pages.about.company.button"), "https://www.konzertdirektion-russ.de/", class: "public-button public-button-primary section-button about-company-band-button", target: "_blank", rel: "noopener noreferrer" %>
     </div>
 
     <div class="about-company-band-grid">
       <% company_areas.each do |area| %>
         <article class="public-card about-company-card about-company-card-<%= area[:key] %>">
-          <a href="<%= area[:url] %>" target="_blank" rel="noopener noreferrer" aria-label="<%= "#{area[:title]} öffnen" %>">
+          <a href="<%= area[:url] %>" target="_blank" rel="noopener noreferrer" aria-label="<%= t("pages.about.company.open_aria", title: area[:title]) %>">
             <figure class="about-company-logo">
               <%= image_tag area[:logo], alt: area[:title] %>
             </figure>
@@ -90,7 +90,7 @@
   <section class="public-section section about-history-section about-history-section-first" aria-labelledby="about-history-title">
     <figure class="about-history-image about-history-image-portrait">
       <%= image_tag "russ_live/about/geschichte-v2.jpg",
-                    alt: "Michaela Russ, Michael Russ und ein historisches Familienportrait",
+                    alt: t("pages.about.history.image_alt"),
                     loading: "lazy",
                     decoding: "async",
                     width: 1200,
@@ -98,24 +98,24 @@
     </figure>
 
     <div class="about-history-copy">
-      <p class="eyebrow">Geschichte</p>
-      <h2 id="about-history-title">Unsere Geschichte. Drei Generationen. Eine Haltung.</h2>
-      <p>Was 1945 mit einer Vision begann, ist heute eine der führenden Konzertdirektionen Europas. Von Stuttgart aus hat Russ über Jahrzehnte Konzertgeschichte mitgeprägt und sich gleichzeitig die Nähe zur Region bewahrt.</p>
-      <p>Diese Verbindung aus lokaler Verwurzelung und internationalem Anspruch prägt unseren Blick bis heute: Wir denken groß, arbeiten partnerschaftlich und behalten immer die Menschen hinter jeder Produktion im Fokus.</p>
+      <p class="eyebrow"><%= t("pages.about.history.eyebrow") %></p>
+      <h2 id="about-history-title"><%= t("pages.about.history.title") %></h2>
+      <p><%= t("pages.about.history.first") %></p>
+      <p><%= t("pages.about.history.second") %></p>
     </div>
   </section>
 
   <section class="public-section section about-history-section about-history-section-award" aria-labelledby="about-award-title">
     <div class="about-history-copy about-history-copy-narrow">
-      <p class="eyebrow">Verantwortung</p>
-      <h2 id="about-award-title">Erfahrung, die nicht stillsteht.</h2>
-      <p>Ob Tournee, Einzelshow, Kulturformat oder Großereignis: Wir verbinden gewachsene Branchenkenntnis mit dem Anspruch, uns immer weiterzuentwickeln. Genau daraus entsteht die Mischung aus Präzision, Ruhe und Neugier, die unsere Arbeit auszeichnet.</p>
-      <p>Auszeichnungen freuen uns. Wichtiger ist uns aber, dass Künstler, Publikum, Partner und Teams sich auf uns verlassen können.</p>
+      <p class="eyebrow"><%= t("pages.about.award.eyebrow") %></p>
+      <h2 id="about-award-title"><%= t("pages.about.award.title") %></h2>
+      <p><%= t("pages.about.award.first") %></p>
+      <p><%= t("pages.about.award.second") %></p>
     </div>
 
     <figure class="about-history-image about-history-image-award">
       <%= image_tag "russ_live/about/award-top-magazin.jpg",
-                    alt: "Michael Russ Jr. mit Auszeichnung und Partner bei einer Preisverleihung",
+                    alt: t("pages.about.award.image_alt"),
                     loading: "lazy",
                     decoding: "async",
                     width: 3661,
@@ -127,7 +127,7 @@
     <div class="about-city-visuals">
       <figure class="about-history-image about-history-image-small">
         <%= image_tag "russ_live/about/ike-tina-1971.jpg",
-                      alt: "Historisches Konzertfoto von Ike und Tina Turner",
+                      alt: t("pages.about.city.small_image_alt"),
                       loading: "lazy",
                       decoding: "async",
                       width: 1408,
@@ -135,7 +135,7 @@
       </figure>
       <figure class="about-history-image about-history-image-large">
         <%= image_tag "russ_live/about/adac-2003.jpg",
-                      alt: "Großveranstaltung in Stuttgart mit Oldtimer-Korso",
+                      alt: t("pages.about.city.large_image_alt"),
                       loading: "lazy",
                       decoding: "async",
                       width: 3008,
@@ -144,18 +144,18 @@
     </div>
 
     <div class="about-history-copy">
-      <p class="eyebrow">Perspektive</p>
-      <h2 id="about-city-title">Von Stuttgart in die Welt.</h2>
-      <p>Ob in der Stuttgarter Liederhalle, auf den großen Festivalflächen, in Arenen oder Open-Air-Produktionen: Wir bringen Menschen zusammen. Live. Echt. Unvergesslich.</p>
-      <p>Die Stadt ist unser Ausgangspunkt, nicht unsere Grenze. Aus ihr heraus entwickeln wir Formate, die regional verankert sind und weit darüber hinaus wirken.</p>
+      <p class="eyebrow"><%= t("pages.about.city.eyebrow") %></p>
+      <h2 id="about-city-title"><%= t("pages.about.city.title") %></h2>
+      <p><%= t("pages.about.city.first") %></p>
+      <p><%= t("pages.about.city.second") %></p>
     </div>
   </section>
 
   <section class="public-section about-closing section" aria-labelledby="about-closing-title">
     <div class="about-closing-copy">
-      <p class="eyebrow">Heute</p>
-      <h2 id="about-closing-title">Tradition ist für uns kein Rückblick, sondern Vertrauen in das, was als Nächstes kommt.</h2>
-      <p>Russ Live steht für Erfahrung ohne Stillstand, für Qualität ohne Attitüde und für Produktionen, die Kultur als gemeinsame Aufgabe begreifen.</p>
+      <p class="eyebrow"><%= t("pages.about.closing.eyebrow") %></p>
+      <h2 id="about-closing-title"><%= t("pages.about.closing.title") %></h2>
+      <p><%= t("pages.about.closing.text") %></p>
     </div>
   </section>
 </main>

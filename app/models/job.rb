@@ -95,11 +95,11 @@ class Job < RussRecord
   end
 
   def detail_label
-    "Jobdetails #{title}"
+    I18n.t("jobs.detail.aria_label", title: title)
   end
 
   def application_email_subject
-    "Bewerbung #{title}"
+    I18n.t("jobs.detail.application_email_subject", title: title)
   end
 
   def build_job_image_with_defaults

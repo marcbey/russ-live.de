@@ -3,7 +3,7 @@
         <picture class="home-hero-media">
           <source media="(max-width: 900px)" srcset="<%= image_path "russ_live/keyvisuals/Keyvisual_RussLive_hoch_mobil.jpg" %>">
           <%= image_tag "russ_live/keyvisuals/Keyvisual_RussLive2.jpg",
-                        alt: "Goldene Gitarre als Russ Live Keyvisual",
+                        alt: t("pages.home.hero.image_alt"),
                         width: 9921,
                         height: 6260,
                         decoding: "async",
@@ -11,97 +11,97 @@
         </picture>
         <div class="home-hero-copy">
           <h1 id="hero-title"><span>Live</span><span>Enter</span><span>Tainment</span></h1>
-          <p id="hero-intro">Ihr örtlicher Veranstalter für Stuttgart. Im Blick haben wir dabei immer die Künstler und das Publikum zugleich – so schaffen wir einzigartige emotionale Momente für bis zu 1 Million Besucher – jedes Jahr.</p>
-          <a class="public-button public-button-primary hero-button home-hero-button" href="#services" data-anchor-position="flush">Services</a>
+          <p id="hero-intro"><%= t("pages.home.hero.intro") %></p>
+          <a class="public-button public-button-primary hero-button home-hero-button" href="#services" data-anchor-position="flush"><%= t("public.header.services") %></a>
         </div>
       </section>
 
       <section class="public-section section services-preview" id="services" aria-labelledby="services-title">
         <div class="section-aside">
-          <p class="eyebrow">Live Entertainment</p>
-          <h2 id="services-title">Full service für Veranstaltungen</h2>
-          <p>Von örtlicher Durchführung über Produktion, Marketing, Personal und Ticketing: Russ Live bündelt Erfahrung, Netzwerk und Umsetzungskraft.</p>
+          <p class="eyebrow"><%= t("pages.home.services.eyebrow") %></p>
+          <h2 id="services-title"><%= t("pages.home.services.title") %></h2>
+          <p><%= t("pages.home.services.intro") %></p>
         </div>
         <div class="services-accordion-wrap">
           <div class="accordion" id="services-accordion" data-controller="accordion">
 <article class="accordion-item is-open">
               <button class="accordion-trigger" type="button" aria-expanded="true">
-                <span>Örtlicher Veranstalter</span>
+                <span><%= t("services.items.local.title") %></span>
                 <span class="accordion-icon" aria-hidden="true">−</span>
               </button>
               <div class="accordion-panel">
                 <div class="accordion-panel-inner">
-                  <p>Wir sind der örtliche Veranstalter in der Metropolregion Stuttgart. Jedes Jahr bringen wir eine Vielzahl an Künstler*innen aus Rock, Pop und Unterhaltung auf die Bühne und können hierbei als Unternehmen der Konzertdirektion Russ auf eine langjährige Erfahrung zurückgreifen.</p>
-                  <p>Dabei spielt die Größe der Veranstaltung für uns keine Rolle – wir finden von Club- bis hin zu Stadionkonzerten die optimale Location, erarbeiten passende Kommunikationspläne, kümmern uns um den Kartenverkauf und stellen mit unserem Personal die ideale Produktion sicher. Auch Businessevents oder öffentliche Großveranstaltungen werden mit uns professionell umgesetzt.</p>
-                  <p>u.a. Live Nation, Karsten Jahnke Konzertdirektion, Wizard Live</p>
+                  <p><%= t("services.items.local.paragraphs.first") %></p>
+                  <p><%= t("services.items.local.paragraphs.second") %></p>
+                  <p><%= t("pages.home.services.local_partners") %></p>
                 </div>
               </div>
             </article>
 <article class="accordion-item">
               <button class="accordion-trigger" type="button" aria-expanded="false">
-                <span>Produktion &amp; Technik</span>
+                <span><%= t("services.items.production.title") %></span>
                 <span class="accordion-icon" aria-hidden="true">+</span>
               </button>
               <div class="accordion-panel">
                 <div class="accordion-panel-inner">
-                  <p>Als einer der größten Konzertveranstalter im süddeutschen Raum blicken wir auf viele Jahre der Konzeption, Planung und Durchführung von Events zurück. Diese Expertise und unser großes Branchennetzwerk stellen wir Ihnen gerne für Ihre Veranstaltungen zur Verfügung. Ob als Full Service oder nur in einzelnen Bereichen.</p>
-                  <p>Wir realisieren alle Arten und Größen von Veranstaltungen. Aber natürlich liegt uns Kunst und Kultur im Blut und wenn es richtig viele Besucher werden, dann blühen wir auf.</p>
-                  <p>Geschäftsleitung<br>Telefon +49.711.16 353 27</p>
+                  <p><%= t("services.items.production.paragraphs.first") %></p>
+                  <p><%= t("services.items.production.paragraphs.second") %></p>
+                  <p><%= t("pages.home.services.production_contact_html") %></p>
                 </div>
               </div>
             </article>
 <article class="accordion-item">
               <button class="accordion-trigger" type="button" aria-expanded="false">
-                <span>Marketing</span>
+                <span><%= t("services.items.marketing.title") %></span>
                 <span class="accordion-icon" aria-hidden="true">+</span>
               </button>
               <div class="accordion-panel">
                 <div class="accordion-panel-inner">
-                  <p>Wer ist meine Zielgruppe, wie und über welche Kanäle kann ich sie erreichen und welche Werbemittel werden benötigt? Es sind viele Fragen, die es zu beantworten gilt. Durch unser Know-How und großes Partnernetzwerk finden wir für alle Fragen und Anforderungen maßgeschneiderte und kompetente Antworten.</p>
-                  <p>Marketing<br>Telefon +49.711.16 353 16<br>/ sarahsandner@russ-live.de</p>
-                  <p>© SKS Michael Russ GmbH <br>Impressum<br>Datenschutz­erklärung<br>AGB<br>Jugendschutz</p>
+                  <p><%= t("services.items.marketing.paragraphs.first") %></p>
+                  <p><%= t("pages.home.services.marketing_contact_html") %></p>
+                  <p><%= t("pages.home.services.legal_links_html") %></p>
                 </div>
               </div>
             </article>
 <article class="accordion-item">
               <button class="accordion-trigger" type="button" aria-expanded="false">
-                <span>Personal</span>
+                <span><%= t("services.items.staff.title") %></span>
                 <span class="accordion-icon" aria-hidden="true">+</span>
               </button>
               <div class="accordion-panel">
                 <div class="accordion-panel-inner">
-                  <p>Wir sind nur so gut, wie jeder unserer Mitarbeiter. Das bedeutet, dass uns jeder wichtig ist, egal ob Reinigungsfachkraft oder Geschäftsführer – wir sind ein Team und zusammen entstehen herausragende Veranstaltungen.</p>
-                  <p>Mit die wichtigste Arbeit leistet unser Produktionspersonal hinter den Kulissen. Ohne sie würde rein gar nichts funktionieren. Wir haben das große Glück, dass über 300 Stagehands, Staplerfahrer, Cateringhilfen und Sicherheitsfachkräfte direkt bei uns beschäftigt sind – festangestellt, in Teilzeit oder auch nur gelegentlich und kurzfristig. Wir zahlen deutlich über Mindestlohn, auch bei ganz einfachen Tätigkeiten.</p>
-                  <p>Chancengleichheit und Gleichbehandlung ungeachtet ethnischer Herkunft, Hautfarbe, Geschlecht, Religion Staatsangehörigkeit, sexueller Ausrichtung, sozialer Herkunft oder politischer Einstellung, soweit diese auf demokratischen Prinzipien und Toleranz gegenüber Andersdenkenden beruht, wird gewährleistet. Mitarbeiter werden grundsätzlich auf der Grundlage ihrer Qualifikation und ihrer Fähigkeiten ausgesucht, eingestellt und gefördert.</p>
+                  <p><%= t("services.items.staff.paragraphs.first") %></p>
+                  <p><%= t("services.items.staff.paragraphs.second") %></p>
+                  <p><%= t("pages.home.services.staff_equal_opportunity") %></p>
                 </div>
               </div>
             </article>
 <article class="accordion-item">
               <button class="accordion-trigger" type="button" aria-expanded="false">
-                <span>Ticketportal</span>
+                <span><%= t("services.items.ticketing.title") %></span>
                 <span class="accordion-icon" aria-hidden="true">+</span>
               </button>
               <div class="accordion-panel">
                 <div class="accordion-panel-inner">
-                  <p>Stuttgart-live ist das Ticketportal mit allen wichtigen Veranstaltungen in der Region Stuttgart: online buchen, schnell, unkompliziert und mit perfektem Service.</p>
-                  <p>Die Eventdaten bleiben perspektivisch read-only angebunden. Diese Russ-live-Seite greift später nur auf freigegebene Veranstaltungsdaten zu.</p>
+                  <p><%= t("services.items.ticketing.paragraphs.first") %></p>
+                  <p><%= t("services.items.ticketing.paragraphs.second") %></p>
                 </div>
               </div>
             </article>
           </div>
-          <a class="public-button public-button-primary section-button" href="<%= services_path %>">Services</a>
+          <a class="public-button public-button-primary section-button" href="<%= services_path %>"><%= t("public.header.services") %></a>
         </div>
       </section>
 
       <% if @home_references.any? %>
         <section class="public-section section references-band home-references-band" id="referenzen" aria-labelledby="references-title">
           <div class="section-head">
-            <p class="eyebrow">Referenzen</p>
-            <h2 id="references-title">Projekte, auf die wir stolz sind</h2>
+            <p class="eyebrow"><%= t("public.header.references") %></p>
+            <h2 id="references-title"><%= t("pages.home.references.title") %></h2>
           </div>
           <div class="klassik-slider" data-slider="" data-controller="slider">
             <div class="klassik-slider-viewport">
-              <button class="klassik-slider-arrow klassik-slider-arrow-prev" type="button" aria-label="Vorherige Referenz">‹</button>
+              <button class="klassik-slider-arrow klassik-slider-arrow-prev" type="button" aria-label="<%= t("references.slider.previous") %>">‹</button>
               <div class="klassik-slider-stage">
                 <% @home_references.each_with_index do |reference, index| %>
                   <% reference_data = reference_home_card_data(reference) %>
@@ -132,7 +132,7 @@
                   <% end %>
                 <% end %>
               </div>
-              <button class="klassik-slider-arrow klassik-slider-arrow-next" type="button" aria-label="Nächste Referenz">›</button>
+              <button class="klassik-slider-arrow klassik-slider-arrow-next" type="button" aria-label="<%= t("references.slider.next") %>">›</button>
             </div>
             <div class="klassik-slider-meta">
               <span class="klassik-slider-marker" aria-hidden="true"></span>
@@ -142,7 +142,7 @@
                 <p class="klassik-slider-date-location"><%= first_reference_data[:date_location] %></p>
                 <p class="klassik-slider-partner"><%= first_reference_data[:partner] %></p>
               </div>
-              <a class="public-button public-button-primary section-button klassik-slider-button" href="<%= referenzen_path %>">Referenzen</a>
+              <a class="public-button public-button-primary section-button klassik-slider-button" href="<%= referenzen_path %>"><%= t("public.header.references") %></a>
             </div>
           </div>
         </section>
@@ -152,25 +152,25 @@
       <section class="public-section section home-events" aria-labelledby="events-title" data-controller="events-slider" data-events-slider-url-value="<%= homepage_lane_events_path %>" data-events-slider-cursor-value="<%= @home_events_next_cursor %>">
         <div class="section-head home-events-head">
           <div>
-            <p class="eyebrow">Stuttgart-live</p>
-            <h2 id="events-title">Nächste Veranstaltungen</h2>
-            <p class="home-events-intro">Ausgewählte SKS-Highlights von Stuttgart-live mit Bild, Datum, Location und Ticketstatus.</p>
+            <p class="eyebrow"><%= t("pages.home.events.eyebrow") %></p>
+            <h2 id="events-title"><%= t("pages.home.events.title") %></h2>
+            <p class="home-events-intro"><%= t("pages.home.events.intro") %></p>
           </div>
           <div class="home-events-toolbar">
-            <div class="home-events-nav" aria-label="Veranstaltungen blättern">
-              <button class="home-events-nav-button" type="button" data-action="events-slider#previous" aria-label="Vorherige Veranstaltungen">‹</button>
-              <button class="home-events-nav-button" type="button" data-action="events-slider#next" aria-label="Nächste Veranstaltungen">›</button>
+            <div class="home-events-nav" aria-label="<%= t("pages.home.events.nav_aria") %>">
+              <button class="home-events-nav-button" type="button" data-action="events-slider#previous" aria-label="<%= t("pages.home.events.previous") %>">‹</button>
+              <button class="home-events-nav-button" type="button" data-action="events-slider#next" aria-label="<%= t("pages.home.events.next") %>">›</button>
             </div>
-            <a class="public-button public-button-primary button home-events-all-button" href="<%= @stuttgart_live_sks_highlights_url %>" target="_blank" rel="noreferrer">Alle anzeigen</a>
+            <a class="public-button public-button-primary button home-events-all-button" href="<%= @stuttgart_live_sks_highlights_url %>" target="_blank" rel="noreferrer"><%= t("pages.home.events.show_all") %></a>
           </div>
         </div>
 
         <div class="home-events-viewport">
-          <div class="home-events-slider" aria-label="Nächste Veranstaltungen" data-events-slider-target="viewport">
+          <div class="home-events-slider" aria-label="<%= t("pages.home.events.title") %>" data-events-slider-target="viewport">
             <%= render "pages/event_slider_cards", events: @home_events %>
           </div>
         </div>
-        <a class="public-text-link home-events-link" href="<%= @stuttgart_live_sks_highlights_url %>" target="_blank" rel="noreferrer">Alle Veranstaltungen auf Stuttgart-live.de</a>
+        <a class="public-text-link home-events-link" href="<%= @stuttgart_live_sks_highlights_url %>" target="_blank" rel="noreferrer"><%= t("pages.home.events.all_events") %></a>
       </section>
       <% end %>
     </main>

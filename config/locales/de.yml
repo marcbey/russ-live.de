@@ -1,0 +1,389 @@
+de:
+  date:
+    month_names:
+      -
+      - Januar
+      - Februar
+      - März
+      - April
+      - Mai
+      - Juni
+      - Juli
+      - August
+      - September
+      - Oktober
+      - November
+      - Dezember
+  time:
+    formats:
+      event_time: "%H:%M Uhr"
+  public:
+    skip_link: "Zum Inhalt springen"
+    filters:
+      all: "Alle"
+    languages:
+      de: "Deutsch"
+      en: "Englisch"
+    header:
+      main_aria: "Hauptnavigation"
+      nav_aria: "Seitennavigation"
+      home_aria: "Russ Live Startseite"
+      company: "Unternehmen"
+      company_submenu_aria: "Unternehmen Untermenü"
+      about: "Über uns"
+      references: "Referenzen"
+      services: "Services"
+      jobs: "Jobs"
+      press: "Presse"
+      contact: "Kontakt"
+      language_aria: "Sprache wechseln"
+      language_switch: "Zur Sprache %{language} wechseln"
+      menu_open: "Menü öffnen"
+      menu_close: "Menü schließen"
+    footer:
+      nav_aria: "Footernavigation"
+      imprint: "Impressum"
+      privacy: "Datenschutz"
+      terms: "AGB"
+      youth_protection: "Jugendschutz"
+  services:
+    items:
+      local:
+        title: "Örtlicher Veranstalter"
+        paragraphs:
+          first: "Wir sind der örtliche Veranstalter in der Metropolregion Stuttgart. Jedes Jahr bringen wir eine Vielzahl an Künstler*innen aus Rock, Pop und Unterhaltung auf die Bühne und können hierbei als Unternehmen der Konzertdirektion Russ auf eine langjährige Erfahrung zurückgreifen."
+          second: "Dabei spielt die Größe der Veranstaltung für uns keine Rolle – wir finden von Club- bis hin zu Stadionkonzerten die optimale Location, erarbeiten passende Kommunikationspläne, kümmern uns um den Kartenverkauf und stellen mit unserem Personal die ideale Produktion sicher. Auch Businessevents oder öffentliche Großveranstaltungen werden mit uns professionell umgesetzt."
+      production:
+        title: "Produktion & Technik"
+        paragraphs:
+          first: "Als einer der größten Konzertveranstalter im süddeutschen Raum blicken wir auf viele Jahre der Konzeption, Planung und Durchführung von Events zurück. Diese Expertise und unser großes Branchennetzwerk stellen wir Ihnen gerne für Ihre Veranstaltungen zur Verfügung. Ob als Full Service oder nur in einzelnen Bereichen."
+          second: "Wir realisieren alle Arten und Größen von Veranstaltungen. Aber natürlich liegt uns Kunst und Kultur im Blut und wenn es richtig viele Besucher werden, dann blühen wir auf."
+      marketing:
+        title: "Marketing"
+        paragraphs:
+          first: "Wer ist meine Zielgruppe, wie und über welche Kanäle kann ich sie erreichen und welche Werbemittel werden benötigt? Es sind viele Fragen, die es zu beantworten gilt. Durch unser Know-How und großes Partnernetzwerk finden wir für alle Fragen und Anforderungen maßgeschneiderte und kompetente Antworten."
+      staff:
+        title: "Personal"
+        paragraphs:
+          first: "Wir sind nur so gut, wie jeder unserer Mitarbeiter. Das bedeutet, dass uns jeder wichtig ist, egal ob Reinigungsfachkraft oder Geschäftsführer – wir sind ein Team und zusammen entstehen herausragende Veranstaltungen."
+          second: "Mit die wichtigste Arbeit leistet unser Produktionspersonal hinter den Kulissen. Ohne sie würde rein gar nichts funktionieren. Wir haben das große Glück, dass über 300 Stagehands, Staplerfahrer, Cateringhilfen und Sicherheitsfachkräfte direkt bei uns beschäftigt sind – festangestellt, in Teilzeit oder auch nur gelegentlich und kurzfristig. Wir zahlen deutlich über Mindestlohn, auch bei ganz einfachen Tätigkeiten."
+      ticketing:
+        title: "Ticketportal"
+        paragraphs:
+          first: "Stuttgart-live ist das Ticketportal mit allen wichtigen Veranstaltungen in der Region Stuttgart: online buchen, schnell, unkompliziert und mit perfektem Service."
+          second: "Die Eventdaten bleiben perspektivisch read-only angebunden. Diese Russ-live-Seite greift später nur auf freigegebene Veranstaltungsdaten zu."
+  pages:
+    home:
+      meta:
+        title: "Russ Live | Kulturproduktionen auf höchstem Niveau"
+        description: "Russ Live ist örtlicher Veranstalter, Produktionspartner und Full-Service-Dienstleister für Live Entertainment in Stuttgart und der Region."
+      hero:
+        image_alt: "Goldene Gitarre als Russ Live Keyvisual"
+        intro: "Ihr örtlicher Veranstalter für Stuttgart. Im Blick haben wir dabei immer die Künstler und das Publikum zugleich – so schaffen wir einzigartige emotionale Momente für bis zu 1 Million Besucher – jedes Jahr."
+      services:
+        eyebrow: "Live Entertainment"
+        title: "Full service für Veranstaltungen"
+        intro: "Von örtlicher Durchführung über Produktion, Marketing, Personal und Ticketing: Russ Live bündelt Erfahrung, Netzwerk und Umsetzungskraft."
+        local_partners: "u.a. Live Nation, Karsten Jahnke Konzertdirektion, Wizard Live"
+        production_contact_html: "Geschäftsleitung<br>Telefon +49.711.16 353 27"
+        marketing_contact_html: "Marketing<br>Telefon +49.711.16 353 16<br>/ sarahsandner@russ-live.de"
+        legal_links_html: "© SKS Michael Russ GmbH <br>Impressum<br>Datenschutz­erklärung<br>AGB<br>Jugendschutz"
+        staff_equal_opportunity: "Chancengleichheit und Gleichbehandlung ungeachtet ethnischer Herkunft, Hautfarbe, Geschlecht, Religion Staatsangehörigkeit, sexueller Ausrichtung, sozialer Herkunft oder politischer Einstellung, soweit diese auf demokratischen Prinzipien und Toleranz gegenüber Andersdenkenden beruht, wird gewährleistet. Mitarbeiter werden grundsätzlich auf der Grundlage ihrer Qualifikation und ihrer Fähigkeiten ausgesucht, eingestellt und gefördert."
+      references:
+        title: "Projekte, auf die wir stolz sind"
+      events:
+        eyebrow: "Stuttgart-live"
+        title: "Nächste Veranstaltungen"
+        intro: "Ausgewählte SKS-Highlights von Stuttgart-live mit Bild, Datum, Location und Ticketstatus."
+        nav_aria: "Veranstaltungen blättern"
+        previous: "Vorherige Veranstaltungen"
+        next: "Nächste Veranstaltungen"
+        show_all: "Alle anzeigen"
+        all_events: "Alle Veranstaltungen auf Stuttgart-live.de"
+    unternehmen:
+      meta:
+        title: "Über uns | Russ Live"
+        description: "Über Russ Live: Geschichte, Haltung und Menschen hinter den Veranstaltungen."
+    about:
+      hero:
+        eyebrow: "Über uns"
+        title_lines:
+          people: "Menschen."
+          moments: "Momente."
+          since: "Seit 1945."
+        intro: "Aus Stuttgart. Für die Welt. Seit drei Generationen gestalten wir Konzerte, die verbinden."
+      profile_title: "Unternehmensprofil"
+      story:
+        first_html: "<strong>Michael Russ Jr.</strong> ist mit einer ruhigen Nähe, viel Herz und echtem Unternehmergeist auf die Welt von Russ Live gewachsen. Im Laufe der Jahre wurde daraus Verantwortung, Erfahrung und ein klarer Blick dafür, wie man Kultur dauerhaft möglich macht."
+        second_html: "<strong>Michaela Russ</strong> führt diesen Weg in der dritten Generation weiter. Gemeinsam steht die Familie für Produktionen, die professionell organisiert sind und trotzdem menschlich bleiben. Daraus ist ein Team entstanden, das Kultur mit Haltung, Verlässlichkeit und Leidenschaft umsetzt."
+      company:
+        eyebrow: "Konzertdirektion Russ"
+        title_html: "Vier Unternehmen.<br>Eine Vision."
+        intro: "Wir wollen Menschen glücklich machen."
+        button: "Konzertdirektion"
+        open_aria: "%{title} öffnen"
+        areas:
+          live: "Ob Club- oder Stadion-Konzerte, Musicals, Shows oder ihr nächstes Firmenevent. Wir sind ihr starker Partner."
+          artists: "Ihr engagierter Partner bei der Suche nach Künstlern und Programmen, die Ihrem Veranstalterprofil entsprechen."
+          service: "Wir sorgen für eine sichere Veranstaltung: Konzert, Tagung, Firmenfeier oder Konferenz."
+          klassik: "Entdecken Sie bei uns die faszinierende Welt der klassischen Musik. Meisterkonzerte für Stuttgart. Seit 1945."
+      history:
+        eyebrow: "Geschichte"
+        title: "Unsere Geschichte. Drei Generationen. Eine Haltung."
+        image_alt: "Michaela Russ, Michael Russ und ein historisches Familienportrait"
+        first: "Was 1945 mit einer Vision begann, ist heute eine der führenden Konzertdirektionen Europas. Von Stuttgart aus hat Russ über Jahrzehnte Konzertgeschichte mitgeprägt und sich gleichzeitig die Nähe zur Region bewahrt."
+        second: "Diese Verbindung aus lokaler Verwurzelung und internationalem Anspruch prägt unseren Blick bis heute: Wir denken groß, arbeiten partnerschaftlich und behalten immer die Menschen hinter jeder Produktion im Fokus."
+      award:
+        eyebrow: "Verantwortung"
+        title: "Erfahrung, die nicht stillsteht."
+        image_alt: "Michael Russ Jr. mit Auszeichnung und Partner bei einer Preisverleihung"
+        first: "Ob Tournee, Einzelshow, Kulturformat oder Großereignis: Wir verbinden gewachsene Branchenkenntnis mit dem Anspruch, uns immer weiterzuentwickeln. Genau daraus entsteht die Mischung aus Präzision, Ruhe und Neugier, die unsere Arbeit auszeichnet."
+        second: "Auszeichnungen freuen uns. Wichtiger ist uns aber, dass Künstler, Publikum, Partner und Teams sich auf uns verlassen können."
+      city:
+        eyebrow: "Perspektive"
+        title: "Von Stuttgart in die Welt."
+        small_image_alt: "Historisches Konzertfoto von Ike und Tina Turner"
+        large_image_alt: "Großveranstaltung in Stuttgart mit Oldtimer-Korso"
+        first: "Ob in der Stuttgarter Liederhalle, auf den großen Festivalflächen, in Arenen oder Open-Air-Produktionen: Wir bringen Menschen zusammen. Live. Echt. Unvergesslich."
+        second: "Die Stadt ist unser Ausgangspunkt, nicht unsere Grenze. Aus ihr heraus entwickeln wir Formate, die regional verankert sind und weit darüber hinaus wirken."
+      closing:
+        eyebrow: "Heute"
+        title: "Tradition ist für uns kein Rückblick, sondern Vertrauen in das, was als Nächstes kommt."
+        text: "Russ Live steht für Erfahrung ohne Stillstand, für Qualität ohne Attitüde und für Produktionen, die Kultur als gemeinsame Aufgabe begreifen."
+    services:
+      meta:
+        title: "Services | Russ Live"
+        description: "Services von Russ Live: örtliche Durchführung, Produktion, Marketing, Personal und Ticketing für Live Entertainment in Stuttgart."
+      hero:
+        image_alt: "Live-Bühne als Keyvisual für Russ Live Services"
+        intro: "Vom ersten Ortstermin bis zum letzten Abbau: Russ Live bündelt Veranstalter-Know-how, Produktion, Marketing, Personal und Ticketing für Konzerte, Shows und Kulturformate in der Region Stuttgart."
+      nav_aria: "Servicebereiche"
+      intro:
+        eyebrow: "Full Service"
+        title: "Alles, was ein Live-Moment braucht"
+        text: "Wir planen Veranstaltungen ganzheitlich oder steigen dort ein, wo Unterstützung gebraucht wird: als örtlicher Veranstalter, Produktionspartner, Marketing-Team, Personaldisposition oder Ticketing-Schnittstelle."
+      details_aria: "Service Details"
+      chapter_label: "Live Entertainment —"
+      image_pending: "Bild folgt"
+      showcase:
+        eyebrow: "Aus der Praxis"
+        title: "Live-Erfahrung in jeder Größenordnung"
+      modules:
+        eyebrow: "Unsere Leistungen"
+        title: "Module für starke Produktionen"
+        kicker: "Servicebereich"
+      more: "Mehr"
+      more_about: "Mehr zu %{title}"
+    referenzen:
+      meta:
+        title: "Referenzen | Russ Live"
+        description: "Referenzen von Russ Live: Konzerte, Shows und Kulturformate aus Stuttgart und der Region."
+    references:
+      hero:
+        title: "Projekte, Projekte, Projekte..."
+        intro: "Konzerte, Shows und Kulturformate aus Stuttgart und der Region."
+    jobs:
+      meta:
+        title: "Jobs | Russ Live"
+        description: "Flexible Jobs bei Konzerten, Festivals und Events in Stuttgart. Jetzt offene Stellen bei Russ Live entdecken."
+      hero:
+        image_alt: "Backstage-Moment mit Russ Live Crew vor einer beleuchteten Bühne"
+        title: "Werde Teil unseres Event-Teams."
+        intro: "Flexible Jobs bei Konzerten, Festivals und Events in Stuttgart."
+      list:
+        title: "Unsere aktuellen Jobangebote"
+        aria: "Jobangebote"
+        position: "Position"
+        category: "Bereich"
+        location: "Einsatzort"
+        inquiry: "Anfrage"
+      empty: "Aktuell sind keine Jobs veröffentlicht."
+      story:
+        aria: "Einblicke in die Arbeitswelt"
+        stage_image_alt: "Bühnenaufbau mit Traversen, Cases und Technik vor einem Event"
+        crowd_image_alt: "Publikum bei einem Konzert mit erhobenen Händen"
+        first_eyebrow: "Einzigartige Momente"
+        first_title: "Arbeiten, wo Events entstehen."
+        first_text: "Vom ersten Aufbau bis zur letzten Show bist Du Teil eingespielter Teams und echter Live-Momente."
+        second_eyebrow: "Mehr als nur ein Job"
+        second_title: "Gemeinsam für unvergessliche Erlebnisse."
+        second_text: "Wir arbeiten mit Leidenschaft, packen gemeinsam an und schaffen Events, die in Erinnerung bleiben."
+      quotes:
+        aria: "Stimmen aus dem Team"
+        text: "Man erlebt Events aus einer Perspektive, die sonst niemand sieht."
+        footer: "Luca, Stagehand seit 2022"
+    job:
+      meta:
+        title: "Jobs | Russ Live"
+        dynamic_title: "%{title} | Jobs | Russ Live"
+        description: "Jobprofil bei Russ Live."
+    kontakt:
+      meta:
+        title: "Kontakt | Russ Live"
+        description: "Kontakt zur SKS Michael Russ GmbH am Charlottenplatz in Stuttgart."
+    contact:
+      paragraphs:
+        location: "Die Konzertdirektion Russ befindet sich im Herzen der Stuttgarter Innenstadt am Charlottenplatz 17. In direkter Nachbarschaft liegen das Neue Schloss und das Landesmuseum Württemberg."
+        directions: "Vom Hauptbahnhof kommend, nehmen Sie die Stadtbahn bis zur Haltestelle Charlottenplatz und gehen zum Ausgang Holzstraße oder Planie. Hier geht es zum Fahrplan."
+    impressum:
+      meta:
+        title: "Impressum | Russ Live"
+        description: "Impressum der SKS Michael Russ GmbH."
+      title: "Impressum"
+      member: "Mitglied des Verbandes Deutscher Konzertdirektionen e.V."
+      liability: "Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich."
+    datenschutz:
+      meta:
+        title: "Datenschutz | Russ Live"
+        description: "Datenschutz der SKS Michael Russ GmbH."
+      title: "Datenschutz"
+      placeholder: "Sorry, aber Du suchst gerade nach etwas, was hier nicht ist."
+    agb:
+      meta:
+        title: "AGB | Russ Live"
+        description: "AGB der SKS Michael Russ GmbH."
+      title: "AGB"
+      placeholder: "Die Allgemeinen Geschäftsbedingungen werden hier statisch vorbereitet und können später mit den final freigegebenen Texten ergänzt werden."
+    jugendschutz:
+      meta:
+        title: "Jugendschutz | Russ Live"
+        description: "Jugendschutz der SKS Michael Russ GmbH."
+      title: "Jugendschutz"
+      paragraphs:
+        - "Viele Menschen, hohe Lautstärken, Spielzeiten bis in die späten Abendstunden – ist diese Veranstaltung für mein Kind geeignet? Bitte überlegen Sie gut, sie kennen Ihr Kind so gut wie sonst niemand. Sie können uns jederzeit hierzu anrufen (0711-55066077) oder per Mail info@stuttgart-live.de, wir beraten Sie gerne, denn manchmal ist es für alle entspannter etwas Geld in eine Kinderbetreuung zu investieren."
+        - "Die Altersempfehlungen und Altersfreigaben sind für jede Veranstaltung detailliert geregelt. Diese sind rechtlich bindend und Teil unserer Allgemeinen Geschäftsbedingungen. Sie finden die Altersfreigaben unter der jeweiligen Veranstaltungsbeschreibung auf dieser Homepage."
+        - "Generell orientieren sich die Altersfreigaben an folgenden Regelungen: Kinder unter 8 Jahren dürfen Abendveranstaltungen und Konzerte in der Regel nicht besuchen. In der Regel dürfen Kinder (unter 14 Jahren) Veranstaltungen nur in Begleitung einer erziehungsbeauftragten Person besuchen. Jugendliche (ab 14 Jahren) unter 16 Jahren dürfen in der Regel bis 22.00 Uhr auf Konzerte, Jugendliche über 16 Jahren bis 24.00 Uhr, danach nur in Begleitung einer personensorgeberechtigten oder erziehungsbeauftragten Person."
+        - "Personensorgeberechtigte Personen sind Mutter und/oder Vater oder der Vormund. Erziehungsbeauftragte Person kann jede volljährige Person (über 18 Jahre) sein, wenn sie im Einverständnis mit den Eltern Erziehungsaufgaben tatsächlich wahrnimmt – sie muss im Rahmen der übertragenen Aufgabe Aufsichtspflichten nachkommen können, also in der Lage sein, die anvertrauten jungen Menschen zu leiten und zu lenken. Es ist eine Vollmacht zur Erziehungsbeauftragung vorzuweisen, die von den Eltern unterschrieben ist. Zudem ist eine Ausweiskopie des entsprechenden Elternteils beizufügen. Die o.g. verantwortliche Person hat das Kind auch während der Veranstaltung zu beaufsichtigen und benötigt eine Eintrittskarte. Pro Begleitperson können nur zwei Kinder beaufsichtigt werden. Alle Kinder und Jugendliche unter 18 Jahren sollten sich mit einem Kinder- oder Personalausweis ausweisen können."
+        - "Hier stellen wir Ihnen das entsprechende Formular zum Download zur Verfügung:"
+    legal:
+      eyebrow: "Rechtliches"
+    presse:
+      meta:
+        title: "Presse | Russ Live"
+        description: "Pressebereich von Russ Live mit Pressetexten, Bildmaterial und Veranstaltungsdaten für Medien und Partner."
+  references:
+    filters:
+      aria: "Referenzen nach Tags filtern"
+    grid_aria: "Referenzprojekte"
+    empty: "Aktuell sind keine Referenzen veröffentlicht."
+    slider:
+      previous: "Vorherige Referenz"
+      next: "Nächste Referenz"
+    card:
+      details_aria: "Details zu %{title} anzeigen"
+      date: "Datum"
+      location: "Location"
+      production: "Produktion"
+      partner: "Partner: %{production}"
+      fallback_partner: "Referenz"
+      service_reference: "Service-Referenz"
+  jobs:
+    apply_now: "Jetzt bewerben"
+    back_to_overview: "Zur Übersicht"
+    filters:
+      aria: "Jobs nach Bereichen filtern"
+    detail:
+      aria_label: "Jobdetails %{title}"
+      application_email_subject: "Bewerbung %{title}"
+      responsibilities: "Tätigkeitsfeld"
+      requirements: "Anforderungen"
+      apply_title: "Wir freuen uns auf Deine Bewerbung!"
+      contact: "Ansprechpartner"
+  press:
+    index:
+      hero:
+        title: "Presseinfos für Partner und Medien."
+        intro: "Pressetexte, Bildmaterial und Veranstaltungsdaten zu kommenden Produktionen."
+      search:
+        aria: "Künstler suchen"
+        label: "Künstler suchen"
+        placeholder: "Name eingeben"
+        reset: "Zurücksetzen"
+        reset_aria: "Suche zurücksetzen"
+      directory:
+        eyebrow: "Übersicht"
+        title: "Künstler A-Z"
+      count_singular: "Presseeintrag"
+      count_plural: "Presseeinträge"
+      empty: "Kein Künstler gefunden."
+      contact:
+        eyebrow: "Ansprechpartner"
+        title: "Pressekontakt"
+        text: "Für Interview-, Akkreditierungs- und Materialanfragen ist der Pressebereich direkt vorbereitet."
+        role: "Presse- & Öffentlichkeitsarbeit"
+    detail:
+      meta:
+        title: "%{name} | Presse | Russ Live"
+        description: "Pressemappe zu %{name}: Pressetext, Bildmaterial und Veranstaltungsdaten von Russ Live."
+      back: "Zur Presseübersicht"
+      eyebrow: "Pressemappe"
+      intro: "Pressetext, Bildmaterial und Veranstaltungsdaten zu %{name}."
+      download_presskit: "Pressemappe downloaden"
+      press_photo_alt: "%{name} Pressefoto"
+      info_aria: "Presseinformationen"
+      event:
+        eyebrow: "Veranstaltung"
+        date: "Datum"
+        time: "Uhrzeit"
+        location: "Location"
+        status: "Status"
+        current: "Aktuelle Veranstaltung"
+        past: "Vergangene Veranstaltung"
+        more_dates: "Weitere Termine"
+      press_text:
+        eyebrow: "Pressetext"
+        empty: "Für diesen Künstler ist aktuell kein Pressetext hinterlegt."
+        usage: "Die Verwendung des Bild- und Textmaterials ist für redaktionelle Zwecke kostenfrei. Bei Pressefotos ist der im Dateinamen oder in den Metadaten hinterlegte Credit zu beachten."
+      downloads:
+        eyebrow: "Downloads"
+        title: "Bildergalerie"
+      gallery_image_label: "Pressefoto %{name} %{index}"
+      fallback_image_alt: "Pressebild"
+      download_image: "Bild downloaden"
+      lightbox_aria: "Pressebild Vorschau"
+      close_lightbox: "Lightbox schließen"
+      previous_image: "Vorheriges Bild"
+      next_image: "Nächstes Bild"
+  events:
+    tickets: "Tickets"
+    price_from: "ab %{price}"
+    status:
+      canceled: "Abgesagt"
+      sold_out: "Ausverkauft"
+  file_metadata:
+    name: "Name"
+    type: "Typ"
+    size: "Größe"
+  errors:
+    messages:
+      accepted: "must be accepted"
+      blank: "can't be blank"
+      confirmation: "doesn't match confirmation"
+      empty: "can't be empty"
+      equal_to: "must be equal to %{count}"
+      even: "must be even"
+      exclusion: "is reserved"
+      greater_than: "must be greater than %{count}"
+      greater_than_or_equal_to: "must be greater than or equal to %{count}"
+      inclusion: "is not included in the list"
+      invalid: "is invalid"
+      less_than: "must be less than %{count}"
+      less_than_or_equal_to: "must be less than or equal to %{count}"
+      not_a_number: "is not a number"
+      odd: "must be odd"
+      other_than: "must be other than %{count}"
+      present: "must be blank"
+      required: "must exist"
+      taken: "has already been taken"
+      too_long:
+        one: "is too long (maximum is 1 character)"
+        other: "is too long (maximum is %{count} characters)"
+      too_short:
+        one: "is too short (minimum is 1 character)"
+        other: "is too short (minimum is %{count} characters)"
+      wrong_length:
+        one: "is the wrong length (should be 1 character)"
+        other: "is the wrong length (should be %{count} characters)"
+      restrict_dependent_destroy:
+        has_one: "Cannot delete record because a dependent %{record} exists"
+        has_many: "Cannot delete record because dependent %{record} exist"

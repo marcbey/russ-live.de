@@ -4,8 +4,6 @@ class PressController < ApplicationController
   allow_unauthenticated_access
 
   PAGE_META = {
-    title: "Presse | Russ Live",
-    description: "Pressebereich von Russ Live mit Pressetexten, Bildmaterial und Veranstaltungsdaten für Medien und Partner.",
     body_class: "press-body"
   }.freeze
 
@@ -22,8 +20,8 @@ class PressController < ApplicationController
   def show
     @press_artist = find_press_artist!
     @page_meta = PAGE_META.merge(
-      title: "#{@press_artist.name} | Presse | Russ Live",
-      description: "Pressemappe zu #{@press_artist.name}: Pressetext, Bildmaterial und Veranstaltungsdaten von Russ Live."
+      title: t("press.detail.meta.title", name: @press_artist.name),
+      description: t("press.detail.meta.description", name: @press_artist.name)
     )
 
     render "pages/press_detail"
@@ -49,7 +47,10 @@ class PressController < ApplicationController
 
   def set_page_context
     @page_key = :presse
-    @page_meta = PAGE_META
+    @page_meta = PAGE_META.merge(
+      title: t("pages.presse.meta.title"),
+      description: t("pages.presse.meta.description")
+    )
   end
 
   def press_artists

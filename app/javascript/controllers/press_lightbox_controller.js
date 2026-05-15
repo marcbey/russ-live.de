@@ -2,6 +2,9 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["trigger", "lightbox", "image", "caption", "download", "close"]
+  static values = {
+    fallbackAlt: String,
+  }
 
   connect() {
     this.abortController = new AbortController()
@@ -56,11 +59,15 @@ export default class extends Controller {
     const trigger = this.triggerTargets[this.activeIndex]
     const src = trigger.dataset.lightboxSrc || ""
     const download = trigger.dataset.lightboxDownload || src
-    const alt = trigger.dataset.lightboxAlt || "Pressebild"
+    const alt = trigger.dataset.lightboxAlt || this.fallbackAlt
 
     this.imageTarget.src = src
     this.imageTarget.alt = alt
     this.captionTarget.textContent = alt
     this.downloadTarget.href = download
+  }
+
+  get fallbackAlt() {
+    return this.fallbackAltValue || "Press image"
   }
 }

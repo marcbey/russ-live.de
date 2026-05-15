@@ -1,27 +1,39 @@
-<header class="site-header<%= " page-header" unless public_page?(:home) %>" aria-label="Hauptnavigation" data-controller="mobile-menu scrolled-header">
-  <%= link_to root_path, class: "brand", aria: { label: "Russ Live Startseite" } do %>
+<header class="site-header<%= " page-header" unless public_page?(:home) %>" aria-label="<%= t("public.header.main_aria") %>" data-controller="mobile-menu scrolled-header" data-mobile-menu-open-label-value="<%= t("public.header.menu_open") %>" data-mobile-menu-close-label-value="<%= t("public.header.menu_close") %>">
+  <%= link_to root_path, class: "brand", aria: { label: t("public.header.home_aria") } do %>
     <%= image_tag "russ_live/logos/russ-live-logo-header.svg", alt: "Russ Live", class: "brand-mark" %>
   <% end %>
 
-  <nav class="main-nav" aria-label="Seitennavigation" data-mobile-menu-target="nav">
+  <nav class="main-nav" aria-label="<%= t("public.header.nav_aria") %>" data-mobile-menu-target="nav">
     <div class="nav-item has-submenu">
-      <%= link_to "Unternehmen", unternehmen_path, class: public_nav_class(%i[unternehmen referenzen]) %>
-      <div class="nav-submenu" aria-label="Unternehmen Untermenü">
-        <%= link_to "Über uns", unternehmen_path, public_nav_aria(:unternehmen) || {} %>
-        <%= link_to "Referenzen", referenzen_path, public_nav_aria(:referenzen) || {} %>
+      <%= link_to t("public.header.company"), unternehmen_path, class: public_nav_class(%i[unternehmen referenzen]) %>
+      <div class="nav-submenu" aria-label="<%= t("public.header.company_submenu_aria") %>">
+        <%= link_to t("public.header.about"), unternehmen_path, public_nav_aria(:unternehmen) || {} %>
+        <%= link_to t("public.header.references"), referenzen_path, public_nav_aria(:referenzen) || {} %>
       </div>
     </div>
-    <%= link_to "Services", services_path, public_nav_aria(:services) || {} %>
-    <%= link_to "Jobs", jobs_path, public_nav_aria(%i[jobs job]) || {} %>
-    <%= link_to "Presse", presse_path, public_nav_aria(%i[presse press_detail]) || {} %>
-    <%= link_to "Kontakt", kontakt_path, public_nav_aria(:kontakt) || {} %>
+    <%= link_to t("public.header.services"), services_path, public_nav_aria(:services) || {} %>
+    <%= link_to t("public.header.jobs"), jobs_path, public_nav_aria(%i[jobs job]) || {} %>
+    <%= link_to t("public.header.press"), presse_path, public_nav_aria(%i[presse press_detail]) || {} %>
+    <%= link_to t("public.header.contact"), kontakt_path, public_nav_aria(:kontakt) || {} %>
+    <div class="language-switch" aria-label="<%= t("public.header.language_aria") %>">
+      <% I18n.available_locales.each_with_index do |locale, index| %>
+        <% if index.positive? %>
+          <span class="language-switch-separator" aria-hidden="true">/</span>
+        <% end %>
+        <%= button_to locale.to_s.upcase,
+                      locale_path(locale),
+                      method: :post,
+                      params: { return_to: locale_return_to_path },
+                      form_class: "language-switch-form",
+                      class: [ "language-switch-button", ("is-active" if I18n.locale == locale) ],
+                      form: { aria: { label: t("public.header.language_switch", language: t("public.languages.#{locale}")) } },
+                      lang: locale,
+                      aria: { current: ("true" if I18n.locale == locale) } %>
+      <% end %>
+    </div>
   </nav>
 
-  <% unless public_page?(:home) %>
-    <%= link_to "EN", root_path, class: "language", hreflang: "en", aria: { label: "Englische Version" } %>
-  <% end %>
-
-  <button class="mobile-menu-button" type="button" aria-label="Menü öffnen" data-mobile-menu-target="button" data-action="mobile-menu#toggle">
+  <button class="mobile-menu-button" type="button" aria-label="<%= t("public.header.menu_open") %>" data-mobile-menu-target="button" data-action="mobile-menu#toggle">
     <span></span>
     <span></span>
     <span></span>

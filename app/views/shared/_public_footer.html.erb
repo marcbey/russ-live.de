@@ -3,10 +3,10 @@
     <%= image_tag "russ_live/logos/russ-live-logo.png", alt: "Russ Live" %>
     <p>© SKS Michael Russ GmbH</p>
   </div>
-  <nav aria-label="Footernavigation">
-    <%= link_to "Impressum", impressum_path %>
-    <%= link_to "Datenschutz", datenschutz_path %>
-    <%= link_to "AGB", agb_path %>
-    <%= link_to "Jugendschutz", jugendschutz_path %>
+  <nav aria-label="<%= t("public.footer.nav_aria") %>">
+    <%= link_to t("public.footer.imprint"), impressum_path %>
+    <%= link_to t("public.footer.privacy"), datenschutz_path %>
+    <%= link_to t("public.footer.terms"), agb_path %>
+    <%= link_to t("public.footer.youth_protection"), jugendschutz_path %>
   </nav>
 </footer>

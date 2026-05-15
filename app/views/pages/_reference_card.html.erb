@@ -4,7 +4,7 @@
 
 <%= tag.figure class: "public-card reference-card #{reference_grid_class(reference_image)}",
                data: { reference_tags: reference.tag_slugs.join(" ") }.merge(reference_image_render_data(reference_image)) do %>
-  <button class="reference-card-flip" type="button" aria-pressed="false" aria-label="Details zu <%= reference.title %> anzeigen">
+  <button class="reference-card-flip" type="button" aria-pressed="false" aria-label="<%= t("references.card.details_aria", title: reference.title) %>">
     <span class="reference-card-face reference-card-front" aria-hidden="true" data-reference-image-render-target="frame">
       <% if image_source.present? %>
         <%= image_tag image_source,
@@ -22,10 +22,10 @@
     </span>
     <span class="reference-card-face reference-card-back">
       <span class="reference-card-name"><%= reference.title %></span>
-      <span class="reference-card-meta"><strong>Datum</strong><%= l(reference.starts_on, format: "%d.%m.%Y") %></span>
-      <span class="reference-card-meta"><strong>Location</strong><%= reference.location %></span>
+      <span class="reference-card-meta"><strong><%= t("references.card.date") %></strong><%= l(reference.starts_on, format: "%d.%m.%Y") %></span>
+      <span class="reference-card-meta"><strong><%= t("references.card.location") %></strong><%= reference.location %></span>
       <% if reference.production.present? %>
-        <span class="reference-card-meta"><strong>Produktion</strong><%= reference.production %></span>
+        <span class="reference-card-meta"><strong><%= t("references.card.production") %></strong><%= reference.production %></span>
       <% end %>
       <% if reference.description.present? %>
         <span class="reference-card-copy"><%= reference.description %></span>

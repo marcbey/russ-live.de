@@ -38,6 +38,108 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "sets english locale by cookie" do
+    post locale_path(:en), params: { return_to: root_path }
+
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_response :success
+    assert_select "html[lang=?]", "en"
+    assert_includes response.body, "Your local promoter for Stuttgart"
+    assert_includes response.body, "href=\"/services\""
+    assert_not_includes response.body, "?locale="
+  end
+
+  test "renders all public pages in english without missing translation markers" do
+    post locale_path(:en), params: { return_to: root_path }
+    assert_redirected_to root_path
+
+    [
+      root_path,
+      unternehmen_path,
+      services_path,
+      referenzen_path,
+      jobs_path,
+      job_path("stagehands"),
+      presse_path,
+      kontakt_path,
+      impressum_path,
+      datenschutz_path,
+      agb_path,
+      jugendschutz_path
+    ].each do |path|
+      get path
+
+      assert_response :success
+      assert_select "html[lang=?]", "en"
+      assert_not_includes response.body, "translation missing"
+    end
+  end
+
+  test "sets german locale by cookie" do
+    post locale_path(:de), params: { return_to: root_path }
+
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_response :success
+    assert_select "html[lang=?]", "de"
+    assert_includes response.body, "Ihr örtlicher Veranstalter für Stuttgart"
+    assert_includes response.body, "href=\"/services\""
+    assert_not_includes response.body, "?locale="
+  end
+
+  test "uses english browser language without query parameter" do
+    get root_path, headers: { "HTTP_ACCEPT_LANGUAGE" => "en-US,en;q=0.9,de;q=0.5" }
+
+    assert_response :success
+    assert_select "html[lang=?]", "en"
+    assert_includes response.body, "Your local promoter for Stuttgart"
+    assert_not_includes response.body, "href=\"/services?locale=en\""
+  end
+
+  test "falls back to german without matching locale" do
+    get root_path, headers: { "HTTP_ACCEPT_LANGUAGE" => "fr-FR,fr;q=0.9" }
+
+    assert_response :success
+    assert_select "html[lang=?]", "de"
+    assert_includes response.body, "Ihr örtlicher Veranstalter für Stuttgart"
+  end
+
+  test "invalid locale query parameter is removed without setting locale" do
+    get root_path(locale: :fr), headers: { "HTTP_ACCEPT_LANGUAGE" => "en-US,en;q=0.9" }
+
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_response :success
+    assert_select "html[lang=?]", "de"
+    assert_includes response.body, "Ihr örtlicher Veranstalter für Stuttgart"
+    assert_not_includes response.body, "?locale=fr"
+  end
+
+  test "legacy locale query parameter sets cookie and redirects to clean url" do
+    get root_path(locale: :en)
+
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_response :success
+    assert_select "html[lang=?]", "en"
+    assert_includes response.body, "Your local promoter for Stuttgart"
+    assert_not_includes response.body, "?locale="
+  end
+
+  test "language switch posts current route and non-locale query parameters without visible locale" do
+    post locale_path(:en), params: { return_to: jobs_path(category: "catering") }
+    assert_redirected_to jobs_path(category: "catering")
+
+    get jobs_path(category: "catering")
+
+    assert_response :success
+    assert_includes response.body, "action=\"/language/de\""
+    assert_includes response.body, "action=\"/language/en\""
+    assert_includes response.body, "value=\"/jobs?category=catering\""
+    assert_not_includes response.body, "locale="
+  end
+
   test "homepage omits reference slider without published references with images" do
     Reference.create!(
       title: "Referenz ohne Bild",
@@ -218,6 +320,15 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "Highlight ohne SKS"
     assert_not_includes response.body, "Vergangen"
     assert_not_includes response.body, "Unveröffentlicht"
+
+    post locale_path(:en), params: { return_to: root_path }
+    assert_redirected_to root_path
+
+    get root_path
+
+    assert_response :success
+    assert_includes response.body, "data-events-slider-url-value=\"/events/homepage_lane\""
+    assert_not_includes response.body, "data-events-slider-url-value=\"/events/homepage_lane?locale="
   end
 
   test "homepage deduplicates event series" do

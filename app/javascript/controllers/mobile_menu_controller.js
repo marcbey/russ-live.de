@@ -2,6 +2,10 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["button", "nav"]
+  static values = {
+    closeLabel: String,
+    openLabel: String,
+  }
 
   connect() {
     this.abortController = new AbortController()
@@ -36,6 +40,14 @@ export default class extends Controller {
     this.element.classList.toggle("is-menu-open", open)
     this.buttonTarget.classList.toggle("is-active", open)
     this.buttonTarget.setAttribute("aria-expanded", String(open))
-    this.buttonTarget.setAttribute("aria-label", open ? "Menü schließen" : "Menü öffnen")
+    this.buttonTarget.setAttribute("aria-label", open ? this.closeLabel : this.openLabel)
+  }
+
+  get closeLabel() {
+    return this.closeLabelValue || "Close menu"
+  }
+
+  get openLabel() {
+    return this.openLabelValue || "Open menu"
   }
 }

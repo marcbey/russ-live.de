@@ -1,31 +1,356 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  date:
+    month_names:
+      -
+      - January
+      - February
+      - March
+      - April
+      - May
+      - June
+      - July
+      - August
+      - September
+      - October
+      - November
+      - December
+  time:
+    formats:
+      event_time: "%H:%M"
+  public:
+    skip_link: "Skip to content"
+    filters:
+      all: "All"
+    languages:
+      de: "German"
+      en: "English"
+    header:
+      main_aria: "Main navigation"
+      nav_aria: "Site navigation"
+      home_aria: "Russ Live homepage"
+      company: "Company"
+      company_submenu_aria: "Company submenu"
+      about: "About us"
+      references: "References"
+      services: "Services"
+      jobs: "Jobs"
+      press: "Press"
+      contact: "Contact"
+      language_aria: "Change language"
+      language_switch: "Switch to %{language}"
+      menu_open: "Open menu"
+      menu_close: "Close menu"
+    footer:
+      nav_aria: "Footer navigation"
+      imprint: "Imprint"
+      privacy: "Privacy"
+      terms: "Terms"
+      youth_protection: "Youth protection"
+  services:
+    items:
+      local:
+        title: "Local promoter"
+        paragraphs:
+          first: "We are the local promoter for the Stuttgart metropolitan region. Every year, we bring a wide range of artists from rock, pop and entertainment to the stage, drawing on decades of experience as part of Konzertdirektion Russ."
+          second: "The size of the event does not matter to us: from clubs to stadium concerts, we find the right venue, develop communication plans, handle ticket sales and provide the staff needed for a strong production. We also deliver business events and major public events professionally."
+      production:
+        title: "Production & Technology"
+        paragraphs:
+          first: "As one of the largest concert promoters in southern Germany, we look back on many years of event concept, planning and delivery. We gladly make this expertise and our broad industry network available for your events, whether as a full-service partner or for selected areas."
+          second: "We produce events of every type and scale. Art and culture are in our blood, and when audience numbers grow, our work truly comes alive."
+      marketing:
+        title: "Marketing"
+        paragraphs:
+          first: "Who is my target audience, how and through which channels can I reach them, and which advertising materials are needed? There are many questions to answer. With our know-how and broad partner network, we find tailored, competent answers for every requirement."
+      staff:
+        title: "Staffing"
+        paragraphs:
+          first: "We are only as good as each member of our team. Every person matters to us, whether cleaning specialist or managing director. We are one team, and outstanding events are created together."
+          second: "Some of the most important work is done by our production staff behind the scenes. Without them, nothing would work. We are fortunate to employ more than 300 stagehands, forklift drivers, catering assistants and security specialists directly, whether permanent, part-time, occasional or short-term. We pay clearly above minimum wage, even for straightforward tasks."
+      ticketing:
+        title: "Ticket portal"
+        paragraphs:
+          first: "Stuttgart-live is the ticket portal for all major events in the Stuttgart region: online booking, quick, straightforward and with excellent service."
+          second: "Event data will remain connected read-only in the long term. This Russ Live site will only use approved event data."
+  pages:
+    home:
+      meta:
+        title: "Russ Live | Cultural productions at the highest level"
+        description: "Russ Live is a local promoter, production partner and full-service provider for live entertainment in Stuttgart and the region."
+      hero:
+        image_alt: "Golden guitar as the Russ Live key visual"
+        intro: "Your local promoter for Stuttgart. We always keep both artists and audiences in view, creating unique emotional moments for up to 1 million visitors every year."
+      services:
+        eyebrow: "Live Entertainment"
+        title: "Full service for events"
+        intro: "From local delivery to production, marketing, staffing and ticketing: Russ Live combines experience, network and execution."
+        local_partners: "Including Live Nation, Karsten Jahnke Konzertdirektion, Wizard Live"
+        production_contact_html: "Management<br>Phone +49.711.16 353 27"
+        marketing_contact_html: "Marketing<br>Phone +49.711.16 353 16<br>/ sarahsandner@russ-live.de"
+        legal_links_html: "© SKS Michael Russ GmbH <br>Imprint<br>Privacy policy<br>Terms<br>Youth protection"
+        staff_equal_opportunity: "Equal opportunity and equal treatment regardless of ethnic origin, skin color, gender, religion, nationality, sexual orientation, social background or political views, insofar as these are based on democratic principles and tolerance toward different opinions, are ensured. Employees are selected, hired and supported on the basis of their qualifications and abilities."
+      references:
+        title: "Projects we are proud of"
+      events:
+        eyebrow: "Stuttgart-live"
+        title: "Upcoming events"
+        intro: "Selected SKS highlights from Stuttgart-live with image, date, venue and ticket status."
+        nav_aria: "Browse events"
+        previous: "Previous events"
+        next: "Next events"
+        show_all: "Show all"
+        all_events: "All events on Stuttgart-live.de"
+    unternehmen:
+      meta:
+        title: "About us | Russ Live"
+        description: "About Russ Live: history, attitude and the people behind the events."
+    about:
+      hero:
+        eyebrow: "About us"
+        title_lines:
+          people: "People."
+          moments: "Moments."
+          since: "Since 1945."
+        intro: "From Stuttgart. For the world. For three generations, we have created concerts that connect people."
+      profile_title: "Company profile"
+      story:
+        first_html: "<strong>Michael Russ Jr.</strong> grew into the world of Russ Live with calm closeness, heart and genuine entrepreneurial spirit. Over the years, this became responsibility, experience and a clear sense of how to make culture last."
+        second_html: "<strong>Michaela Russ</strong> continues this path in the third generation. Together, the family stands for productions that are professionally organized while remaining human. This has created a team that delivers culture with attitude, reliability and passion."
+      company:
+        eyebrow: "Konzertdirektion Russ"
+        title_html: "Four companies.<br>One vision."
+        intro: "We want to make people happy."
+        button: "Konzertdirektion"
+        open_aria: "Open %{title}"
+        areas:
+          live: "Whether club or stadium concerts, musicals, shows or your next corporate event: we are your strong partner."
+          artists: "Your committed partner in finding artists and programs that fit your promoter profile."
+          service: "We ensure a safe event: concert, conference, company celebration or convention."
+          klassik: "Discover the fascinating world of classical music with us. Master concerts for Stuttgart. Since 1945."
+      history:
+        eyebrow: "History"
+        title: "Our history. Three generations. One attitude."
+        image_alt: "Michaela Russ, Michael Russ and a historic family portrait"
+        first: "What began with a vision in 1945 is now one of Europe's leading concert agencies. From Stuttgart, Russ has helped shape concert history for decades while preserving its closeness to the region."
+        second: "This combination of local roots and international ambition still shapes our view today: we think big, work in partnership and always keep the people behind every production in focus."
+      award:
+        eyebrow: "Responsibility"
+        title: "Experience that never stands still."
+        image_alt: "Michael Russ Jr. with an award and partner at an awards ceremony"
+        first: "Whether tour, one-off show, cultural format or major event: we combine deep industry knowledge with the ambition to keep evolving. This creates the mix of precision, calm and curiosity that defines our work."
+        second: "Awards make us happy. More important to us, however, is that artists, audiences, partners and teams can rely on us."
+      city:
+        eyebrow: "Perspective"
+        title: "From Stuttgart to the world."
+        small_image_alt: "Historic concert photo of Ike and Tina Turner"
+        large_image_alt: "Major event in Stuttgart with a classic car parade"
+        first: "Whether in Stuttgart's Liederhalle, on large festival grounds, in arenas or open-air productions: we bring people together. Live. Real. Unforgettable."
+        second: "The city is our starting point, not our boundary. From here, we develop formats that are regionally rooted and reach far beyond."
+      closing:
+        eyebrow: "Today"
+        title: "For us, tradition is not a look back, but trust in what comes next."
+        text: "Russ Live stands for experience without stagnation, quality without attitude and productions that understand culture as a shared task."
+    services:
+      meta:
+        title: "Services | Russ Live"
+        description: "Russ Live services: local delivery, production, marketing, staffing and ticketing for live entertainment in Stuttgart."
+      hero:
+        image_alt: "Live stage as the key visual for Russ Live services"
+        intro: "From the first site visit to final load-out: Russ Live brings together promoter expertise, production, marketing, staffing and ticketing for concerts, shows and cultural formats in the Stuttgart region."
+      nav_aria: "Service areas"
+      intro:
+        eyebrow: "Full Service"
+        title: "Everything a live moment needs"
+        text: "We plan events holistically or step in exactly where support is needed: as a local promoter, production partner, marketing team, staffing coordinator or ticketing interface."
+      details_aria: "Service details"
+      chapter_label: "Live Entertainment —"
+      image_pending: "Image coming soon"
+      showcase:
+        eyebrow: "From practice"
+        title: "Live experience at every scale"
+      modules:
+        eyebrow: "Our services"
+        title: "Modules for strong productions"
+        kicker: "Service area"
+      more: "More"
+      more_about: "More about %{title}"
+    referenzen:
+      meta:
+        title: "References | Russ Live"
+        description: "Russ Live references: concerts, shows and cultural formats from Stuttgart and the region."
+    references:
+      hero:
+        title: "Projects, projects, projects..."
+        intro: "Concerts, shows and cultural formats from Stuttgart and the region."
+    jobs:
+      meta:
+        title: "Jobs | Russ Live"
+        description: "Flexible jobs at concerts, festivals and events in Stuttgart. Discover open positions at Russ Live."
+      hero:
+        image_alt: "Backstage moment with the Russ Live crew in front of a lit stage"
+        title: "Become part of our event team."
+        intro: "Flexible jobs at concerts, festivals and events in Stuttgart."
+      list:
+        title: "Our current job openings"
+        aria: "Job openings"
+        position: "Position"
+        category: "Area"
+        location: "Location"
+        inquiry: "Inquiry"
+      empty: "There are currently no published jobs."
+      story:
+        aria: "Insights into working with us"
+        stage_image_alt: "Stage setup with trusses, cases and technology before an event"
+        crowd_image_alt: "Audience at a concert with raised hands"
+        first_eyebrow: "Unique moments"
+        first_title: "Work where events are created."
+        first_text: "From first setup to the final show, you are part of experienced teams and real live moments."
+        second_eyebrow: "More than just a job"
+        second_title: "Together for unforgettable experiences."
+        second_text: "We work with passion, get things done together and create events that stay in people's memories."
+      quotes:
+        aria: "Voices from the team"
+        text: "You experience events from a perspective that almost nobody else sees."
+        footer: "Luca, stagehand since 2022"
+    job:
+      meta:
+        title: "Jobs | Russ Live"
+        dynamic_title: "%{title} | Jobs | Russ Live"
+        description: "Job profile at Russ Live."
+    kontakt:
+      meta:
+        title: "Contact | Russ Live"
+        description: "Contact SKS Michael Russ GmbH at Charlottenplatz in Stuttgart."
+    contact:
+      paragraphs:
+        location: "Konzertdirektion Russ is located in the heart of downtown Stuttgart at Charlottenplatz 17. The New Palace and the Landesmuseum Württemberg are nearby."
+        directions: "Coming from the main station, take the Stadtbahn to Charlottenplatz and use the Holzstraße or Planie exit. This is the way to the timetable."
+    impressum:
+      meta:
+        title: "Imprint | Russ Live"
+        description: "Imprint of SKS Michael Russ GmbH."
+      title: "Imprint"
+      member: "Member of the Association of German Concert Agencies."
+      liability: "Despite careful content checks, we assume no liability for the content of external links. The operators of the linked pages are solely responsible for their content."
+    datenschutz:
+      meta:
+        title: "Privacy | Russ Live"
+        description: "Privacy information of SKS Michael Russ GmbH."
+      title: "Privacy"
+      placeholder: "Sorry, you are looking for something that is not here."
+    agb:
+      meta:
+        title: "Terms | Russ Live"
+        description: "Terms of SKS Michael Russ GmbH."
+      title: "Terms"
+      placeholder: "The general terms and conditions are being prepared here statically and can later be supplemented with the finally approved text."
+    jugendschutz:
+      meta:
+        title: "Youth protection | Russ Live"
+        description: "Youth protection information of SKS Michael Russ GmbH."
+      title: "Youth protection"
+      paragraphs:
+        - "Many people, high volumes, show times late into the evening: is this event suitable for my child? Please consider this carefully; nobody knows your child as well as you do. You can call us at any time on 0711-55066077 or email info@stuttgart-live.de. We will be happy to advise you, because sometimes investing in childcare is more relaxed for everyone."
+        - "Age recommendations and age restrictions are regulated in detail for every event. They are legally binding and form part of our general terms and conditions. You can find the age restrictions in the respective event description on this website."
+        - "In general, age restrictions follow these rules: children under 8 are usually not allowed to attend evening events and concerts. Children under 14 may usually only attend events when accompanied by an authorized guardian. Young people aged 14 to under 16 may usually attend concerts until 10 p.m.; young people over 16 may attend until midnight, after which they must be accompanied by a parent or authorized guardian."
+        - "Parents or legal guardians are the mother and/or father or the legal guardian. An authorized guardian may be any adult over 18 if they actually assume parental duties with the parents' consent. They must be able to fulfill supervisory duties within the assigned task, meaning they must be able to guide and supervise the young people entrusted to them. A parental authorization form signed by the parents must be presented. A copy of the relevant parent's ID must also be enclosed. The responsible person named above must supervise the child during the event and needs an admission ticket. Each accompanying person may supervise no more than two children. All children and young people under 18 should be able to identify themselves with a child ID or personal ID."
+        - "We provide the relevant form for download here:"
+    legal:
+      eyebrow: "Legal"
+    presse:
+      meta:
+        title: "Press | Russ Live"
+        description: "Russ Live press area with press texts, image material and event data for media and partners."
+  references:
+    filters:
+      aria: "Filter references by tags"
+    grid_aria: "Reference projects"
+    empty: "There are currently no published references."
+    slider:
+      previous: "Previous reference"
+      next: "Next reference"
+    card:
+      details_aria: "Show details for %{title}"
+      date: "Date"
+      location: "Location"
+      production: "Production"
+      partner: "Partner: %{production}"
+      fallback_partner: "Reference"
+      service_reference: "Service reference"
+  jobs:
+    apply_now: "Apply now"
+    back_to_overview: "Back to overview"
+    filters:
+      aria: "Filter jobs by area"
+    detail:
+      aria_label: "Job details %{title}"
+      application_email_subject: "Application %{title}"
+      responsibilities: "Responsibilities"
+      requirements: "Requirements"
+      apply_title: "We look forward to your application!"
+      contact: "Contact person"
+  press:
+    index:
+      hero:
+        title: "Press information for partners and media."
+        intro: "Press texts, image material and event data for upcoming productions."
+      search:
+        aria: "Search artists"
+        label: "Search artists"
+        placeholder: "Enter name"
+        reset: "Reset"
+        reset_aria: "Reset search"
+      directory:
+        eyebrow: "Overview"
+        title: "Artists A-Z"
+      count_singular: "press entry"
+      count_plural: "press entries"
+      empty: "No artist found."
+      contact:
+        eyebrow: "Contact person"
+        title: "Press contact"
+        text: "For interview, accreditation and material requests, the press area is directly prepared."
+        role: "Press & Public Relations"
+    detail:
+      meta:
+        title: "%{name} | Press | Russ Live"
+        description: "Press kit for %{name}: press text, image material and event data from Russ Live."
+      back: "Back to press overview"
+      eyebrow: "Press kit"
+      intro: "Press text, image material and event data for %{name}."
+      download_presskit: "Download press kit"
+      press_photo_alt: "%{name} press photo"
+      info_aria: "Press information"
+      event:
+        eyebrow: "Event"
+        date: "Date"
+        time: "Time"
+        location: "Location"
+        status: "Status"
+        current: "Current event"
+        past: "Past event"
+        more_dates: "More dates"
+      press_text:
+        eyebrow: "Press text"
+        empty: "There is currently no press text for this artist."
+        usage: "The image and text material may be used free of charge for editorial purposes. For press photos, please observe the credit stored in the file name or metadata."
+      downloads:
+        eyebrow: "Downloads"
+        title: "Image gallery"
+      gallery_image_label: "Press photo %{name} %{index}"
+      fallback_image_alt: "Press image"
+      download_image: "Download image"
+      lightbox_aria: "Press image preview"
+      close_lightbox: "Close lightbox"
+      previous_image: "Previous image"
+      next_image: "Next image"
+  events:
+    tickets: "Tickets"
+    price_from: "from %{price}"
+    status:
+      canceled: "Canceled"
+      sold_out: "Sold out"
+  file_metadata:
+    name: "Name"
+    type: "Type"
+    size: "Size"

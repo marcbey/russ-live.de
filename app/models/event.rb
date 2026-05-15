@@ -78,9 +78,9 @@ class Event < SharedStuttgartRecord
 
   def public_ticket_status_label
     offer = public_ticket_status_offer
-    return "Abgesagt" if offer&.canceled?
+    return I18n.t("events.status.canceled") if offer&.canceled?
 
-    "Ausverkauft" if offer&.sold_out?
+    I18n.t("events.status.sold_out") if offer&.sold_out?
   end
 
   def public_ticket_url

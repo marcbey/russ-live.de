@@ -1,15 +1,15 @@
-<main id="main-content" class="page-main public-page press-page" tabindex="-1" data-controller="press-search">
+<main id="main-content" class="page-main public-page press-page" tabindex="-1" data-controller="press-search" data-press-search-locale-value="<%= I18n.locale == :de ? "de-DE" : "en-US" %>" data-press-search-singular-label-value="<%= t("press.index.count_singular") %>" data-press-search-plural-label-value="<%= t("press.index.count_plural") %>">
   <section class="public-hero public-hero-editorial press-hero" aria-labelledby="press-title">
     <div class="press-hero-copy">
-      <p class="eyebrow">Presse</p>
-      <h1 id="press-title">Presseinfos für Partner und Medien.</h1>
-      <p>Pressetexte, Bildmaterial und Veranstaltungsdaten zu kommenden Produktionen.</p>
+      <p class="eyebrow"><%= t("public.header.press") %></p>
+      <h1 id="press-title"><%= t("press.index.hero.title") %></h1>
+      <p><%= t("press.index.hero.intro") %></p>
     </div>
-    <form class="press-search" role="search" aria-label="Künstler suchen" data-action="submit->press-search#submit reset->press-search#reset">
-      <label for="press-search-input">Künstler suchen</label>
+    <form class="press-search" role="search" aria-label="<%= t("press.index.search.aria") %>" data-action="submit->press-search#submit reset->press-search#reset">
+      <label for="press-search-input"><%= t("press.index.search.label") %></label>
       <div>
-        <input id="press-search-input" type="search" name="q" autocomplete="off" placeholder="Name eingeben" data-press-search-target="input" data-action="input->press-search#render search->press-search#render">
-        <button type="reset" aria-label="Suche zurücksetzen">Zurücksetzen</button>
+        <input id="press-search-input" type="search" name="q" autocomplete="off" placeholder="<%= t("press.index.search.placeholder") %>" data-press-search-target="input" data-action="input->press-search#render search->press-search#render">
+        <button type="reset" aria-label="<%= t("press.index.search.reset_aria") %>"><%= t("press.index.search.reset") %></button>
       </div>
     </form>
   </section>
@@ -17,10 +17,10 @@
   <section class="public-section section press-directory" aria-labelledby="press-directory-title">
     <div class="press-directory-head">
       <div>
-        <p class="eyebrow">Übersicht</p>
-        <h2 id="press-directory-title">Künstler A-Z</h2>
+        <p class="eyebrow"><%= t("press.index.directory.eyebrow") %></p>
+        <h2 id="press-directory-title"><%= t("press.index.directory.title") %></h2>
       </div>
-      <p data-press-search-target="count"><%= @press_artist_count %> <%= @press_artist_count == 1 ? "Presseeintrag" : "Presseeinträge" %></p>
+      <p data-press-search-target="count"><%= @press_artist_count %> <%= @press_artist_count == 1 ? t("press.index.count_singular") : t("press.index.count_plural") %></p>
     </div>
 
     <div class="public-directory press-letter-grid" data-press-directory>
@@ -37,20 +37,20 @@
         </section>
       <% end %>
     </div>
-    <p class="press-empty" data-press-search-target="empty" hidden>Kein Künstler gefunden.</p>
+    <p class="press-empty" data-press-search-target="empty" hidden><%= t("press.index.empty") %></p>
   </section>
 
   <section class="public-section section press-contact-strip" aria-labelledby="press-contact-title">
     <div>
-      <p class="eyebrow">Ansprechpartner</p>
-      <h2 id="press-contact-title">Pressekontakt</h2>
-      <p>Für Interview-, Akkreditierungs- und Materialanfragen ist der Pressebereich direkt vorbereitet.</p>
+      <p class="eyebrow"><%= t("press.index.contact.eyebrow") %></p>
+      <h2 id="press-contact-title"><%= t("press.index.contact.title") %></h2>
+      <p><%= t("press.index.contact.text") %></p>
     </div>
     <article class="public-contact-card press-contact-card">
       <%= image_tag "russ_live/team/arnulf-woock.jpg", alt: "Arnulf Woock", loading: "lazy", decoding: "async", width: 600, height: 600 %>
       <div>
         <h3>Arnulf Woock</h3>
-        <p>Presse- &amp; Öffentlichkeitsarbeit</p>
+        <p><%= t("press.index.contact.role") %></p>
         <a href="mailto:arnulfwoock@michaelrussgmbh.de">arnulfwoock@michaelrussgmbh.de</a>
         <a href="tel:+497111635320">+49.711.16 353 20</a>
       </div>

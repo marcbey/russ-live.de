@@ -4,55 +4,17 @@ class PagesController < ApplicationController
   allow_unauthenticated_access
 
   PAGE_META = {
-    home: {
-      title: "Russ Live | Kulturproduktionen auf höchstem Niveau",
-      description: "Russ Live ist örtlicher Veranstalter, Produktionspartner und Full-Service-Dienstleister für Live Entertainment in Stuttgart und der Region.",
-      body_class: "home-body"
-    },
-    unternehmen: {
-      title: "Über uns | Russ Live",
-      description: "Über Russ Live: Geschichte, Haltung und Menschen hinter den Veranstaltungen."
-    },
-    services: {
-      title: "Services | Russ Live",
-      description: "Services von Russ Live: örtliche Durchführung, Produktion, Marketing, Personal und Ticketing für Live Entertainment in Stuttgart.",
-      body_class: "services-body"
-    },
-    referenzen: {
-      title: "Referenzen | Russ Live",
-      description: "Referenzen von Russ Live: Konzerte, Shows und Kulturformate aus Stuttgart und der Region.",
-      body_class: "references-body"
-    },
-    jobs: {
-      title: "Jobs | Russ Live",
-      description: "Flexible Jobs bei Konzerten, Festivals und Events in Stuttgart. Jetzt offene Stellen bei Russ Live entdecken.",
-      body_class: "jobs-body jobs-overview-body"
-    },
-    job: {
-      title: "Jobs | Russ Live",
-      description: "Jobprofil bei Russ Live.",
-      body_class: "jobs-body job-detail-page-body"
-    },
-    kontakt: {
-      title: "Kontakt | Russ Live",
-      description: "Kontakt zur SKS Michael Russ GmbH am Charlottenplatz in Stuttgart."
-    },
-    impressum: {
-      title: "Impressum | Russ Live",
-      description: "Impressum der SKS Michael Russ GmbH."
-    },
-    datenschutz: {
-      title: "Datenschutz | Russ Live",
-      description: "Datenschutz der SKS Michael Russ GmbH."
-    },
-    agb: {
-      title: "AGB | Russ Live",
-      description: "AGB der SKS Michael Russ GmbH."
-    },
-    jugendschutz: {
-      title: "Jugendschutz | Russ Live",
-      description: "Jugendschutz der SKS Michael Russ GmbH."
-    }
+    home: { body_class: "home-body" },
+    unternehmen: {},
+    services: { body_class: "services-body" },
+    referenzen: { body_class: "references-body" },
+    jobs: { body_class: "jobs-body jobs-overview-body" },
+    job: { body_class: "jobs-body job-detail-page-body" },
+    kontakt: {},
+    impressum: {},
+    datenschutz: {},
+    agb: {},
+    jugendschutz: {}
   }.freeze
 
   HOME_EVENTS_PER_PAGE = 10
@@ -94,8 +56,8 @@ class PagesController < ApplicationController
     @jobs = Job.published.with_contact_and_image.ordered.to_a
     @selected_job = find_job!(params[:slug])
     @page_meta = PAGE_META.fetch(:job).merge(
-      title: @selected_job.meta_title.presence || "#{@selected_job.title} | Jobs | Russ Live",
-      description: @selected_job.meta_description.presence || PAGE_META.fetch(:job).fetch(:description)
+      title: @selected_job.meta_title.presence || t("pages.job.meta.dynamic_title", title: @selected_job.title),
+      description: @selected_job.meta_description.presence || t("pages.job.meta.description")
     )
   end
   def kontakt; end
@@ -114,7 +76,10 @@ class PagesController < ApplicationController
 
   def set_page_meta
     @page_key = action_name.to_sym
-    @page_meta = PAGE_META.fetch(@page_key)
+    @page_meta = PAGE_META.fetch(@page_key).merge(
+      title: t("pages.#{@page_key}.meta.title"),
+      description: t("pages.#{@page_key}.meta.description")
+    )
   end
 
   def home_events_page(cursor: nil, per_page: HOME_EVENTS_PER_PAGE)

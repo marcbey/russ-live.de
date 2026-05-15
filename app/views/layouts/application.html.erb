@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="<%= I18n.locale %>">
   <head>
     <title><%= content_for(:title) || @page_meta&.fetch(:title, nil) || "Russ Live" %></title>
     <% if content_for?(:description) || @page_meta&.fetch(:description, nil).present? %>
@@ -27,7 +27,7 @@
   </head>
 
   <body class="<%= content_for(:body_class) || @page_meta&.fetch(:body_class, nil) %>" data-controller="smooth-anchor">
-    <%= link_to "Zum Inhalt springen", "#main-content", class: "skip-link" if @page_key.present? %>
+    <%= link_to t("public.skip_link"), "#main-content", class: "skip-link" if @page_key.present? %>
     <%= render "shared/public_header" if @page_key.present? %>
     <%= render "layouts/flash_messages" %>
     <%= yield %>

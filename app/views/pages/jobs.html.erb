@@ -2,7 +2,7 @@
   <section class="public-hero public-hero-dark section job-overview-hero" aria-labelledby="jobs-title">
     <div class="job-overview-hero-media">
       <%= image_tag @job_overview_hero_image,
-                    alt: "Backstage-Moment mit Russ Live Crew vor einer beleuchteten Bühne",
+                    alt: t("pages.jobs.hero.image_alt"),
                     width: 2565,
                     height: 1067,
                     decoding: "async",
@@ -10,12 +10,12 @@
     </div>
 
     <div class="job-overview-hero-copy">
-      <h1 id="jobs-title">Werde Teil unseres Event-Teams.</h1>
-      <p>Flexible Jobs bei Konzerten, Festivals und Events in Stuttgart.</p>
+      <h1 id="jobs-title"><%= t("pages.jobs.hero.title") %></h1>
+      <p><%= t("pages.jobs.hero.intro") %></p>
     </div>
     <% if @job_categories.any? %>
-      <nav class="public-filter-nav job-category-filter-nav" aria-label="Jobs nach Bereichen filtern">
-        <button type="button" data-job-category="all" aria-pressed="true">Alle</button>
+      <nav class="public-filter-nav job-category-filter-nav" aria-label="<%= t("jobs.filters.aria") %>">
+        <button type="button" data-job-category="all" aria-pressed="true"><%= t("public.filters.all") %></button>
         <% @job_categories.each do |job_category| %>
           <button type="button" data-job-category="<%= Job.category_slug(job_category) %>" aria-pressed="false"><%= job_category %></button>
         <% end %>
@@ -26,16 +26,16 @@
   <section class="public-section section job-overview-listing" id="jobs-list" aria-labelledby="jobs-list-title">
     <div class="job-overview-heading">
       <div>
-        <h2 id="jobs-list-title">Unsere aktuellen Jobangebote</h2>
+        <h2 id="jobs-list-title"><%= t("pages.jobs.list.title") %></h2>
       </div>
     </div>
 
-    <div class="public-directory job-table" role="table" aria-label="Jobangebote">
+    <div class="public-directory job-table" role="table" aria-label="<%= t("pages.jobs.list.aria") %>">
       <div class="job-table-row job-table-row-head" role="row">
-        <span role="columnheader">Position</span>
-        <span role="columnheader">Bereich</span>
-        <span role="columnheader">Einsatzort</span>
-        <span role="columnheader">Anfrage</span>
+        <span role="columnheader"><%= t("pages.jobs.list.position") %></span>
+        <span role="columnheader"><%= t("pages.jobs.list.category") %></span>
+        <span role="columnheader"><%= t("pages.jobs.list.location") %></span>
+        <span role="columnheader"><%= t("pages.jobs.list.inquiry") %></span>
       </div>
 
       <% @jobs.each do |job| %>
@@ -49,43 +49,43 @@
           <span role="cell"><%= job.category_list %></span>
           <span role="cell"><%= job.location %></span>
           <span class="job-table-action" role="cell">
-            <span>Jetzt bewerben</span>
+            <span><%= t("jobs.apply_now") %></span>
             <span aria-hidden="true">→</span>
           </span>
         <% end %>
       <% end %>
     </div>
     <% if @jobs.empty? %>
-      <p class="references-empty">Aktuell sind keine Jobs veröffentlicht.</p>
+      <p class="references-empty"><%= t("pages.jobs.empty") %></p>
     <% end %>
   </section>
 
-  <section class="public-section section job-story-grid" id="jobs-story" aria-label="Einblicke in die Arbeitswelt">
+  <section class="public-section section job-story-grid" id="jobs-story" aria-label="<%= t("pages.jobs.story.aria") %>">
     <article class="job-story-card">
       <figure class="job-story-image">
         <%= image_tag "russ_live/jobs/stage-before.jpg",
-                      alt: "Bühnenaufbau mit Traversen, Cases und Technik vor einem Event",
+                      alt: t("pages.jobs.story.stage_image_alt"),
                       loading: "lazy",
                       decoding: "async",
                       width: 3827,
                       height: 2554 %>
       </figure>
       <div class="job-story-copy">
-        <p class="eyebrow">Einzigartige Momente</p>
-        <h2>Arbeiten, wo Events entstehen.</h2>
-        <p>Vom ersten Aufbau bis zur letzten Show bist Du Teil eingespielter Teams und echter Live-Momente.</p>
+        <p class="eyebrow"><%= t("pages.jobs.story.first_eyebrow") %></p>
+        <h2><%= t("pages.jobs.story.first_title") %></h2>
+        <p><%= t("pages.jobs.story.first_text") %></p>
       </div>
     </article>
 
     <article class="job-story-band">
       <div class="job-story-band-copy">
-        <p class="eyebrow">Mehr als nur ein Job</p>
-        <h2>Gemeinsam für unvergessliche Erlebnisse.</h2>
-        <p>Wir arbeiten mit Leidenschaft, packen gemeinsam an und schaffen Events, die in Erinnerung bleiben.</p>
+        <p class="eyebrow"><%= t("pages.jobs.story.second_eyebrow") %></p>
+        <h2><%= t("pages.jobs.story.second_title") %></h2>
+        <p><%= t("pages.jobs.story.second_text") %></p>
       </div>
       <figure class="job-story-band-visual">
         <%= image_tag "russ_live/jobs/people-enjoying-music-concert.jpg",
-                      alt: "Publikum bei einem Konzert mit erhobenen Händen",
+                      alt: t("pages.jobs.story.crowd_image_alt"),
                       loading: "lazy",
                       decoding: "async",
                       width: 4200,
@@ -93,11 +93,11 @@
       </figure>
     </article>
 
-    <section class="job-quotes" aria-label="Stimmen aus dem Team">
+    <section class="job-quotes" aria-label="<%= t("pages.jobs.quotes.aria") %>">
       <% 3.times do %>
         <blockquote class="job-quote">
-          <p>Man erlebt Events aus einer Perspektive, die sonst niemand sieht.</p>
-          <footer>Luca, Stagehand seit 2022</footer>
+          <p><%= t("pages.jobs.quotes.text") %></p>
+          <footer><%= t("pages.jobs.quotes.footer") %></footer>
         </blockquote>
       <% end %>
     </section>

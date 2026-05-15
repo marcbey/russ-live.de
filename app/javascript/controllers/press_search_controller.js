@@ -2,6 +2,11 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["input", "card", "group", "count", "empty"]
+  static values = {
+    locale: { type: String, default: "de-DE" },
+    pluralLabel: String,
+    singularLabel: String,
+  }
 
   connect() {
     this.render()
@@ -32,11 +37,19 @@ export default class extends Controller {
       group.hidden = !group.querySelector("[data-press-search-target='card']:not([hidden])")
     })
 
-    this.countTarget.textContent = `${visible} ${visible === 1 ? "Presseeintrag" : "Presseeinträge"}`
+    this.countTarget.textContent = `${visible} ${visible === 1 ? this.singularLabel : this.pluralLabel}`
     this.emptyTarget.hidden = visible > 0
   }
 
   normalize(value) {
-    return value.toLocaleLowerCase("de-DE").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    return value.toLocaleLowerCase(this.localeValue).normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+  }
+
+  get pluralLabel() {
+    return this.pluralLabelValue || "Press entries"
+  }
+
+  get singularLabel() {
+    return this.singularLabelValue || "Press entry"
   }
 }

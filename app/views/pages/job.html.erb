@@ -14,9 +14,9 @@
       <p><%= @selected_job.employment %></p>
       <div class="job-overview-hero-actions">
         <% if @selected_job.join_recruiting_url.present? %>
-          <%= link_to "Jetzt bewerben", @selected_job.join_recruiting_url, class: "public-button public-button-primary section-button", target: "_blank", rel: "noopener noreferrer" %>
+          <%= link_to t("jobs.apply_now"), @selected_job.join_recruiting_url, class: "public-button public-button-primary section-button", target: "_blank", rel: "noopener noreferrer" %>
         <% end %>
-        <%= link_to "Zur Übersicht", jobs_path, class: "public-button public-button-outline section-button section-button-outline-light" %>
+        <%= link_to t("jobs.back_to_overview"), jobs_path, class: "public-button public-button-outline section-button section-button-outline-light" %>
       </div>
     </div>
   </section>
@@ -28,7 +28,7 @@
       </div>
 
       <div class="job-section">
-        <p class="eyebrow">Tätigkeitsfeld</p>
+        <p class="eyebrow"><%= t("jobs.detail.responsibilities") %></p>
         <ul class="job-list">
           <% @selected_job.responsibilities.each do |responsibility| %>
             <li><%= responsibility %></li>
@@ -37,7 +37,7 @@
       </div>
 
       <div class="job-section">
-        <p class="eyebrow">Anforderungen</p>
+        <p class="eyebrow"><%= t("jobs.detail.requirements") %></p>
         <ul class="job-list">
           <% @selected_job.requirements.each do |requirement| %>
             <li><%= requirement %></li>
@@ -46,9 +46,9 @@
       </div>
 
       <div class="job-apply">
-        <h2>Wir freuen uns auf Deine Bewerbung!</h2>
+        <h2><%= t("jobs.detail.apply_title") %></h2>
         <% if @selected_job.join_recruiting_url.present? %>
-          <%= link_to "Jetzt bewerben", @selected_job.join_recruiting_url, class: "public-button public-button-primary section-button", target: "_blank", rel: "noopener noreferrer" %>
+          <%= link_to t("jobs.apply_now"), @selected_job.join_recruiting_url, class: "public-button public-button-primary section-button", target: "_blank", rel: "noopener noreferrer" %>
         <% elsif @selected_job.contact&.email.present? %>
           <%= mail_to @selected_job.contact.email,
                       @selected_job.contact.email,
@@ -59,9 +59,9 @@
     </article>
 
     <% if @selected_job.contact.present? %>
-      <aside class="job-sidebar" aria-label="Ansprechpartner">
+      <aside class="job-sidebar" aria-label="<%= t("jobs.detail.contact") %>">
         <div class="public-contact-card job-contact">
-          <p class="eyebrow">Ansprechpartner</p>
+          <p class="eyebrow"><%= t("jobs.detail.contact") %></p>
           <%= image_tag contact_image_source(@selected_job.contact.contact_image) || image_path("russ_live/team/sebastian-kraenzlein.jpg"),
                         alt: @selected_job.contact.contact_image&.display_alt_text || @selected_job.contact.name,
                         loading: "lazy",

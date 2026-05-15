@@ -103,6 +103,21 @@ Profil, den hinterlegten Ansprechpartner und den Bewerbungslink, falls eine
 JOIN-URL gepflegt ist. Job- und Ansprechpartnerbilder werden unter
 `storage/job_images` beziehungsweise `storage/contact_images` abgelegt.
 
+## Mehrsprachigkeit
+
+Die öffentlichen Frontend-Seiten werden über Rails I18n auf Deutsch und
+Englisch ausgeliefert. Ohne gespeicherte Auswahl nutzt die App die im Browser
+bevorzugte Sprache, sofern sie `de` oder `en` ist; andernfalls fällt sie auf
+Deutsch zurück.
+
+Die Sprache wird über den Header gewechselt und in einem Cookie gespeichert.
+Dadurch bleiben die öffentlichen URLs sauber; es gibt keine lokalisierten Pfade
+und keinen sichtbaren `locale`-Query-Parameter in den generierten Links.
+Statische UI-, Marketing-, Presse-, Job- und Rechtstexte liegen in
+`config/locales/de.yml` und `config/locales/en.yml`. Russ-eigene Domain-Inhalte
+aus Referenzen, Ansprechpartnern und Jobs sowie angebundene Event-/Pressetexte
+bleiben vorerst einsprachig aus den jeweiligen Datenquellen.
+
 ## Entwicklung starten
 
 ```bash

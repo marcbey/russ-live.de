@@ -15,6 +15,21 @@ module ApplicationHelper
     class_name if public_section?(Array(keys))
   end
 
+  def locale_return_to_path
+    query_parameters = request.query_parameters.except("locale")
+    query_string = query_parameters.to_query
+
+    query_string.present? ? "#{request.path}?#{query_string}" : request.path
+  end
+
+  def localized_reference_partner(reference)
+    if reference.production.present?
+      t("references.card.partner", production: reference.production)
+    else
+      t("references.card.fallback_partner")
+    end
+  end
+
   def reference_image_source(reference_image)
     return if reference_image.blank?
     return reference_image_path(reference_image, v: reference_image.updated_at.to_i) if reference_image.uploaded?
@@ -56,9 +71,9 @@ module ApplicationHelper
     byte_size = reference_image.byte_size.presence || reference_image_asset_byte_size(reference_image)
 
     [
-      [ "Name", filename ],
-      [ "Type", content_type ],
-      [ "Größe", (number_to_human_size(byte_size) if byte_size.present?) ]
+      [ t("file_metadata.name"), filename ],
+      [ t("file_metadata.type"), content_type ],
+      [ t("file_metadata.size"), (number_to_human_size(byte_size) if byte_size.present?) ]
     ].select { |_, value| value.present? }
   end
 
@@ -86,7 +101,7 @@ module ApplicationHelper
     {
       title: reference.title,
       date_location: [ l(reference.starts_on, format: "%d.%m.%Y"), reference.location ].compact_blank.join(" · "),
-      partner: reference.production.present? ? "Partner: #{reference.production}" : "Referenz",
+      partner: localized_reference_partner(reference),
       image: reference_image_source(reference.reference_image),
       alt: reference.reference_image&.display_alt_text || reference.title,
       dimensions: reference_card_dimensions(reference.reference_image),
@@ -111,9 +126,9 @@ module ApplicationHelper
     byte_size = stored_image.byte_size.presence || stored_image_asset_byte_size(stored_image)
 
     [
-      [ "Name", filename ],
-      [ "Type", content_type ],
-      [ "Größe", (number_to_human_size(byte_size) if byte_size.present?) ]
+      [ t("file_metadata.name"), filename ],
+      [ t("file_metadata.type"), content_type ],
+      [ t("file_metadata.size"), (number_to_human_size(byte_size) if byte_size.present?) ]
     ].select { |_, value| value.present? }
   end
 

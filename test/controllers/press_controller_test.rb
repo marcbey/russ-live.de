@@ -33,6 +33,26 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, visible_event.title
   end
 
+  test "index renders english static press copy while keeping artist model data" do
+    create_event!(
+      artist_name: "Ärztin Live",
+      normalized_artist_name: "aerztin live",
+      publish_on_russ_live: true,
+      start_at: Time.zone.local(2026, 6, 1, 20)
+    )
+
+    post locale_path(:en), params: { return_to: presse_path }
+    assert_redirected_to presse_path
+
+    get presse_path
+
+    assert_response :success
+    assert_select "html[lang=?]", "en"
+    assert_includes response.body, "Press information for partners and media."
+    assert_includes response.body, "data-press-search-singular-label-value=\"press entry\""
+    assert_includes response.body, "Ärztin Live"
+  end
+
   test "index deduplicates artists by normalized artist name" do
     create_event!(
       artist_name: "Same Artist",
