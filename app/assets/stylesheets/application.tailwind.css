@@ -2444,6 +2444,23 @@ h3 {
   color: var(--ink);
 }
 
+.button-danger {
+  background: #b42318;
+  border-color: #b42318;
+  color: #fff;
+}
+
+.button-danger:hover,
+.button-danger:focus-visible {
+  background: #8f1d14;
+  border-color: #8f1d14;
+  color: #fff;
+}
+
+.editor-actions form {
+  margin: 0;
+}
+
 .backend-split {
   display: grid;
   gap: 24px;
@@ -2757,6 +2774,31 @@ h3 {
   color: var(--muted);
   font-size: .88rem;
   margin-top: 8px;
+}
+
+.event-image-file-meta {
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding-top: 12px;
+}
+
+.event-image-file-meta div {
+  display: grid;
+  gap: 2px;
+}
+
+.event-image-file-meta dt {
+  color: var(--muted);
+  font-size: .72rem;
+  font-weight: 650;
+  text-transform: uppercase;
+}
+
+.event-image-file-meta dd {
+  margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .home-events {

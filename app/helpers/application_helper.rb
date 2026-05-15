@@ -17,7 +17,7 @@ module ApplicationHelper
 
   def reference_image_source(reference_image)
     return if reference_image.blank?
-    return reference_image_path(reference_image) if reference_image.uploaded?
+    return reference_image_path(reference_image, v: reference_image.updated_at.to_i) if reference_image.uploaded?
 
     image_path(reference_image.asset_path) if reference_image.asset_path.present?
   end
@@ -46,6 +46,20 @@ module ApplicationHelper
       reference_image_render_focus_y_value: reference_image.card_focus_y_value,
       reference_image_render_zoom_value: reference_image.card_zoom_value
     }
+  end
+
+  def reference_image_file_metadata(reference_image)
+    return [] if reference_image.blank? || !reference_image.image?
+
+    filename = reference_image.filename.presence || File.basename(reference_image.asset_path.to_s)
+    content_type = reference_image.content_type.presence || Rack::Mime.mime_type(File.extname(filename), nil)
+    byte_size = reference_image.byte_size.presence || reference_image_asset_byte_size(reference_image)
+
+    [
+      [ "Name", filename ],
+      [ "Type", content_type ],
+      [ "Größe", (number_to_human_size(byte_size) if byte_size.present?) ]
+    ].select { |_, value| value.present? }
   end
 
   def reference_grid_class(reference_image)
@@ -77,4 +91,16 @@ module ApplicationHelper
       image_render_data: reference_image_render_data(reference.reference_image)
     }
   end
+
+  private
+    def reference_image_asset_byte_size(reference_image)
+      return if reference_image.asset_path.blank?
+
+      asset_root = Rails.root.join("app/assets/images")
+      asset_path = asset_root.join(reference_image.asset_path).cleanpath
+      return unless asset_path.to_s.start_with?("#{asset_root}/")
+      return unless File.file?(asset_path)
+
+      File.size(asset_path)
+    end
 end

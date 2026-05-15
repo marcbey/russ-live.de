@@ -7,6 +7,8 @@ export default class extends Controller {
     "previewBox",
     "focusX",
     "focusY",
+    "fileInput",
+    "fileMeta",
     "zoom",
     "gridVariant",
     "zoomOutput",
@@ -20,8 +22,10 @@ export default class extends Controller {
     this.boundUpdate = () => this.update()
     this.boundDrag = (event) => this.drag(event)
     this.boundEndDrag = () => this.endDrag()
+    this.boundFilePreview = () => this.previewSelectedFile()
 
     if (this.hasPreviewImageTarget) this.previewImageTarget.addEventListener("load", this.boundUpdate)
+    if (this.hasFileInputTarget) this.fileInputTarget.addEventListener("change", this.boundFilePreview)
 
     if (typeof ResizeObserver !== "undefined") {
       this.resizeObserver = new ResizeObserver(this.boundUpdate)
@@ -34,6 +38,8 @@ export default class extends Controller {
 
   disconnect() {
     if (this.hasPreviewImageTarget) this.previewImageTarget.removeEventListener("load", this.boundUpdate)
+    if (this.hasFileInputTarget) this.fileInputTarget.removeEventListener("change", this.boundFilePreview)
+    this.revokePreviewUrl()
     this.endDrag()
     this.resizeObserver?.disconnect()
   }
@@ -102,6 +108,44 @@ export default class extends Controller {
     window.removeEventListener("pointermove", this.boundDrag)
     window.removeEventListener("pointerup", this.boundEndDrag)
     window.removeEventListener("pointercancel", this.boundEndDrag)
+  }
+
+  previewSelectedFile() {
+    if (!this.hasFileInputTarget || !this.hasPreviewImageTarget) return
+
+    const file = this.fileInputTarget.files?.[0]
+    if (!file) return
+
+    this.revokePreviewUrl()
+    this.previewUrl = URL.createObjectURL(file)
+    this.previewImageTarget.src = this.previewUrl
+    this.previewImageTarget.alt = file.name
+    this.previewImageTarget.classList.remove("is-hidden")
+    this.placeholderElement?.classList.add("is-hidden")
+    this.renderFileMeta(file)
+  }
+
+  revokePreviewUrl() {
+    if (!this.previewUrl) return
+
+    URL.revokeObjectURL(this.previewUrl)
+    this.previewUrl = null
+  }
+
+  renderFileMeta(file) {
+    if (!this.hasFileMetaTarget) return
+
+    this.fileMetaTarget.innerHTML = [
+      ["Name", file.name],
+      ["Type", file.type || "Unbekannt"],
+      ["Größe", this.formatBytes(file.size)]
+    ].map(([label, value]) => `
+      <div>
+        <dt>${this.escapeHtml(label)}</dt>
+        <dd>${this.escapeHtml(value)}</dd>
+      </div>
+    `).join("")
+    this.fileMetaTarget.hidden = false
   }
 
   updateCropBox(geometry) {
@@ -184,5 +228,30 @@ export default class extends Controller {
 
   clamp(value, min, max) {
     return Math.min(Math.max(value, min), max)
+  }
+
+  formatBytes(bytes) {
+    if (!Number.isFinite(bytes) || bytes <= 0) return "0 Bytes"
+
+    const units = ["Bytes", "KB", "MB", "GB"]
+    const exponent = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1)
+    const value = bytes / (1024 ** exponent)
+    const precision = value >= 10 || exponent === 0 ? 0 : 1
+
+    return `${value.toFixed(precision)} ${units[exponent]}`
+  }
+
+  escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, (character) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[character])
+  }
+
+  get placeholderElement() {
+    return this.previewFrameTarget?.querySelector("[data-role='event-image-crop-placeholder']")
   }
 }

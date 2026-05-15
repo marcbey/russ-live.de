@@ -64,7 +64,23 @@
 
           <div class="event-image-meta-inline-form">
             <label class="form-label" for="reference_image_file">Bild</label>
-            <%= file_field_tag "reference_image[file]", accept: "image/*", id: "reference_image_file", class: "form-input" %>
+            <%= file_field_tag "reference_image[file]",
+                               accept: "image/*",
+                               id: "reference_image_file",
+                               class: "form-input",
+                               data: { reference_image_crop_preview_target: "fileInput" } %>
+            <% image_file_metadata = reference_image_file_metadata(reference_image) %>
+            <dl class="event-image-file-meta"
+                aria-label="Aktuelle Bilddatei"
+                data-reference-image-crop-preview-target="fileMeta"
+                <%= "hidden" if image_file_metadata.empty? %>>
+              <% image_file_metadata.each do |label, value| %>
+                <div>
+                  <dt><%= label %></dt>
+                  <dd><%= value %></dd>
+                </div>
+              <% end %>
+            </dl>
           </div>
 
           <div class="event-image-meta-inline-form">
@@ -88,7 +104,3 @@
     </div>
   </div>
 </section>
-
-<div class="editor-actions">
-  <%= form.submit "Speichern", class: "button" %>
-</div>

@@ -1,6 +1,7 @@
 <% reference_image = reference.build_reference_image_with_defaults %>
 <% form_url = reference.persisted? ? backend_reference_path(reference) : backend_references_path %>
 <% form_method = reference.persisted? ? :patch : :post %>
+<% form_id = dom_id(reference, :editor_form) %>
 
 <div class="editor-panel" data-controller="reference-image-crop-preview">
   <div class="editor-tabs" role="tablist" aria-label="Referenz bearbeiten">
@@ -17,7 +18,7 @@
                 url: form_url,
                 method: form_method,
                 class: "editor-form",
-                html: { multipart: true },
+                html: { id: form_id, multipart: true },
                 data: { turbo: false } do |form| %>
     <%= hidden_field_tag :status, (@status_filter unless @status_filter == "all") %>
     <%= hidden_field_tag :query, @query_filter if @query_filter.present? %>
@@ -41,13 +42,14 @@
     <% end %>
   <% end %>
 
-  <% if reference.persisted? %>
-    <div class="editor-danger-actions">
+  <div class="editor-actions">
+    <button type="submit" form="<%= form_id %>" class="button button-compact">Speichern</button>
+    <% if reference.persisted? %>
       <%= button_to "Referenz löschen",
                     backend_reference_path(reference, status: (@status_filter unless @status_filter == "all"), query: @query_filter),
                     method: :delete,
-                    class: "button button-ghost button-compact",
+                    class: "button button-danger button-compact",
                     form: { data: { turbo_confirm: "Diese Referenz wirklich löschen?" } } %>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 </div>
