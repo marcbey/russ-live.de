@@ -83,6 +83,9 @@ Editor-Panel. Pro Referenz gibt es einen eigenen Eventbild-ähnlichen Bildeditor
 mit Grid-Variante, Ausschnitt und Zoom; diese Werte steuern die Kachel auf
 `/referenzen`.
 
+Auf `/services` nutzt der Referenzslider dieselben veröffentlichten Referenzen,
+beschränkt auf Einträge mit den Tags `Concert`, `Konzert` oder `Live`.
+
 Bestehende Referenzen werden beim Einspielen der Russ-Migration als
 veröffentlichte Startdaten übernommen. Neue Uploads werden im Rails-Storage
 unter `storage/reference_images` abgelegt und über Russ Live ausgeliefert; die

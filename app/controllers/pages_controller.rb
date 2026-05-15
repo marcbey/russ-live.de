@@ -18,6 +18,7 @@ class PagesController < ApplicationController
   }.freeze
 
   HOME_EVENTS_PER_PAGE = 10
+  SERVICE_REFERENCE_TAGS = %w[Concert Konzert Live].freeze
   STUTTGART_LIVE_SKS_HIGHLIGHTS_URL = "https://www.stuttgart-live.de/highlights?filter=sks".freeze
 
   before_action :set_page_meta, except: :homepage_lane
@@ -41,7 +42,14 @@ class PagesController < ApplicationController
     head :bad_request
   end
   def unternehmen; end
-  def services; end
+  def services
+    @service_references = Reference.published
+      .with_image
+      .tagged_with_any(SERVICE_REFERENCE_TAGS)
+      .ordered
+      .to_a
+      .select { |reference| reference.reference_image&.image? }
+  end
   def referenzen
     @references = Reference.published.with_image.ordered.to_a
     @reference_tags = Reference.tags_from(@references)

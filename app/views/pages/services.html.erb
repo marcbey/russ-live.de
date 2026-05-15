@@ -85,37 +85,16 @@
         </article>
       </section>
 
-      <section class="public-section section services-showcase" aria-labelledby="services-showcase-title">
-        <div class="section-head">
-          <h2 id="services-showcase-title"><%= t("pages.services.showcase.title") %></h2>
-        </div>
-        <div class="klassik-slider klassik-slider-page services-reference-slider" data-slider="" data-controller="slider">
-          <div class="klassik-slider-viewport">
-            <button class="klassik-slider-arrow klassik-slider-arrow-prev" type="button" aria-label="<%= t("references.slider.previous") %>">‹</button>
-            <div class="klassik-slider-stage">
-              <figure class="klassik-slide is-active" data-index="0" tabindex="0" aria-hidden="false" aria-label="Five Finger Death Punch" data-title="Five Finger Death Punch" data-date-location="Rock / Metal · Porsche-Arena Stuttgart" data-partner="<%= t("references.card.service_reference") %>">
-                <%= image_tag "russ_live/references/featured/bild1.jpg", alt: "Five Finger Death Punch", loading: "lazy", decoding: "async", width: 920, height: 400 %>
-              </figure>
-              <figure class="klassik-slide is-next" data-index="1" tabindex="0" aria-hidden="true" aria-label="AC/DC" data-title="AC/DC" data-date-location="Stadionproduktion · Stuttgart" data-partner="<%= t("references.card.service_reference") %>">
-                <%= image_tag "russ_live/references/featured/bild2.jpg", alt: "AC/DC", loading: "lazy", decoding: "async", width: 920, height: 400 %>
-              </figure>
-              <figure class="klassik-slide is-prev" data-index="2" tabindex="0" aria-hidden="true" aria-label="David Garrett" data-title="David Garrett" data-date-location="Arena-Konzert · Liederhalle Stuttgart" data-partner="<%= t("references.card.service_reference") %>">
-                <%= image_tag "russ_live/references/featured/bild3.jpg", alt: "David Garrett", loading: "lazy", decoding: "async", width: 920, height: 400 %>
-              </figure>
-            </div>
-            <button class="klassik-slider-arrow klassik-slider-arrow-next" type="button" aria-label="<%= t("references.slider.next") %>">›</button>
+      <% if @service_references.any? %>
+        <section class="public-section section services-showcase" aria-labelledby="services-showcase-title">
+          <div class="section-head">
+            <h2 id="services-showcase-title"><%= t("pages.services.showcase.title") %></h2>
           </div>
-          <div class="klassik-slider-meta">
-            <span class="klassik-slider-marker" aria-hidden="true"></span>
-            <div class="klassik-slider-text">
-              <h3>Five Finger Death Punch</h3>
-              <p class="klassik-slider-date-location">Rock / Metal · Porsche-Arena Stuttgart</p>
-              <p class="klassik-slider-partner"><%= t("references.card.service_reference") %></p>
-            </div>
-            <a class="public-button public-button-primary section-button klassik-slider-button" href="<%= referenzen_path %>"><%= t("public.header.references") %></a>
-          </div>
-        </div>
-      </section>
+          <%= render "pages/reference_slider",
+                     references: @service_references,
+                     slider_classes: "klassik-slider klassik-slider-page services-reference-slider" %>
+        </section>
+      <% end %>
 
       <section class="public-section section service-companies" aria-labelledby="service-companies-title">
         <div class="section-head">

@@ -46,6 +46,16 @@ class ReferenceTest < ActiveSupport::TestCase
     assert_equal [ tagged ], Reference.matching("open").to_a
   end
 
+  test "tagged with any matches exact tags case insensitive" do
+    concert = create_reference!(title: "Concert", status: "published", position: 1, tag_list: "concert")
+    konzert = create_reference!(title: "Konzert", status: "published", position: 2, tag_list: "Konzert")
+    live = create_reference!(title: "Live", status: "published", position: 3, tag_list: "Live")
+    create_reference!(title: "Partial", status: "published", position: 4, tag_list: "Livehouse")
+    create_reference!(title: "Other", status: "published", position: 5, tag_list: "Open Air")
+
+    assert_equal [ concert, konzert, live ], Reference.tagged_with_any(%w[Concert Konzert Live]).ordered.to_a
+  end
+
   test "tags from records are unique and sorted case insensitive" do
     create_reference!(title: "A", status: "published", position: 1, tag_list: "Clubkonzert, Open Air")
     create_reference!(title: "B", status: "published", position: 2, tag_list: "open air, Ausstellung")

@@ -21,6 +21,18 @@ class Reference < RussRecord
   scope :ordered, -> { order(position: :asc, starts_on: :desc, id: :asc) }
   scope :published, -> { where(status: "published") }
   scope :with_image, -> { includes(:reference_image) }
+  scope :tagged_with_any, lambda { |tags|
+    normalized_tags = Array(tags).map { |tag| tag.to_s.strip.downcase }.reject(&:blank?).uniq
+
+    if normalized_tags.empty?
+      none
+    else
+      where(
+        "EXISTS (SELECT 1 FROM unnest(tags) AS reference_tags(tag_name) WHERE lower(reference_tags.tag_name) IN (:tags))",
+        tags: normalized_tags
+      )
+    end
+  }
   scope :matching, lambda { |query|
     normalized_query = query.to_s.strip
     next all if normalized_query.blank?
