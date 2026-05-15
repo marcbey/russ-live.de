@@ -53,47 +53,6 @@ class PagesController < ApplicationController
     }
   }.freeze
 
-  HOME_REFERENCES = [
-    { image: "russ_live/references/01-disgusting-food-museum.jpg", alt: "DISGUSTING FOOD MUSEUM", title: "DISGUSTING FOOD MUSEUM", date_location: "18.04.2026 · Stuttgart", partner: "Partner: Karsten Jahnke Konzertdirektion" },
-    { image: "russ_live/references/02-david-garrett.jpg", alt: "DAVID GARRETT", title: "DAVID GARRETT", date_location: "21.05.2025 · Liederhalle Stuttgart", partner: "Partner: Live Nation" },
-    { image: "russ_live/references/03-neil-young.jpg", alt: "NEIL YOUNG", title: "NEIL YOUNG", date_location: "29.06.2024 · Hanns-Martin-Schleyer-Halle", partner: "Partner: Wizart Promotion" },
-    { image: "russ_live/references/04-iron-maiden.jpg", alt: "IRON MAIDEN", title: "IRON MAIDEN", date_location: "13.07.2023 · Porsche-Arena Stuttgart", partner: "Partner: SKS Michael Russ" },
-    { image: "russ_live/references/05-referenz-5.jpg", alt: "Referenz 5", title: "Referenz 5", date_location: "24.08.2022 · SpardaWelt Freilichtbühne", partner: "Partner: Semmel Concerts" },
-    { image: "russ_live/references/06-tate-mc-rae.jpg", alt: "TATE MC RAE", title: "TATE MC RAE", date_location: "05.09.2021 · Kultur- und Kongresszentrum", partner: "Partner: BB Promotion" },
-    { image: "russ_live/references/07-sean-paul.jpg", alt: "SEAN PAUL", title: "SEAN PAUL", date_location: "17.10.2020 · Schlossplatz Stuttgart", partner: "Partner: Karsten Jahnke Konzertdirektion" },
-    { image: "russ_live/references/08-chris-tall.jpg", alt: "CHRIS TALL", title: "CHRIS TALL", date_location: "28.11.2026 · Theaterhaus Stuttgart", partner: "Partner: Live Nation" },
-    { image: "russ_live/references/09-max-giesinger.jpg", alt: "MAX GIESINGER", title: "MAX GIESINGER", date_location: "18.04.2025 · Stuttgart", partner: "Partner: Wizart Promotion" },
-    { image: "russ_live/references/10-simply-red.jpg", alt: "SIMPLY RED", title: "SIMPLY RED", date_location: "21.05.2024 · Liederhalle Stuttgart", partner: "Partner: SKS Michael Russ" },
-    { image: "russ_live/references/11-toto.jpg", alt: "TOTO", title: "TOTO", date_location: "29.06.2023 · Hanns-Martin-Schleyer-Halle", partner: "Partner: Semmel Concerts" },
-    { image: "russ_live/references/12-acdc.jpg", alt: "ACDC", title: "ACDC", date_location: "13.07.2022 · Porsche-Arena Stuttgart", partner: "Partner: BB Promotion" },
-    { image: "russ_live/references/13-gianna-nannini.jpg", alt: "GIANNA NANNINI", title: "GIANNA NANNINI", date_location: "24.08.2021 · SpardaWelt Freilichtbühne", partner: "Partner: Karsten Jahnke Konzertdirektion" },
-    { image: "russ_live/references/14-bob-dylan.jpg", alt: "BOB DYLAN", title: "BOB DYLAN", date_location: "05.09.2020 · Kultur- und Kongresszentrum", partner: "Partner: Live Nation" },
-    { image: "russ_live/references/15-laura-pausini.jpg", alt: "LAURA PAUSINI", title: "LAURA PAUSINI", date_location: "17.10.2026 · Schlossplatz Stuttgart", partner: "Partner: Wizart Promotion" },
-    { image: "russ_live/references/16-titanic.jpg", alt: "TITANIC", title: "TITANIC", date_location: "28.11.2025 · Theaterhaus Stuttgart", partner: "Partner: SKS Michael Russ" },
-    { image: "russ_live/references/17-mamma-mia.jpg", alt: "MAMMA MIA!", title: "MAMMA MIA!", date_location: "18.04.2024 · Stuttgart", partner: "Partner: Semmel Concerts" },
-    { image: "russ_live/references/18-adel-tawil.jpg", alt: "ADEL TAWIL", title: "ADEL TAWIL", date_location: "21.05.2023 · Liederhalle Stuttgart", partner: "Partner: BB Promotion" },
-    { image: "russ_live/references/19-blue-man-group.jpg", alt: "BLUE MAN GROUP", title: "BLUE MAN GROUP", date_location: "29.06.2022 · Hanns-Martin-Schleyer-Halle", partner: "Partner: Karsten Jahnke Konzertdirektion" },
-    { image: "russ_live/references/20-crystal-cirque-du-soleil.jpg", alt: "CRYSTAL - CIRQUE DU SOLEIL", title: "CRYSTAL - CIRQUE DU SOLEIL", date_location: "13.07.2021 · Porsche-Arena Stuttgart", partner: "Partner: Live Nation" },
-    { image: "russ_live/references/21-helene-fischer.jpg", alt: "HELENE FISCHER", title: "HELENE FISCHER", date_location: "24.08.2020 · SpardaWelt Freilichtbühne", partner: "Partner: Wizart Promotion" },
-    { image: "russ_live/references/22-stuttgart-live-festival.png", alt: "STUTTGART-LIVE FESTIVAL", title: "STUTTGART-LIVE FESTIVAL", date_location: "05.09.2026 · Kultur- und Kongresszentrum", partner: "Partner: SKS Michael Russ" },
-    { image: "russ_live/references/23-referenz-23.jpg", alt: "Referenz 23", title: "Referenz 23", date_location: "17.10.2025 · Schlossplatz Stuttgart", partner: "Partner: Semmel Concerts" },
-    { image: "russ_live/references/24-cypress-hill.jpg", alt: "CYPRESS HILL", title: "CYPRESS HILL", date_location: "28.11.2024 · Theaterhaus Stuttgart", partner: "Partner: BB Promotion" },
-    { image: "russ_live/references/25-scorpions.jpg", alt: "SCORPIONS", title: "SCORPIONS", date_location: "18.04.2023 · Stuttgart", partner: "Partner: Karsten Jahnke Konzertdirektion" },
-    { image: "russ_live/references/26-eric-clapton.jpg", alt: "ERIC CLAPTON", title: "ERIC CLAPTON", date_location: "21.05.2022 · Liederhalle Stuttgart", partner: "Partner: Live Nation" },
-    { image: "russ_live/references/27-zaz.jpg", alt: "ZAZ", title: "ZAZ", date_location: "29.06.2021 · Hanns-Martin-Schleyer-Halle", partner: "Partner: Wizart Promotion" },
-    { image: "russ_live/references/28-howard-carpendale.jpg", alt: "HOWARD CARPENDALE", title: "HOWARD CARPENDALE", date_location: "13.07.2020 · Porsche-Arena Stuttgart", partner: "Partner: SKS Michael Russ" },
-    { image: "russ_live/references/29-kiss.jpg", alt: "KISS", title: "KISS", date_location: "24.08.2026 · SpardaWelt Freilichtbühne", partner: "Partner: Semmel Concerts" },
-    { image: "russ_live/references/30-iron-maiden.jpg", alt: "IRON MAIDEN", title: "IRON MAIDEN", date_location: "05.09.2025 · Kultur- und Kongresszentrum", partner: "Partner: BB Promotion" },
-    { image: "russ_live/references/31-moderat.jpg", alt: "MODERAT", title: "MODERAT", date_location: "17.10.2024 · Schlossplatz Stuttgart", partner: "Partner: Karsten Jahnke Konzertdirektion" },
-    { image: "russ_live/references/32-stuttgart-live-festival.png", alt: "STUTTGART-LIVE FESTIVAL", title: "STUTTGART-LIVE FESTIVAL", date_location: "28.11.2023 · Theaterhaus Stuttgart", partner: "Partner: Live Nation" },
-    { image: "russ_live/references/33-kontra-k.jpg", alt: "KONTRA K", title: "KONTRA K", date_location: "18.04.2022 · Stuttgart", partner: "Partner: Wizart Promotion" },
-    { image: "russ_live/references/34-volbeat.jpg", alt: "VOLBEAT", title: "VOLBEAT", date_location: "21.05.2021 · Liederhalle Stuttgart", partner: "Partner: SKS Michael Russ" },
-    { image: "russ_live/references/35-stuttgart-live-festival.png", alt: "Stuttgart-live Festival", title: "Stuttgart-live Festival", date_location: "29.06.2020 · Hanns-Martin-Schleyer-Halle", partner: "Partner: Semmel Concerts" },
-    { image: "russ_live/references/36-wwe-live.jpg", alt: "WWE LIVE", title: "WWE LIVE", date_location: "13.07.2026 · Porsche-Arena Stuttgart", partner: "Partner: BB Promotion" },
-    { image: "russ_live/references/37-kultur-im-alten-schloss.jpg", alt: "Kultur IM ALTEN SCHLOSS", title: "Kultur IM ALTEN SCHLOSS", date_location: "24.08.2025 · SpardaWelt Freilichtbühne", partner: "Partner: Karsten Jahnke Konzertdirektion" },
-    { image: "russ_live/references/38-live-sommer-autokonzerte-fuer-den-sueden.jpg", alt: "Live Sommer - Autokonzerte für den Süden", title: "Live Sommer - Autokonzerte für den Süden", date_location: "05.09.2024 · Kultur- und Kongresszentrum", partner: "Partner: Live Nation" }
-  ].freeze
-
   HOME_EVENTS_PER_PAGE = 10
   STUTTGART_LIVE_SKS_HIGHLIGHTS_URL = "https://www.stuttgart-live.de/highlights?filter=sks".freeze
 
@@ -236,7 +195,7 @@ class PagesController < ApplicationController
   before_action :set_page_meta, except: :homepage_lane
 
   def home
-    @home_references = Reference.published.with_image.ordered.to_a.presence || HOME_REFERENCES
+    @home_references = Reference.published.with_image.ordered.to_a.select { |reference| reference.reference_image&.image? }
     @home_events_page = home_events_page
     @home_events = @home_events_page.events
     @home_events_next_cursor = @home_events_page.next_cursor

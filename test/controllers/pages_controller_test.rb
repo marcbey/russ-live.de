@@ -33,6 +33,22 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "homepage omits reference slider without published references with images" do
+    Reference.create!(
+      title: "Referenz ohne Bild",
+      starts_on: Date.new(2026, 5, 1),
+      location: "Stuttgart",
+      status: "published"
+    )
+
+    get root_path
+
+    assert_response :success
+    assert_not_includes response.body, "home-references-band"
+    assert_not_includes response.body, "Referenz ohne Bild"
+    assert_not_includes response.body, "DISGUSTING FOOD MUSEUM"
+  end
+
   test "renders reference image crop and zoom styles on public reference surfaces" do
     reference = Reference.create!(
       title: "NEIL YOUNG",
