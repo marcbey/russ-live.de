@@ -8,6 +8,13 @@
   --signal: #111111;
   --gold: #b8842d;
   --panel: #ffffff;
+  --backend-bg: #f5f2ec;
+  --backend-bg-sticky: rgba(245, 242, 236, .94);
+  --backend-panel: rgba(255, 255, 255, .9);
+  --backend-panel-strong: rgba(255, 255, 255, .96);
+  --backend-focus: rgba(17, 17, 17, .16);
+  --danger: #b42318;
+  --danger-hover: #8f1d14;
   --max: 1440px;
   --reference-max: 1760px;
   --header-nav-height: 72px;
@@ -2287,7 +2294,7 @@ h3 {
 }
 
 .flash-alert {
-  border-color: #b42318;
+  border-color: var(--danger);
 }
 
 .flash-notice {
@@ -2338,28 +2345,9 @@ h3 {
   gap: 18px;
 }
 
-.auth-label {
-  display: block;
-  font-size: .82rem;
-  font-weight: 650;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-}
-
-.auth-input {
-  appearance: none;
-  background: #f8f7f4;
-  border: 1px solid var(--line);
-  color: var(--ink);
-  font: inherit;
+.auth-form .form-input {
   min-height: 54px;
-  padding: 0 15px;
-  width: 100%;
-}
-
-.auth-input:focus-visible {
-  border-color: var(--ink);
-  outline: 2px solid rgba(17, 17, 17, .16);
+  padding-inline: 15px;
 }
 
 .auth-actions {
@@ -2390,7 +2378,7 @@ h3 {
 }
 
 .backend-shell {
-  background: #f5f2ec;
+  background: var(--backend-bg);
   color: var(--ink);
   display: flex;
   flex-direction: column;
@@ -2410,7 +2398,7 @@ h3 {
 }
 
 .backend-topbar-sticky {
-  background: rgba(245, 242, 236, .94);
+  background: var(--backend-bg-sticky);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -2449,15 +2437,15 @@ h3 {
 }
 
 .button-danger {
-  background: #b42318;
-  border-color: #b42318;
+  background: var(--danger);
+  border-color: var(--danger);
   color: #fff;
 }
 
 .button-danger:hover,
 .button-danger:focus-visible {
-  background: #8f1d14;
-  border-color: #8f1d14;
+  background: var(--danger-hover);
+  border-color: var(--danger-hover);
   color: #fff;
 }
 
@@ -2496,7 +2484,7 @@ h3 {
 
 .backend-list-toolbar {
   align-self: start;
-  background: #f5f2ec;
+  background: var(--backend-bg);
   display: grid;
   gap: 0;
   z-index: 4;
@@ -2537,7 +2525,7 @@ h3 {
 .editor-panel,
 .backend-section,
 .empty-state {
-  background: rgba(255, 255, 255, .9);
+  background: var(--backend-panel);
   border: 1px solid var(--line);
 }
 
@@ -2564,7 +2552,7 @@ h3 {
   grid-column: 1 / -1;
 }
 
-.filter-date-wrap {
+.filter-control {
   position: relative;
 }
 
@@ -2572,7 +2560,7 @@ h3 {
   padding-right: 44px;
 }
 
-.filter-date-clear {
+.filter-clear {
   align-items: center;
   appearance: none;
   background: transparent;
@@ -2589,8 +2577,12 @@ h3 {
   width: 36px;
 }
 
-.filter-date-clear-visible {
+.filter-clear.is-visible {
   display: inline-flex;
+}
+
+.form-field {
+  min-width: 0;
 }
 
 .form-label {
@@ -2622,7 +2614,7 @@ h3 {
 .form-textarea:focus-visible,
 .form-range:focus-visible {
   border-color: var(--ink);
-  outline: 2px solid rgba(17, 17, 17, .16);
+  outline: 2px solid var(--backend-focus);
 }
 
 .form-checkbox {
@@ -2649,7 +2641,7 @@ h3 {
 }
 
 .backend-reference-list-item {
-  background: rgba(255, 255, 255, .9);
+  background: var(--backend-panel);
   border: 1px solid var(--line);
   display: grid;
   gap: 5px;
@@ -2690,7 +2682,7 @@ h3 {
 
 .editor-tabs {
   align-items: stretch;
-  background: rgba(255, 255, 255, .96);
+  background: var(--backend-panel-strong);
   border-bottom: 1px solid var(--line);
   display: flex;
   justify-content: space-between;
@@ -2837,6 +2829,7 @@ h3 {
   position: absolute;
 }
 
+.form-hint,
 .event-image-crop-hint {
   color: var(--muted);
   font-size: .88rem;
@@ -4198,6 +4191,44 @@ h3 {
     scroll-padding-top: calc(var(--mobile-header-height) + var(--services-jump-height));
   }
 
+  .backend-shell {
+    height: auto;
+    min-height: 100svh;
+    overflow: visible;
+    padding-bottom: 24px;
+  }
+
+  .backend-topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .backend-topbar-actions,
+  .editor-actions,
+  .editor-danger-actions {
+    width: 100%;
+  }
+
+  .backend-split {
+    grid-template-columns: 1fr;
+  }
+
+  .backend-list-column,
+  .backend-editor-column {
+    height: auto;
+    overflow: visible;
+  }
+
+  .backend-reference-list-scroll {
+    max-height: 42svh;
+  }
+
+  .editor-grid,
+  .filter-grid,
+  .event-image-crop-editor {
+    grid-template-columns: 1fr;
+  }
+
   .site-header {
     align-items: center;
     background: #fff;
@@ -5044,6 +5075,42 @@ h3 {
   h1 {
     font-size: 2.35rem;
     max-width: 100%;
+  }
+
+  .auth-shell {
+    padding: 18px;
+  }
+
+  .auth-panel {
+    padding: 22px;
+  }
+
+  .auth-actions,
+  .backend-topbar-actions,
+  .editor-tabs,
+  .editor-tabs-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .auth-actions .button,
+  .backend-topbar-actions .button,
+  .editor-tabs-actions .button,
+  .editor-tabs-actions form {
+    width: 100%;
+  }
+
+  .editor-tab-list {
+    width: 100%;
+  }
+
+  .editor-tab {
+    flex: 1 1 0;
+    justify-content: center;
+  }
+
+  .filter-form {
+    height: auto;
   }
 
   .reference-detail-title {

@@ -17,31 +17,32 @@
   <div class="backend-split backend-inbox-split">
     <aside class="backend-list-column">
       <div class="backend-list-toolbar">
-        <div class="backend-status-row">
+        <nav class="backend-status-row" aria-label="Referenzen nach Status filtern">
           <% Backend::ReferencesController::FILTERS.each do |filter| %>
             <% label = { "all" => "Alle", "draft" => "Entwürfe", "published" => "Veröffentlicht" }.fetch(filter) %>
             <%= link_to label,
                         backend_references_path(status: (filter unless filter == "all"), query: @query_filter),
-                        class: "status-chip #{'status-chip-active' if @status_filter == filter}" %>
+                        class: "status-chip #{'status-chip-active' if @status_filter == filter}",
+                        aria: { current: ("page" if @status_filter == filter) } %>
           <% end %>
-        </div>
+        </nav>
 
-        <%= form_with url: backend_references_path, method: :get, class: "filter-form", data: { turbo: false } do |form| %>
+        <%= form_with url: backend_references_path, method: :get, class: "filter-form", data: { turbo: false, controller: "filter-clear" } do |form| %>
           <%= form.hidden_field :status, value: (@status_filter unless @status_filter == "all") %>
           <div class="filter-grid">
             <div class="filter-search-field filter-search-field-full">
               <%= form.label :query, "Suche", class: "form-label" %>
-              <div class="filter-date-wrap">
+              <div class="filter-control">
                 <%= form.text_field :query,
                                     value: @query_filter,
                                     placeholder: "Titel, Ort, Produktion",
                                     class: "form-input filter-input-with-clear",
-                                    oninput: "this.nextElementSibling.classList.toggle('filter-date-clear-visible', this.value.length > 0)" %>
+                                    data: { filter_clear_target: "input", action: "input->filter-clear#toggle" } %>
                 <%= button_tag "×",
                                type: "button",
-                               class: "filter-date-clear filter-input-clear #{'filter-date-clear-visible' if @query_filter.present?}",
+                               class: "filter-clear filter-input-clear #{'is-visible' if @query_filter.present?}",
                                aria: { label: "Suche löschen" },
-                               onclick: "this.previousElementSibling.value=''; this.classList.remove('filter-date-clear-visible'); this.form.requestSubmit();" %>
+                               data: { filter_clear_target: "clear", action: "filter-clear#clear" } %>
               </div>
             </div>
           </div>

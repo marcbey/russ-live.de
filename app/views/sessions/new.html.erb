@@ -7,25 +7,25 @@
     </div>
 
     <%= form_with url: session_path, class: "auth-form" do |form| %>
-      <div>
-        <%= form.label :email_address, "E-Mail", class: "auth-label" %>
+      <div class="form-field">
+        <%= form.label :email_address, "E-Mail", class: "form-label" %>
         <%= form.email_field :email_address,
                              required: true,
                              autofocus: true,
                              autocomplete: "username",
                              placeholder: "name@example.com",
                              value: params[:email_address],
-                             class: "auth-input" %>
+                             class: "form-input" %>
       </div>
 
-      <div>
-        <%= form.label :password, "Passwort", class: "auth-label" %>
+      <div class="form-field">
+        <%= form.label :password, "Passwort", class: "form-label" %>
         <%= form.password_field :password,
                                 required: true,
                                 autocomplete: "current-password",
                                 placeholder: "Passwort",
                                 maxlength: 72,
-                                class: "auth-input" %>
+                                class: "form-input" %>
       </div>
 
       <div class="auth-actions">

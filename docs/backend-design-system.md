@@ -48,7 +48,7 @@ Login und Backend-Startseite nutzen die Auth-Shell:
 - `auth-body` setzt Keyvisual-Hintergrund mit heller Überlagerung.
 - `auth-shell` zentriert die Oberfläche im Viewport.
 - `auth-panel` ist ein einzelnes, helles Panel mit klarer Hierarchie.
-- `auth-form`, `auth-label`, `auth-input` und `auth-actions` bilden das Formularsystem für Login-ähnliche Screens.
+- `auth-form` und `auth-actions` strukturieren Login-ähnliche Screens; Labels und Felder nutzen das allgemeine Formularsystem mit `form-label` und `form-input`.
 
 Neue Auth-Ansichten sollen dieses Muster verwenden, solange sie eine fokussierte Aufgabe wie Login, Zugang oder Statusmeldung darstellen.
 
@@ -124,7 +124,7 @@ Standardklassen:
 
 Formulare sind zweispaltig, solange genügend Breite vorhanden ist. Lange Felder wie Beschreibung, Tags oder breite Suchfelder verwenden die volle Breite. Labels stehen immer oberhalb des Felds und bleiben kurz.
 
-Hilfetexte verwenden aktuell `event-image-crop-hint`; bei neuen allgemeinen Hilfetexten sollte diese Rolle entweder wiederverwendet oder in eine neutralere Klasse überführt werden, ohne das visuelle Muster zu ändern.
+Allgemeine Hilfetexte verwenden `form-hint`. Bildeditor-spezifische Hinweise verwenden weiter `event-image-crop-hint`, teilen sich aber dieselbe visuelle Sprache.
 
 Fehlerblöcke verwenden `form-errors`. Sie stehen direkt im Formular, nennen zuerst die Aufgabe und listen dann konkrete Validierungsfehler.
 
@@ -134,12 +134,12 @@ Such- und Filterformulare verwenden:
 
 - `filter-form`
 - `filter-grid`
-- `filter-date-wrap`
+- `filter-control`
 - `filter-input-with-clear`
-- `filter-date-clear`
-- `filter-date-clear-visible`
+- `filter-clear`
+- `filter-clear.is-visible`
 
-Clear Controls müssen per Tastatur erreichbar sein und ein `aria-label` besitzen. Inline-JavaScript existiert aktuell in der Referenzen-Suche; neue komplexere Interaktionen sollen als Stimulus-Controller umgesetzt werden.
+Clear Controls müssen per Tastatur erreichbar sein und ein `aria-label` besitzen. Zustandswechsel laufen über Stimulus, damit Markup und Verhalten nicht durch Inline-JavaScript gekoppelt werden.
 
 ### Bildeditor
 
