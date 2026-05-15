@@ -1,7 +1,12 @@
-<main class="page-main job-page" data-controller="job-filter">
-  <section class="section job-overview-hero" aria-labelledby="jobs-title">
+<main id="main-content" class="page-main public-page job-page" tabindex="-1" data-controller="job-filter">
+  <section class="public-hero public-hero-dark section job-overview-hero" aria-labelledby="jobs-title">
     <div class="job-overview-hero-media">
-      <%= image_tag @job_overview_hero_image, alt: "Backstage-Moment mit Russ Live Crew vor einer beleuchteten Bühne" %>
+      <%= image_tag @job_overview_hero_image,
+                    alt: "Backstage-Moment mit Russ Live Crew vor einer beleuchteten Bühne",
+                    width: 2565,
+                    height: 1067,
+                    decoding: "async",
+                    fetchpriority: "high" %>
     </div>
 
     <div class="job-overview-hero-copy">
@@ -9,7 +14,7 @@
       <p>Flexible Jobs bei Konzerten, Festivals und Events in Stuttgart.</p>
     </div>
     <% if @job_categories.any? %>
-      <nav class="job-category-filter-nav" aria-label="Jobs nach Bereichen filtern">
+      <nav class="public-filter-nav job-category-filter-nav" aria-label="Jobs nach Bereichen filtern">
         <button type="button" data-job-category="all" aria-pressed="true">Alle</button>
         <% @job_categories.each do |job_category| %>
           <button type="button" data-job-category="<%= Job.category_slug(job_category) %>" aria-pressed="false"><%= job_category %></button>
@@ -18,14 +23,14 @@
     <% end %>
   </section>
 
-  <section class="section job-overview-listing" id="jobs-list" aria-labelledby="jobs-list-title">
+  <section class="public-section section job-overview-listing" id="jobs-list" aria-labelledby="jobs-list-title">
     <div class="job-overview-heading">
       <div>
         <h2 id="jobs-list-title">Unsere aktuellen Jobangebote</h2>
       </div>
     </div>
 
-    <div class="job-table" role="table" aria-label="Jobangebote">
+    <div class="public-directory job-table" role="table" aria-label="Jobangebote">
       <div class="job-table-row job-table-row-head" role="row">
         <span role="columnheader">Position</span>
         <span role="columnheader">Bereich</span>
@@ -34,7 +39,7 @@
       </div>
 
       <% @jobs.each do |job| %>
-        <%= link_to job_path(job.slug), class: "job-table-row", role: "row", data: { job_categories: job.category_slugs.join(" ") } do %>
+        <%= link_to job_path(job.slug), class: "public-card job-table-row", role: "row", data: { job_categories: job.category_slugs.join(" ") } do %>
           <span class="job-table-position" role="cell">
             <strong><%= job.title %></strong>
             <% if job.badge.present? %>
@@ -55,10 +60,15 @@
     <% end %>
   </section>
 
-  <section class="section job-story-grid" id="jobs-story" aria-label="Einblicke in die Arbeitswelt">
+  <section class="public-section section job-story-grid" id="jobs-story" aria-label="Einblicke in die Arbeitswelt">
     <article class="job-story-card">
       <figure class="job-story-image">
-        <%= image_tag "russ_live/jobs/stage-before.jpg", alt: "Bühnenaufbau mit Traversen, Cases und Technik vor einem Event" %>
+        <%= image_tag "russ_live/jobs/stage-before.jpg",
+                      alt: "Bühnenaufbau mit Traversen, Cases und Technik vor einem Event",
+                      loading: "lazy",
+                      decoding: "async",
+                      width: 3827,
+                      height: 2554 %>
       </figure>
       <div class="job-story-copy">
         <p class="eyebrow">Einzigartige Momente</p>
@@ -74,7 +84,12 @@
         <p>Wir arbeiten mit Leidenschaft, packen gemeinsam an und schaffen Events, die in Erinnerung bleiben.</p>
       </div>
       <figure class="job-story-band-visual">
-        <%= image_tag "russ_live/jobs/people-enjoying-music-concert.jpg", alt: "Publikum bei einem Konzert mit erhobenen Händen" %>
+        <%= image_tag "russ_live/jobs/people-enjoying-music-concert.jpg",
+                      alt: "Publikum bei einem Konzert mit erhobenen Händen",
+                      loading: "lazy",
+                      decoding: "async",
+                      width: 4200,
+                      height: 2787 %>
       </figure>
     </article>
 

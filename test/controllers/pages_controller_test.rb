@@ -131,7 +131,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get referenzen_path
 
     assert_response :success
-    assert_includes response.body, 'class="references-filter-nav"'
+    assert_includes response.body, 'class="public-filter-nav references-filter-nav"'
     assert_includes response.body, 'data-reference-tag="all"'
     assert_includes response.body, 'data-reference-tag="open-air"'
     assert_includes response.body, 'data-reference-tag="clubkonzert"'
@@ -172,7 +172,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get jobs_path
 
     assert_response :success
-    assert_includes response.body, 'class="job-category-filter-nav"'
+    assert_includes response.body, 'class="public-filter-nav job-category-filter-nav"'
     assert_includes response.body, 'data-job-category="catering"'
     assert_includes response.body, 'data-job-categories="catering"'
     assert_not_includes response.body, "Intern"

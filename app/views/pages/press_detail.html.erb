@@ -1,14 +1,14 @@
-<main class="page-main press-detail-page">
-  <section class="section press-detail-hero" aria-labelledby="press-detail-title">
+<main id="main-content" class="page-main public-page press-detail-page" tabindex="-1">
+  <section class="public-hero public-hero-detail section press-detail-hero" aria-labelledby="press-detail-title">
     <div class="press-detail-copy">
       <%= link_to "Zur Presseübersicht", presse_path, class: "press-back-link" %>
       <p class="eyebrow">Pressemappe</p>
       <h1 id="press-detail-title"><%= @press_artist.name %></h1>
       <p>Pressetext, Bildmaterial und Veranstaltungsdaten zu <%= @press_artist.name %>.</p>
       <div class="press-detail-actions">
-        <a class="section-button" href="<%= @press_artist.ticket_url %>" target="_blank" rel="noreferrer">Tickets</a>
+        <a class="public-button public-button-primary section-button" href="<%= @press_artist.ticket_url %>" target="_blank" rel="noreferrer">Tickets</a>
         <% if @press_artist.gallery_images.any? %>
-          <%= link_to "Pressemappe downloaden", press_artist_download_path(@press_artist.slug), class: "press-outline-button", data: { turbo: false } %>
+          <%= link_to "Pressemappe downloaden", press_artist_download_path(@press_artist.slug), class: "public-button public-button-outline press-outline-button", data: { turbo: false } %>
         <% end %>
       </div>
     </div>
@@ -17,19 +17,22 @@
       <% if hero_image.is_a?(EventImage) %>
         <picture>
           <source media="(max-width: 700px)" srcset="<%= url_for hero_image.press_variant(:hero_mobile) %>">
-          <%= image_tag hero_image.press_variant(:hero_desktop), alt: hero_image.alt_text.presence || "#{@press_artist.name} Pressefoto" %>
+          <%= image_tag hero_image.press_variant(:hero_desktop),
+                        alt: hero_image.alt_text.presence || "#{@press_artist.name} Pressefoto",
+                        decoding: "async",
+                        fetchpriority: "high" %>
         </picture>
         <% if hero_image.sub_text.present? %>
           <figcaption><%= hero_image.sub_text %></figcaption>
         <% end %>
       <% else %>
-        <%= image_tag hero_image, alt: "#{@press_artist.name} Pressefoto" %>
+        <%= image_tag hero_image, alt: "#{@press_artist.name} Pressefoto", decoding: "async", fetchpriority: "high" %>
       <% end %>
     </figure>
   </section>
 
-  <section class="section press-detail-content" aria-label="Presseinformationen">
-    <aside class="press-event-panel">
+  <section class="public-section section press-detail-content" aria-label="Presseinformationen">
+    <aside class="public-card press-event-panel">
       <p class="eyebrow">Veranstaltung</p>
       <dl>
         <% primary_event = @press_artist.primary_event %>
@@ -51,7 +54,7 @@
         <% end %>
       </dl>
     </aside>
-    <article class="press-text-panel">
+    <article class="public-card press-text-panel">
       <p class="eyebrow">Pressetext</p>
       <h2><%= @press_artist.name %></h2>
       <% if @press_artist.press_body.present? %>
@@ -64,15 +67,15 @@
   </section>
 
   <% if @press_artist.gallery_images.any? %>
-    <section class="section press-downloads" id="downloads" aria-labelledby="press-download-title" data-controller="press-lightbox">
+    <section class="public-section section press-downloads" id="downloads" aria-labelledby="press-download-title" data-controller="press-lightbox">
       <div class="press-directory-head">
         <div>
           <p class="eyebrow">Downloads</p>
           <h2 id="press-download-title">Bildergalerie</h2>
         </div>
-        <%= link_to "Pressemappe downloaden", press_artist_download_path(@press_artist.slug), class: "section-button", data: { turbo: false } %>
+        <%= link_to "Pressemappe downloaden", press_artist_download_path(@press_artist.slug), class: "public-button public-button-primary section-button", data: { turbo: false } %>
       </div>
-      <div class="press-gallery" data-press-gallery>
+      <div class="public-media-grid press-gallery" data-press-gallery>
         <% @press_artist.gallery_images.each_with_index do |image, index| %>
           <% label = image.alt_text.presence || "Pressefoto #{@press_artist.name} #{index + 1}" %>
           <% download_url = rails_blob_path(image.file, disposition: "attachment") %>
@@ -80,7 +83,7 @@
             <button type="button" data-press-lightbox-target="trigger" data-lightbox-src="<%= url_for image.press_variant(:hero_desktop) %>" data-lightbox-download="<%= download_url %>" data-lightbox-alt="<%= label %>" data-action="press-lightbox#open">
               <picture>
                 <source media="(max-width: 700px)" srcset="<%= url_for image.press_variant(:gallery_mobile) %>">
-                <%= image_tag image.press_variant(:gallery_desktop), alt: label, loading: "lazy" %>
+                <%= image_tag image.press_variant(:gallery_desktop), alt: label, loading: "lazy", decoding: "async" %>
               </picture>
             </button>
             <figcaption><span><%= label %></span><%= link_to "Bild downloaden", download_url, download: true %></figcaption>

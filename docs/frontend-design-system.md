@@ -103,6 +103,15 @@ Konsolidierungsziele für spätere Refactors:
 - Card-Muster mit gemeinsamen Regeln für Bild, Copy, Linkfläche, Fokus und Empty State zusammenführen.
 - Slider-Controls und Meta-Anzeigen angleichen und Tastaturzustände robuster machen.
 
+## Sticky Header
+
+- Der Public-Header ist auf allen öffentlichen Seiten sticky/fixed vorhanden, inklusive Home und Jobs.
+- Seiten mit dunklem Hero verwenden vor dem Scrollen einen transparenten Header mit weißem Logo und weißer Navigation. Aktuell gilt das für Home, Services und Jobs.
+- Beim Scrollen wechselt der Header in den hellen Standardzustand: weißer Hintergrund, dunkles Logo, dunkle Navigation und stabile Höhe.
+- Normale Inhaltsseiten behalten genügend Top-Padding, damit der fixed Header keine Inhalte verdeckt. Full-bleed-Hero-Seiten starten dagegen unter dem transparenten Header bei `y=0`.
+- Mobile verwendet denselben Zustandsgedanken: transparenter Header auf Hero-Seiten bis zum Scrollen, danach weißer Header mit dunklem Burger und Logo.
+- Neue Public-Seiten müssen vor der Auslieferung in beiden Header-Zuständen geprüft werden: initialer Hero-Zustand, gescrollter Sticky-Zustand, Mobile-Menü offen und Mobile-Menü geschlossen.
+
 ## Performance
 
 Ziel ist Lighthouse-Grün ohne visuelle Verwässerung.

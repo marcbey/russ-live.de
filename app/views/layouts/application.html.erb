@@ -27,6 +27,7 @@
   </head>
 
   <body class="<%= content_for(:body_class) || @page_meta&.fetch(:body_class, nil) %>" data-controller="smooth-anchor">
+    <%= link_to "Zum Inhalt springen", "#main-content", class: "skip-link" if @page_key.present? %>
     <%= render "shared/public_header" if @page_key.present? %>
     <%= render "layouts/flash_messages" %>
     <%= yield %>

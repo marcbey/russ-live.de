@@ -1,8 +1,12 @@
-<main class="page-main job-page">
-  <section class="section job-template-hero" aria-labelledby="job-title">
+<main id="main-content" class="page-main public-page job-page" tabindex="-1">
+  <section class="public-hero public-hero-dark section job-template-hero" aria-labelledby="job-title">
     <div class="job-template-hero-media">
       <%= image_tag job_image_source(@selected_job.job_image) || image_path("russ_live/jobs/cateringhilfen.jpg"),
-                    alt: @selected_job.job_image&.display_alt_text || @selected_job.title %>
+                    alt: @selected_job.job_image&.display_alt_text || @selected_job.title,
+                    width: 6144,
+                    height: 3456,
+                    decoding: "async",
+                    fetchpriority: "high" %>
     </div>
 
     <div class="job-template-hero-copy">
@@ -10,14 +14,14 @@
       <p><%= @selected_job.employment %></p>
       <div class="job-overview-hero-actions">
         <% if @selected_job.join_recruiting_url.present? %>
-          <%= link_to "Jetzt bewerben", @selected_job.join_recruiting_url, class: "section-button", target: "_blank", rel: "noopener" %>
+          <%= link_to "Jetzt bewerben", @selected_job.join_recruiting_url, class: "public-button public-button-primary section-button", target: "_blank", rel: "noopener noreferrer" %>
         <% end %>
-        <%= link_to "Zur Übersicht", jobs_path, class: "section-button section-button-outline-light" %>
+        <%= link_to "Zur Übersicht", jobs_path, class: "public-button public-button-outline section-button section-button-outline-light" %>
       </div>
     </div>
   </section>
 
-  <section class="section job-detail" id="job-detail" aria-label="<%= @selected_job.detail_label %>">
+  <section class="public-section section job-detail" id="job-detail" aria-label="<%= @selected_job.detail_label %>">
     <article class="job-content">
       <div class="job-detail-hero" id="<%= @selected_job.detail_id %>">
         <p><%= @selected_job.intro %></p>
@@ -44,22 +48,26 @@
       <div class="job-apply">
         <h2>Wir freuen uns auf Deine Bewerbung!</h2>
         <% if @selected_job.join_recruiting_url.present? %>
-          <%= link_to "Jetzt bewerben", @selected_job.join_recruiting_url, class: "section-button", target: "_blank", rel: "noopener" %>
+          <%= link_to "Jetzt bewerben", @selected_job.join_recruiting_url, class: "public-button public-button-primary section-button", target: "_blank", rel: "noopener noreferrer" %>
         <% elsif @selected_job.contact&.email.present? %>
           <%= mail_to @selected_job.contact.email,
                       @selected_job.contact.email,
                       subject: @selected_job.application_email_subject,
-                      class: "section-button" %>
+                      class: "public-button public-button-primary section-button" %>
         <% end %>
       </div>
     </article>
 
     <% if @selected_job.contact.present? %>
       <aside class="job-sidebar" aria-label="Ansprechpartner">
-        <div class="job-contact">
+        <div class="public-contact-card job-contact">
           <p class="eyebrow">Ansprechpartner</p>
           <%= image_tag contact_image_source(@selected_job.contact.contact_image) || image_path("russ_live/team/sebastian-kraenzlein.jpg"),
-                        alt: @selected_job.contact.contact_image&.display_alt_text || @selected_job.contact.name %>
+                        alt: @selected_job.contact.contact_image&.display_alt_text || @selected_job.contact.name,
+                        loading: "lazy",
+                        decoding: "async",
+                        width: 1024,
+                        height: 1024 %>
           <h2><%= @selected_job.contact.name %></h2>
           <p><%= @selected_job.contact.role %></p>
           <p><a href="tel:<%= @selected_job.contact.tel_href %>"><%= @selected_job.contact.phone_number %></a></p>

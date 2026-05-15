@@ -1,5 +1,5 @@
-<main class="page-main press-page" data-controller="press-search">
-  <section class="press-hero" aria-labelledby="press-title">
+<main id="main-content" class="page-main public-page press-page" tabindex="-1" data-controller="press-search">
+  <section class="public-hero public-hero-editorial press-hero" aria-labelledby="press-title">
     <div class="press-hero-copy">
       <p class="eyebrow">Presse</p>
       <h1 id="press-title">Presseinfos für Partner und Medien.</h1>
@@ -14,7 +14,7 @@
     </form>
   </section>
 
-  <section class="section press-directory" aria-labelledby="press-directory-title">
+  <section class="public-section section press-directory" aria-labelledby="press-directory-title">
     <div class="press-directory-head">
       <div>
         <p class="eyebrow">Übersicht</p>
@@ -23,13 +23,13 @@
       <p data-press-search-target="count"><%= @press_artist_count %> <%= @press_artist_count == 1 ? "Presseeintrag" : "Presseeinträge" %></p>
     </div>
 
-    <div class="press-letter-grid" data-press-directory>
+    <div class="public-directory press-letter-grid" data-press-directory>
       <% @press_artist_groups.each do |letter, artists| %>
         <section class="press-letter-group" data-letter-group data-press-search-target="group">
           <h3><%= letter %></h3>
           <div class="press-artist-list">
             <% artists.each do |artist| %>
-              <%= link_to press_artist_path(artist.slug), class: "press-artist-card", data: { press_search_target: "card", artist_name: artist.name } do %>
+              <%= link_to press_artist_path(artist.slug), class: "public-card press-artist-card", data: { press_search_target: "card", artist_name: artist.name } do %>
                 <span><%= artist.name %></span>
               <% end %>
             <% end %>
@@ -40,14 +40,14 @@
     <p class="press-empty" data-press-search-target="empty" hidden>Kein Künstler gefunden.</p>
   </section>
 
-  <section class="section press-contact-strip" aria-labelledby="press-contact-title">
+  <section class="public-section section press-contact-strip" aria-labelledby="press-contact-title">
     <div>
       <p class="eyebrow">Ansprechpartner</p>
       <h2 id="press-contact-title">Pressekontakt</h2>
       <p>Für Interview-, Akkreditierungs- und Materialanfragen ist der Pressebereich direkt vorbereitet.</p>
     </div>
-    <article class="press-contact-card">
-      <%= image_tag "russ_live/team/arnulf-woock.jpg", alt: "Arnulf Woock", loading: "lazy" %>
+    <article class="public-contact-card press-contact-card">
+      <%= image_tag "russ_live/team/arnulf-woock.jpg", alt: "Arnulf Woock", loading: "lazy", decoding: "async", width: 600, height: 600 %>
       <div>
         <h3>Arnulf Woock</h3>
         <p>Presse- &amp; Öffentlichkeitsarbeit</p>

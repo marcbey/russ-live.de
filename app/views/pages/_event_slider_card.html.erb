@@ -11,7 +11,7 @@
     ticket_offer&.ticket_price_text.to_s.presence
   end %>
 
-<article class="event-slider-card" data-events-slider-target="card">
+<article class="public-card event-slider-card" data-events-slider-target="card">
   <figure class="event-slider-image">
     <% if image_source.present? %>
       <img src="<%= image_source %>" alt="<%= image_alt %>" loading="lazy" decoding="async" width="500" height="515">
@@ -33,7 +33,7 @@
     <% if ticket_status_label.present? %>
       <span class="event-slider-status"><%= ticket_status_label %></span>
     <% else %>
-      <a class="event-slider-button" href="<%= event.public_ticket_url %>" target="_blank" rel="noreferrer">Tickets</a>
+      <a class="public-button public-button-primary event-slider-button" href="<%= event.public_ticket_url %>" target="_blank" rel="noreferrer">Tickets</a>
     <% end %>
   </div>
 </article>

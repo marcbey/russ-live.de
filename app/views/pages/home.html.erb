@@ -1,17 +1,22 @@
-<main class="">
-      <section class="home-hero" aria-labelledby="hero-title">
+<main id="main-content" class="page-main public-page home-page" tabindex="-1">
+      <section class="public-hero public-hero-dark home-hero" aria-labelledby="hero-title">
         <picture class="home-hero-media">
           <source media="(max-width: 900px)" srcset="<%= image_path "russ_live/keyvisuals/Keyvisual_RussLive_hoch_mobil.jpg" %>">
-          <%= image_tag "russ_live/keyvisuals/Keyvisual_RussLive2.jpg", alt: "Goldene Gitarre als Russ Live Keyvisual" %>
+          <%= image_tag "russ_live/keyvisuals/Keyvisual_RussLive2.jpg",
+                        alt: "Goldene Gitarre als Russ Live Keyvisual",
+                        width: 9921,
+                        height: 6260,
+                        decoding: "async",
+                        fetchpriority: "high" %>
         </picture>
         <div class="home-hero-copy">
           <h1 id="hero-title"><span>Live</span><span>Enter</span><span>Tainment</span></h1>
           <p id="hero-intro">Ihr örtlicher Veranstalter für Stuttgart. Im Blick haben wir dabei immer die Künstler und das Publikum zugleich – so schaffen wir einzigartige emotionale Momente für bis zu 1 Million Besucher – jedes Jahr.</p>
-          <a class="hero-button home-hero-button" href="#services" data-anchor-position="flush">Services</a>
+          <a class="public-button public-button-primary hero-button home-hero-button" href="#services" data-anchor-position="flush">Services</a>
         </div>
       </section>
 
-      <section class="section services-preview" id="services" aria-labelledby="services-title">
+      <section class="public-section section services-preview" id="services" aria-labelledby="services-title">
         <div class="section-aside">
           <p class="eyebrow">Live Entertainment</p>
           <h2 id="services-title">Full service für Veranstaltungen</h2>
@@ -84,12 +89,12 @@
               </div>
             </article>
           </div>
-          <a class="section-button" href="<%= services_path %>">Services</a>
+          <a class="public-button public-button-primary section-button" href="<%= services_path %>">Services</a>
         </div>
       </section>
 
       <% if @home_references.any? %>
-        <section class="section references-band home-references-band" id="referenzen" aria-labelledby="references-title">
+        <section class="public-section section references-band home-references-band" id="referenzen" aria-labelledby="references-title">
           <div class="section-head">
             <p class="eyebrow">Referenzen</p>
             <h2 id="references-title">Projekte, auf die wir stolz sind</h2>
@@ -118,6 +123,10 @@
                                  aria: { hidden: index.zero? ? "false" : "true", label: reference_data[:title] } do %>
                     <%= tag.img src: reference_data[:image],
                                 alt: reference_data[:alt],
+                                loading: "lazy",
+                                decoding: "async",
+                                width: reference_data.dig(:dimensions, :width),
+                                height: reference_data.dig(:dimensions, :height),
                                 style: reference_data[:image_style].presence,
                                 data: { reference_image_render_target: "image" } %>
                   <% end %>
@@ -133,14 +142,14 @@
                 <p class="klassik-slider-date-location"><%= first_reference_data[:date_location] %></p>
                 <p class="klassik-slider-partner"><%= first_reference_data[:partner] %></p>
               </div>
-              <a class="section-button klassik-slider-button" href="<%= referenzen_path %>">Referenzen</a>
+              <a class="public-button public-button-primary section-button klassik-slider-button" href="<%= referenzen_path %>">Referenzen</a>
             </div>
           </div>
         </section>
       <% end %>
 
       <% if @home_events.any? %>
-      <section class="section home-events" aria-labelledby="events-title" data-controller="events-slider" data-events-slider-url-value="<%= homepage_lane_events_path %>" data-events-slider-cursor-value="<%= @home_events_next_cursor %>">
+      <section class="public-section section home-events" aria-labelledby="events-title" data-controller="events-slider" data-events-slider-url-value="<%= homepage_lane_events_path %>" data-events-slider-cursor-value="<%= @home_events_next_cursor %>">
         <div class="section-head home-events-head">
           <div>
             <p class="eyebrow">Stuttgart-live</p>
@@ -152,7 +161,7 @@
               <button class="home-events-nav-button" type="button" data-action="events-slider#previous" aria-label="Vorherige Veranstaltungen">‹</button>
               <button class="home-events-nav-button" type="button" data-action="events-slider#next" aria-label="Nächste Veranstaltungen">›</button>
             </div>
-            <a class="button home-events-all-button" href="<%= @stuttgart_live_sks_highlights_url %>" target="_blank" rel="noreferrer">Alle anzeigen</a>
+            <a class="public-button public-button-primary button home-events-all-button" href="<%= @stuttgart_live_sks_highlights_url %>" target="_blank" rel="noreferrer">Alle anzeigen</a>
           </div>
         </div>
 
@@ -161,7 +170,7 @@
             <%= render "pages/event_slider_cards", events: @home_events %>
           </div>
         </div>
-        <a class="home-events-link" href="<%= @stuttgart_live_sks_highlights_url %>" target="_blank" rel="noreferrer">Alle Veranstaltungen auf Stuttgart-live.de</a>
+        <a class="public-text-link home-events-link" href="<%= @stuttgart_live_sks_highlights_url %>" target="_blank" rel="noreferrer">Alle Veranstaltungen auf Stuttgart-live.de</a>
       </section>
       <% end %>
     </main>

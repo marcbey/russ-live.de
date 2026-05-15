@@ -1,12 +1,19 @@
-<main class="page-main references-page" data-controller="reference-mosaic">
-  <section class="references-hero" aria-labelledby="references-title">
-    <div class="references-hero-media"><img src="<%= image_path "russ_live/keyvisuals/references-tropfen.png" %>" alt=""></div>
+<main id="main-content" class="page-main public-page references-page" tabindex="-1" data-controller="reference-mosaic">
+  <section class="public-hero public-hero-editorial references-hero" aria-labelledby="references-title">
+    <div class="references-hero-media">
+      <%= image_tag "russ_live/keyvisuals/references-tropfen.png",
+                    alt: "",
+                    width: 1523,
+                    height: 1148,
+                    decoding: "async",
+                    fetchpriority: "high" %>
+    </div>
     <div class="references-hero-copy">
       <p class="eyebrow">Referenzen</p>
       <h1 id="references-title">Projekte, Projekte, Projekte...</h1>
       <p>Konzerte, Shows und Kulturformate aus Stuttgart und der Region.</p>
     </div>
-    <nav class="references-filter-nav" aria-label="Referenzen nach Tags filtern">
+    <nav class="public-filter-nav references-filter-nav" aria-label="Referenzen nach Tags filtern">
       <button type="button" data-reference-tag="all" aria-pressed="true">Alle</button>
       <% @reference_tags.each do |reference_tag| %>
         <button type="button" data-reference-tag="<%= Reference.tag_slug(reference_tag) %>" aria-pressed="false"><%= reference_tag %></button>
@@ -14,7 +21,7 @@
     </nav>
   </section>
 
-  <section class="section references-band" aria-label="Referenzprojekte">
+  <section class="public-section section references-band" aria-label="Referenzprojekte">
     <% if @references.any? %>
       <div class="reference-grid reference-highlight-grid" data-layout="grid">
         <%= render partial: "pages/reference_card", collection: @references, as: :reference %>

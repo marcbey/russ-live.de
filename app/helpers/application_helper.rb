@@ -89,6 +89,7 @@ module ApplicationHelper
       partner: reference.production.present? ? "Partner: #{reference.production}" : "Referenz",
       image: reference_image_source(reference.reference_image),
       alt: reference.reference_image&.display_alt_text || reference.title,
+      dimensions: reference_card_dimensions(reference.reference_image),
       image_style: reference_image_style(reference.reference_image),
       image_render_data: reference_image_render_data(reference.reference_image)
     }
@@ -153,6 +154,7 @@ module ApplicationHelper
         partner: reference[:partner],
         image: image_path(reference[:image]),
         alt: reference[:alt],
+        dimensions: { width: 920, height: 400 },
         image_render_data: {}
       }
     end

@@ -15,10 +15,12 @@ class PagesController < ApplicationController
     },
     services: {
       title: "Services | Russ Live",
+      description: "Services von Russ Live: örtliche Durchführung, Produktion, Marketing, Personal und Ticketing für Live Entertainment in Stuttgart.",
       body_class: "services-body"
     },
     referenzen: {
       title: "Referenzen | Russ Live",
+      description: "Referenzen von Russ Live: Konzerte, Shows und Kulturformate aus Stuttgart und der Region.",
       body_class: "references-body"
     },
     jobs: {

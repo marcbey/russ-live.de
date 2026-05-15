@@ -5,6 +5,7 @@ class PressController < ApplicationController
 
   PAGE_META = {
     title: "Presse | Russ Live",
+    description: "Pressebereich von Russ Live mit Pressetexten, Bildmaterial und Veranstaltungsdaten für Medien und Partner.",
     body_class: "press-body"
   }.freeze
 
@@ -20,7 +21,10 @@ class PressController < ApplicationController
 
   def show
     @press_artist = find_press_artist!
-    @page_meta = PAGE_META.merge(title: "#{@press_artist.name} | Presse | Russ Live")
+    @page_meta = PAGE_META.merge(
+      title: "#{@press_artist.name} | Presse | Russ Live",
+      description: "Pressemappe zu #{@press_artist.name}: Pressetext, Bildmaterial und Veranstaltungsdaten von Russ Live."
+    )
 
     render "pages/press_detail"
   end

@@ -11,110 +11,50 @@
     logo: "russ_live/about/russ-artists-logo.png",
     title: "Russ Artists",
     url: "https://russ-artists.de/",
-    text: "Ihr engagierter Partner bei der Suche nach K&uuml;nstlern und Programmen, die Ihrem Veranstalterprofil entsprechen."
+    text: "Ihr engagierter Partner bei der Suche nach Künstlern und Programmen, die Ihrem Veranstalterprofil entsprechen."
   },
   {
     key: "service",
     logo: "russ_live/about/russ-service-logo.png",
     title: "Russ Service",
     url: "https://www.ordnerdienste-stuttgart.de/",
-    text: "Wir sorgen f&uuml;r eine sichere Veranstaltung - Konzert - Tagung - Firmenfeier - Konferenz."
+    text: "Wir sorgen für eine sichere Veranstaltung: Konzert, Tagung, Firmenfeier oder Konferenz."
   },
   {
     key: "klassik",
     logo: "russ_live/about/russ-klassik-logo.png",
     title: "Russ Klassik",
     url: "https://russ-klassik.de/",
-    text: "Entdecken sie bei uns die faszinierende Welt der klassischen Musik. Meisterkonzerte f&uuml;r Stuttgart. Seit 1945."
+    text: "Entdecken Sie bei uns die faszinierende Welt der klassischen Musik. Meisterkonzerte für Stuttgart. Seit 1945."
   }
 ] %>
 
-<style>
-  @media (min-width: 1400px) {
-    .about-page .about-company-band {
-      gap: 2rem !important;
-      grid-template-columns: 21rem 1fr !important;
-    }
-
-    .about-page .about-company-band-grid {
-      gap: 2rem 3rem !important;
-      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    }
-
-    .about-page .about-company-card a {
-      border: 0 !important;
-      box-shadow: none !important;
-      min-height: 4.75rem !important;
-      padding: 0 !important;
-    }
-
-    .about-page .about-company-logo {
-      height: 4.2rem !important;
-    }
-
-    .about-page .about-company-card-live .about-company-logo img {
-      width: 12.8rem !important;
-    }
-
-    .about-page .about-company-card-artists .about-company-logo img {
-      width: 14rem !important;
-    }
-
-    .about-page .about-company-card-service .about-company-logo img {
-      width: 13.3rem !important;
-    }
-
-    .about-page .about-company-card-klassik .about-company-logo img {
-      width: 13.7rem !important;
-    }
-  }
-
-  .about-page .about-history-image {
-    background: transparent !important;
-    overflow: visible !important;
-  }
-
-  .about-page .about-history-image-portrait {
-    aspect-ratio: auto !important;
-    justify-self: center !important;
-    max-width: 56rem !important;
-    width: 100% !important;
-  }
-
-  .about-page .about-history-image-portrait img {
-    display: block !important;
-    height: auto !important;
-    object-fit: contain !important;
-    width: 100% !important;
-  }
-</style>
-
-<main class="page-main about-page">
-  <section class="section about-hero" aria-labelledby="about-title">
+<main id="main-content" class="page-main public-page about-page" tabindex="-1">
+  <section class="public-hero public-hero-editorial section about-hero" aria-labelledby="about-title">
     <div class="about-hero-copy">
       <p class="eyebrow">Über uns</p>
       <h1 id="about-title">
-        <span style="display:block;white-space:nowrap;">Menschen.</span>
-        <span style="display:block;white-space:nowrap;"><em style="white-space:nowrap;">Momente.</em></span>
-        <span style="display:block;white-space:nowrap;">Seit 1945.</span>
+        <span>Menschen.</span>
+        <span><em>Momente.</em></span>
+        <span>Seit 1945.</span>
       </h1>
       <p>Aus Stuttgart. Für die Welt. Seit drei Generationen gestalten wir Konzerte, die verbinden.</p>
     </div>
 
     <div class="about-hero-collage" aria-hidden="true">
       <figure class="about-hero-card about-hero-card-tall">
-        <%= image_tag "russ_live/about/tina-turner-1990.jpg", alt: "" %>
+        <%= image_tag "russ_live/about/tina-turner-1990.jpg", alt: "", width: 1264, height: 1772, decoding: "async" %>
       </figure>
       <figure class="about-hero-card about-hero-card-wide">
-        <%= image_tag "russ_live/about/u2-2002.jpg", alt: "" %>
+        <%= image_tag "russ_live/about/u2-2002.jpg", alt: "", width: 600, height: 400, decoding: "async" %>
       </figure>
       <figure class="about-hero-card about-hero-card-square">
-        <%= image_tag "russ_live/about/ike-tina-1971.jpg", alt: "" %>
+        <%= image_tag "russ_live/about/ike-tina-1971.jpg", alt: "", width: 1408, height: 792, decoding: "async" %>
       </figure>
     </div>
   </section>
 
-  <section class="section about-story-lead" aria-labelledby="about-story-lead-title">
+  <section class="public-section section about-story-lead" aria-labelledby="about-story-lead-title">
     <div class="about-story-lead-copy">
       <h2 id="about-story-lead-title" class="sr-only">Unternehmensprofil</h2>
       <p><strong>Michael Russ Jr.</strong> ist mit einer ruhigen Nähe, viel Herz und echtem Unternehmergeist auf die Welt von Russ Live gewachsen. Im Laufe der Jahre wurde daraus Verantwortung, Erfahrung und ein klarer Blick dafür, wie man Kultur dauerhaft möglich macht.</p>
@@ -122,24 +62,24 @@
     </div>
   </section>
 
-  <section class="about-company-band" aria-labelledby="about-company-band-title">
+  <section class="public-section about-company-band" aria-labelledby="about-company-band-title">
     <div class="about-company-band-copy">
       <p class="eyebrow">Konzertdirektion Russ</p>
       <h2 id="about-company-band-title">Vier Unternehmen.<br>Eine Vision.</h2>
-      <p>Wir wollen Menschen gl&uuml;cklich machen.</p>
-      <%= link_to "Konzertdirektion", "https://www.konzertdirektion-russ.de/", class: "section-button about-company-band-button", target: "_blank", rel: "noopener noreferrer" %>
+      <p>Wir wollen Menschen glücklich machen.</p>
+      <%= link_to "Konzertdirektion", "https://www.konzertdirektion-russ.de/", class: "public-button public-button-primary section-button about-company-band-button", target: "_blank", rel: "noopener noreferrer" %>
     </div>
 
     <div class="about-company-band-grid">
       <% company_areas.each do |area| %>
-        <article class="about-company-card about-company-card-<%= area[:key] %>">
+        <article class="public-card about-company-card about-company-card-<%= area[:key] %>">
           <a href="<%= area[:url] %>" target="_blank" rel="noopener noreferrer" aria-label="<%= "#{area[:title]} öffnen" %>">
             <figure class="about-company-logo">
               <%= image_tag area[:logo], alt: area[:title] %>
             </figure>
             <div class="about-company-hover-copy">
               <h3><%= area[:title] %></h3>
-              <p><%= area[:text].html_safe %></p>
+              <p><%= area[:text] %></p>
             </div>
           </a>
         </article>
@@ -147,9 +87,14 @@
     </div>
   </section>
 
-  <section class="section about-history-section about-history-section-first" aria-labelledby="about-history-title">
+  <section class="public-section section about-history-section about-history-section-first" aria-labelledby="about-history-title">
     <figure class="about-history-image about-history-image-portrait">
-      <%= image_tag "russ_live/about/geschichte-v2.jpg", alt: "Michaela Russ, Michael Russ und ein historisches Familienportrait", style: "display:block;width:100%;height:auto;object-fit:contain;" %>
+      <%= image_tag "russ_live/about/geschichte-v2.jpg",
+                    alt: "Michaela Russ, Michael Russ und ein historisches Familienportrait",
+                    loading: "lazy",
+                    decoding: "async",
+                    width: 1200,
+                    height: 675 %>
     </figure>
 
     <div class="about-history-copy">
@@ -160,7 +105,7 @@
     </div>
   </section>
 
-  <section class="section about-history-section about-history-section-award" aria-labelledby="about-award-title">
+  <section class="public-section section about-history-section about-history-section-award" aria-labelledby="about-award-title">
     <div class="about-history-copy about-history-copy-narrow">
       <p class="eyebrow">Verantwortung</p>
       <h2 id="about-award-title">Erfahrung, die nicht stillsteht.</h2>
@@ -169,17 +114,32 @@
     </div>
 
     <figure class="about-history-image about-history-image-award">
-      <%= image_tag "russ_live/about/award-top-magazin.jpg", alt: "Michael Russ Jr. mit Auszeichnung und Partner bei einer Preisverleihung" %>
+      <%= image_tag "russ_live/about/award-top-magazin.jpg",
+                    alt: "Michael Russ Jr. mit Auszeichnung und Partner bei einer Preisverleihung",
+                    loading: "lazy",
+                    decoding: "async",
+                    width: 3661,
+                    height: 5491 %>
     </figure>
   </section>
 
-  <section class="section about-history-section about-history-section-city" aria-labelledby="about-city-title">
+  <section class="public-section section about-history-section about-history-section-city" aria-labelledby="about-city-title">
     <div class="about-city-visuals">
       <figure class="about-history-image about-history-image-small">
-        <%= image_tag "russ_live/about/ike-tina-1971.jpg", alt: "Historisches Konzertfoto von Ike und Tina Turner" %>
+        <%= image_tag "russ_live/about/ike-tina-1971.jpg",
+                      alt: "Historisches Konzertfoto von Ike und Tina Turner",
+                      loading: "lazy",
+                      decoding: "async",
+                      width: 1408,
+                      height: 792 %>
       </figure>
       <figure class="about-history-image about-history-image-large">
-        <%= image_tag "russ_live/about/adac-2003.jpg", alt: "Großveranstaltung in Stuttgart mit Oldtimer-Korso" %>
+        <%= image_tag "russ_live/about/adac-2003.jpg",
+                      alt: "Großveranstaltung in Stuttgart mit Oldtimer-Korso",
+                      loading: "lazy",
+                      decoding: "async",
+                      width: 3008,
+                      height: 2000 %>
       </figure>
     </div>
 
@@ -191,7 +151,7 @@
     </div>
   </section>
 
-  <section class="about-closing section" aria-labelledby="about-closing-title">
+  <section class="public-section about-closing section" aria-labelledby="about-closing-title">
     <div class="about-closing-copy">
       <p class="eyebrow">Heute</p>
       <h2 id="about-closing-title">Tradition ist für uns kein Rückblick, sondern Vertrauen in das, was als Nächstes kommt.</h2>

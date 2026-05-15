@@ -28,6 +28,7 @@ export default class extends Controller {
   open(event) {
     const index = this.triggerTargets.indexOf(event.currentTarget)
 
+    this.activeTrigger = event.currentTarget
     this.render(index)
     this.lightboxTarget.hidden = false
     document.body.style.overflow = "hidden"
@@ -37,6 +38,8 @@ export default class extends Controller {
   close() {
     this.lightboxTarget.hidden = true
     document.body.style.overflow = ""
+    this.activeTrigger?.focus()
+    this.activeTrigger = null
   }
 
   previous() {
