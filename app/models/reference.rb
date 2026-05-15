@@ -1,11 +1,14 @@
 class Reference < RussRecord
   STATUSES = %w[draft published].freeze
+  TAG_SPLIT_PATTERN = /[\n,]+/
 
   has_one :reference_image, dependent: :destroy
 
   accepts_nested_attributes_for :reference_image
 
   normalizes :title, :location, :production, with: ->(value) { value.to_s.strip }
+
+  before_validation :normalize_tags
 
   validates :title, presence: true, length: { maximum: 180 }
   validates :starts_on, presence: true
@@ -23,8 +26,36 @@ class Reference < RussRecord
     next all if normalized_query.blank?
 
     pattern = "%#{sanitize_sql_like(normalized_query)}%"
-    where("title ILIKE :query OR location ILIKE :query OR production ILIKE :query", query: pattern)
+    where(
+      "title ILIKE :query OR location ILIKE :query OR production ILIKE :query OR EXISTS (SELECT 1 FROM unnest(tags) AS tag WHERE tag ILIKE :query)",
+      query: pattern
+    )
   }
+
+  def self.tags_from(records)
+    records.flat_map { |record| record.tags.to_a }
+      .map(&:to_s)
+      .map(&:strip)
+      .reject(&:blank?)
+      .uniq { |tag| tag.downcase }
+      .sort_by(&:downcase)
+  end
+
+  def self.tag_slug(tag)
+    tag.to_s.parameterize
+  end
+
+  def tag_list
+    tags.to_a.join(", ")
+  end
+
+  def tag_list=(value)
+    self.tags = normalized_tag_values(value)
+  end
+
+  def tag_slugs
+    tags.to_a.map { |tag| self.class.tag_slug(tag) }.reject(&:blank?)
+  end
 
   def published?
     status == "published"
@@ -41,4 +72,17 @@ class Reference < RussRecord
   def build_reference_image_with_defaults
     reference_image || build_reference_image(alt_text: title, grid_variant: ReferenceImage::GRID_VARIANT_1X1)
   end
+
+  private
+    def normalize_tags
+      self.tags = normalized_tag_values(tags)
+    end
+
+    def normalized_tag_values(value)
+      Array(value)
+        .flat_map { |item| item.to_s.split(TAG_SPLIT_PATTERN) }
+        .map(&:strip)
+        .reject(&:blank?)
+        .uniq { |tag| tag.downcase }
+    end
 end

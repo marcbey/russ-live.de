@@ -3,7 +3,7 @@
 <% dimensions = reference_card_dimensions(reference_image) %>
 
 <%= tag.figure class: "reference-card #{reference_grid_class(reference_image)}",
-               data: { year: reference.year }.merge(reference_image_render_data(reference_image)) do %>
+               data: { reference_tags: reference.tag_slugs.join(" ") }.merge(reference_image_render_data(reference_image)) do %>
   <button class="reference-card-flip" type="button" aria-pressed="false" aria-label="Details zu <%= reference.title %> anzeigen">
     <span class="reference-card-face reference-card-front" aria-hidden="true" data-reference-image-render-target="frame">
       <% if image_source.present? %>

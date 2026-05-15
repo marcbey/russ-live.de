@@ -8,6 +8,7 @@ module RussLiveSchema
     create_sessions(connection)
     create_login_attempts(connection)
     create_references(connection)
+    add_reference_tags(connection)
     create_reference_images(connection)
 
     [ Session, LoginAttempt, Reference, ReferenceImage ].each(&:reset_column_information)
@@ -47,6 +48,7 @@ module RussLiveSchema
       table.date :starts_on, null: false
       table.string :location, null: false
       table.string :production
+      table.string :tags, array: true, default: [], null: false
       table.text :description
       table.string :status, default: "draft", null: false
       table.integer :position, default: 0, null: false
@@ -54,6 +56,15 @@ module RussLiveSchema
     end
 
     connection.add_index :references, :status
+    connection.add_index :references, :tags, using: :gin
+  end
+
+  def add_reference_tags(connection)
+    return unless table_exists?(connection, :references)
+    return if connection.column_exists?(:references, :tags)
+
+    connection.add_column :references, :tags, :string, array: true, default: [], null: false
+    connection.add_index :references, :tags, using: :gin
   end
 
   def create_reference_images(connection)

@@ -256,8 +256,8 @@ class PagesController < ApplicationController
   def unternehmen; end
   def services; end
   def referenzen
-    @references = Reference.published.with_image.ordered
-    @reference_years = @references.map(&:year).compact.uniq.sort.reverse
+    @references = Reference.published.with_image.ordered.to_a
+    @reference_tags = Reference.tags_from(@references)
   end
   def jobs
     @jobs = JOBS

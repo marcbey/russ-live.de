@@ -6,10 +6,10 @@
       <h1 id="references-title">Projekte, Projekte, Projekte...</h1>
       <p>Konzerte, Shows und Kulturformate aus Stuttgart und der Region.</p>
     </div>
-    <nav class="references-year-nav" aria-label="Referenzen nach Jahr filtern">
-      <button type="button" data-year="all" aria-pressed="true">Alle</button>
-      <% @reference_years.each do |year| %>
-        <button type="button" data-year="<%= year %>" aria-pressed="false"><%= year %></button>
+    <nav class="references-filter-nav" aria-label="Referenzen nach Tags filtern">
+      <button type="button" data-reference-tag="all" aria-pressed="true">Alle</button>
+      <% @reference_tags.each do |reference_tag| %>
+        <button type="button" data-reference-tag="<%= Reference.tag_slug(reference_tag) %>" aria-pressed="false"><%= reference_tag %></button>
       <% end %>
     </nav>
   </section>

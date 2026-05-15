@@ -14,6 +14,7 @@ module StuttgartLiveSchema
     create_users(connection)
     create_action_text(connection)
     create_active_storage(connection)
+    create_active_storage(ActiveStorage::Blob.connection)
 
     [ AppSetting, Event, EventImage, EventOffer, ImportEventImage, User, Venue, ActionText::RichText, ActiveStorage::Blob, ActiveStorage::Attachment ].each(&:reset_column_information)
   end

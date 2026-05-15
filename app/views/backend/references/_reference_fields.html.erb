@@ -16,6 +16,11 @@
       <%= form.label :production, "Produktion", class: "form-label" %>
       <%= form.text_field :production, class: "form-input" %>
     </div>
+    <div class="editor-grid-span-full">
+      <%= form.label :tag_list, "Tags", class: "form-label" %>
+      <%= form.text_field :tag_list, class: "form-input", placeholder: "Open Air, Clubkonzert, Ausstellung" %>
+      <p class="event-image-crop-hint">Komma- oder zeilengetrennt.</p>
+    </div>
     <div>
       <%= form.label :status, "Status", class: "form-label" %>
       <%= form.select :status, [["Entwurf", "draft"], ["Veröffentlicht", "published"]], {}, class: "form-input" %>

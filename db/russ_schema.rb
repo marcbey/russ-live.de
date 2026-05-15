@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_14_143000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_15_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -54,10 +54,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_14_143000) do
     t.string "production"
     t.date "starts_on", null: false
     t.string "status", default: "draft", null: false
+    t.string "tags", default: [], null: false, array: true
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.index ["position", "starts_on"], name: "index_references_on_position_and_starts_on"
     t.index ["status"], name: "index_references_on_status"
+    t.index ["tags"], name: "index_references_on_tags", using: :gin
   end
 
   create_table "sessions", force: :cascade do |t|

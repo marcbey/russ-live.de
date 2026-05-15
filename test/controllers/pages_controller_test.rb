@@ -78,6 +78,49 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'data-reference-image-render-target="frame"'
   end
 
+  test "renders public references with tag filters instead of year filters" do
+    open_air = Reference.create!(
+      title: "OPEN AIR SHOW",
+      starts_on: Date.new(2025, 7, 1),
+      location: "Schlossplatz Stuttgart",
+      status: "published",
+      position: 1,
+      tag_list: "Open Air, Clubkonzert"
+    )
+    open_air.create_reference_image!(asset_path: "russ_live/references/01-disgusting-food-museum.jpg", alt_text: open_air.title)
+    exhibition = Reference.create!(
+      title: "AUSSTELLUNG",
+      starts_on: Date.new(2024, 5, 1),
+      location: "Museum",
+      status: "published",
+      position: 2,
+      tag_list: "Ausstellung"
+    )
+    exhibition.create_reference_image!(asset_path: "russ_live/references/02-david-garrett.jpg", alt_text: exhibition.title)
+    draft = Reference.create!(
+      title: "DRAFT",
+      starts_on: Date.new(2026, 1, 1),
+      location: "Stuttgart",
+      status: "draft",
+      position: 3,
+      tag_list: "Intern"
+    )
+    draft.create_reference_image!(asset_path: "russ_live/references/03-neil-young.jpg", alt_text: draft.title)
+
+    get referenzen_path
+
+    assert_response :success
+    assert_includes response.body, 'class="references-filter-nav"'
+    assert_includes response.body, 'data-reference-tag="all"'
+    assert_includes response.body, 'data-reference-tag="open-air"'
+    assert_includes response.body, 'data-reference-tag="clubkonzert"'
+    assert_includes response.body, 'data-reference-tag="ausstellung"'
+    assert_includes response.body, 'data-reference-tags="open-air clubkonzert"'
+    assert_not_includes response.body, "references-year-nav"
+    assert_not_includes response.body, "data-year"
+    assert_not_includes response.body, "Intern"
+  end
+
   test "renders job detail on its own page" do
     get job_path("stagehands")
 

@@ -766,7 +766,7 @@ h3 {
   max-width: 600px;
 }
 
-.references-year-nav {
+.references-filter-nav {
   align-self: end;
   background: rgba(255, 255, 255, .92);
   bottom: 0;
@@ -784,11 +784,11 @@ h3 {
   z-index: 4;
 }
 
-.references-year-nav::-webkit-scrollbar {
+.references-filter-nav::-webkit-scrollbar {
   display: none;
 }
 
-.references-year-nav button {
+.references-filter-nav button {
   appearance: none;
   align-items: center;
   background: transparent;
@@ -808,9 +808,9 @@ h3 {
   transition: background-color .25s ease, color .25s ease;
 }
 
-.references-year-nav button:hover,
-.references-year-nav button:focus-visible,
-.references-year-nav button[aria-pressed="true"] {
+.references-filter-nav button:hover,
+.references-filter-nav button:focus-visible,
+.references-filter-nav button[aria-pressed="true"] {
   background: #000;
   color: #fff;
 }
@@ -5316,7 +5316,7 @@ h3 {
     top: -58px;
   }
 
-  .references-year-nav button {
+  .references-filter-nav button {
     min-height: 58px;
     min-width: 78px;
     padding-inline: 16px;

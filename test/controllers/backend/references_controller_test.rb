@@ -40,8 +40,21 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'data-reference-image-crop-preview-tab-param="image"'
     assert_includes response.body, 'name="reference[title]"'
     assert_includes response.body, 'name="reference[location]"'
+    assert_includes response.body, 'name="reference[tag_list]"'
     assert_includes response.body, 'name="reference_image[grid_variant]"'
     assert_includes response.body, 'name="reference_image[card_zoom]"'
+  end
+
+  test "searches references by tags" do
+    sign_in_as(@admin)
+    create_reference!(title: "KISS", tag_list: "Open Air")
+    create_reference!(title: "Neil Young", tag_list: "Clubkonzert")
+
+    get backend_references_path(query: "open")
+
+    assert_response :success
+    assert_includes response.body, "KISS"
+    assert_not_includes response.body, "Neil Young"
   end
 
   test "reference links open with reference tab by default" do
@@ -80,6 +93,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
 
     reference = Reference.last
     assert_equal "published", reference.status
+    assert_equal [ "Open Air", "Clubkonzert" ], reference.tags
     assert_equal "2x1", reference.reference_image.grid_variant
     assert_redirected_to backend_references_path(reference_id: reference.id, status: "published")
   end
@@ -175,6 +189,9 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
       focus_x: "62.5"
     ).deep_merge(
       editor_tab: "image",
+      reference: {
+        tag_list: "Open Air\nAusstellung"
+      },
       reference_image: {
         alt_text: "All Them Witches",
         sub_text: "Travis Shinn",
@@ -187,12 +204,18 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     reference.reload
     assert_equal "All Them Witches", reference.title
     assert_equal "published", reference.status
+    assert_equal [ "Open Air", "Ausstellung" ], reference.tags
     assert_equal "2x2", reference.reference_image.grid_variant
     assert_equal "All Them Witches", reference.reference_image.alt_text
     assert_equal "Travis Shinn", reference.reference_image.sub_text
     assert_equal 62.5, reference.reference_image.card_focus_x_value
     assert_equal 37.5, reference.reference_image.card_focus_y_value
     assert_equal 180.0, reference.reference_image.card_zoom_value
+
+    get backend_references_path(reference_id: reference.id)
+
+    assert_response :success
+    assert_includes response.body, 'value="Open Air, Ausstellung"'
   end
 
   test "uploaded image replaces asset image and renders cache busted url" do
@@ -229,13 +252,14 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
   end
 
   private
-    def create_reference!(title:, status: "published")
+    def create_reference!(title:, status: "published", tag_list: nil)
       Reference.create!(
         title: title,
         starts_on: Date.new(2026, 5, 1),
         location: "Stuttgart",
         status: status,
-        position: 1
+        position: 1,
+        tag_list: tag_list
       ).tap do |reference|
         reference.create_reference_image!(
           alt_text: title,
@@ -252,6 +276,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
           starts_on: "2026-05-01",
           location: "Stuttgart",
           production: "SKS Michael Russ",
+          tag_list: "Open Air, Clubkonzert",
           description: "Beschreibung",
           status: status,
           position: "1"

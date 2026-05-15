@@ -16,18 +16,19 @@ export default class extends Controller {
   }
 
   bindFilters() {
-    const nav = this.element.querySelector(".references-year-nav")
+    const nav = this.element.querySelector(".references-filter-nav")
     const grid = this.referenceGrid
     if (!nav || !grid) return
 
-    nav.querySelectorAll("button[data-year]").forEach((button) => {
+    nav.querySelectorAll("button[data-reference-tag]").forEach((button) => {
       button.addEventListener("click", () => {
-        const year = button.dataset.year || "all"
+        const referenceTag = button.dataset.referenceTag || "all"
         nav.querySelectorAll("button").forEach((item) => item.setAttribute("aria-pressed", "false"))
         button.setAttribute("aria-pressed", "true")
 
         grid.querySelectorAll(".reference-card").forEach((card) => {
-          card.hidden = year !== "all" && card.dataset.year !== year
+          const cardTags = (card.dataset.referenceTags || "").split(" ").filter(Boolean)
+          card.hidden = referenceTag !== "all" && !cardTags.includes(referenceTag)
           if (card.hidden) {
             card.classList.remove("is-flipped")
             card.querySelector(".reference-card-flip")?.setAttribute("aria-pressed", "false")
