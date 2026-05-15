@@ -1,7 +1,6 @@
 <main id="main-content" class="page-main public-page press-page" tabindex="-1" data-controller="press-search" data-press-search-locale-value="<%= I18n.locale == :de ? "de-DE" : "en-US" %>" data-press-search-singular-label-value="<%= t("press.index.count_singular") %>" data-press-search-plural-label-value="<%= t("press.index.count_plural") %>">
   <section class="public-hero public-hero-editorial press-hero" aria-labelledby="press-title">
     <div class="press-hero-copy">
-      <p class="eyebrow"><%= t("public.header.press") %></p>
       <h1 id="press-title"><%= t("press.index.hero.title") %></h1>
       <p><%= t("press.index.hero.intro") %></p>
     </div>
@@ -17,7 +16,6 @@
   <section class="public-section section press-directory" aria-labelledby="press-directory-title">
     <div class="press-directory-head">
       <div>
-        <p class="eyebrow"><%= t("press.index.directory.eyebrow") %></p>
         <h2 id="press-directory-title"><%= t("press.index.directory.title") %></h2>
       </div>
       <p data-press-search-target="count"><%= @press_artist_count %> <%= @press_artist_count == 1 ? t("press.index.count_singular") : t("press.index.count_plural") %></p>
@@ -42,7 +40,6 @@
 
   <section class="public-section section press-contact-strip" aria-labelledby="press-contact-title">
     <div>
-      <p class="eyebrow"><%= t("press.index.contact.eyebrow") %></p>
       <h2 id="press-contact-title"><%= t("press.index.contact.title") %></h2>
       <p><%= t("press.index.contact.text") %></p>
     </div>
