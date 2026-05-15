@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resource :session, only: [ :new, :create, :destroy ]
 
   namespace :backend do
+    resources :contacts, except: :show
+    resources :jobs, except: :show
     resources :references, except: :show
     root "dashboard#show"
   end
@@ -21,6 +23,8 @@ Rails.application.routes.draw do
   get "services", to: "pages#services"
   get "referenzen", to: "pages#referenzen"
   get "referenzbilder/:id", to: "reference_images#show", as: :reference_image
+  get "jobbilder/:id", to: "job_images#show", as: :job_image
+  get "ansprechpartnerbilder/:id", to: "contact_images#show", as: :contact_image
   get "jobs", to: "pages#jobs"
   get "jobs/:slug", to: "pages#job", as: :job
   get "events/homepage_lane", to: "pages#homepage_lane", as: :homepage_lane_events

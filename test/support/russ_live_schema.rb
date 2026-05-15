@@ -10,8 +10,12 @@ module RussLiveSchema
     create_references(connection)
     add_reference_tags(connection)
     create_reference_images(connection)
+    create_contacts(connection)
+    create_contact_images(connection)
+    create_jobs(connection)
+    create_job_images(connection)
 
-    [ Session, LoginAttempt, Reference, ReferenceImage ].each(&:reset_column_information)
+    [ Session, LoginAttempt, Reference, ReferenceImage, Contact, ContactImage, Job, JobImage ].each(&:reset_column_information)
   end
 
   def create_sessions(connection)
@@ -87,6 +91,85 @@ module RussLiveSchema
     end
 
     connection.add_index :reference_images, :reference_id, unique: true
+  end
+
+  def create_contacts(connection)
+    return if table_exists?(connection, :contacts)
+
+    connection.create_table :contacts do |table|
+      table.string :name, null: false
+      table.string :role
+      table.string :phone_number, null: false
+      table.string :email, null: false
+      table.integer :position, default: 0, null: false
+      table.timestamps
+    end
+
+    connection.add_index :contacts, :position
+  end
+
+  def create_contact_images(connection)
+    return if table_exists?(connection, :contact_images)
+
+    connection.create_table :contact_images do |table|
+      table.references :contact, null: false
+      image_columns(table)
+    end
+
+    connection.add_index :contact_images, :contact_id, unique: true
+  end
+
+  def create_jobs(connection)
+    return if table_exists?(connection, :jobs)
+
+    connection.create_table :jobs do |table|
+      table.references :contact
+      table.string :slug, null: false
+      table.string :title, null: false
+      table.string :badge
+      table.string :employment
+      table.string :location, null: false
+      table.text :intro
+      table.string :highlight_label
+      table.string :highlight_title
+      table.text :highlight_text
+      table.text :responsibilities, array: true, default: [], null: false
+      table.text :requirements, array: true, default: [], null: false
+      table.string :categories, array: true, default: [], null: false
+      table.string :join_recruiting_url
+      table.string :meta_title
+      table.text :meta_description
+      table.string :status, default: "draft", null: false
+      table.integer :position, default: 0, null: false
+      table.timestamps
+    end
+
+    connection.add_index :jobs, :slug, unique: true
+    connection.add_index :jobs, :status
+    connection.add_index :jobs, :position
+    connection.add_index :jobs, :categories, using: :gin
+  end
+
+  def create_job_images(connection)
+    return if table_exists?(connection, :job_images)
+
+    connection.create_table :job_images do |table|
+      table.references :job, null: false
+      image_columns(table)
+    end
+
+    connection.add_index :job_images, :job_id, unique: true
+  end
+
+  def image_columns(table)
+    table.string :alt_text
+    table.string :sub_text
+    table.string :asset_path
+    table.string :file_path
+    table.string :content_type
+    table.string :filename
+    table.bigint :byte_size
+    table.timestamps
   end
 
   def table_exists?(connection, table_name)

@@ -88,6 +88,21 @@ veröffentlichte Startdaten übernommen. Neue Uploads werden im Rails-Storage
 unter `storage/reference_images` abgelegt und über Russ Live ausgeliefert; die
 readonly Stuttgart-Live-Datenbank bleibt davon unberührt.
 
+## Jobs und Ansprechpartner
+
+Jobs und Ansprechpartner werden ebenfalls als Russ-eigene Domain-Daten in der
+`russ`-Datenbank gepflegt. Das Backend bietet dafür `/backend/jobs` und
+`/backend/contacts`; beide Ansichten folgen der Referenzen-Inbox mit Liste,
+Suche und Editor-Panel. Jobs haben die Status `Entwurf` und `Veröffentlicht`,
+mehrere Bereichs-Kategorien, eine optionale JOIN-Recruiting-URL und verweisen
+auf einen Ansprechpartner.
+
+Auf `/jobs` erscheinen nur veröffentlichte Jobs. Die Bereichs-Kategorien werden
+dort als Filter angeboten; Job-Detailseiten zeigen dagegen nur das ausgewählte
+Profil, den hinterlegten Ansprechpartner und den Bewerbungslink, falls eine
+JOIN-URL gepflegt ist. Job- und Ansprechpartnerbilder werden unter
+`storage/job_images` beziehungsweise `storage/contact_images` abgelegt.
+
 ## Entwicklung starten
 
 ```bash

@@ -1,5 +1,7 @@
-<main class="auth-shell">
-  <section class="auth-panel" aria-labelledby="backend-title">
+<main class="backend-shell backend-dashboard-shell">
+  <%= render "backend/shared/navigation" %>
+
+  <section class="auth-panel backend-dashboard-panel" aria-labelledby="backend-title">
     <div>
       <p class="eyebrow">Russ Live</p>
       <h1 id="backend-title">Backend</h1>
@@ -7,6 +9,8 @@
 
     <div class="auth-actions">
       <%= link_to "Referenzen verwalten", backend_references_path, class: "button button-compact" %>
+      <%= link_to "Jobs verwalten", backend_jobs_path, class: "button button-compact" %>
+      <%= link_to "Ansprechpartner verwalten", backend_contacts_path, class: "button button-compact" %>
       <%= link_to "Zur Website", root_path, class: "button button-compact" %>
       <%= button_to "Ausloggen", session_path, method: :delete, class: "auth-reset-link" %>
     </div>

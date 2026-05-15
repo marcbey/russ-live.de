@@ -822,6 +822,55 @@ h3 {
   color: #fff;
 }
 
+.job-category-filter-nav {
+  align-self: end;
+  background: rgba(255, 255, 255, .92);
+  bottom: 0;
+  color: #000;
+  display: flex;
+  gap: 0;
+  left: 0;
+  max-width: none;
+  overflow-x: auto;
+  position: absolute;
+  right: 0;
+  scrollbar-width: none;
+  transform: none;
+  width: 100%;
+  z-index: 4;
+}
+
+.job-category-filter-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.job-category-filter-nav button {
+  appearance: none;
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-right: 1px solid var(--line);
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font: inherit;
+  font-size: clamp(1rem, 1.15vw, 1.18rem);
+  font-weight: 650;
+  justify-content: center;
+  min-height: 68px;
+  min-width: clamp(92px, 8vw, 140px);
+  padding: 0 clamp(18px, 2.4vw, 34px);
+  transition: background-color .25s ease, color .25s ease;
+}
+
+.job-category-filter-nav button:hover,
+.job-category-filter-nav button:focus-visible,
+.job-category-filter-nav button[aria-pressed="true"] {
+  background: #000;
+  color: #fff;
+}
+
 .references-band {
   background: transparent;
   color: var(--ink);
@@ -2397,6 +2446,59 @@ h3 {
   padding: 22px 0;
 }
 
+.backend-global-nav {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: space-between;
+  min-height: 58px;
+  padding: 10px 0;
+}
+
+.backend-global-nav-links,
+.backend-global-nav-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.backend-global-nav-links a {
+  align-items: center;
+  border: 1px solid var(--line);
+  display: inline-flex;
+  font-size: .82rem;
+  font-weight: 650;
+  min-height: 36px;
+  padding: 0 12px;
+  text-transform: uppercase;
+}
+
+.backend-global-nav-links a:hover,
+.backend-global-nav-links a:focus-visible,
+.backend-global-nav-links a.is-active {
+  background: #111;
+  border-color: #111;
+  color: #fff;
+}
+
+.backend-global-nav-actions form {
+  margin: 0;
+}
+
+.backend-dashboard-shell {
+  min-height: 100svh;
+}
+
+.backend-dashboard-panel {
+  align-self: center;
+  margin: auto;
+  max-width: 760px;
+  width: min(760px, 100%);
+}
+
 .backend-topbar-sticky {
   background: var(--backend-bg-sticky);
   position: sticky;
@@ -3101,6 +3203,7 @@ h3 {
   overflow: hidden;
   padding: clamp(190px, 14vw, 240px) var(--brand-left) clamp(58px, 6vw, 92px);
   position: relative;
+  width: 100%;
 }
 
 .job-overview-hero::after {
@@ -3137,10 +3240,12 @@ h3 {
 }
 
 .job-overview-hero-copy {
+  align-self: center;
   color: #fff;
   margin-left: 0;
-  max-width: min(1120px, 58vw);
+  max-width: min(1320px, calc(100vw - (var(--brand-left) * 2)));
   position: relative;
+  transform: translateY(calc(clamp(64px, 5.8vw, 94px) * -1));
   z-index: 2;
 }
 
@@ -3191,9 +3296,11 @@ h3 {
 }
 
 .job-template-hero-copy {
+  align-self: center;
   color: #fff;
-  max-width: min(560px, 100%);
+  max-width: min(1320px, calc(100vw - (var(--brand-left) * 2)));
   position: relative;
+  transform: translateY(calc(clamp(12px, 1.2vw, 32px) * -1));
   z-index: 2;
 }
 
@@ -3202,17 +3309,21 @@ h3 {
 }
 
 .job-template-hero h1 {
-  font-size: clamp(3rem, 6vw, 5.8rem);
+  font-size: clamp(4.2rem, 5.6vw, 7rem);
+  hyphens: none;
   letter-spacing: -.05em;
   line-height: .92;
-  max-width: 10ch;
+  max-width: none;
+  overflow-wrap: normal;
+  white-space: nowrap;
 }
 
 .job-template-hero-copy > p:not(.eyebrow) {
   color: rgba(255, 255, 255, .88);
   font-size: clamp(1.12rem, 1.6vw, 1.5rem);
   margin: 22px 0 0;
-  max-width: 30rem;
+  max-width: none;
+  white-space: nowrap;
 }
 
 .job-overview-hero-copy .eyebrow {
@@ -3224,15 +3335,17 @@ h3 {
   hyphens: none;
   letter-spacing: -.05em;
   line-height: .92;
-  max-width: 13.5ch;
+  max-width: none;
   overflow-wrap: normal;
+  white-space: nowrap;
 }
 
 .job-overview-hero-copy > p:not(.eyebrow) {
   color: rgba(255, 255, 255, .88);
   font-size: clamp(1.15rem, 1.7vw, 1.65rem);
   margin: 24px 0 0;
-  max-width: 28rem;
+  max-width: none;
+  white-space: nowrap;
 }
 
 .job-overview-hero-actions {
@@ -3268,16 +3381,14 @@ h3 {
 
 .job-overview-heading {
   align-items: end;
-  column-gap: 36px;
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr);
-  row-gap: 18px;
+  display: block;
 }
 
 .job-overview-heading h2 {
-  font-size: clamp(2.25rem, 3.8vw, 4.25rem);
+  font-size: clamp(2rem, 3vw, 3.4rem);
   line-height: .96;
   margin-top: 10px;
+  white-space: nowrap;
 }
 
 .job-overview-intro {
@@ -3543,7 +3654,11 @@ h3 {
   max-width: none;
   padding-bottom: clamp(58px, 7vw, 92px);
   padding-top: clamp(42px, 6vw, 74px);
-  scroll-margin-top: calc(var(--header-nav-height) + var(--job-profile-nav-height));
+  scroll-margin-top: var(--header-nav-height);
+}
+
+.job-content {
+  max-width: none;
 }
 
 .job-detail-hero {
@@ -3600,8 +3715,10 @@ h3 {
 }
 
 .job-apply h2 {
-  font-size: clamp(2.3rem, 4.2vw, 5rem);
-  max-width: 720px;
+  font-size: clamp(1.9rem, 2.6vw, 3rem);
+  line-height: 1;
+  max-width: none;
+  white-space: nowrap;
 }
 
 .job-sidebar {
@@ -3612,8 +3729,7 @@ h3 {
 }
 
 .job-contact {
-  border-top: 2px solid var(--ink);
-  padding-top: 24px;
+  padding-top: 0;
 }
 
 .job-nav nav {
@@ -4771,12 +4887,27 @@ h3 {
   }
 
   .job-overview-hero-copy {
+    align-self: end;
     margin-left: 0;
     max-width: min(540px, calc(100vw - 56px));
+    transform: none;
+  }
+
+  .job-overview-hero h1,
+  .job-overview-hero-copy > p:not(.eyebrow),
+  .job-overview-heading h2,
+  .job-apply h2 {
+    white-space: normal;
   }
 
   .job-template-hero-copy {
+    align-self: end;
     max-width: min(540px, calc(100vw - 56px));
+    transform: none;
+  }
+
+  .job-template-hero-copy > p:not(.eyebrow) {
+    white-space: normal;
   }
 
   .job-overview-hero-actions {
@@ -4810,7 +4941,7 @@ h3 {
   }
 
   .job-detail {
-    scroll-margin-top: calc(var(--mobile-header-height) + var(--job-profile-nav-height));
+    scroll-margin-top: var(--mobile-header-height);
   }
 
   .job-profile-toggle {
@@ -5281,7 +5412,8 @@ h3 {
   }
 
   .job-template-hero h1 {
-    font-size: clamp(2.2rem, 10vw, 3.2rem);
+    font-size: clamp(2.45rem, 11vw, 3.7rem);
+    white-space: normal;
   }
 
   .job-overview-hero-copy > p:not(.eyebrow) {

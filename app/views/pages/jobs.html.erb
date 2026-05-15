@@ -1,27 +1,28 @@
-<main class="page-main job-page">
+<main class="page-main job-page" data-controller="job-filter">
   <section class="section job-overview-hero" aria-labelledby="jobs-title">
     <div class="job-overview-hero-media">
       <%= image_tag @job_overview_hero_image, alt: "Backstage-Moment mit Russ Live Crew vor einer beleuchteten Bühne" %>
     </div>
 
     <div class="job-overview-hero-copy">
-      <p class="eyebrow">Jobs</p>
       <h1 id="jobs-title">Werde Teil unseres Event-Teams.</h1>
       <p>Flexible Jobs bei Konzerten, Festivals und Events in Stuttgart.</p>
-      <div class="job-overview-hero-actions">
-        <a class="section-button" href="#jobs-list">Jetzt bewerben</a>
-        <a class="section-button section-button-outline-light" href="#jobs-story">Mehr erfahren</a>
-      </div>
     </div>
+    <% if @job_categories.any? %>
+      <nav class="job-category-filter-nav" aria-label="Jobs nach Bereichen filtern">
+        <button type="button" data-job-category="all" aria-pressed="true">Alle</button>
+        <% @job_categories.each do |job_category| %>
+          <button type="button" data-job-category="<%= Job.category_slug(job_category) %>" aria-pressed="false"><%= job_category %></button>
+        <% end %>
+      </nav>
+    <% end %>
   </section>
 
   <section class="section job-overview-listing" id="jobs-list" aria-labelledby="jobs-list-title">
     <div class="job-overview-heading">
       <div>
-        <p class="eyebrow">Aktuelle Jobs</p>
         <h2 id="jobs-list-title">Unsere aktuellen Jobangebote</h2>
       </div>
-      <p class="job-overview-intro">Klick auf ein Jobprofil und Du landest direkt in der bekannten Detailansicht weiter unten auf der Seite.</p>
     </div>
 
     <div class="job-table" role="table" aria-label="Jobangebote">
@@ -33,13 +34,15 @@
       </div>
 
       <% @jobs.each do |job| %>
-        <%= link_to job_path(job[:slug]), class: "job-table-row", role: "row" do %>
+        <%= link_to job_path(job.slug), class: "job-table-row", role: "row", data: { job_categories: job.category_slugs.join(" ") } do %>
           <span class="job-table-position" role="cell">
-            <strong><%= job[:title] %></strong>
-            <span class="job-table-badge"><%= job[:badge] %></span>
+            <strong><%= job.title %></strong>
+            <% if job.badge.present? %>
+              <span class="job-table-badge"><%= job.badge %></span>
+            <% end %>
           </span>
-          <span role="cell"><%= job[:area] %></span>
-          <span role="cell"><%= job[:location] %></span>
+          <span role="cell"><%= job.category_list %></span>
+          <span role="cell"><%= job.location %></span>
           <span class="job-table-action" role="cell">
             <span>Jetzt bewerben</span>
             <span aria-hidden="true">→</span>
@@ -47,6 +50,9 @@
         <% end %>
       <% end %>
     </div>
+    <% if @jobs.empty? %>
+      <p class="references-empty">Aktuell sind keine Jobs veröffentlicht.</p>
+    <% end %>
   </section>
 
   <section class="section job-story-grid" id="jobs-story" aria-label="Einblicke in die Arbeitswelt">

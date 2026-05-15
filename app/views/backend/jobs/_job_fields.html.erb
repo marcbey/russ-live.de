@@ -1,0 +1,79 @@
+<section class="backend-section">
+  <div class="backend-section-body editor-grid">
+    <div>
+      <%= form.label :title, "Titel", class: "form-label" %>
+      <%= form.text_field :title, class: "form-input" %>
+    </div>
+    <div>
+      <%= form.label :slug, "Slug", class: "form-label" %>
+      <%= form.text_field :slug, class: "form-input" %>
+    </div>
+    <div>
+      <%= form.label :badge, "Badge", class: "form-label" %>
+      <%= form.text_field :badge, class: "form-input", placeholder: "Minijob" %>
+    </div>
+    <div>
+      <%= form.label :employment, "Beschäftigung", class: "form-label" %>
+      <%= form.text_field :employment, class: "form-input" %>
+    </div>
+    <div>
+      <%= form.label :location, "Einsatzort", class: "form-label" %>
+      <%= form.text_field :location, class: "form-input" %>
+    </div>
+    <div>
+      <%= form.label :contact_id, "Ansprechpartner", class: "form-label" %>
+      <%= form.collection_select :contact_id, contacts, :id, :name, { include_blank: "Kein Ansprechpartner" }, class: "form-input" %>
+    </div>
+    <div class="editor-grid-span-full">
+      <%= form.label :category_list, "Bereiche", class: "form-label" %>
+      <%= form.text_field :category_list, class: "form-input", placeholder: "Catering, Logistik" %>
+      <p class="form-hint">Komma- oder zeilengetrennt.</p>
+    </div>
+    <div>
+      <%= form.label :status, "Status", class: "form-label" %>
+      <%= form.select :status, [["Entwurf", "draft"], ["Veröffentlicht", "published"]], {}, class: "form-input" %>
+    </div>
+    <div>
+      <%= form.label :position, "Sortierung", class: "form-label" %>
+      <%= form.number_field :position, class: "form-input", min: 0, step: 1 %>
+    </div>
+    <div class="editor-grid-span-full">
+      <%= form.label :intro, "Intro", class: "form-label" %>
+      <%= form.text_area :intro, rows: 3, class: "form-textarea" %>
+    </div>
+    <div>
+      <%= form.label :highlight_label, "Highlight Label", class: "form-label" %>
+      <%= form.text_field :highlight_label, class: "form-input" %>
+    </div>
+    <div>
+      <%= form.label :highlight_title, "Highlight Titel", class: "form-label" %>
+      <%= form.text_field :highlight_title, class: "form-input" %>
+    </div>
+    <div class="editor-grid-span-full">
+      <%= form.label :highlight_text, "Highlight Text", class: "form-label" %>
+      <%= form.text_area :highlight_text, rows: 3, class: "form-textarea" %>
+    </div>
+    <div class="editor-grid-span-full">
+      <%= form.label :responsibilities_text, "Tätigkeitsfeld", class: "form-label" %>
+      <%= form.text_area :responsibilities_text, rows: 5, class: "form-textarea" %>
+      <p class="form-hint">Eine Aufgabe pro Zeile.</p>
+    </div>
+    <div class="editor-grid-span-full">
+      <%= form.label :requirements_text, "Anforderungen", class: "form-label" %>
+      <%= form.text_area :requirements_text, rows: 6, class: "form-textarea" %>
+      <p class="form-hint">Eine Anforderung pro Zeile.</p>
+    </div>
+    <div class="editor-grid-span-full">
+      <%= form.label :join_recruiting_url, "JOIN Recruiting URL", class: "form-label" %>
+      <%= form.url_field :join_recruiting_url, class: "form-input", placeholder: "https://join.com/..." %>
+    </div>
+    <div>
+      <%= form.label :meta_title, "Meta Title", class: "form-label" %>
+      <%= form.text_field :meta_title, class: "form-input" %>
+    </div>
+    <div>
+      <%= form.label :meta_description, "Meta Description", class: "form-label" %>
+      <%= form.text_area :meta_description, rows: 3, class: "form-textarea" %>
+    </div>
+  </div>
+</section>

@@ -81,6 +81,8 @@ module ApplicationHelper
   end
 
   def reference_home_card_data(reference)
+    return fallback_reference_home_card_data(reference) unless reference.respond_to?(:reference_image)
+
     {
       title: reference.title,
       date_location: [ l(reference.starts_on, format: "%d.%m.%Y"), reference.location ].compact_blank.join(" · "),
@@ -92,7 +94,47 @@ module ApplicationHelper
     }
   end
 
+  def job_image_source(job_image)
+    stored_image_source(job_image, route_helper: :job_image_path)
+  end
+
+  def contact_image_source(contact_image)
+    stored_image_source(contact_image, route_helper: :contact_image_path)
+  end
+
+  def stored_image_file_metadata(stored_image)
+    return [] if stored_image.blank? || !stored_image.image?
+
+    filename = stored_image.filename.presence || File.basename(stored_image.asset_path.to_s)
+    content_type = stored_image.content_type.presence || Rack::Mime.mime_type(File.extname(filename), nil)
+    byte_size = stored_image.byte_size.presence || stored_image_asset_byte_size(stored_image)
+
+    [
+      [ "Name", filename ],
+      [ "Type", content_type ],
+      [ "Größe", (number_to_human_size(byte_size) if byte_size.present?) ]
+    ].select { |_, value| value.present? }
+  end
+
   private
+    def stored_image_source(stored_image, route_helper:)
+      return if stored_image.blank?
+      return public_send(route_helper, stored_image, v: stored_image.updated_at.to_i) if stored_image.uploaded?
+
+      image_path(stored_image.asset_path) if stored_image.asset_path.present?
+    end
+
+    def stored_image_asset_byte_size(stored_image)
+      return if stored_image.asset_path.blank?
+
+      asset_root = Rails.root.join("app/assets/images")
+      asset_path = asset_root.join(stored_image.asset_path).cleanpath
+      return unless asset_path.to_s.start_with?("#{asset_root}/")
+      return unless File.file?(asset_path)
+
+      File.size(asset_path)
+    end
+
     def reference_image_asset_byte_size(reference_image)
       return if reference_image.asset_path.blank?
 
@@ -102,5 +144,16 @@ module ApplicationHelper
       return unless File.file?(asset_path)
 
       File.size(asset_path)
+    end
+
+    def fallback_reference_home_card_data(reference)
+      {
+        title: reference[:title],
+        date_location: reference[:date_location],
+        partner: reference[:partner],
+        image: image_path(reference[:image]),
+        alt: reference[:alt],
+        image_render_data: {}
+      }
     end
 end

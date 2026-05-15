@@ -1,0 +1,67 @@
+<% content_for :title, "Ansprechpartner" %>
+
+<main class="backend-shell backend-inbox-shell">
+  <%= render "backend/shared/navigation" %>
+
+  <header class="backend-topbar backend-topbar-sticky backend-inbox-topbar">
+    <div class="backend-topbar-title">
+      <p class="eyebrow">Russ Live</p>
+      <h1>Ansprechpartner</h1>
+    </div>
+    <div class="backend-topbar-actions">
+      <%= link_to "Neuer Ansprechpartner", new_backend_contact_path(query: @query_filter), class: "button button-secondary button-compact" %>
+      <%= link_to "Zur Jobseite", jobs_path, class: "button button-compact" %>
+    </div>
+  </header>
+
+  <div class="backend-split backend-inbox-split">
+    <aside class="backend-list-column">
+      <div class="backend-list-toolbar">
+        <%= form_with url: backend_contacts_path, method: :get, class: "filter-form", data: { turbo: false, controller: "filter-clear" } do |form| %>
+          <div class="filter-grid">
+            <div class="filter-search-field filter-search-field-full">
+              <%= form.label :query, "Suche", class: "form-label" %>
+              <div class="filter-control">
+                <%= form.text_field :query,
+                                    value: @query_filter,
+                                    placeholder: "Name, Rolle, Telefon, E-Mail",
+                                    class: "form-input filter-input-with-clear",
+                                    data: { filter_clear_target: "input", action: "input->filter-clear#toggle" } %>
+                <%= button_tag "×",
+                               type: "button",
+                               class: "filter-clear filter-input-clear #{'is-visible' if @query_filter.present?}",
+                               aria: { label: "Suche löschen" },
+                               data: { filter_clear_target: "clear", action: "filter-clear#clear" } %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="backend-reference-list-scroll">
+        <div class="backend-reference-list">
+          <% if @contacts.any? %>
+            <% @contacts.each do |contact| %>
+              <%= link_to backend_contacts_path(query: @query_filter, contact_id: contact.id),
+                          class: "backend-reference-list-item #{'is-active' if @selected_contact&.id == contact.id}" do %>
+                <span class="backend-reference-list-title"><%= contact.name %></span>
+                <span class="backend-reference-list-meta"><%= [contact.role, contact.email].compact_blank.join(" · ") %></span>
+                <span class="status-badge"><%= pluralize(contact.jobs.count, "Job", "Jobs") %></span>
+              <% end %>
+            <% end %>
+          <% else %>
+            <p class="empty-state">Keine Ansprechpartner zur aktuellen Filterung.</p>
+          <% end %>
+        </div>
+      </div>
+    </aside>
+
+    <section class="backend-editor-column backend-inbox-editor-column">
+      <% if @selected_contact.present? %>
+        <%= render "editor_panel", contact: @selected_contact, active_editor_tab: @active_editor_tab %>
+      <% else %>
+        <p class="empty-state">Wähle einen Ansprechpartner aus oder lege einen neuen Ansprechpartner an.</p>
+      <% end %>
+    </section>
+  </div>
+</main>

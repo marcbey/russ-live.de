@@ -4,10 +4,15 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   setup do
     StuttgartLiveSchema.ensure!
     RussLiveSchema.ensure!
+    JobImage.delete_all
+    Job.delete_all
+    ContactImage.delete_all
+    Contact.delete_all
     ReferenceImage.delete_all
     Reference.delete_all
     clear_stuttgart_live_records
     seed_sks_promoter_ids!
+    seed_jobs!
   end
 
   test "renders public pages" do
@@ -155,6 +160,37 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_no_match(/Jobdetails Stagehands/, response.body)
   end
 
+  test "jobs overview renders category filters and hides draft jobs" do
+    Job.create!(
+      title: "Draft Job",
+      slug: "draft-job",
+      location: "Stuttgart",
+      status: "draft",
+      category_list: "Intern"
+    )
+
+    get jobs_path
+
+    assert_response :success
+    assert_includes response.body, 'class="job-category-filter-nav"'
+    assert_includes response.body, 'data-job-category="catering"'
+    assert_includes response.body, 'data-job-categories="catering"'
+    assert_not_includes response.body, "Intern"
+    assert_not_includes response.body, "Draft Job"
+  end
+
+  test "job detail has contact sidebar but no category or profile filters" do
+    get job_path("stagehands")
+
+    assert_response :success
+    assert_not_includes response.body, "job-category-filter-nav"
+    assert_not_includes response.body, "job-profile-nav"
+    assert_includes response.body, "job-sidebar"
+    assert_includes response.body, "Sebastian Kränzlein"
+    assert_includes response.body, 'href="tel:+497111635342"'
+    assert_includes response.body, "mailto:sebastiankraenzlein@russ-live.de?subject=Bewerbung%20Stagehands"
+  end
+
   test "homepage renders sks highlights from Stuttgart Live with lazy images" do
     matching_event = create_event!(
       artist_name: "WILHELMINE",
@@ -252,6 +288,38 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
         updated_at: Time.current
       }
     ])
+  end
+
+  def seed_jobs!
+    contact = Contact.create!(
+      name: "Sebastian Kränzlein",
+      role: "Personaldisposition / Personalmarketing",
+      phone_number: "+49.711.16 353 42",
+      email: "sebastiankraenzlein@russ-live.de",
+      position: 1
+    )
+    contact.create_contact_image!(asset_path: "russ_live/team/sebastian-kraenzlein.jpg", alt_text: contact.name)
+
+    [
+      [ "cateringhilfen", "Cateringhilfen", "Catering" ],
+      [ "stagehands", "Stagehands", "Auf-/Abbau" ]
+    ].each_with_index do |(slug, title, category), index|
+      job = Job.create!(
+        contact: contact,
+        slug: slug,
+        title: title,
+        badge: "Minijob",
+        employment: "Flexible Einsätze bei Konzerten und Produktionen, m/w/d",
+        category_list: category,
+        location: "Stuttgart",
+        intro: "Du unterstützt unser Team hinter den Kulissen.",
+        responsibilities_text: "Unterstützung beim Auf- und Abbau von Bühnen-, Licht- und Tontechnik\nTransport und Positionierung von Material im Venue",
+        requirements_text: "Teamfähigkeit\nZuverlässigkeit",
+        status: "published",
+        position: index + 1
+      )
+      job.create_job_image!(asset_path: "russ_live/jobs/cateringhilfen.jpg", alt_text: title)
+    end
   end
 
   def create_event!(attributes = {})

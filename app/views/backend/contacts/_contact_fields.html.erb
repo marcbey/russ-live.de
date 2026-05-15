@@ -1,0 +1,24 @@
+<section class="backend-section">
+  <div class="backend-section-body editor-grid">
+    <div>
+      <%= form.label :name, "Name", class: "form-label" %>
+      <%= form.text_field :name, class: "form-input" %>
+    </div>
+    <div>
+      <%= form.label :role, "Rolle", class: "form-label" %>
+      <%= form.text_field :role, class: "form-input" %>
+    </div>
+    <div>
+      <%= form.label :phone_number, "Telefonnummer", class: "form-label" %>
+      <%= form.telephone_field :phone_number, class: "form-input" %>
+    </div>
+    <div>
+      <%= form.label :email, "E-Mail", class: "form-label" %>
+      <%= form.email_field :email, class: "form-input" %>
+    </div>
+    <div>
+      <%= form.label :position, "Sortierung", class: "form-label" %>
+      <%= form.number_field :position, class: "form-input", min: 0, step: 1 %>
+    </div>
+  </div>
+</section>

@@ -20,5 +20,8 @@ class Backend::DashboardControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_includes response.body, "Referenzen verwalten"
+    assert_includes response.body, "Jobs verwalten"
+    assert_includes response.body, "Ansprechpartner verwalten"
+    assert_includes response.body, "Logout"
   end
 end

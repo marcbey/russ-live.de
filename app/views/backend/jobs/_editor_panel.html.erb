@@ -1,0 +1,70 @@
+<% job_image = job.build_job_image_with_defaults %>
+<% form_url = job.persisted? ? backend_job_path(job) : backend_jobs_path %>
+<% form_method = job.persisted? ? :patch : :post %>
+<% form_id = dom_id(job, :editor_form) %>
+
+<div class="editor-panel" data-controller="reference-image-crop-preview">
+  <div class="editor-tabs">
+    <div class="editor-tab-list" role="tablist" aria-label="Job bearbeiten">
+      <% { "job" => "Job", "image" => "Bild" }.each do |tab, label| %>
+        <%= button_tag label,
+                       type: "button",
+                       class: "editor-tab #{'is-active' if active_editor_tab == tab}",
+                       role: "tab",
+                       aria: { selected: (active_editor_tab == tab).to_s },
+                       data: {
+                         action: "reference-image-crop-preview#selectTab",
+                         reference_image_crop_preview_target: "tab",
+                         reference_image_crop_preview_tab_param: tab
+                       } %>
+      <% end %>
+    </div>
+
+    <div class="editor-actions editor-tabs-actions">
+      <button type="submit" form="<%= form_id %>" class="button button-compact">Speichern</button>
+      <% if job.persisted? %>
+        <%= button_to "Job löschen",
+                      backend_job_path(job, status: (@status_filter unless @status_filter == "all"), query: @query_filter),
+                      method: :delete,
+                      class: "button button-danger button-compact",
+                      form: { data: { turbo_confirm: "Diesen Job wirklich löschen?" } } %>
+      <% end %>
+    </div>
+  </div>
+
+  <%= form_with model: job,
+                url: form_url,
+                method: form_method,
+                class: "editor-form",
+                html: { id: form_id, multipart: true },
+                data: { turbo: false } do |form| %>
+    <%= hidden_field_tag :status, (@status_filter unless @status_filter == "all") %>
+    <%= hidden_field_tag :query, @query_filter if @query_filter.present? %>
+    <%= hidden_field_tag :editor_tab, active_editor_tab, data: { reference_image_crop_preview_target: "editorTab" } %>
+
+    <% if job.errors.any? || job_image.errors.any? %>
+      <div class="form-errors">
+        <p>Bitte prüfe die markierten Angaben.</p>
+        <ul>
+          <% (job.errors.full_messages + job_image.errors.full_messages).uniq.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="editor-tab-panel"
+         data-reference-image-crop-preview-target="panel"
+         data-reference-image-crop-preview-tab-param="job"
+         <%= "hidden" unless active_editor_tab == "job" %>>
+      <%= render "job_fields", form: form, job: job, contacts: contacts %>
+    </div>
+
+    <div class="editor-tab-panel"
+         data-reference-image-crop-preview-target="panel"
+         data-reference-image-crop-preview-tab-param="image"
+         <%= "hidden" unless active_editor_tab == "image" %>>
+      <%= render "backend/shared/simple_image_fields", image: job_image, image_source: job_image_source(job_image), param_key: "job_image" %>
+    </div>
+  <% end %>
+</div>

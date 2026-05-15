@@ -7,6 +7,7 @@ import { application } from "./application"
 import AccordionController from "./accordion_controller"
 import EventsSliderController from "./events_slider_controller"
 import FilterClearController from "./filter_clear_controller"
+import JobFilterController from "./job_filter_controller"
 import JobProfileNavController from "./job_profile_nav_controller"
 import MobileMenuController from "./mobile_menu_controller"
 import PressLightboxController from "./press_lightbox_controller"
@@ -22,6 +23,7 @@ import SmoothAnchorController from "./smooth_anchor_controller"
 application.register("accordion", AccordionController)
 application.register("events-slider", EventsSliderController)
 application.register("filter-clear", FilterClearController)
+application.register("job-filter", JobFilterController)
 application.register("job-profile-nav", JobProfileNavController)
 application.register("mobile-menu", MobileMenuController)
 application.register("press-lightbox", PressLightboxController)
