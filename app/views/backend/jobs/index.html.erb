@@ -8,12 +8,6 @@
       <p class="eyebrow">Russ Live</p>
       <h1>Jobs</h1>
     </div>
-    <div class="backend-topbar-actions">
-      <%= link_to "Neuer Job",
-                  new_backend_job_path(status: (@status_filter unless @status_filter == "all"), query: @query_filter),
-                  class: "button button-secondary button-compact" %>
-      <%= link_to "Zur Jobseite", jobs_path, class: "button button-compact" %>
-    </div>
   </header>
 
   <div class="backend-split backend-inbox-split">
@@ -73,7 +67,12 @@
       <% if @selected_job.present? %>
         <%= render "editor_panel", job: @selected_job, contacts: @contacts, active_editor_tab: @active_editor_tab %>
       <% else %>
-        <p class="empty-state">Wähle einen Job aus oder lege einen neuen Job an.</p>
+        <div class="empty-state">
+          <p>Wähle einen Job aus oder lege einen neuen Job an.</p>
+          <%= link_to "Neuer Job",
+                      new_backend_job_path(status: (@status_filter unless @status_filter == "all"), query: @query_filter),
+                      class: "button button-success button-compact" %>
+        </div>
       <% end %>
     </section>
   </div>

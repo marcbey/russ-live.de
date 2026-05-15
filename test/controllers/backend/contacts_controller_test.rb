@@ -31,6 +31,9 @@ class Backend::ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Jobs"
     assert_includes response.body, "Logout"
     assert_includes response.body, "Sebastian Kränzlein"
+    assert_select ".editor-tabs-actions .button-danger", "Ansprechpartner löschen"
+    assert_select ".editor-tabs-actions .button-success", "Neuer Ansprechpartner"
+    assert_operator response.body.index("Ansprechpartner löschen"), :<, response.body.index("Neuer Ansprechpartner")
   end
 
   test "image tab does not expose alt text or copyright fields" do

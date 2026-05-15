@@ -28,6 +28,9 @@
                       method: :delete,
                       class: "button button-danger button-compact",
                       form: { data: { turbo_confirm: "Diesen Ansprechpartner wirklich löschen?" } } %>
+        <%= link_to "Neuer Ansprechpartner",
+                    new_backend_contact_path(query: @query_filter),
+                    class: "button button-success button-compact" %>
       <% end %>
     </div>
   </div>

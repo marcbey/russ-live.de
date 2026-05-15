@@ -10,6 +10,7 @@ export default class extends Controller {
     "focusY",
     "fileInput",
     "fileMeta",
+    "imageDependentField",
     "panel",
     "tab",
     "zoom",
@@ -146,7 +147,14 @@ export default class extends Controller {
     this.previewImageTarget.alt = file.name
     this.previewImageTarget.classList.remove("is-hidden")
     this.placeholderElement?.classList.add("is-hidden")
+    this.showImageDependentFields()
     this.renderFileMeta(file)
+  }
+
+  showImageDependentFields() {
+    this.imageDependentFieldTargets.forEach((element) => {
+      element.hidden = false
+    })
   }
 
   revokePreviewUrl() {

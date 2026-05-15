@@ -15,6 +15,8 @@
   --backend-focus: rgba(17, 17, 17, .16);
   --danger: #b42318;
   --danger-hover: #8f1d14;
+  --success: #147a3f;
+  --success-hover: #0f5f31;
   --max: 1440px;
   --reference-max: 1760px;
   --header-nav-height: 72px;
@@ -2513,8 +2515,8 @@ h3 {
 }
 
 .backend-topbar-title h1 {
-  font-size: clamp(2.2rem, 5vw, 4.8rem);
-  line-height: .9;
+  font-size: clamp(1.35rem, 2.5vw, 2.4rem);
+  line-height: 1;
   margin: 4px 0 0;
   text-transform: uppercase;
 }
@@ -2554,6 +2556,19 @@ h3 {
 .button-danger:focus-visible {
   background: var(--danger-hover);
   border-color: var(--danger-hover);
+  color: #fff;
+}
+
+.button-success {
+  background: var(--success);
+  border-color: var(--success);
+  color: #fff;
+}
+
+.button-success:hover,
+.button-success:focus-visible {
+  background: var(--success-hover);
+  border-color: var(--success-hover);
   color: #fff;
 }
 

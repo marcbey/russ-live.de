@@ -28,6 +28,9 @@
                       method: :delete,
                       class: "button button-danger button-compact",
                       form: { data: { turbo_confirm: "Diese Referenz wirklich löschen?" } } %>
+        <%= link_to "Neue Referenz",
+                    new_backend_reference_path(status: (@status_filter unless @status_filter == "all"), query: @query_filter),
+                    class: "button button-success button-compact" %>
       <% end %>
     </div>
   </div>

@@ -43,6 +43,9 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'name="reference[tag_list]"'
     assert_includes response.body, 'name="reference_image[grid_variant]"'
     assert_includes response.body, 'name="reference_image[card_zoom]"'
+    assert_select ".editor-tabs-actions .button-danger", "Referenz löschen"
+    assert_select ".editor-tabs-actions .button-success", "Neue Referenz"
+    assert_operator response.body.index("Referenz löschen"), :<, response.body.index("Neue Referenz")
   end
 
   test "searches references by tags" do
@@ -80,6 +83,23 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "01-disgusting-food-museum.jpg"
     assert_includes response.body, "image/jpeg"
     assert_includes response.body, "514 KB"
+  end
+
+  test "hides image detail fields until a reference image exists" do
+    sign_in_as(@admin)
+    reference = Reference.create!(
+      title: "Ohne Bild",
+      starts_on: Date.new(2026, 5, 1),
+      location: "Stuttgart",
+      status: "draft",
+      position: 1
+    )
+
+    get backend_references_path(reference_id: reference.id, editor_tab: "image")
+
+    assert_response :success
+    assert_select 'label[for="reference_image_file"]', "Bild"
+    assert_select '[data-reference-image-crop-preview-target="imageDependentField"][hidden]', 5
   end
 
   test "creates published reference with image metadata" do

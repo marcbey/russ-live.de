@@ -32,6 +32,9 @@ class Backend::JobsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Ansprechpartner"
     assert_includes response.body, "Logout"
     assert_includes response.body, "Stagehands"
+    assert_select ".editor-tabs-actions .button-danger", "Job löschen"
+    assert_select ".editor-tabs-actions .button-success", "Neuer Job"
+    assert_operator response.body.index("Job löschen"), :<, response.body.index("Neuer Job")
   end
 
   test "searches jobs by categories and contact" do

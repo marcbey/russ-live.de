@@ -8,10 +8,6 @@
       <p class="eyebrow">Russ Live</p>
       <h1>Ansprechpartner</h1>
     </div>
-    <div class="backend-topbar-actions">
-      <%= link_to "Neuer Ansprechpartner", new_backend_contact_path(query: @query_filter), class: "button button-secondary button-compact" %>
-      <%= link_to "Zur Jobseite", jobs_path, class: "button button-compact" %>
-    </div>
   </header>
 
   <div class="backend-split backend-inbox-split">
@@ -60,7 +56,12 @@
       <% if @selected_contact.present? %>
         <%= render "editor_panel", contact: @selected_contact, active_editor_tab: @active_editor_tab %>
       <% else %>
-        <p class="empty-state">Wähle einen Ansprechpartner aus oder lege einen neuen Ansprechpartner an.</p>
+        <div class="empty-state">
+          <p>Wähle einen Ansprechpartner aus oder lege einen neuen Ansprechpartner an.</p>
+          <%= link_to "Neuer Ansprechpartner",
+                      new_backend_contact_path(query: @query_filter),
+                      class: "button button-success button-compact" %>
+        </div>
       <% end %>
     </section>
   </div>

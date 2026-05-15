@@ -28,6 +28,9 @@
                       method: :delete,
                       class: "button button-danger button-compact",
                       form: { data: { turbo_confirm: "Diesen Job wirklich löschen?" } } %>
+        <%= link_to "Neuer Job",
+                    new_backend_job_path(status: (@status_filter unless @status_filter == "all"), query: @query_filter),
+                    class: "button button-success button-compact" %>
       <% end %>
     </div>
   </div>
