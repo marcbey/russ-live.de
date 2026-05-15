@@ -87,12 +87,12 @@ module Backend
       end
 
       def reference_params
-        params.require(:reference).permit(:title, :starts_on, :location, :production, :tag_list, :description, :status, :position)
+        params.require(:reference).permit(:title, :starts_on, :location, :production, :tag_list, :description, :description_en, :status, :position)
       end
 
       def create_reference_params
         params.fetch(:reference, ActionController::Parameters.new)
-          .permit(:title, :starts_on, :location, :production, :tag_list, :description, :status, :position)
+          .permit(:title, :starts_on, :location, :production, :tag_list, :description, :description_en, :status, :position)
           .reverse_merge(
             title: fallback_reference_title,
             starts_on: Time.zone.today,

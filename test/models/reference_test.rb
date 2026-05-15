@@ -17,6 +17,39 @@ class ReferenceTest < ActiveSupport::TestCase
     assert_includes reference.errors[:status], "is not included in the list"
   end
 
+  test "validates english description length" do
+    reference = create_reference!(
+      title: "Localized",
+      status: "published",
+      position: 1,
+      description_en: "English project description."
+    )
+
+    assert_predicate reference, :valid?
+
+    reference.description_en = "x" * 501
+
+    assert_not reference.valid?
+    assert_includes reference.errors[:description_en], "is too long (maximum is 500 characters)"
+  end
+
+  test "localized description uses english copy with german fallback" do
+    reference = create_reference!(
+      title: "Localized",
+      status: "published",
+      position: 1,
+      description: "Deutsche Beschreibung",
+      description_en: "English description"
+    )
+
+    assert_equal "Deutsche Beschreibung", reference.localized_description(:de)
+    assert_equal "English description", reference.localized_description(:en)
+
+    reference.description_en = nil
+
+    assert_equal "Deutsche Beschreibung", reference.localized_description(:en)
+  end
+
   test "published scope and ordering" do
     draft = create_reference!(title: "Draft", status: "draft", position: 1)
     published_late = create_reference!(title: "Late", status: "published", position: 3, starts_on: Date.new(2025, 1, 1))
@@ -64,14 +97,16 @@ class ReferenceTest < ActiveSupport::TestCase
   end
 
   private
-    def create_reference!(title:, status:, position:, starts_on: Date.new(2026, 1, 1), tag_list: nil)
+    def create_reference!(title:, status:, position:, starts_on: Date.new(2026, 1, 1), tag_list: nil, description: nil, description_en: nil)
       Reference.create!(
         title: title,
         starts_on: starts_on,
         location: "Stuttgart",
         status: status,
         position: position,
-        tag_list: tag_list
+        tag_list: tag_list,
+        description: description,
+        description_en: description_en
       )
     end
 end

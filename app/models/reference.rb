@@ -14,7 +14,7 @@ class Reference < RussRecord
   validates :starts_on, presence: true
   validates :location, presence: true, length: { maximum: 180 }
   validates :production, length: { maximum: 180 }, allow_blank: true
-  validates :description, length: { maximum: 500 }, allow_blank: true
+  validates :description, :description_en, length: { maximum: 500 }, allow_blank: true
   validates :status, inclusion: { in: STATUSES }
   validates :position, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
@@ -79,6 +79,12 @@ class Reference < RussRecord
 
   def year
     starts_on&.year
+  end
+
+  def localized_description(locale = I18n.locale)
+    return description_en.presence || description if locale.to_s == "en"
+
+    description
   end
 
   def build_reference_image_with_defaults

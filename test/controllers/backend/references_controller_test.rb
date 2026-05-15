@@ -41,6 +41,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'name="reference[title]"'
     assert_includes response.body, 'name="reference[location]"'
     assert_includes response.body, 'name="reference[tag_list]"'
+    assert_includes response.body, 'name="reference[description_en]"'
     assert_includes response.body, 'name="reference_image[grid_variant]"'
     assert_includes response.body, 'name="reference_image[card_zoom]"'
     assert_select ".editor-tabs-actions .button-danger", "Referenz löschen"
@@ -114,6 +115,8 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     reference = Reference.last
     assert_equal "published", reference.status
     assert_equal [ "Open Air", "Clubkonzert" ], reference.tags
+    assert_equal "Beschreibung", reference.description
+    assert_equal "English description", reference.description_en
     assert_equal "2x1", reference.reference_image.grid_variant
     assert_redirected_to backend_references_path(reference_id: reference.id, status: "published")
   end
@@ -225,6 +228,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "All Them Witches", reference.title
     assert_equal "published", reference.status
     assert_equal [ "Open Air", "Ausstellung" ], reference.tags
+    assert_equal "English description", reference.description_en
     assert_equal "2x2", reference.reference_image.grid_variant
     assert_equal "All Them Witches", reference.reference_image.alt_text
     assert_equal "Travis Shinn", reference.reference_image.sub_text
@@ -236,6 +240,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_includes response.body, 'value="Open Air, Ausstellung"'
+    assert_select "textarea[name='reference[description_en]']", "English description"
   end
 
   test "uploaded image replaces asset image and renders cache busted url" do
@@ -298,6 +303,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
           production: "SKS Michael Russ",
           tag_list: "Open Air, Clubkonzert",
           description: "Beschreibung",
+          description_en: "English description",
           status: status,
           position: "1"
         },

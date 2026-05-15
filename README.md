@@ -81,7 +81,9 @@ verwaltet. Das Backend unter `/backend/references` bietet eine
 stuttgart-live-inspirierte Inbox mit Liste, Suche, Statusfilter und
 Editor-Panel. Pro Referenz gibt es einen eigenen Eventbild-ähnlichen Bildeditor
 mit Grid-Variante, Ausschnitt und Zoom; diese Werte steuern die Kachel auf
-`/referenzen`.
+`/referenzen`. Die Beschreibung wird getrennt für Deutsch und Englisch gepflegt;
+fehlt die englische Beschreibung, zeigt die englische Seite die deutsche
+Beschreibung als Fallback.
 
 Auf `/services` nutzt der Referenzslider dieselben veröffentlichten Referenzen,
 beschränkt auf Einträge mit den Tags `Concert`, `Konzert` oder `Live`.

@@ -297,6 +297,39 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "Intern"
   end
 
+  test "renders localized reference descriptions" do
+    localized = create_reference_with_image!(
+      title: "LOCALIZED SHOW",
+      position: 1,
+      tag_list: "Open Air",
+      description: "Deutsche Referenzbeschreibung",
+      description_en: "English reference description"
+    )
+    fallback = create_reference_with_image!(
+      title: "FALLBACK SHOW",
+      position: 2,
+      tag_list: "Clubkonzert",
+      description: "Deutsche Fallback-Beschreibung"
+    )
+
+    get referenzen_path
+
+    assert_response :success
+    assert_includes response.body, localized.description
+    assert_includes response.body, fallback.description
+    assert_not_includes response.body, localized.description_en
+
+    post locale_path(:en), params: { return_to: referenzen_path }
+    assert_redirected_to referenzen_path
+
+    get referenzen_path
+
+    assert_response :success
+    assert_includes response.body, localized.description_en
+    assert_includes response.body, fallback.description
+    assert_not_includes response.body, localized.description
+  end
+
   test "renders job detail on its own page" do
     get job_path("stagehands")
 
@@ -486,14 +519,16 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def create_reference_with_image!(title:, position:, tag_list:, status: "published")
+  def create_reference_with_image!(title:, position:, tag_list:, status: "published", description: nil, description_en: nil)
     Reference.create!(
       title: title,
       starts_on: Date.new(2026, 5, 1),
       location: "Stuttgart",
       status: status,
       position: position,
-      tag_list: tag_list
+      tag_list: tag_list,
+      description: description,
+      description_en: description_en
     ).tap do |reference|
       reference.create_reference_image!(
         asset_path: "russ_live/references/01-disgusting-food-museum.jpg",

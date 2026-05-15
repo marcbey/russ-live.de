@@ -1,6 +1,7 @@
 <% reference_image = reference.reference_image %>
 <% image_source = reference_image_source(reference_image) %>
 <% dimensions = reference_card_dimensions(reference_image) %>
+<% localized_description = reference.localized_description %>
 
 <%= tag.figure class: "public-card reference-card #{reference_grid_class(reference_image)}",
                data: { reference_tags: reference.tag_slugs.join(" ") }.merge(reference_image_render_data(reference_image)) do %>
@@ -27,8 +28,8 @@
       <% if reference.production.present? %>
         <span class="reference-card-meta"><strong><%= t("references.card.production") %></strong><%= reference.production %></span>
       <% end %>
-      <% if reference.description.present? %>
-        <span class="reference-card-copy"><%= reference.description %></span>
+      <% if localized_description.present? %>
+        <span class="reference-card-copy"><%= localized_description %></span>
       <% end %>
     </span>
   </button>
