@@ -11,6 +11,7 @@
 - After a pull, fast-forward, or rebase, `bin/ci` must be run successfully again before pushing.
 - A `git push` must not be performed if updating the branch fails or if `bin/ci` or any individual check is failing.
 - If new migrations enter the working tree after a `git pull`, rebase, or branch switch, the local database must be brought up to date before running further tests, starting the app, or performing deployment steps.
+- The local development environment defaults to port `3001` when started through `mise exec -- bin/dev`; only override `PORT` intentionally.
 - Changes to the app, new features, workflows, deployments, or infrastructure must always be checked to determine whether `README.md` also needs to be updated. If usage, operations, setup, architecture, dependencies, or troubleshooting change, `README.md` must be updated in the same workflow.
 - `README.md` should primarily be written for humans: clear, understandable, concise, and practical. Documentation should explain relationships and describe concrete steps, rather than merely listing internal implementation details or file inventories.
 - When changing English or German copy, existing text content, or legacy text content, the corresponding other language version must be updated in the same workflow wherever it exists so both languages keep the same meaning and level of detail.

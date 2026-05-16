@@ -129,7 +129,7 @@ bleiben vorerst einsprachig aus den jeweiligen Datenquellen.
 mise exec -- bin/dev
 ```
 
-Die Anwendung läuft danach standardmäßig unter `http://127.0.0.1:3000`.
+Die Anwendung läuft danach standardmäßig unter `http://127.0.0.1:3001`.
 
 ## Checks
 
