@@ -1,4 +1,4 @@
-<header class="site-header<%= " page-header" unless public_page?(:home) %>" aria-label="<%= t("public.header.main_aria") %>" data-controller="mobile-menu scrolled-header" data-mobile-menu-open-label-value="<%= t("public.header.menu_open") %>" data-mobile-menu-close-label-value="<%= t("public.header.menu_close") %>">
+<header class="site-header page-header" aria-label="<%= t("public.header.main_aria") %>" data-controller="mobile-menu scrolled-header" data-mobile-menu-open-label-value="<%= t("public.header.menu_open") %>" data-mobile-menu-close-label-value="<%= t("public.header.menu_close") %>">
   <%= link_to root_path, class: "brand", aria: { label: t("public.header.home_aria") } do %>
     <%= image_tag "russ_live/logos/russ-live-logo-header.svg", alt: "Russ Live", class: "brand-mark" %>
   <% end %>

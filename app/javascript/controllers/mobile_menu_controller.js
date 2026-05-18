@@ -1,5 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
+const DESKTOP_BREAKPOINT = "(min-width: 1071px)"
+
 export default class extends Controller {
   static targets = ["button", "nav"]
   static values = {
@@ -24,7 +26,7 @@ export default class extends Controller {
     }, { signal })
 
     window.addEventListener("resize", () => {
-      if (window.matchMedia("(min-width: 901px)").matches) this.setOpen(false)
+      if (window.matchMedia(DESKTOP_BREAKPOINT).matches) this.setOpen(false)
     }, { signal })
   }
 
