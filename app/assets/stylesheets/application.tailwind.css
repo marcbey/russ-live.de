@@ -65,24 +65,12 @@ body {
 
 @media (min-width: 1800px) {
   .page-header {
-    --brand-left: 108px;
-    --brand-top: 70px;
     --header-nav-height: 84px;
     --header-nav-font-size: 23px;
     --header-nav-padding: 38px;
     --header-subnav-font-size: 19px;
     --header-subnav-height: 62px;
     --header-subnav-padding: 30px;
-  }
-
-  .jobs-body {
-    --brand-left: 108px;
-    --brand-top: 70px;
-  }
-
-  .page-header .brand {
-    padding-left: var(--brand-left);
-    padding-top: var(--brand-top);
   }
 
   .page-header + .page-main {
@@ -92,24 +80,12 @@ body {
 
 @media (min-width: 2400px) {
   .page-header {
-    --brand-left: 132px;
-    --brand-top: 84px;
     --header-nav-height: 96px;
     --header-nav-font-size: 26px;
     --header-nav-padding: 48px;
     --header-subnav-font-size: 21px;
     --header-subnav-height: 70px;
     --header-subnav-padding: 36px;
-  }
-
-  .jobs-body {
-    --brand-left: 132px;
-    --brand-top: 84px;
-  }
-
-  .page-header .brand {
-    padding-left: var(--brand-left);
-    padding-top: var(--brand-top);
   }
 
   .page-header + .page-main {
@@ -845,11 +821,11 @@ h3 {
 
 .references-hero-copy {
   align-self: center;
-  justify-self: center;
-  max-width: var(--reference-max);
-  padding: clamp(202px, 16vw, 258px) 0 clamp(92px, 8vw, 118px);
+  justify-self: stretch;
+  max-width: none;
+  padding: clamp(202px, 16vw, 258px) var(--brand-left) clamp(92px, 8vw, 118px);
   position: relative;
-  width: min(calc(100% - clamp(40px, 8vw, 168px)), var(--reference-max));
+  width: 100%;
   z-index: 3;
 }
 
@@ -1656,7 +1632,7 @@ h3 {
 .services-hero-copy {
   align-self: center;
   max-width: 980px;
-  padding: clamp(170px, 18vw, 260px) clamp(20px, 7vw, 110px) clamp(150px, 13vw, 210px);
+  padding: clamp(170px, 18vw, 260px) clamp(20px, 7vw, 110px) clamp(150px, 13vw, 210px) var(--brand-left);
   position: relative;
   z-index: 2;
 }
@@ -4746,7 +4722,7 @@ h3 {
     align-items: center;
     display: flex;
     height: var(--mobile-header-height);
-    padding: 0 0 0 28px;
+    padding: 0 0 0 var(--brand-left);
   }
 
   .brand img {
@@ -4864,7 +4840,7 @@ h3 {
 
   .references-hero-copy {
     align-self: end;
-    padding: 164px 28px 92px;
+    padding: 164px var(--brand-left) 92px;
   }
 
   .references-hero h1 {
@@ -4897,7 +4873,7 @@ h3 {
 
   .services-hero-copy {
     align-self: end;
-    padding: 210px 28px 150px;
+    padding: 210px var(--brand-left) 150px;
   }
 
   .services-hero h1 {
@@ -5509,7 +5485,7 @@ h3 {
   }
 
   .brand {
-    padding-left: 24px;
+    padding-left: var(--brand-left);
   }
 
   .mobile-menu-button {
@@ -5531,20 +5507,20 @@ h3 {
 
   .site-header.is-menu-open .main-nav > a,
   .site-header.is-menu-open .nav-item > a {
-    padding-inline: 24px;
+    padding-inline: var(--brand-left);
   }
 
   .site-header.is-menu-open .nav-submenu a {
-    padding-inline: 42px 24px;
+    padding-inline: calc(var(--brand-left) + 18px) var(--brand-left);
   }
 
   .site-header.is-menu-open .language-switch {
-    padding-inline: 24px;
+    padding-inline: var(--brand-left);
   }
 
   .hero-copy {
-    left: 24px;
-    max-width: min(310px, calc(100vw - 48px));
+    left: var(--brand-left);
+    max-width: min(310px, calc(100vw - (var(--brand-left) * 2)));
   }
 
   h2 {
@@ -5744,7 +5720,7 @@ h3 {
   }
 
   .services-hero-copy {
-    padding: 180px 24px 132px;
+    padding: 180px var(--brand-left) 132px;
   }
 
   .home-hero-copy {
