@@ -12,6 +12,13 @@
     <div class="job-overview-hero-copy">
       <h1 id="jobs-title"><%= t("pages.jobs.hero.title") %></h1>
       <p><%= t("pages.jobs.hero.intro") %></p>
+      <%= public_backend_link(
+            label: t("public.actions.edit"),
+            path: backend_jobs_path,
+            aria_label: t("public.actions.edit_jobs"),
+            class_name: "public-button section-button section-button-outline-light public-admin-link",
+            wrapper_class: "job-overview-hero-actions"
+          ) %>
     </div>
     <% if @job_categories.any? %>
       <nav class="public-filter-nav job-category-filter-nav" aria-label="<%= t("jobs.filters.aria") %>">

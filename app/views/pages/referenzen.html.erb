@@ -11,6 +11,12 @@
     <div class="references-hero-copy">
       <h1 id="references-title"><%= t("pages.references.hero.title") %></h1>
       <p><%= t("pages.references.hero.intro") %></p>
+      <%= public_backend_link(
+            label: t("public.actions.edit"),
+            path: backend_references_path,
+            aria_label: t("public.actions.edit_references"),
+            wrapper_class: "public-admin-link-row"
+          ) %>
     </div>
     <nav class="public-filter-nav references-filter-nav" aria-label="<%= t("references.filters.aria") %>">
       <button type="button" data-reference-tag="all" aria-pressed="true"><%= t("public.filters.all") %></button>

@@ -1,4 +1,8 @@
 module ApplicationHelper
+  def backend_user?
+    authenticated? && current_user&.backend_access?
+  end
+
   def public_page?(key)
     @page_key == key.to_sym
   end
@@ -13,6 +17,22 @@ module ApplicationHelper
 
   def public_nav_class(keys, class_name: "is-active")
     class_name if public_section?(Array(keys))
+  end
+
+  def public_backend_link(label:, path:, aria_label: nil, class_name: "public-button section-button public-admin-link", wrapper_class: nil, data: {})
+    return unless backend_user?
+
+    link = link_to(
+      label,
+      path,
+      class: class_name,
+      aria: (aria_label.present? ? { label: aria_label } : {}),
+      data: data.reverse_merge(role: "public-admin-edit-link")
+    )
+
+    return link if wrapper_class.blank?
+
+    content_tag(:div, link, class: wrapper_class)
   end
 
   def locale_return_to_path

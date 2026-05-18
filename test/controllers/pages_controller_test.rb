@@ -4,6 +4,8 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   setup do
     StuttgartLiveSchema.ensure!
     RussLiveSchema.ensure!
+    clear_auth_records
+    clear_stuttgart_users
     JobImage.delete_all
     Job.delete_all
     ContactImage.delete_all
@@ -13,6 +15,59 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     clear_stuttgart_live_records
     seed_sks_promoter_ids!
     seed_jobs!
+  end
+
+  test "signed out visitors do not see backend navigation or edit buttons" do
+    create_reference_with_image!(title: "VISIBLE REFERENCE", position: 1, tag_list: "Concert")
+
+    [ root_path, referenzen_path, jobs_path, job_path("stagehands"), unternehmen_path ].each do |path|
+      get path
+
+      assert_response :success
+      assert_not_includes response.body, 'data-role="public-backend-nav-link"'
+      assert_not_includes response.body, 'data-role="public-admin-edit-link"'
+    end
+  end
+
+  test "backend users see backend navigation and edit buttons on editable public areas" do
+    create_reference_with_image!(title: "VISIBLE REFERENCE", position: 1, tag_list: "Concert")
+    admin = create_stuttgart_user!(email_address: "admin@example.com", role: "admin")
+
+    sign_in_as(admin)
+
+    get referenzen_path
+
+    assert_response :success
+    assert_includes response.body, 'data-role="public-backend-nav-link"'
+    assert_includes response.body, "href=\"#{backend_root_path}\""
+    assert_includes response.body, 'data-role="public-admin-edit-link"'
+    assert_includes response.body, "href=\"#{backend_references_path}\""
+
+    get jobs_path
+
+    assert_response :success
+    assert_includes response.body, 'data-role="public-backend-nav-link"'
+    assert_includes response.body, "href=\"#{backend_jobs_path}\""
+
+    stagehands_job = Job.find_by!(slug: "stagehands")
+
+    get job_path(stagehands_job.slug)
+
+    assert_response :success
+    assert_includes response.body, "href=\"#{backend_jobs_path(job_id: stagehands_job.id)}\""
+    assert_includes response.body, "href=\"#{backend_contacts_path(contact_id: stagehands_job.contact.id)}\""
+  end
+
+  test "backend users do not see edit buttons on static public pages without backend targets" do
+    admin = create_stuttgart_user!(email_address: "admin@example.com", role: "admin")
+
+    sign_in_as(admin)
+
+    get unternehmen_path
+
+    assert_response :success
+    assert_includes response.body, 'data-role="public-backend-nav-link"'
+    assert_not_includes response.body, 'data-role="public-admin-edit-link"'
   end
 
   test "renders public pages" do

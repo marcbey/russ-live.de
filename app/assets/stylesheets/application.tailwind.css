@@ -667,6 +667,52 @@ h3 {
   transform: translateY(-1px);
 }
 
+.public-admin-link-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.public-admin-link {
+  background: #c32026;
+  border: 1px solid #c32026;
+  color: #fff;
+  min-width: auto;
+}
+
+.section-button-outline-light.public-admin-link {
+  background: #c32026;
+  border-color: #c32026;
+  color: #fff;
+}
+
+.public-admin-link:hover,
+.public-admin-link:focus-visible {
+  background: #a61a1f;
+  border-color: #a61a1f;
+  color: #fff;
+}
+
+.section-button-outline-light.public-admin-link:hover,
+.section-button-outline-light.public-admin-link:focus-visible {
+  background: #a61a1f;
+  border-color: #a61a1f;
+  color: #fff;
+}
+
+.main-nav > a.public-admin-nav-link {
+  background: #c32026;
+  color: #fff;
+}
+
+.main-nav > a.public-admin-nav-link:hover,
+.main-nav > a.public-admin-nav-link:focus-visible,
+.main-nav > a.public-admin-nav-link[aria-current="page"] {
+  background: #a61a1f;
+  color: #fff;
+}
+
 .accordion-item {
   border-bottom: 1px solid var(--line);
   transition: border-color .34s ease;
@@ -1429,6 +1475,13 @@ h3 {
   margin-top: 0;
 }
 
+.klassik-slider-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
 .references-band .klassik-slider-meta h3,
 .references-band .klassik-slider-date-location {
   color: #fff;
@@ -1445,6 +1498,19 @@ h3 {
 .references-band .section-button {
   background: #fff;
   color: #111;
+}
+
+.references-band .public-admin-link {
+  background: #c32026;
+  border-color: #c32026;
+  color: #fff;
+}
+
+.references-band .public-admin-link:hover,
+.references-band .public-admin-link:focus-visible {
+  background: #a61a1f;
+  border-color: #a61a1f;
+  color: #fff;
 }
 
 .reference-card:hover img {
@@ -1834,6 +1900,19 @@ h3 {
 .services-showcase .section-button {
   background: #fff;
   color: #111;
+}
+
+.services-showcase .public-admin-link {
+  background: #c32026;
+  border-color: #c32026;
+  color: #fff;
+}
+
+.services-showcase .public-admin-link:hover,
+.services-showcase .public-admin-link:focus-visible {
+  background: #a61a1f;
+  border-color: #a61a1f;
+  color: #fff;
 }
 
 .service-company-grid {
@@ -3792,6 +3871,10 @@ h3 {
 
 .job-contact {
   padding-top: 0;
+}
+
+.job-contact .public-admin-link {
+  margin-top: 18px;
 }
 
 .job-nav nav {

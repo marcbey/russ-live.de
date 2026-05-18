@@ -4,6 +4,9 @@
   <% end %>
 
   <nav class="main-nav" aria-label="<%= t("public.header.nav_aria") %>" data-mobile-menu-target="nav">
+    <% if backend_user? %>
+      <%= link_to t("public.header.backend"), backend_root_path, class: "public-admin-nav-link", data: { role: "public-backend-nav-link" } %>
+    <% end %>
     <div class="nav-item has-submenu">
       <%= link_to t("public.header.company"), unternehmen_path, class: public_nav_class(%i[unternehmen referenzen]) %>
       <div class="nav-submenu" aria-label="<%= t("public.header.company_submenu_aria") %>">

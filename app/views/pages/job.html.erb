@@ -17,6 +17,12 @@
           <%= link_to t("jobs.apply_now"), @selected_job.join_recruiting_url, class: "public-button public-button-primary section-button", target: "_blank", rel: "noopener noreferrer" %>
         <% end %>
         <%= link_to t("jobs.back_to_overview"), jobs_path, class: "public-button public-button-outline section-button section-button-outline-light" %>
+        <%= public_backend_link(
+              label: t("public.actions.edit"),
+              path: backend_jobs_path(job_id: @selected_job.id),
+              aria_label: t("public.actions.edit_jobs"),
+              class_name: "public-button section-button section-button-outline-light public-admin-link"
+            ) %>
       </div>
     </div>
   </section>
@@ -72,6 +78,11 @@
           <p><%= @selected_job.contact.role %></p>
           <p><a href="tel:<%= @selected_job.contact.tel_href %>"><%= @selected_job.contact.phone_number %></a></p>
           <p><%= mail_to @selected_job.contact.email, @selected_job.contact.email, subject: @selected_job.application_email_subject %></p>
+          <%= public_backend_link(
+                label: t("public.actions.edit"),
+                path: backend_contacts_path(contact_id: @selected_job.contact.id),
+                aria_label: t("public.actions.edit_contact")
+              ) %>
         </div>
       </aside>
     <% end %>

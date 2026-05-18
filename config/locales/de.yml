@@ -28,6 +28,7 @@ de:
       main_aria: "Hauptnavigation"
       nav_aria: "Seitennavigation"
       home_aria: "Russ Live Startseite"
+      backend: "Backend"
       company: "Unternehmen"
       company_submenu_aria: "Unternehmen Untermenü"
       about: "Über uns"
@@ -40,6 +41,11 @@ de:
       language_switch: "Zur Sprache %{language} wechseln"
       menu_open: "Menü öffnen"
       menu_close: "Menü schließen"
+    actions:
+      edit: "Bearbeiten"
+      edit_references: "Referenzen im Backend bearbeiten"
+      edit_jobs: "Jobs im Backend bearbeiten"
+      edit_contact: "Ansprechpartner im Backend bearbeiten"
     footer:
       nav_aria: "Footernavigation"
       imprint: "Impressum"

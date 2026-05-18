@@ -43,6 +43,14 @@
       <p class="klassik-slider-date-location"><%= first_reference_data[:date_location] %></p>
       <p class="klassik-slider-partner"><%= first_reference_data[:partner] %></p>
     </div>
-    <a class="public-button public-button-primary section-button klassik-slider-button" href="<%= referenzen_path %>"><%= t("public.header.references") %></a>
+    <div class="klassik-slider-actions">
+      <a class="public-button public-button-primary section-button klassik-slider-button" href="<%= referenzen_path %>"><%= t("public.header.references") %></a>
+      <%= public_backend_link(
+            label: t("public.actions.edit"),
+            path: backend_references_path,
+            aria_label: t("public.actions.edit_references"),
+            class_name: "public-button section-button public-admin-link klassik-slider-button"
+          ) %>
+    </div>
   </div>
 </div>
