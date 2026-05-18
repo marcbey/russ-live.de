@@ -112,15 +112,15 @@
             <p class="home-events-intro"><%= t("pages.home.events.intro") %></p>
           </div>
           <div class="home-events-toolbar">
-            <div class="home-events-nav" aria-label="<%= t("pages.home.events.nav_aria") %>">
-              <button class="home-events-nav-button" type="button" data-action="events-slider#previous" aria-label="<%= t("pages.home.events.previous") %>">‹</button>
-              <button class="home-events-nav-button" type="button" data-action="events-slider#next" aria-label="<%= t("pages.home.events.next") %>">›</button>
-            </div>
             <a class="public-button public-button-primary button home-events-all-button" href="<%= @stuttgart_live_sks_highlights_url %>" target="_blank" rel="noreferrer"><%= t("pages.home.events.show_all") %></a>
           </div>
         </div>
 
         <div class="home-events-viewport">
+          <div class="home-events-nav" aria-label="<%= t("pages.home.events.nav_aria") %>">
+            <button class="home-events-nav-button" type="button" data-action="events-slider#previous" aria-label="<%= t("pages.home.events.previous") %>">‹</button>
+            <button class="home-events-nav-button" type="button" data-action="events-slider#next" aria-label="<%= t("pages.home.events.next") %>">›</button>
+          </div>
           <div class="home-events-slider" aria-label="<%= t("pages.home.events.title") %>" data-events-slider-target="viewport">
             <%= render "pages/event_slider_cards", events: @home_events %>
           </div>

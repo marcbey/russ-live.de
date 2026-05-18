@@ -515,11 +515,11 @@ h3 {
   display: block;
 }
 
-.home-hero-copy > p:last-child {
+.home-hero-copy > #hero-intro {
   color: rgba(255, 255, 255, .82);
-  font-size: clamp(1.18rem, 1.45vw, 1.72rem);
-  line-height: 1.2;
-  margin: 30px 0 0;
+  font-size: clamp(1.4rem, 1.7vw, 2rem);
+  line-height: 1.28;
+  margin: 44px 0 0;
   max-width: 580px;
 }
 
@@ -537,6 +537,14 @@ h3 {
 }
 
 @media (min-width: 1071px) {
+  .home-hero-copy {
+    max-width: 980px;
+  }
+
+  .home-hero-copy > #hero-intro {
+    max-width: 900px;
+  }
+
   .home-body .site-header:not(.is-scrolled):not(.is-menu-open),
   .site-header:not(.is-scrolled):not(.is-menu-open) {
     --header-nav-bg: transparent;
@@ -3099,6 +3107,7 @@ h3 {
 
 .home-events-intro {
   color: var(--muted);
+  margin-top: 8px;
   max-width: 620px;
 }
 
@@ -3106,24 +3115,35 @@ h3 {
   align-items: center;
   display: flex;
   gap: 12px;
+  justify-content: flex-end;
 }
 
 .home-events-nav {
+  align-items: center;
   display: flex;
   gap: 8px;
+  inset-inline: -18px;
+  justify-content: space-between;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
 }
 
 .home-events-nav-button {
   align-items: center;
   appearance: none;
-  background: transparent;
-  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, .92);
+  border: 1px solid rgba(17, 17, 17, .14);
   border-radius: 999px;
   color: var(--ink);
   display: inline-flex;
   font-size: 1.5rem;
   height: 42px;
   justify-content: center;
+  pointer-events: auto;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, .14);
   transition: background-color .22s ease, color .22s ease, opacity .22s ease, transform .22s ease;
   width: 42px;
 }
@@ -3167,8 +3187,9 @@ h3 {
 
 .home-events-viewport {
   margin: -10px;
-  overflow: hidden;
+  overflow: visible;
   padding: 10px 10px 24px;
+  position: relative;
 }
 
 .home-events-slider {
@@ -4564,12 +4585,16 @@ h3 {
   }
 
   .home-events-toolbar {
-    flex-wrap: wrap;
+    justify-content: flex-start;
   }
 
   .home-events-viewport {
     margin: -8px;
     padding: 8px 8px 24px;
+  }
+
+  .home-events-nav {
+    inset-inline: -10px;
   }
 
   .home-events-slider {
@@ -4788,7 +4813,7 @@ h3 {
   .rich-copy p,
   .accordion-panel p {
     font-size: clamp(1.05rem, 3.2vw, 1.55rem);
-    max-width: min(430px, calc(100vw - 72px));
+    max-width: none;
   }
 
   .hero-button {
@@ -5041,11 +5066,14 @@ h3 {
 
   .home-hero::after {
     background:
-      linear-gradient(180deg, rgba(5, 5, 5, .5) 0%, rgba(5, 5, 5, .82) 58%, rgba(5, 5, 5, .94) 100%);
+      linear-gradient(180deg, rgba(5, 5, 5, .14) 0%, rgba(5, 5, 5, .42) 50%, rgba(5, 5, 5, .68) 100%);
   }
 
   .home-hero-media img {
-    object-position: 58% center;
+    object-position: 68% bottom;
+    filter: brightness(1.14) contrast(1.08);
+    transform: scale(1.22);
+    transform-origin: center bottom;
   }
 
   .home-hero-copy {
@@ -5054,11 +5082,12 @@ h3 {
   }
 
   .home-hero h1 {
-    font-size: clamp(2.65rem, 10vw, 4.2rem);
-    max-width: min(680px, calc(100vw - 56px));
+    font-size: clamp(3.1rem, 11.8vw, 5rem);
+    line-height: .84;
+    max-width: min(760px, calc(100vw - 48px));
   }
 
-  .home-hero-copy > p:last-child {
+  .home-hero-copy > #hero-intro {
     max-width: min(620px, calc(100vw - 56px));
   }
 
@@ -5353,8 +5382,14 @@ h3 {
     font-size: clamp(1.35rem, 5vw, 2rem);
   }
 
-  .klassik-slider-button {
+  .klassik-slider-actions {
     grid-column: 2;
+    justify-content: flex-start;
+    margin-top: 14px;
+    width: 100%;
+  }
+
+  .klassik-slider-button {
     justify-self: start;
     margin-top: 14px;
   }
@@ -5728,7 +5763,14 @@ h3 {
   }
 
   .home-hero h1 {
-    font-size: clamp(2.05rem, 9vw, 2.9rem);
+    font-size: clamp(3rem, 14vw, 4.1rem);
+    line-height: .84;
+    max-width: calc(100vw - 48px);
+  }
+
+  .home-hero-copy > #hero-intro {
+    font-size: clamp(1.2rem, 4.8vw, 1.5rem);
+    margin-top: 34px;
   }
 
   .services-hero h1 {
