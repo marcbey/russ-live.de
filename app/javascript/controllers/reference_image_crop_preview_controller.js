@@ -12,6 +12,10 @@ export default class extends Controller {
     "fileMeta",
     "imageDependentField",
     "panel",
+    "sliderFileInput",
+    "sliderFileMeta",
+    "sliderPreviewImage",
+    "sliderPreviewPlaceholder",
     "tab",
     "zoom",
     "gridVariant",
@@ -27,9 +31,11 @@ export default class extends Controller {
     this.boundDrag = (event) => this.drag(event)
     this.boundEndDrag = () => this.endDrag()
     this.boundFilePreview = () => this.previewSelectedFile()
+    this.boundSliderFilePreview = () => this.previewSelectedSliderFile()
 
     if (this.hasPreviewImageTarget) this.previewImageTarget.addEventListener("load", this.boundUpdate)
     if (this.hasFileInputTarget) this.fileInputTarget.addEventListener("change", this.boundFilePreview)
+    if (this.hasSliderFileInputTarget) this.sliderFileInputTarget.addEventListener("change", this.boundSliderFilePreview)
 
     if (typeof ResizeObserver !== "undefined") {
       this.resizeObserver = new ResizeObserver(this.boundUpdate)
@@ -43,7 +49,9 @@ export default class extends Controller {
   disconnect() {
     if (this.hasPreviewImageTarget) this.previewImageTarget.removeEventListener("load", this.boundUpdate)
     if (this.hasFileInputTarget) this.fileInputTarget.removeEventListener("change", this.boundFilePreview)
+    if (this.hasSliderFileInputTarget) this.sliderFileInputTarget.removeEventListener("change", this.boundSliderFilePreview)
     this.revokePreviewUrl()
+    this.revokeSliderPreviewUrl()
     this.endDrag()
     this.resizeObserver?.disconnect()
   }
@@ -151,6 +159,21 @@ export default class extends Controller {
     this.renderFileMeta(file)
   }
 
+  previewSelectedSliderFile() {
+    if (!this.hasSliderFileInputTarget || !this.hasSliderPreviewImageTarget) return
+
+    const file = this.sliderFileInputTarget.files?.[0]
+    if (!file) return
+
+    this.revokeSliderPreviewUrl()
+    this.sliderPreviewUrl = URL.createObjectURL(file)
+    this.sliderPreviewImageTarget.src = this.sliderPreviewUrl
+    this.sliderPreviewImageTarget.alt = file.name
+    this.sliderPreviewImageTarget.classList.remove("is-hidden")
+    this.sliderPreviewPlaceholderTarget?.classList.add("is-hidden")
+    this.renderSliderFileMeta(file)
+  }
+
   showImageDependentFields() {
     this.imageDependentFieldTargets.forEach((element) => {
       element.hidden = false
@@ -162,6 +185,13 @@ export default class extends Controller {
 
     URL.revokeObjectURL(this.previewUrl)
     this.previewUrl = null
+  }
+
+  revokeSliderPreviewUrl() {
+    if (!this.sliderPreviewUrl) return
+
+    URL.revokeObjectURL(this.sliderPreviewUrl)
+    this.sliderPreviewUrl = null
   }
 
   renderFileMeta(file) {
@@ -178,6 +208,26 @@ export default class extends Controller {
       </div>
     `).join("")
     this.fileMetaTarget.hidden = false
+  }
+
+  renderSliderFileMeta(file) {
+    if (!this.hasSliderFileMetaTarget) return
+
+    this.sliderFileMetaTarget.innerHTML = this.fileMetaMarkup(file)
+    this.sliderFileMetaTarget.hidden = false
+  }
+
+  fileMetaMarkup(file) {
+    return [
+      ["Name", file.name],
+      ["Type", file.type || "Unbekannt"],
+      ["Größe", this.formatBytes(file.size)]
+    ].map(([label, value]) => `
+      <div>
+        <dt>${this.escapeHtml(label)}</dt>
+        <dd>${this.escapeHtml(value)}</dd>
+      </div>
+    `).join("")
   }
 
   updateCropBox(geometry) {

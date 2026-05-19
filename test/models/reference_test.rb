@@ -52,11 +52,76 @@ class ReferenceTest < ActiveSupport::TestCase
 
   test "published scope and ordering" do
     draft = create_reference!(title: "Draft", status: "draft", position: 1)
-    published_late = create_reference!(title: "Late", status: "published", position: 3, starts_on: Date.new(2025, 1, 1))
     published_first = create_reference!(title: "First", status: "published", position: 2, starts_on: Date.new(2024, 1, 1))
+    published_late = create_reference!(title: "Late", status: "published", position: 3, starts_on: Date.new(2025, 1, 1))
 
-    assert_equal [ published_first, published_late ], Reference.published.ordered.to_a
+    assert_equal [ published_late, published_first ], Reference.published.ordered.to_a
     assert_not_includes Reference.published, draft
+  end
+
+  test "inserting a reference at an occupied position shifts later positions up" do
+    first = create_reference!(title: "First", status: "published", position: 1)
+    second = create_reference!(title: "Second", status: "published", position: 2)
+    inserted = create_reference!(title: "Inserted", status: "published", position: 2)
+
+    assert_equal 1, first.reload.position
+    assert_equal 3, second.reload.position
+    assert_equal 2, inserted.reload.position
+    assert_equal [ second, inserted, first ], Reference.ordered.to_a
+  end
+
+  test "moving a reference to an occupied position shifts the affected range" do
+    first = create_reference!(title: "First", status: "published", position: 1)
+    second = create_reference!(title: "Second", status: "published", position: 2)
+    third = create_reference!(title: "Third", status: "published", position: 3)
+
+    first.update!(position: 2)
+
+    assert_equal 1, second.reload.position
+    assert_equal 2, first.reload.position
+    assert_equal 3, third.reload.position
+    assert_equal [ third, first, second ], Reference.ordered.to_a
+  end
+
+  test "destroying a reference closes the position gap" do
+    first = create_reference!(title: "First", status: "published", position: 1)
+    second = create_reference!(title: "Second", status: "published", position: 2)
+    third = create_reference!(title: "Third", status: "published", position: 3)
+
+    second.destroy!
+
+    assert_equal 1, first.reload.position
+    assert_equal 2, third.reload.position
+    assert_equal [ third, first ], Reference.ordered.to_a
+  end
+
+  test "display date text prefers freeform display date over sort date" do
+    reference = create_reference!(
+      title: "Exhibition",
+      status: "published",
+      position: 1,
+      starts_on: Date.new(2025, 6, 1)
+    )
+
+    assert_equal "01.06.2025", reference.display_date_text
+
+    reference.update!(display_date: "Juni 2025 - März 2026")
+
+    assert_equal "Juni 2025 - März 2026", reference.display_date_text
+  end
+
+  test "exact display date updates starts_on automatically" do
+    reference = create_reference!(
+      title: "Exhibition",
+      status: "published",
+      position: 1,
+      starts_on: Date.new(2025, 6, 1)
+    )
+
+    reference.update!(display_date: "18.05.2026")
+
+    assert_equal Date.new(2026, 5, 18), reference.starts_on
+    assert_equal "18.05.2026", reference.display_date_text
   end
 
   test "normalizes tag list and exposes slugs" do
@@ -86,7 +151,7 @@ class ReferenceTest < ActiveSupport::TestCase
     create_reference!(title: "Partial", status: "published", position: 4, tag_list: "Livehouse")
     create_reference!(title: "Other", status: "published", position: 5, tag_list: "Open Air")
 
-    assert_equal [ concert, konzert, live ], Reference.tagged_with_any(%w[Concert Konzert Live]).ordered.to_a
+    assert_equal [ live, konzert, concert ], Reference.tagged_with_any(%w[Concert Konzert Live]).ordered.to_a
   end
 
   test "tags from records are unique and sorted case insensitive" do

@@ -28,8 +28,9 @@ module Backend
 
     def create
       @selected_reference = Reference.new(create_reference_params)
-      @selected_reference.position = next_position if @selected_reference.position.blank?
+      @selected_reference.position = next_position if @selected_reference.position.to_i <= 0
       prepare_reference_image(@selected_reference)
+      prepare_slider_image(@selected_reference)
 
       if save_reference_with_upload(@selected_reference)
         redirect_to backend_references_path(reference_id: @selected_reference.id, status: @selected_reference.status, editor_tab: editor_tab_param), notice: "Referenz wurde erstellt."
@@ -43,6 +44,7 @@ module Backend
       @selected_reference = @reference
       @selected_reference.assign_attributes(reference_params) if params[:reference].present?
       prepare_reference_image(@selected_reference)
+      prepare_slider_image(@selected_reference)
 
       if save_reference_with_upload(@selected_reference)
         redirect_to backend_references_path(reference_id: @selected_reference.id, status: status_param(@status_filter), query: @query_filter.presence, editor_tab: editor_tab_param), notice: "Referenz wurde gespeichert."
@@ -87,12 +89,12 @@ module Backend
       end
 
       def reference_params
-        params.require(:reference).permit(:title, :starts_on, :location, :production, :tag_list, :description, :description_en, :status, :position)
+        params.require(:reference).permit(:title, :starts_on_input, :display_date, :location, :production, :tag_list, :description, :description_en, :status, :position)
       end
 
       def create_reference_params
         params.fetch(:reference, ActionController::Parameters.new)
-          .permit(:title, :starts_on, :location, :production, :tag_list, :description, :description_en, :status, :position)
+          .permit(:title, :starts_on_input, :display_date, :location, :production, :tag_list, :description, :description_en, :status, :position)
           .reverse_merge(
             title: fallback_reference_title,
             starts_on: Time.zone.today,
@@ -113,13 +115,27 @@ module Backend
         )
       end
 
+      def slider_image_params
+        params.fetch(:reference_slider_image, ActionController::Parameters.new).permit(
+          :alt_text,
+          :sub_text,
+          :remove_image
+        )
+      end
+
       def uploaded_image
         params.dig(:reference_image, :file)
       end
 
+      def uploaded_slider_image
+        params.dig(:reference_slider_image, :file)
+      end
+
       def fallback_reference_title
         reference_image_params[:alt_text].presence ||
+          slider_image_params[:alt_text].presence ||
           uploaded_image&.original_filename.to_s.sub(/\.[^.]+\z/, "").presence ||
+          uploaded_slider_image&.original_filename.to_s.sub(/\.[^.]+\z/, "").presence ||
           "Neue Referenz"
       end
 
@@ -134,11 +150,31 @@ module Backend
         image.assign_attributes(asset_path: nil, file_path: nil, filename: nil, content_type: nil, byte_size: nil)
       end
 
+      def prepare_slider_image(reference)
+        image = reference.reference_image || reference.build_reference_image
+        image.assign_attributes(
+          slider_alt_text: slider_image_params[:alt_text],
+          slider_sub_text: slider_image_params[:sub_text]
+        )
+
+        return unless remove_slider_image_requested? && uploaded_slider_image.blank?
+
+        image.purge_file!(variant: ReferenceImage::SLIDER_VARIANT)
+        image.assign_attributes(
+          slider_asset_path: nil,
+          slider_file_path: nil,
+          slider_filename: nil,
+          slider_content_type: nil,
+          slider_byte_size: nil
+        )
+      end
+
       def save_reference_with_upload(reference)
         Reference.transaction do
           reference.save!
           reference.reference_image&.save!
           reference.reference_image&.write_uploaded_file!(uploaded_image) if uploaded_image.present?
+          reference.reference_image&.write_uploaded_file!(uploaded_slider_image, variant: ReferenceImage::SLIDER_VARIANT) if uploaded_slider_image.present?
         end
 
         true
@@ -148,6 +184,10 @@ module Backend
 
       def remove_image_requested?
         ActiveModel::Type::Boolean.new.cast(reference_image_params[:remove_image])
+      end
+
+      def remove_slider_image_requested?
+        ActiveModel::Type::Boolean.new.cast(slider_image_params[:remove_image])
       end
 
       def render_invalid_state(status)
@@ -161,7 +201,7 @@ module Backend
       end
 
       def editor_tab
-        params[:editor_tab].to_s.presence_in(%w[reference image]) || "reference"
+        params[:editor_tab].to_s.presence_in(%w[reference image slider]) || "reference"
       end
 
       def editor_tab_param

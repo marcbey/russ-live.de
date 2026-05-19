@@ -1,0 +1,75 @@
+<% slider_image_source = reference_slider_image_source(reference_image) %>
+<% slider_file_metadata = reference_slider_image_file_metadata(reference_image) %>
+
+<section class="backend-section backend-section-media event-image-section">
+  <div class="backend-section-body">
+    <div class="event-image-crop-shell">
+      <div class="event-image-crop-editor">
+        <div class="event-image-crop-frame">
+          <% if slider_image_source.present? %>
+            <%= image_tag slider_image_source,
+                          alt: reference_image.display_slider_alt_text,
+                          class: "event-image-crop-preview-image",
+                          data: { reference_image_crop_preview_target: "sliderPreviewImage" } %>
+          <% else %>
+            <img alt=""
+                 class="event-image-crop-preview-image is-hidden"
+                 data-reference-image-crop-preview-target="sliderPreviewImage">
+            <p class="event-image-crop-placeholder"
+               data-reference-image-crop-preview-target="sliderPreviewPlaceholder">
+              Noch kein Slider-Bild ausgewählt.
+            </p>
+          <% end %>
+          <% if slider_image_source.present? %>
+            <p class="event-image-crop-placeholder is-hidden"
+               data-reference-image-crop-preview-target="sliderPreviewPlaceholder">
+              Noch kein Slider-Bild ausgewählt.
+            </p>
+          <% end %>
+        </div>
+
+        <aside class="event-image-crop-sidebar">
+          <div class="event-image-meta-inline-form">
+            <label class="form-label" for="reference_slider_image_file">Slider-Bild</label>
+            <%= file_field_tag "reference_slider_image[file]",
+                               accept: "image/*",
+                               id: "reference_slider_image_file",
+                               class: "form-input",
+                               data: { reference_image_crop_preview_target: "sliderFileInput" } %>
+            <p class="event-image-crop-hint">Hier das breite Bild für den Startseiten-Slider hochladen, damit kein Zuschnitt nötig ist.</p>
+            <dl class="event-image-file-meta"
+                aria-label="Aktuelle Slider-Bilddatei"
+                data-reference-image-crop-preview-target="sliderFileMeta"
+                <%= "hidden" if slider_file_metadata.empty? %>>
+              <% slider_file_metadata.each do |label, value| %>
+                <div>
+                  <dt><%= label %></dt>
+                  <dd><%= value %></dd>
+                </div>
+              <% end %>
+            </dl>
+          </div>
+
+          <div class="event-image-sidebar-divider" aria-hidden="true"></div>
+
+          <div class="event-image-meta-inline-form">
+            <label class="form-label" for="reference_slider_image_alt_text">Alt-Text</label>
+            <%= text_field_tag "reference_slider_image[alt_text]", reference_image.slider_alt_text, id: "reference_slider_image_alt_text", class: "form-input" %>
+          </div>
+
+          <div class="event-image-meta-inline-form">
+            <label class="form-label" for="reference_slider_image_sub_text">Copyright</label>
+            <%= text_field_tag "reference_slider_image[sub_text]", reference_image.slider_sub_text, id: "reference_slider_image_sub_text", class: "form-input", placeholder: "Copyright unter dem Slider-Bild (optional)" %>
+          </div>
+
+          <% if reference_image.slider_image? %>
+            <label class="form-checkbox">
+              <%= check_box_tag "reference_slider_image[remove_image]", "1", false %>
+              <span>Slider-Bild entfernen</span>
+            </label>
+          <% end %>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>

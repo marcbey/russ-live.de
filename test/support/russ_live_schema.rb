@@ -9,8 +9,10 @@ module RussLiveSchema
     create_login_attempts(connection)
     create_references(connection)
     add_reference_description_en(connection)
+    add_reference_display_date(connection)
     add_reference_tags(connection)
     create_reference_images(connection)
+    add_reference_slider_image_fields(connection)
     create_contacts(connection)
     create_contact_images(connection)
     create_jobs(connection)
@@ -53,6 +55,7 @@ module RussLiveSchema
       table.date :starts_on, null: false
       table.string :location, null: false
       table.string :production
+      table.string :display_date
       table.string :tags, array: true, default: [], null: false
       table.text :description
       table.text :description_en
@@ -70,6 +73,13 @@ module RussLiveSchema
     return if connection.column_exists?(:references, :description_en)
 
     connection.add_column :references, :description_en, :text
+  end
+
+  def add_reference_display_date(connection)
+    return unless table_exists?(connection, :references)
+    return if connection.column_exists?(:references, :display_date)
+
+    connection.add_column :references, :display_date, :string
   end
 
   def add_reference_tags(connection)
@@ -96,10 +106,35 @@ module RussLiveSchema
       table.string :content_type
       table.string :filename
       table.bigint :byte_size
+      table.string :slider_alt_text
+      table.string :slider_sub_text
+      table.string :slider_asset_path
+      table.string :slider_file_path
+      table.string :slider_content_type
+      table.string :slider_filename
+      table.bigint :slider_byte_size
       table.timestamps
     end
 
     connection.add_index :reference_images, :reference_id, unique: true
+  end
+
+  def add_reference_slider_image_fields(connection)
+    return unless table_exists?(connection, :reference_images)
+
+    {
+      slider_alt_text: :string,
+      slider_sub_text: :string,
+      slider_asset_path: :string,
+      slider_file_path: :string,
+      slider_content_type: :string,
+      slider_filename: :string,
+      slider_byte_size: :bigint
+    }.each do |column_name, type|
+      next if connection.column_exists?(:reference_images, column_name)
+
+      connection.add_column :reference_images, column_name, type
+    end
   end
 
   def create_contacts(connection)

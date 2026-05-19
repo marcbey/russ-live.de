@@ -1,4 +1,6 @@
 class ReferenceImage < RussRecord
+  DEFAULT_VARIANT = :default
+  SLIDER_VARIANT = :slider
   GRID_VARIANT_1X1 = "1x1".freeze
   GRID_VARIANT_2X1 = "2x1".freeze
   GRID_VARIANT_1X2 = "1x2".freeze
@@ -17,7 +19,9 @@ class ReferenceImage < RussRecord
 
   belongs_to :reference
 
-  normalizes :alt_text, :sub_text, :filename, :content_type, with: ->(value) { value.to_s.strip }
+  normalizes :alt_text, :sub_text, :filename, :content_type,
+             :slider_alt_text, :slider_sub_text, :slider_filename, :slider_content_type,
+             with: ->(value) { value.to_s.strip }
 
   validates :grid_variant, inclusion: { in: GRID_VARIANTS }
   validates :card_focus_x, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
@@ -26,18 +30,33 @@ class ReferenceImage < RussRecord
   validates :alt_text, length: { maximum: 180 }, allow_blank: true
   validates :sub_text, length: { maximum: 250 }, allow_blank: true
   validates :filename, length: { maximum: 250 }, allow_blank: true
+  validates :slider_alt_text, length: { maximum: 180 }, allow_blank: true
+  validates :slider_sub_text, length: { maximum: 250 }, allow_blank: true
+  validates :slider_filename, length: { maximum: 250 }, allow_blank: true
   before_validation :normalize_image_values
 
   def uploaded?
-    file_path.present?
+    uploaded_for?(DEFAULT_VARIANT)
   end
 
   def image?
-    uploaded? || asset_path.present?
+    image_for?(DEFAULT_VARIANT)
+  end
+
+  def slider_uploaded?
+    uploaded_for?(SLIDER_VARIANT)
+  end
+
+  def slider_image?
+    image_for?(SLIDER_VARIANT)
   end
 
   def display_alt_text
     alt_text.presence || reference.title
+  end
+
+  def display_slider_alt_text
+    slider_alt_text.presence || display_alt_text
   end
 
   def card_focus_x_value
@@ -52,40 +71,76 @@ class ReferenceImage < RussRecord
     card_zoom.to_f.positive? ? card_zoom.to_f : DEFAULT_CARD_ZOOM
   end
 
-  def write_uploaded_file!(upload)
+  def write_uploaded_file!(upload, variant: DEFAULT_VARIANT)
     validate_upload!(upload)
-    purge_file!
+    purge_file!(variant: variant)
 
     extension = File.extname(upload.original_filename.to_s).presence || Rack::Mime::MIME_TYPES.invert[upload.content_type].to_s
-    relative_path = File.join("reference_images", id.to_s, "original#{extension}")
+    relative_path = File.join("reference_images", id.to_s, "#{variant_basename(variant)}#{extension}")
     target = Rails.root.join("storage", relative_path)
 
     FileUtils.mkdir_p(target.dirname)
     FileUtils.cp(upload.tempfile.path, target)
 
-    update!(
-      asset_path: nil,
-      file_path: relative_path,
-      filename: upload.original_filename,
-      content_type: upload.content_type,
-      byte_size: upload.size
-    )
+    update!(uploaded_attributes(relative_path, upload, variant: variant))
   end
 
-  def purge_file!
-    return if file_path.blank?
+  def purge_file!(variant: DEFAULT_VARIANT)
+    path_value = file_path_for(variant)
+    return if path_value.blank?
 
-    path = Rails.root.join("storage", file_path)
+    path = Rails.root.join("storage", path_value)
     FileUtils.rm_f(path)
   end
 
-  def file_disk_path
-    return if file_path.blank?
+  def file_disk_path(variant: DEFAULT_VARIANT)
+    path_value = file_path_for(variant)
+    return if path_value.blank?
 
-    Rails.root.join("storage", file_path)
+    Rails.root.join("storage", path_value)
   end
 
   private
+    def uploaded_for?(variant)
+      file_path_for(variant).present?
+    end
+
+    def image_for?(variant)
+      uploaded_for?(variant) || asset_path_for(variant).present?
+    end
+
+    def file_path_for(variant)
+      variant == SLIDER_VARIANT ? slider_file_path : file_path
+    end
+
+    def asset_path_for(variant)
+      variant == SLIDER_VARIANT ? slider_asset_path : asset_path
+    end
+
+    def variant_basename(variant)
+      variant == SLIDER_VARIANT ? "slider" : "original"
+    end
+
+    def uploaded_attributes(relative_path, upload, variant:)
+      if variant == SLIDER_VARIANT
+        {
+          slider_asset_path: nil,
+          slider_file_path: relative_path,
+          slider_filename: upload.original_filename,
+          slider_content_type: upload.content_type,
+          slider_byte_size: upload.size
+        }
+      else
+        {
+          asset_path: nil,
+          file_path: relative_path,
+          filename: upload.original_filename,
+          content_type: upload.content_type,
+          byte_size: upload.size
+        }
+      end
+    end
+
     def normalize_image_values
       self.grid_variant = grid_variant.to_s.strip.presence || GRID_VARIANT_1X1
       self.card_focus_x = normalize_percentage(card_focus_x, fallback: DEFAULT_CARD_FOCUS_X)

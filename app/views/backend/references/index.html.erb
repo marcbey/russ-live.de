@@ -45,14 +45,17 @@
         <% end %>
       </div>
 
-      <div class="backend-reference-list-scroll">
+      <div class="backend-reference-list-scroll"
+           data-controller="backend-list-focus"
+           data-backend-list-focus-storage-key-value="<%= [@status_filter, @query_filter.presence || 'all'].join(':') %>">
         <div class="backend-reference-list">
           <% if @references.any? %>
             <% @references.each do |reference| %>
               <%= link_to backend_references_path(status: (@status_filter unless @status_filter == "all"), query: @query_filter, reference_id: reference.id),
-                          class: "backend-reference-list-item #{'is-active' if @selected_reference&.id == reference.id}" do %>
+                          class: "backend-reference-list-item #{'is-active' if @selected_reference&.id == reference.id}",
+                          data: { action: "click->backend-list-focus#rememberScroll" } do %>
                 <span class="backend-reference-list-title"><%= reference.title %></span>
-                <span class="backend-reference-list-meta"><%= l(reference.starts_on, format: "%d.%m.%Y") %> · <%= reference.location %></span>
+                <span class="backend-reference-list-meta"><%= reference_date_label(reference) %> · <%= reference.location %></span>
                 <span class="status-badge"><%= reference.display_status %></span>
               <% end %>
             <% end %>

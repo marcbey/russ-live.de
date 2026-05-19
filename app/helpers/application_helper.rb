@@ -50,11 +50,22 @@ module ApplicationHelper
     end
   end
 
+  def reference_date_label(reference)
+    reference.display_date_text
+  end
+
   def reference_image_source(reference_image)
     return if reference_image.blank?
     return reference_image_path(reference_image, v: reference_image.updated_at.to_i) if reference_image.uploaded?
 
     image_path(reference_image.asset_path) if reference_image.asset_path.present?
+  end
+
+  def reference_slider_image_source(reference_image)
+    return if reference_image.blank?
+    return reference_image_path(reference_image, variant: :slider, v: reference_image.updated_at.to_i) if reference_image.slider_uploaded?
+
+    image_path(reference_image.slider_asset_path) if reference_image.slider_asset_path.present?
   end
 
   def reference_image_style(reference_image)
@@ -97,6 +108,20 @@ module ApplicationHelper
     ].select { |_, value| value.present? }
   end
 
+  def reference_slider_image_file_metadata(reference_image)
+    return [] if reference_image.blank? || !reference_image.slider_image?
+
+    filename = reference_image.slider_filename.presence || File.basename(reference_image.slider_asset_path.to_s)
+    content_type = reference_image.slider_content_type.presence || Rack::Mime.mime_type(File.extname(filename), nil)
+    byte_size = reference_image.slider_byte_size.presence || reference_image_slider_asset_byte_size(reference_image)
+
+    [
+      [ t("file_metadata.name"), filename ],
+      [ t("file_metadata.type"), content_type ],
+      [ t("file_metadata.size"), (number_to_human_size(byte_size) if byte_size.present?) ]
+    ].select { |_, value| value.present? }
+  end
+
   def reference_grid_class(reference_image)
     case reference_image&.grid_variant
     when ReferenceImage::GRID_VARIANT_2X1 then "reference-card-grid-2-1"
@@ -118,9 +143,22 @@ module ApplicationHelper
   def reference_home_card_data(reference)
     return fallback_reference_home_card_data(reference) unless reference.respond_to?(:reference_image)
 
+    slider_image_source = reference_slider_image_source(reference.reference_image)
+    if slider_image_source.present?
+      return {
+        title: reference.title,
+        date_location: [ reference_date_label(reference), reference.location ].compact_blank.join(" · "),
+        partner: localized_reference_partner(reference),
+        image: slider_image_source,
+        alt: reference.reference_image&.display_slider_alt_text || reference.title,
+        dimensions: { width: 920, height: 400 },
+        image_render_data: {}
+      }
+    end
+
     {
       title: reference.title,
-      date_location: [ l(reference.starts_on, format: "%d.%m.%Y"), reference.location ].compact_blank.join(" · "),
+      date_location: [ reference_date_label(reference), reference.location ].compact_blank.join(" · "),
       partner: localized_reference_partner(reference),
       image: reference_image_source(reference.reference_image),
       alt: reference.reference_image&.display_alt_text || reference.title,
@@ -176,6 +214,17 @@ module ApplicationHelper
 
       asset_root = Rails.root.join("app/assets/images")
       asset_path = asset_root.join(reference_image.asset_path).cleanpath
+      return unless asset_path.to_s.start_with?("#{asset_root}/")
+      return unless File.file?(asset_path)
+
+      File.size(asset_path)
+    end
+
+    def reference_image_slider_asset_byte_size(reference_image)
+      return if reference_image.slider_asset_path.blank?
+
+      asset_root = Rails.root.join("app/assets/images")
+      asset_path = asset_root.join(reference_image.slider_asset_path).cleanpath
       return unless asset_path.to_s.start_with?("#{asset_root}/")
       return unless File.file?(asset_path)
 

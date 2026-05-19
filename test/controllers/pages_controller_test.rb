@@ -256,6 +256,109 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'data-reference-image-render-target="frame"'
   end
 
+  test "homepage prefers dedicated slider image for references" do
+    reference = Reference.create!(
+      title: "NEIL YOUNG",
+      starts_on: Date.new(2024, 6, 29),
+      location: "Hanns-Martin-Schleyer-Halle",
+      production: "Wizart Promotion",
+      status: "published",
+      position: 1
+    )
+    reference.create_reference_image!(
+      asset_path: "russ_live/references/01-disgusting-food-museum.jpg",
+      alt_text: "Main Alt",
+      slider_asset_path: "russ_live/references/03-neil-young.jpg",
+      slider_alt_text: "Slider Alt"
+    )
+
+    get root_path
+
+    assert_response :success
+    assert_match %r{03-neil-young-[a-f0-9]+\.jpg}, response.body
+    assert_includes response.body, "Slider Alt"
+    assert_not_includes response.body, "data-reference-image-render-focus-x-value="
+  end
+
+  test "homepage falls back to normal reference image when no slider image exists" do
+    reference = Reference.create!(
+      title: "NEIL YOUNG",
+      starts_on: Date.new(2024, 6, 29),
+      location: "Hanns-Martin-Schleyer-Halle",
+      production: "Wizart Promotion",
+      status: "published",
+      position: 1
+    )
+    reference.create_reference_image!(
+      asset_path: "russ_live/references/01-disgusting-food-museum.jpg",
+      alt_text: "Main Alt",
+      card_focus_x: 35,
+      card_focus_y: 65,
+      card_zoom: 145
+    )
+
+    get root_path
+
+    assert_response :success
+    assert_match %r{01-disgusting-food-museum-[a-f0-9]+\.jpg}, response.body
+    assert_includes response.body, "Main Alt"
+    assert_includes response.body, 'data-reference-image-render-focus-x-value="35.0"'
+  end
+
+  test "homepage renders uploaded slider image when available" do
+    reference = Reference.create!(
+      title: "NEIL YOUNG",
+      starts_on: Date.new(2024, 6, 29),
+      location: "Hanns-Martin-Schleyer-Halle",
+      production: "Wizart Promotion",
+      status: "published",
+      position: 1
+    )
+    reference_image = reference.create_reference_image!(
+      asset_path: "russ_live/references/01-disgusting-food-museum.jpg",
+      alt_text: "Main Alt"
+    )
+    upload = Rack::Test::UploadedFile.new(
+      Rails.root.join("app/assets/images/russ_live/references/03-neil-young.jpg"),
+      "image/jpeg"
+    )
+    reference_image.write_uploaded_file!(upload, variant: ReferenceImage::SLIDER_VARIANT)
+    reference_image.update!(slider_alt_text: "Uploaded Slider Alt")
+
+    get root_path
+
+    assert_response :success
+    assert_includes response.body, "/referenzbilder/#{reference_image.id}"
+    assert_includes response.body, "variant=slider"
+    assert_includes response.body, "Uploaded Slider Alt"
+  end
+
+  test "public reference surfaces prefer freeform display date when present" do
+    reference = Reference.create!(
+      title: "AUSSTELLUNG",
+      starts_on: Date.new(2025, 6, 1),
+      display_date: "Juni 2025 - März 2026",
+      location: "Museum",
+      status: "published",
+      position: 1
+    )
+    reference.create_reference_image!(
+      asset_path: "russ_live/references/01-disgusting-food-museum.jpg",
+      alt_text: "AUSSTELLUNG"
+    )
+
+    get referenzen_path
+
+    assert_response :success
+    assert_includes response.body, "Juni 2025 - März 2026"
+    assert_not_includes response.body, "01.06.2025</span>"
+
+    get root_path
+
+    assert_response :success
+    assert_includes response.body, "Juni 2025 - März 2026 · Museum"
+  end
+
   test "services renders reference slider for published image references with concert tags" do
     concert = create_reference_with_image!(title: "CONCERT", position: 1, tag_list: "concert")
     create_reference_with_image!(title: "KONZERT", position: 2, tag_list: "Konzert")

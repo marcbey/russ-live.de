@@ -19,18 +19,24 @@
       <% else %>
         <span class="reference-card-placeholder"></span>
       <% end %>
-      <span class="reference-card-title"><%= reference.title %></span>
     </span>
     <span class="reference-card-face reference-card-back">
       <span class="reference-card-name"><%= reference.title %></span>
-      <span class="reference-card-meta"><strong><%= t("references.card.date") %></strong><%= l(reference.starts_on, format: "%d.%m.%Y") %></span>
-      <span class="reference-card-meta"><strong><%= t("references.card.location") %></strong><%= reference.location %></span>
-      <% if reference.production.present? %>
-        <span class="reference-card-meta"><strong><%= t("references.card.production") %></strong><%= reference.production %></span>
-      <% end %>
-      <% if localized_description.present? %>
-        <span class="reference-card-copy"><%= localized_description %></span>
-      <% end %>
+      <span class="reference-card-back-content">
+        <span class="reference-card-meta-group">
+          <span class="reference-card-meta reference-card-meta-plain"><%= reference_date_label(reference) %></span>
+          <span class="reference-card-meta reference-card-meta-plain"><%= reference.location %></span>
+        </span>
+        <% if reference.production.present? %>
+          <span class="reference-card-meta reference-card-meta-inline">
+            <strong><%= t("references.card.production") %></strong>
+            <span><%= reference.production %></span>
+          </span>
+        <% end %>
+        <% if localized_description.present? %>
+          <span class="reference-card-copy"><%= localized_description %></span>
+        <% end %>
+      </span>
     </span>
   </button>
 <% end %>

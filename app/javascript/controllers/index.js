@@ -5,6 +5,7 @@
 import { application } from "./application"
 
 import AccordionController from "./accordion_controller"
+import BackendListFocusController from "./backend_list_focus_controller"
 import EventsSliderController from "./events_slider_controller"
 import FilterClearController from "./filter_clear_controller"
 import JobFilterController from "./job_filter_controller"
@@ -21,6 +22,7 @@ import SliderController from "./slider_controller"
 import SmoothAnchorController from "./smooth_anchor_controller"
 
 application.register("accordion", AccordionController)
+application.register("backend-list-focus", BackendListFocusController)
 application.register("events-slider", EventsSliderController)
 application.register("filter-clear", FilterClearController)
 application.register("job-filter", JobFilterController)

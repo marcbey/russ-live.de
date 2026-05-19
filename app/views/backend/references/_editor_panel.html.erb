@@ -6,7 +6,7 @@
 <div class="editor-panel" data-controller="reference-image-crop-preview">
   <div class="editor-tabs">
     <div class="editor-tab-list" role="tablist" aria-label="Referenz bearbeiten">
-      <% { "reference" => "Referenz", "image" => "Bild" }.each do |tab, label| %>
+      <% { "reference" => "Referenz", "image" => "Bild", "slider" => "Slider" }.each do |tab, label| %>
         <%= button_tag label,
                        type: "button",
                        class: "editor-tab #{'is-active' if active_editor_tab == tab}",
@@ -68,6 +68,13 @@
          data-reference-image-crop-preview-tab-param="image"
          <%= "hidden" unless active_editor_tab == "image" %>>
       <%= render "image_fields", form: form, reference: reference, reference_image: reference_image %>
+    </div>
+
+    <div class="editor-tab-panel"
+         data-reference-image-crop-preview-target="panel"
+         data-reference-image-crop-preview-tab-param="slider"
+         <%= "hidden" unless active_editor_tab == "slider" %>>
+      <%= render "slider_fields", form: form, reference: reference, reference_image: reference_image %>
     </div>
   <% end %>
 
