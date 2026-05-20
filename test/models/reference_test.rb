@@ -95,6 +95,19 @@ class ReferenceTest < ActiveSupport::TestCase
     assert_equal [ third, first ], Reference.ordered.to_a
   end
 
+  test "renumber positions rebuilds a gapless descending sequence" do
+    first = create_reference!(title: "First", status: "published", position: 1)
+    second = create_reference!(title: "Second", status: "published", position: 3)
+    third = create_reference!(title: "Third", status: "published", position: 6)
+
+    Reference.renumber_positions!
+
+    assert_equal 1, first.reload.position
+    assert_equal 2, second.reload.position
+    assert_equal 3, third.reload.position
+    assert_equal [ third, second, first ], Reference.ordered.to_a
+  end
+
   test "display date text prefers freeform display date over sort date" do
     reference = create_reference!(
       title: "Exhibition",

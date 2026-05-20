@@ -48,7 +48,8 @@ class PressControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "html[lang=?]", "en"
-    assert_includes response.body, "Press information for partners and media."
+    assert_includes response.body, "Press information"
+    assert_includes response.body, "for partners and media"
     assert_includes response.body, "data-press-search-singular-label-value=\"press entry\""
     assert_includes response.body, "Ärztin Live"
   end
@@ -72,6 +73,25 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select ".press-artist-card", 1
     assert_includes response.body, "1 Presseeintrag"
+  end
+
+  test "index falls back when russ live publish flag is unavailable" do
+    create_event!(
+      artist_name: "Fallback Artist",
+      normalized_artist_name: "fallback artist",
+      publish_on_russ_live: true,
+      start_at: Time.zone.local(2026, 6, 1, 20)
+    )
+
+    SharedStuttgartRecord.connection.remove_column(:events, :publish_on_russ_live)
+    Event.reset_column_information
+
+    get presse_path
+
+    assert_response :success
+    assert_includes response.body, "Fallback Artist"
+  ensure
+    StuttgartLiveSchema.ensure!
   end
 
   test "show renders primary event, fallback press text, venue and further events" do

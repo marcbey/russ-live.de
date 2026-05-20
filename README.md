@@ -45,12 +45,15 @@ mise exec -- bin/rails db:prepare
 ```
 
 Falls PostgreSQL lokal nicht über den Standard-Socket erreichbar ist, können die
-Verbindungsdaten beim Start von `russ-live` überschrieben werden:
+Verbindungsdaten beim Start von `russ-live` überschrieben werden. Den
+Produktions-Read-Only-Benutzer `russ_live_de_reader` solltest du lokal nur
+setzen, wenn diese Rolle in deiner lokalen PostgreSQL-Instanz auch wirklich
+existiert:
 
 ```bash
 STUTTGART_LIVE_DB_HOST=127.0.0.1 \
 STUTTGART_LIVE_DB_PORT=5432 \
-STUTTGART_LIVE_DB_USER=russ_live_de_reader \
+STUTTGART_LIVE_DB_USER=dein_lokaler_postgres_user \
 STUTTGART_LIVE_DB_PASSWORD=... \
 mise exec -- bin/dev
 ```
@@ -92,6 +95,16 @@ Bestehende Referenzen werden beim Einspielen der Russ-Migration als
 veröffentlichte Startdaten übernommen. Neue Uploads werden im Rails-Storage
 unter `storage/reference_images` abgelegt und über Russ Live ausgeliefert; die
 readonly Stuttgart-Live-Datenbank bleibt davon unberührt.
+
+Wenn bestehende Referenzen bereits andere Positionszahlen in der Datenbank
+haben, kann die Reihenfolge einmal lückenlos neu nummeriert werden:
+
+```bash
+mise exec -- bin/rails russ:references:renumber_positions
+```
+
+Die Aufgabe übernimmt die aktuelle sichtbare Reihenfolge und schreibt daraus
+fortlaufende Positionswerte von oben nach unten.
 
 ## Jobs und Ansprechpartner
 

@@ -16,7 +16,12 @@ class Event < SharedStuttgartRecord
       .where("published_at IS NULL OR published_at <= ?", Time.current)
       .chronological
   }
-  scope :published_on_russ_live, -> { published_live.where(publish_on_russ_live: true) }
+  scope :published_on_russ_live, lambda {
+    relation = published_live
+    next relation unless russ_live_publish_flag_available?
+
+    relation.where(publish_on_russ_live: true)
+  }
   scope :upcoming, -> { where("start_at >= ?", Time.zone.today.beginning_of_day) }
   scope :sks_promoters, lambda {
     sks_promoter_ids = AppSetting.sks_promoter_ids
@@ -85,5 +90,9 @@ class Event < SharedStuttgartRecord
 
   def public_ticket_url
     public_ticket_offer&.resolved_ticket_url.presence || "#{STUTTGART_LIVE_EVENT_BASE_URL}#{slug}"
+  end
+
+  def self.russ_live_publish_flag_available?
+    columns_hash.key?("publish_on_russ_live")
   end
 end

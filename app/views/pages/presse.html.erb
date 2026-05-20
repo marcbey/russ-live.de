@@ -1,16 +1,21 @@
 <main id="main-content" class="page-main public-page press-page" tabindex="-1" data-controller="press-search" data-press-search-locale-value="<%= I18n.locale == :de ? "de-DE" : "en-US" %>" data-press-search-singular-label-value="<%= t("press.index.count_singular") %>" data-press-search-plural-label-value="<%= t("press.index.count_plural") %>">
-  <section class="public-hero public-hero-editorial press-hero" aria-labelledby="press-title">
-    <div class="press-hero-copy">
-      <h1 id="press-title"><%= t("press.index.hero.title") %></h1>
+  <section class="public-hero public-hero-dark section job-overview-hero press-hero" aria-labelledby="press-title">
+    <div class="job-overview-hero-media press-hero-media">
+      <%= image_tag "russ_live/press-overview-hero.jpg",
+                    alt: t("press.index.hero.image_alt"),
+                    width: 6000,
+                    height: 4000,
+                    decoding: "async",
+                    fetchpriority: "high" %>
+    </div>
+
+    <div class="job-overview-hero-copy press-hero-copy">
+      <h1 id="press-title">
+        <span><%= t("press.index.hero.title_first_line") %></span>
+        <span><%= t("press.index.hero.title_second_line") %></span>
+      </h1>
       <p><%= t("press.index.hero.intro") %></p>
     </div>
-    <form class="press-search" role="search" aria-label="<%= t("press.index.search.aria") %>" data-action="submit->press-search#submit reset->press-search#reset">
-      <label for="press-search-input"><%= t("press.index.search.label") %></label>
-      <div>
-        <input id="press-search-input" type="search" name="q" autocomplete="off" placeholder="<%= t("press.index.search.placeholder") %>" data-press-search-target="input" data-action="input->press-search#render search->press-search#render">
-        <button type="reset" aria-label="<%= t("press.index.search.reset_aria") %>"><%= t("press.index.search.reset") %></button>
-      </div>
-    </form>
   </section>
 
   <section class="public-section section press-directory" aria-labelledby="press-directory-title">
@@ -20,6 +25,14 @@
       </div>
       <p data-press-search-target="count"><%= @press_artist_count %> <%= @press_artist_count == 1 ? t("press.index.count_singular") : t("press.index.count_plural") %></p>
     </div>
+
+    <form class="press-search" role="search" aria-label="<%= t("press.index.search.aria") %>" data-action="submit->press-search#submit reset->press-search#reset">
+      <label for="press-search-input"><%= t("press.index.search.label") %></label>
+      <div>
+        <input id="press-search-input" type="search" name="q" autocomplete="off" placeholder="<%= t("press.index.search.placeholder") %>" data-press-search-target="input" data-action="input->press-search#render search->press-search#render">
+        <button type="reset" aria-label="<%= t("press.index.search.reset_aria") %>"><%= t("press.index.search.reset") %></button>
+      </div>
+    </form>
 
     <div class="public-directory press-letter-grid" data-press-directory>
       <% @press_artist_groups.each do |letter, artists| %>

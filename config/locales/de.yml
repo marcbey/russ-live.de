@@ -164,6 +164,24 @@ de:
         image_alt: "Live-Bühne als Keyvisual für Russ Live Services"
         intro: "Vom ersten Ortstermin bis zum letzten Abbau: Russ Live bündelt Veranstalter-Know-how, Produktion, Marketing, Personal und Ticketing für Konzerte, Shows und Kulturformate in der Region Stuttgart."
       nav_aria: "Servicebereiche"
+      contacts:
+        aria: "Ansprechpartner"
+        paul:
+          name: "Paul Woog"
+          role: "Geschäftsleitung"
+          email: "paulwoog@michaelrussgmbh.de"
+        johanna:
+          name: "Johanna Backmund"
+          role: "Projektmanagement / Accounting"
+          email: "johannabackmund@michaelrussgmbh.de"
+        sarah:
+          name: "Sarah Sandner"
+          role: "Marketing"
+          email: "sarahsandner@michaelrussgmbh.de"
+        sebastian:
+          name: "Sebastian Kränzlein"
+          role: "Personaldisposition"
+          email: "sebastiankraenzlein@russ-live.de"
       intro:
         eyebrow: "Full Service"
         title: "Alles, was ein Live-Moment braucht"
@@ -195,6 +213,8 @@ de:
       hero:
         image_alt: "Backstage-Moment mit Russ Live Crew vor einer beleuchteten Bühne"
         title: "Werde Teil unseres Event-Teams."
+        title_first_line: "Werde Teil"
+        title_second_line: "unseres Event-Teams"
         intro: "Flexible Jobs bei Konzerten, Festivals und Events in Stuttgart."
       list:
         title: "Unsere aktuellen Jobangebote"
@@ -298,7 +318,10 @@ de:
   press:
     index:
       hero:
+        image_alt: "Konzertszene mit Smartphone-Aufnahme für den Pressebereich"
         title: "Presseinfos für Partner und Medien."
+        title_first_line: "Presseinfos für"
+        title_second_line: "Partner und Medien"
         intro: "Pressetexte, Bildmaterial und Veranstaltungsdaten zu kommenden Produktionen."
       search:
         aria: "Künstler suchen"

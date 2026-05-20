@@ -29,7 +29,7 @@ development:
   primary:
     <<: *default
     database: <%= ENV.fetch("STUTTGART_LIVE_DB_NAME", "stuttgart_live_de_development") %>
-    username: <%= ENV.fetch("STUTTGART_LIVE_DB_USER", "russ_live_de_reader") %>
+    username: <%= ENV["STUTTGART_LIVE_DB_USER"] %>
     password: <%= ENV["STUTTGART_LIVE_DB_PASSWORD"] %>
     host: <%= ENV["STUTTGART_LIVE_DB_HOST"] %>
     port: <%= ENV.fetch("STUTTGART_LIVE_DB_PORT", 5432) %>

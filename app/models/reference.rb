@@ -67,6 +67,17 @@ class Reference < RussRecord
     tag.to_s.parameterize
   end
 
+  def self.renumber_positions!
+    references = ordered.to_a
+    total = references.size
+
+    transaction do
+      references.each_with_index do |reference, index|
+        reference.update_columns(position: total - index, updated_at: reference.updated_at)
+      end
+    end
+  end
+
   def tag_list
     tags.to_a.join(", ")
   end

@@ -78,7 +78,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
       referenzen_path => "Projekte, Projekte, Projekte",
       jobs_path => "Unsere aktuellen Jobangebote",
       job_path("stagehands") => "Jobdetails Stagehands",
-      presse_path => "Presseinfos für Partner und Medien.",
+      presse_path => "Presseinfos für",
       kontakt_path => "Charlottenplatz 17",
       impressum_path => "Impressum",
       datenschutz_path => "Datenschutz",
@@ -506,7 +506,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_no_match(/Jobdetails Stagehands/, response.body)
   end
 
-  test "jobs overview renders category filters and hides draft jobs" do
+  test "jobs overview hides draft jobs and renders category metadata on cards" do
     Job.create!(
       title: "Draft Job",
       slug: "draft-job",
@@ -518,9 +518,8 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get jobs_path
 
     assert_response :success
-    assert_includes response.body, 'class="public-filter-nav job-category-filter-nav"'
-    assert_includes response.body, 'data-job-category="catering"'
     assert_includes response.body, 'data-job-categories="catering"'
+    assert_includes response.body, 'class="public-directory job-table"'
     assert_not_includes response.body, "Intern"
     assert_not_includes response.body, "Draft Job"
   end

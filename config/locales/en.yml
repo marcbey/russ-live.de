@@ -164,6 +164,24 @@ en:
         image_alt: "Live stage as the key visual for Russ Live services"
         intro: "From the first site visit to final load-out: Russ Live brings together promoter expertise, production, marketing, staffing and ticketing for concerts, shows and cultural formats in the Stuttgart region."
       nav_aria: "Service areas"
+      contacts:
+        aria: "Contacts"
+        paul:
+          name: "Paul Woog"
+          role: "Management"
+          email: "paulwoog@michaelrussgmbh.de"
+        johanna:
+          name: "Johanna Backmund"
+          role: "Project Management / Accounting"
+          email: "johannabackmund@michaelrussgmbh.de"
+        sarah:
+          name: "Sarah Sandner"
+          role: "Marketing"
+          email: "sarahsandner@michaelrussgmbh.de"
+        sebastian:
+          name: "Sebastian Kraenzlein"
+          role: "Personnel Scheduling"
+          email: "sebastiankraenzlein@russ-live.de"
       intro:
         eyebrow: "Full Service"
         title: "Everything a live moment needs"
@@ -195,6 +213,8 @@ en:
       hero:
         image_alt: "Backstage moment with the Russ Live crew in front of a lit stage"
         title: "Become part of our event team."
+        title_first_line: "Become part"
+        title_second_line: "of our event team"
         intro: "Flexible jobs at concerts, festivals and events in Stuttgart."
       list:
         title: "Our current job openings"
@@ -298,7 +318,10 @@ en:
   press:
     index:
       hero:
+        image_alt: "Concert scene with smartphone recording for the press section"
         title: "Press information for partners and media."
+        title_first_line: "Press information"
+        title_second_line: "for partners and media"
         intro: "Press texts, image material and event data for upcoming productions."
       search:
         aria: "Search artists"

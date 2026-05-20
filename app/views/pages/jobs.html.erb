@@ -10,7 +10,10 @@
     </div>
 
     <div class="job-overview-hero-copy">
-      <h1 id="jobs-title"><%= t("pages.jobs.hero.title") %></h1>
+      <h1 id="jobs-title">
+        <span><%= t("pages.jobs.hero.title_first_line") %></span>
+        <span><%= t("pages.jobs.hero.title_second_line") %></span>
+      </h1>
       <p><%= t("pages.jobs.hero.intro") %></p>
       <%= public_backend_link(
             label: t("public.actions.edit"),
@@ -20,14 +23,6 @@
             wrapper_class: "job-overview-hero-actions"
           ) %>
     </div>
-    <% if @job_categories.any? %>
-      <nav class="public-filter-nav job-category-filter-nav" aria-label="<%= t("jobs.filters.aria") %>">
-        <button type="button" data-job-category="all" aria-pressed="true"><%= t("public.filters.all") %></button>
-        <% @job_categories.each do |job_category| %>
-          <button type="button" data-job-category="<%= Job.category_slug(job_category) %>" aria-pressed="false"><%= job_category %></button>
-        <% end %>
-      </nav>
-    <% end %>
   </section>
 
   <section class="public-section section job-overview-listing" id="jobs-list" aria-labelledby="jobs-list-title">
