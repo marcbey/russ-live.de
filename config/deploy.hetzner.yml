@@ -58,6 +58,7 @@ env:
     CABLE_DB_NAME: <%= ENV.fetch("CABLE_DB_NAME", "russ_live_de_production_cable") %>
     ACTIVE_STORAGE_SERVICE: <%= ENV.fetch("ACTIVE_STORAGE_SERVICE", "local") %>
     ACTIVE_STORAGE_ROOT: <%= ENV.fetch("ACTIVE_STORAGE_ROOT", "/rails/storage") %>
+    STAGING_NOINDEX: "true"
 
 ssh:
   user: deploy

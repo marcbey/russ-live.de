@@ -164,6 +164,12 @@ und Puma intern auf Port `3000`. `nginx` liefert Assets und signierte
 `/media/...`-Dateien direkt aus `/rails/public` beziehungsweise
 `/rails/storage` aus.
 
+Die Staging-Domain `https://russ-live.schopp3r.de/` wird in der
+Hetzner-Deployment-Konfiguration mit `STAGING_NOINDEX=true` ausgeliefert.
+`nginx` setzt dadurch global den Header `X-Robots-Tag: noindex, nofollow`,
+auch für Assets, Media-Dateien und den Healthcheck `/up`. `robots.txt` wird
+dafür bewusst nicht gesperrt, damit Suchmaschinen das `noindex` crawlen können.
+
 Für manuelle Produktions-Kommandos brauchst du lokal:
 
 - `config/master.key`

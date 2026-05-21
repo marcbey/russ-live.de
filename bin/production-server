@@ -5,7 +5,17 @@ export PORT=3000
 export PIDFILE="${PIDFILE:-/tmp/pids/puma.pid}"
 
 mkdir -p /tmp/pids /tmp/nginx /tmp/nginx/client_body /tmp/nginx/proxy /tmp/nginx/fastcgi /tmp/nginx/uwsgi /tmp/nginx/scgi
-envsubst '${MEDIA_PROXY_SECRET}' < /rails/config/nginx.conf.template > /tmp/nginx.conf
+
+case "${STAGING_NOINDEX:-}" in
+  1|true|TRUE|yes|YES|on|ON)
+    export STAGING_NOINDEX_HEADER='add_header X-Robots-Tag "noindex, nofollow" always;'
+    ;;
+  *)
+    export STAGING_NOINDEX_HEADER=''
+    ;;
+esac
+
+envsubst '${MEDIA_PROXY_SECRET} ${STAGING_NOINDEX_HEADER}' < /rails/config/nginx.conf.template > /tmp/nginx.conf
 
 bundle exec puma -C config/puma.rb &
 puma_pid=$!
