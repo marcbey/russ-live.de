@@ -25,7 +25,7 @@
   --header-subnav-font-size: 17px;
   --header-subnav-height: 54px;
   --header-subnav-padding: 24px;
-  --header-logo-width: clamp(220px, 18vw, 290px);
+  --header-logo-width: clamp(170px, 14vw, 230px);
   --header-logo-width-expanded: clamp(250px, 20vw, 330px);
   --header-logo-width-mobile: clamp(220px, 42vw, 260px);
   --header-logo-filter: none;
