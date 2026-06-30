@@ -4736,6 +4736,14 @@ h3 {
   .home-events-head {
     align-items: start;
     grid-template-columns: 1fr;
+    min-width: 0;
+  }
+
+  .home-events-head h2 {
+    font-size: clamp(2.15rem, 8.8vw, 3rem);
+    line-height: .96;
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
 
   .home-events-toolbar {
@@ -4744,15 +4752,38 @@ h3 {
 
   .home-events-viewport {
     margin: -8px;
+    overflow: hidden;
     padding: 8px 8px 24px;
   }
 
   .home-events-nav {
-    inset-inline: -10px;
+    inset-inline: auto;
+    justify-content: flex-end;
+    margin: 0 0 10px;
+    position: relative;
+    top: auto;
+    transform: none;
+    z-index: 6;
   }
 
   .home-events-slider {
-    grid-auto-columns: minmax(210px, 72vw);
+    gap: 12px;
+    grid-auto-columns: minmax(176px, 58vw);
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .event-slider-copy {
+    padding: 12px 12px 14px;
+  }
+
+  .event-slider-copy h3 {
+    font-size: clamp(1rem, 4vw, 1.22rem);
+  }
+
+  .event-slider-button {
+    min-height: 38px;
+    padding: 0 14px;
   }
 
   .site-footer {
