@@ -257,7 +257,7 @@ en:
         location: "Konzertdirektion Russ is located in the heart of downtown Stuttgart at Charlottenplatz 17. The New Palace and the Landesmuseum Württemberg are nearby."
         directions: "Coming from the main station, take the Stadtbahn to Charlottenplatz and use the Holzstraße or Planie exit. This is the way to the timetable."
       form:
-        title: "Prepare a message"
+        title: "Write a message"
         name: "Name"
         company: "Company"
         email: "Email"

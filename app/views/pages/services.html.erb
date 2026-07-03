@@ -170,7 +170,14 @@
                         target: "_blank",
                         rel: "noopener noreferrer" %>
           </div>
-          <figure class="public-card service-chapter-visual"><span><%= t("pages.services.image_pending") %></span></figure>
+          <figure class="public-card service-chapter-visual service-chapter-visual-filled service-chapter-visual-ticketportal">
+            <%= image_tag "russ_live/keyvisuals/services-ticketportal.png",
+                          alt: "",
+                          width: 1719,
+                          height: 1276,
+                          loading: "lazy",
+                          decoding: "async" %>
+          </figure>
         </article>
       </section>
 
@@ -185,41 +192,4 @@
         </section>
       <% end %>
 
-      <section class="public-section section service-companies" aria-labelledby="service-companies-title">
-        <div class="section-head">
-          <h2 id="service-companies-title"><%= t("pages.services.modules.title") %></h2>
-        </div>
-        <div class="service-company-grid">
-<article class="public-card service-company-card">
-            <p class="service-company-kicker"><%= t("pages.services.modules.kicker") %></p>
-            <h3><%= t("services.items.local.title") %></h3>
-            <p><%= t("services.items.local.paragraphs.first") %></p>
-            <a href="#local" aria-label="<%= t("pages.services.more_about", title: t("services.items.local.title")) %>"><%= t("pages.services.more") %></a>
-          </article>
-<article class="public-card service-company-card">
-            <p class="service-company-kicker"><%= t("pages.services.modules.kicker") %></p>
-            <h3><%= t("services.items.production.title") %></h3>
-            <p><%= t("services.items.production.paragraphs.first") %></p>
-            <a href="#production" aria-label="<%= t("pages.services.more_about", title: t("services.items.production.title")) %>"><%= t("pages.services.more") %></a>
-          </article>
-<article class="public-card service-company-card">
-            <p class="service-company-kicker"><%= t("pages.services.modules.kicker") %></p>
-            <h3><%= t("services.items.marketing.title") %></h3>
-            <p><%= t("services.items.marketing.paragraphs.first") %></p>
-            <a href="#marketing" aria-label="<%= t("pages.services.more_about", title: t("services.items.marketing.title")) %>"><%= t("pages.services.more") %></a>
-          </article>
-<article class="public-card service-company-card">
-            <p class="service-company-kicker"><%= t("pages.services.modules.kicker") %></p>
-            <h3><%= t("services.items.staff.title") %></h3>
-            <p><%= t("services.items.staff.paragraphs.first") %></p>
-            <a href="#staff" aria-label="<%= t("pages.services.more_about", title: t("services.items.staff.title")) %>"><%= t("pages.services.more") %></a>
-          </article>
-<article class="public-card service-company-card">
-            <p class="service-company-kicker"><%= t("pages.services.modules.kicker") %></p>
-            <h3><%= t("services.items.ticketing.title") %></h3>
-            <p><%= t("services.items.ticketing.paragraphs.first") %></p>
-            <a href="#ticketing" aria-label="<%= t("pages.services.more_about", title: t("services.items.ticketing.title")) %>"><%= t("pages.services.more") %></a>
-          </article>
-        </div>
-      </section>
     </main>

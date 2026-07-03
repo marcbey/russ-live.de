@@ -35,7 +35,6 @@
   --header-nav-bg: #fff;
   --header-nav-shadow: 0 1px 0 rgba(0, 0, 0, .08);
   --header-submenu-bg: #fff;
-  --header-scrolled-brand-top: 8px;
   --brand-left: 84px;
   --brand-top: 58px;
   --hero-copy-top: clamp(230px, 27vh, 330px);
@@ -196,8 +195,11 @@ img {
   }
 
   .site-header.is-scrolled .brand {
+    align-items: center;
+    display: flex;
+    height: var(--header-nav-height);
     left: 0;
-    padding: var(--header-scrolled-brand-top) 0 0 var(--brand-left);
+    padding: 0 0 0 var(--brand-left);
     position: fixed;
     top: 0;
     z-index: 2;
@@ -1794,19 +1796,38 @@ h3 {
 }
 
 .service-chapters {
-  margin-inline: auto;
-  max-width: var(--max);
-  padding: 0 clamp(20px, 4vw, 64px) clamp(72px, 9vw, 138px);
+  counter-reset: service-chapter;
+  margin-inline: 0;
+  max-width: none;
+  overflow: hidden;
+  padding: 0 0 clamp(72px, 9vw, 138px);
 }
 
 .service-chapter {
+  --service-chapter-column-gap: clamp(14px, 1.5vw, 26px);
   border-top: 1px solid rgba(17, 17, 17, .28);
+  counter-increment: service-chapter;
   display: grid;
-  gap: clamp(18px, 3.2vw, 48px);
-  grid-template-columns: minmax(0, .95fr) minmax(0, .95fr);
-  min-height: clamp(360px, 33vw, 520px);
-  padding: clamp(34px, 5vw, 72px) 0;
+  column-gap: var(--service-chapter-column-gap);
+  grid-template-columns: calc(var(--brand-left) - var(--service-chapter-column-gap)) repeat(12, minmax(0, 7rem)) minmax(var(--brand-left), 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  min-height: clamp(520px, 46vw, 760px);
+  padding: clamp(54px, 6vw, 96px) 0;
+  position: relative;
   scroll-margin-top: 116px;
+}
+
+.service-chapter::before {
+  align-self: start;
+  color: rgba(17, 17, 17, .38);
+  content: counter(service-chapter, decimal-leading-zero);
+  font-size: .8rem;
+  font-weight: 650;
+  grid-column: 2 / 3;
+  grid-row: 1;
+  letter-spacing: .12em;
+  line-height: 1;
+  padding-top: .35rem;
 }
 
 .service-chapter:last-child {
@@ -1814,15 +1835,25 @@ h3 {
 }
 
 .service-chapter h2 {
-  align-self: center;
-  font-size: clamp(2.1rem, 3.8vw, 4.8rem);
-  grid-column: 1;
+  align-self: end;
+  font-size: clamp(3.5rem, 5.1vw, 5.85rem);
+  grid-column: 2 / span 5;
+  grid-row: 1;
+  hyphens: none;
+  letter-spacing: 0;
   line-height: .92;
-  text-transform: uppercase;
+  max-width: 100%;
+  overflow-wrap: normal;
+  text-transform: none;
+  text-wrap: normal;
 }
 
 .service-chapter-copy {
-  grid-column: 1;
+  align-self: start;
+  grid-column: 2 / span 5;
+  grid-row: 2;
+  max-width: 38rem;
+  padding-top: clamp(22px, 2.6vw, 42px);
 }
 
 .service-chapter-copy p {
@@ -1896,11 +1927,11 @@ h3 {
     linear-gradient(135deg, rgba(255, 255, 255, .44), rgba(255, 255, 255, 0) 42%),
     repeating-linear-gradient(45deg, rgba(17, 17, 17, .11) 0 1px, transparent 1px 18px),
     #ddd8ce;
-  border: 1px solid rgba(17, 17, 17, .18);
-  grid-column: 2;
+  border: 0;
+  grid-column: 8 / -1;
   grid-row: 1 / span 2;
   margin: 0;
-  min-height: clamp(360px, 36vw, 560px);
+  min-height: clamp(460px, 42vw, 720px);
   overflow: hidden;
   position: relative;
 }
@@ -1922,6 +1953,23 @@ h3 {
   object-position: center;
   position: absolute;
   width: 100%;
+}
+
+.service-chapter-visual-ticketportal {
+  background: #fff;
+}
+
+.service-chapter-visual-ticketportal img {
+  bottom: auto;
+  height: auto;
+  left: 50%;
+  object-fit: contain;
+  object-position: top center;
+  right: auto;
+  top: clamp(20px, 3vw, 42px);
+  transform: translateX(-50%) rotate(-2.2deg);
+  transform-origin: top center;
+  width: min(92%, 58rem);
 }
 
 .service-chapter-visual::before,
@@ -1960,11 +2008,27 @@ h3 {
 
 .service-chapter-reverse h2,
 .service-chapter-reverse .service-chapter-copy {
-  grid-column: 2;
+  grid-column: 9 / span 5;
+}
+
+.service-chapter-reverse::before {
+  grid-column: 9 / 10;
 }
 
 .service-chapter-reverse .service-chapter-visual {
-  grid-column: 1;
+  grid-column: 1 / 8;
+}
+
+.service-chapter:nth-child(1) .service-chapter-visual,
+.service-chapter:nth-child(5) .service-chapter-visual {
+  grid-column: 7 / -1;
+}
+
+.service-chapter:nth-child(1) h2,
+.service-chapter:nth-child(1) .service-chapter-copy,
+.service-chapter:nth-child(5) h2,
+.service-chapter:nth-child(5) .service-chapter-copy {
+  grid-column: 2 / span 4;
 }
 
 .services-showcase {
@@ -2016,57 +2080,6 @@ h3 {
   background: #a61a1f;
   border-color: #a61a1f;
   color: #fff;
-}
-
-.service-companies {
-  max-width: 1640px;
-}
-
-.service-company-grid {
-  border-top: 1px solid var(--line);
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-}
-
-.service-company-card {
-  border-bottom: 1px solid var(--line);
-  border-right: 1px solid var(--line);
-  display: flex;
-  flex-direction: column;
-  min-height: 360px;
-  padding: clamp(22px, 2.4vw, 34px);
-}
-
-.service-company-card:nth-child(5n) {
-  border-right: 0;
-}
-
-.service-company-kicker {
-  color: var(--gold);
-  font-size: .82rem;
-  font-weight: 650;
-  margin: 0 0 26px;
-  text-transform: uppercase;
-}
-
-.service-company-card h3 {
-  font-size: clamp(1.55rem, 2vw, 2.35rem);
-  line-height: .96;
-}
-
-.service-company-card > p:not(.service-company-kicker) {
-  color: var(--muted);
-  font-size: 1rem;
-  line-height: 1.38;
-  margin: 18px 0 28px;
-}
-
-.service-company-card a {
-  align-self: flex-start;
-  border-bottom: 2px solid currentColor;
-  font-weight: 650;
-  margin-top: auto;
-  padding-bottom: 3px;
 }
 
 .sr-only {
@@ -4213,6 +4226,10 @@ h3 {
 
 .press-hero {
   aspect-ratio: auto;
+  background-image: url("/assets/russ_live/press-overview-hero.jpg");
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-size: cover;
   min-height: 620px;
   padding-left: 0;
   padding-right: 0;
@@ -4224,13 +4241,8 @@ h3 {
     linear-gradient(180deg, rgba(5, 5, 5, .14) 0%, rgba(5, 5, 5, .42) 100%);
 }
 
-.press-hero-media img {
-  filter: saturate(.88) contrast(1.02) brightness(.62);
-  height: 100%;
-  max-width: none;
-  object-fit: cover;
-  object-position: left center;
-  width: 100%;
+.job-overview-hero.press-hero .job-overview-hero-media {
+  display: none;
 }
 
 .press-hero-copy {
@@ -4815,6 +4827,7 @@ h3 {
     --job-profile-nav-height: 64px;
     --mobile-header-height: 86px;
     --mobile-hero-content-top: 78px;
+    --mobile-hero-screen-height: calc(100svh - var(--mobile-header-height));
     --services-jump-height: 64px;
   }
 
@@ -5252,11 +5265,11 @@ h3 {
   }
 
   .services-hero {
-    min-height: 820px;
+    min-height: min(820px, var(--mobile-hero-screen-height));
   }
 
   .references-hero {
-    min-height: 380px;
+    min-height: min(380px, var(--mobile-hero-screen-height));
   }
 
   .references-hero::after {
@@ -5272,12 +5285,12 @@ h3 {
   }
 
   .references-hero-media img {
-    opacity: .48;
+    opacity: .62;
   }
 
   .references-hero-copy {
     align-self: end;
-    padding: 164px var(--brand-left) 92px;
+    padding: clamp(118px, 22svh, 164px) var(--brand-left) clamp(62px, 11svh, 92px);
   }
 
   .references-hero h1 {
@@ -5301,16 +5314,16 @@ h3 {
 
   .services-hero::after {
     background:
-      linear-gradient(180deg, rgba(5, 5, 5, .5) 0%, rgba(5, 5, 5, .82) 58%, rgba(5, 5, 5, .94) 100%);
+      linear-gradient(180deg, rgba(5, 5, 5, .42) 0%, rgba(5, 5, 5, .68) 58%, rgba(5, 5, 5, .84) 100%);
   }
 
   .services-hero-media img {
-    object-position: 58% center;
+    object-position: 58% 42%;
   }
 
   .services-hero-copy {
     align-self: end;
-    padding: 210px var(--brand-left) 150px;
+    padding: clamp(150px, 25svh, 210px) var(--brand-left) clamp(96px, 15svh, 150px);
   }
 
   .services-hero h1 {
@@ -5339,14 +5352,28 @@ h3 {
     font-size: clamp(2.3rem, 9.5vw, 4.3rem);
   }
 
+  .service-chapters {
+    margin-inline: auto;
+    max-width: var(--max);
+    overflow: visible;
+    padding: 0 clamp(20px, 4vw, 64px) clamp(72px, 9vw, 138px);
+  }
+
   .service-chapter {
+    row-gap: clamp(34px, 5vw, 56px);
     grid-template-columns: minmax(0, 1fr);
     min-height: 0;
+  }
+
+  .service-chapter::before {
+    display: none;
   }
 
   .service-chapter-copy,
   .service-chapter-reverse .service-chapter-copy {
     grid-column: 1;
+    max-width: none;
+    padding-top: 0;
   }
 
   .service-contact-grid {
@@ -5360,22 +5387,10 @@ h3 {
 
   .service-chapter-visual,
   .service-chapter-reverse .service-chapter-visual {
+    border: 0;
     grid-column: 1;
     grid-row: auto;
     min-height: clamp(230px, 56vw, 430px);
-  }
-
-  .service-company-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .service-company-card,
-  .service-company-card:nth-child(5n) {
-    border-right: 1px solid var(--line);
-  }
-
-  .service-company-card:nth-child(2n) {
-    border-right: 0;
   }
 
   .about-hero,
@@ -5525,24 +5540,24 @@ h3 {
   }
 
   .home-hero {
-    min-height: 820px;
+    min-height: min(820px, var(--mobile-hero-screen-height));
   }
 
   .home-hero::after {
     background:
-      linear-gradient(180deg, rgba(5, 5, 5, .14) 0%, rgba(5, 5, 5, .42) 50%, rgba(5, 5, 5, .68) 100%);
+      linear-gradient(180deg, rgba(5, 5, 5, .1) 0%, rgba(5, 5, 5, .34) 50%, rgba(5, 5, 5, .56) 100%);
   }
 
   .home-hero-media img {
-    object-position: 68% bottom;
-    filter: brightness(1.14) contrast(1.08);
-    transform: scale(1.22);
-    transform-origin: center bottom;
+    object-position: 68% 42%;
+    filter: brightness(1.18) contrast(1.08);
+    transform: scale(1.12);
+    transform-origin: center 42%;
   }
 
   .home-hero-copy {
     align-self: start;
-    padding: calc(var(--mobile-header-height) + 48px) var(--brand-left) 128px;
+    padding: clamp(calc(var(--mobile-header-height) + 34px), 21svh, calc(var(--mobile-header-height) + 48px)) var(--brand-left) clamp(86px, 14svh, 128px);
   }
 
   .home-hero h1 {
@@ -5557,27 +5572,42 @@ h3 {
 
   .job-overview-hero {
     align-items: end;
-    min-height: 620px;
-    padding: var(--mobile-hero-content-top) var(--brand-left) 64px;
+    min-height: min(620px, var(--mobile-hero-screen-height));
+    padding: clamp(var(--mobile-hero-content-top), 12svh, 128px) var(--brand-left) clamp(48px, 8svh, 64px);
   }
 
   .job-template-hero {
     align-items: end;
-    min-height: 520px;
-    padding: var(--mobile-hero-content-top) var(--brand-left) 64px;
+    min-height: min(520px, var(--mobile-hero-screen-height));
+    padding: clamp(var(--mobile-hero-content-top), 12svh, 128px) var(--brand-left) clamp(48px, 8svh, 64px);
   }
 
   .job-overview-hero::after {
     background:
-      linear-gradient(180deg, rgba(5, 5, 5, .38) 0%, rgba(5, 5, 5, .66) 52%, rgba(5, 5, 5, .88) 100%),
-      linear-gradient(90deg, rgba(5, 5, 5, .68) 0%, rgba(5, 5, 5, .08) 76%);
+      linear-gradient(180deg, rgba(5, 5, 5, .3) 0%, rgba(5, 5, 5, .54) 52%, rgba(5, 5, 5, .78) 100%),
+      linear-gradient(90deg, rgba(5, 5, 5, .56) 0%, rgba(5, 5, 5, .06) 76%);
+  }
+
+  .job-overview-hero-media img {
+    object-position: center 42%;
+  }
+
+  .job-template-hero::after {
+    background:
+      linear-gradient(180deg, rgba(5, 5, 5, .32) 0%, rgba(5, 5, 5, .56) 52%, rgba(5, 5, 5, .78) 100%),
+      linear-gradient(90deg, rgba(5, 5, 5, .56) 0%, rgba(5, 5, 5, .08) 76%);
+  }
+
+  .job-template-hero-media img {
+    filter: saturate(.84) contrast(1.04) brightness(.7);
+    object-position: center 42%;
   }
 
   .job-overview-hero-copy {
     align-self: start;
     margin-left: 0;
     max-width: min(540px, calc(100vw - 56px));
-    padding-top: 56px;
+    padding-top: clamp(30px, 7svh, 56px);
     transform: none;
   }
 
@@ -5689,15 +5719,16 @@ h3 {
 
   .press-hero {
     aspect-ratio: auto;
-    min-height: 540px;
+    background-position: left 42%;
+    min-height: min(540px, var(--mobile-hero-screen-height));
     padding-left: 0;
     padding-right: 0;
   }
 
   .press-hero::after {
     background:
-      linear-gradient(180deg, rgba(5, 5, 5, .44) 0%, rgba(5, 5, 5, .7) 52%, rgba(5, 5, 5, .9) 100%),
-      linear-gradient(90deg, rgba(5, 5, 5, .72) 0%, rgba(5, 5, 5, .12) 76%);
+      linear-gradient(180deg, rgba(5, 5, 5, .36) 0%, rgba(5, 5, 5, .58) 52%, rgba(5, 5, 5, .8) 100%),
+      linear-gradient(90deg, rgba(5, 5, 5, .6) 0%, rgba(5, 5, 5, .1) 76%);
   }
 
   .press-hero-copy {
@@ -5719,15 +5750,11 @@ h3 {
   }
 
   .press-hero h1 {
-    padding-top: clamp(120px, 8vw, 180px);
+    padding-top: clamp(72px, 13svh, 120px);
   }
 
   .press-hero-copy > p:last-child {
     white-space: normal;
-  }
-
-  .press-hero-media img {
-    object-position: 68% center;
   }
 
   .press-search {
@@ -5833,9 +5860,9 @@ h3 {
   }
 
   .klassik-slider-stage {
-    gap: 10px;
+    gap: 0;
     min-height: clamp(250px, 68vw, 430px);
-    padding: 0 44px;
+    padding: 0 clamp(24px, 5vw, 56px);
   }
 
   .klassik-slide {
@@ -5844,9 +5871,13 @@ h3 {
     transform: scale(.82) translateY(10px);
   }
 
+  .klassik-slide:not(.is-active) {
+    display: none;
+  }
+
   .klassik-slide.is-active {
-    flex-basis: min(68vw, 520px);
-    height: clamp(200px, 56vw, 360px);
+    flex-basis: min(88vw, 760px);
+    height: clamp(220px, 58vw, 420px);
   }
 
   .klassik-slider-arrow {
@@ -5855,11 +5886,11 @@ h3 {
   }
 
   .klassik-slider-arrow-prev {
-    left: clamp(54px, 15vw, 96px);
+    left: clamp(18px, 5vw, 42px);
   }
 
   .klassik-slider-arrow-next {
-    right: clamp(54px, 15vw, 96px);
+    right: clamp(18px, 5vw, 42px);
   }
 
   .klassik-slider-meta {
@@ -5923,6 +5954,7 @@ h3 {
     --job-profile-nav-height: 58px;
     --mobile-header-height: 68px;
     --mobile-hero-content-top: 34px;
+    --mobile-hero-screen-height: calc(100svh - var(--mobile-header-height));
     --services-jump-height: 58px;
   }
 
@@ -6207,19 +6239,19 @@ h3 {
   }
 
   .services-hero {
-    min-height: 760px;
+    min-height: min(760px, var(--mobile-hero-screen-height));
   }
 
   .home-hero {
-    min-height: 760px;
+    min-height: min(760px, var(--mobile-hero-screen-height));
   }
 
   .references-hero {
-    min-height: 370px;
+    min-height: min(370px, var(--mobile-hero-screen-height));
   }
 
   .references-hero-copy {
-    padding: 148px 24px 88px;
+    padding: clamp(104px, 21svh, 148px) var(--brand-left) clamp(58px, 11svh, 88px);
   }
 
   .references-hero h1 {
@@ -6229,8 +6261,8 @@ h3 {
   }
 
   .job-overview-hero {
-    min-height: 540px;
-    padding: calc(var(--mobile-hero-content-top) + 128px) var(--brand-left) 56px;
+    min-height: min(540px, var(--mobile-hero-screen-height));
+    padding: clamp(116px, 25svh, calc(var(--mobile-hero-content-top) + 128px)) var(--brand-left) clamp(42px, 9svh, 56px);
   }
 
   .job-overview-hero h1 {
@@ -6239,8 +6271,8 @@ h3 {
   }
 
   .job-template-hero {
-    min-height: 420px;
-    padding: var(--mobile-hero-content-top) var(--brand-left) 52px;
+    min-height: min(420px, var(--mobile-hero-screen-height));
+    padding: clamp(var(--mobile-hero-content-top), 10svh, 72px) var(--brand-left) clamp(38px, 8svh, 52px);
   }
 
   .job-template-hero h1 {
@@ -6297,7 +6329,11 @@ h3 {
 
   .press-hero {
     aspect-ratio: auto;
-    min-height: 540px;
+    min-height: min(540px, var(--mobile-hero-screen-height));
+  }
+
+  .press-hero h1 {
+    padding-top: clamp(48px, 11svh, 88px);
   }
 
   .press-search div {
@@ -6355,11 +6391,11 @@ h3 {
   }
 
   .services-hero-copy {
-    padding: 180px var(--brand-left) 132px;
+    padding: clamp(128px, 24svh, 180px) var(--brand-left) clamp(72px, 14svh, 132px);
   }
 
   .home-hero-copy {
-    padding: calc(var(--mobile-header-height) + 56px) var(--brand-left) 112px;
+    padding: clamp(calc(var(--mobile-header-height) + 30px), 22svh, calc(var(--mobile-header-height) + 56px)) var(--brand-left) clamp(70px, 13svh, 112px);
   }
 
   .home-hero h1 {
@@ -6389,7 +6425,7 @@ h3 {
   }
 
   .service-chapter {
-    gap: 14px;
+    gap: 30px;
     grid-template-columns: minmax(0, 1fr);
     padding-block: 34px;
   }
@@ -6409,20 +6445,9 @@ h3 {
     padding-inline: 18px;
   }
 
-  .service-company-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .service-company-card,
-  .service-company-card:nth-child(2n),
-  .service-company-card:nth-child(5n) {
-    border-right: 0;
-    min-height: 280px;
-  }
-
   .klassik-slider-stage {
     gap: 7px;
-    padding: 0 34px;
+    padding: 0 20px;
   }
 
   .klassik-slide {
@@ -6431,8 +6456,8 @@ h3 {
   }
 
   .klassik-slide.is-active {
-    flex-basis: min(72vw, 330px);
-    height: clamp(170px, 60vw, 270px);
+    flex-basis: min(90vw, 420px);
+    height: clamp(185px, 62vw, 300px);
   }
 
   .klassik-slider-arrow {
@@ -6440,10 +6465,10 @@ h3 {
   }
 
   .klassik-slider-arrow-prev {
-    left: 54px;
+    left: 20px;
   }
 
   .klassik-slider-arrow-next {
-    right: 54px;
+    right: 20px;
   }
 }
