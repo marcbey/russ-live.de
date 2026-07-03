@@ -1,5 +1,12 @@
 <% company_areas = [
   {
+    key: "klassik",
+    logo: "russ_live/about/russ-klassik-logo.png",
+    title: "Russ Klassik",
+    url: "https://russ-klassik.de/",
+    text: t("pages.about.company.areas.klassik")
+  },
+  {
     key: "live",
     logo: "russ_live/about/russ-live-area-logo.png",
     title: "Russ Live",
@@ -19,13 +26,6 @@
     title: "Russ Service",
     url: "https://www.ordnerdienste-stuttgart.de/",
     text: t("pages.about.company.areas.service")
-  },
-  {
-    key: "klassik",
-    logo: "russ_live/about/russ-klassik-logo.png",
-    title: "Russ Klassik",
-    url: "https://russ-klassik.de/",
-    text: t("pages.about.company.areas.klassik")
   }
 ] %>
 
@@ -61,30 +61,6 @@
     </div>
   </section>
 
-  <section class="public-section about-company-band" aria-labelledby="about-company-band-title">
-    <div class="about-company-band-copy">
-      <h2 id="about-company-band-title"><%= t("pages.about.company.title_html") %></h2>
-      <p><%= t("pages.about.company.intro") %></p>
-      <%= link_to t("pages.about.company.button"), "https://www.konzertdirektion-russ.de/", class: "public-button public-button-primary section-button about-company-band-button", target: "_blank", rel: "noopener noreferrer" %>
-    </div>
-
-    <div class="about-company-band-grid">
-      <% company_areas.each do |area| %>
-        <article class="public-card about-company-card about-company-card-<%= area[:key] %>">
-          <a href="<%= area[:url] %>" target="_blank" rel="noopener noreferrer" aria-label="<%= t("pages.about.company.open_aria", title: area[:title]) %>">
-            <figure class="about-company-logo">
-              <%= image_tag area[:logo], alt: area[:title] %>
-            </figure>
-            <div class="about-company-hover-copy">
-              <h3><%= area[:title] %></h3>
-              <p><%= area[:text] %></p>
-            </div>
-          </a>
-        </article>
-      <% end %>
-    </div>
-  </section>
-
   <section class="public-section section about-history-section about-history-section-first" aria-labelledby="about-history-title">
     <figure class="about-history-image about-history-image-portrait">
       <%= image_tag "russ_live/about/geschichte-v2.jpg",
@@ -102,26 +78,28 @@
     </div>
   </section>
 
-  <section class="public-section section about-history-section about-history-section-award" aria-labelledby="about-award-title">
-    <div class="about-history-copy about-history-copy-narrow">
-      <h2 id="about-award-title"><%= t("pages.about.award.title") %></h2>
-      <p><%= t("pages.about.award.first") %></p>
-      <p><%= t("pages.about.award.second") %></p>
-    </div>
-
-    <figure class="about-history-image about-history-image-award">
-      <%= image_tag "russ_live/about/award-top-magazin.jpg",
-                    alt: t("pages.about.award.image_alt"),
-                    loading: "lazy",
-                    decoding: "async",
-                    width: 3661,
-                    height: 5491 %>
-    </figure>
+  <section class="about-quote-band" aria-labelledby="about-quote-title">
+    <h2 id="about-quote-title">
+      <span aria-hidden="true">»</span>
+      <%= t("pages.about.closing.title") %>
+      <span aria-hidden="true">«</span>
+    </h2>
   </section>
 
-  <section class="public-section section about-history-section about-history-section-city" aria-labelledby="about-city-title">
-    <div class="about-city-visuals">
-      <figure class="about-history-image about-history-image-small">
+  <section class="public-section section about-editorial-section" aria-labelledby="about-award-title">
+    <div class="about-editorial-visuals">
+      <figure class="about-editorial-image about-editorial-image-award">
+        <%= image_tag "russ_live/about/award-top-magazin.jpg",
+                      alt: t("pages.about.award.image_alt"),
+                      loading: "lazy",
+                      decoding: "async",
+                      width: 3661,
+                      height: 5491 %>
+      </figure>
+
+      <p class="about-editorial-note"><%= t("pages.about.award.second") %></p>
+
+      <figure class="about-editorial-image about-editorial-image-small">
         <%= image_tag "russ_live/about/ike-tina-1971.jpg",
                       alt: t("pages.about.city.small_image_alt"),
                       loading: "lazy",
@@ -129,7 +107,8 @@
                       width: 1408,
                       height: 792 %>
       </figure>
-      <figure class="about-history-image about-history-image-large">
+
+      <figure class="about-editorial-image about-editorial-image-large">
         <%= image_tag "russ_live/about/adac-2003.jpg",
                       alt: t("pages.about.city.large_image_alt"),
                       loading: "lazy",
@@ -139,17 +118,47 @@
       </figure>
     </div>
 
-    <div class="about-history-copy">
-      <h2 id="about-city-title"><%= t("pages.about.city.title") %></h2>
-      <p><%= t("pages.about.city.first") %></p>
-      <p><%= t("pages.about.city.second") %></p>
+    <div class="about-editorial-copy">
+      <article class="about-editorial-block">
+        <h2 id="about-award-title"><%= t("pages.about.award.title") %></h2>
+        <p><%= t("pages.about.award.first") %></p>
+      </article>
+
+      <article class="about-editorial-block">
+        <h2 id="about-city-title"><%= t("pages.about.city.title") %></h2>
+        <p><%= t("pages.about.city.first") %></p>
+        <p><%= t("pages.about.city.second") %></p>
+      </article>
+
+      <article class="about-editorial-block about-editorial-block-closing">
+        <p><%= t("pages.about.closing.text") %></p>
+        <% t("pages.about.closing.placeholder_paragraphs").each do |paragraph| %>
+          <p><%= paragraph %></p>
+        <% end %>
+      </article>
     </div>
   </section>
 
-  <section class="public-section about-closing section" aria-labelledby="about-closing-title">
-    <div class="about-closing-copy">
-      <h2 id="about-closing-title"><%= t("pages.about.closing.title") %></h2>
-      <p><%= t("pages.about.closing.text") %></p>
+  <section class="public-section about-company-band" aria-labelledby="about-company-band-title">
+    <div class="about-company-band-copy">
+      <h2 id="about-company-band-title"><%= t("pages.about.company.title_html") %></h2>
+    </div>
+
+    <div class="about-company-band-grid">
+      <% (company_areas + company_areas).each_with_index do |area, index| %>
+        <% duplicate = index >= company_areas.length %>
+        <article class="public-card about-company-card about-company-card-<%= area[:key] %><%= " about-company-card-duplicate" if duplicate %>"<%= " aria-hidden=\"true\"".html_safe if duplicate %>>
+          <a href="<%= area[:url] %>" target="_blank" rel="noopener noreferrer" aria-label="<%= t("pages.about.company.open_aria", title: area[:title]) %>"<%= " tabindex=\"-1\"".html_safe if duplicate %>>
+            <figure class="about-company-logo">
+              <%= image_tag area[:logo], alt: area[:title] %>
+            </figure>
+            <div class="about-company-hover-copy">
+              <h3><%= area[:title] %></h3>
+              <p><%= area[:text] %></p>
+            </div>
+          </a>
+        </article>
+      <% end %>
     </div>
   </section>
 </main>

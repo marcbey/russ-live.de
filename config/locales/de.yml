@@ -124,7 +124,7 @@ de:
         second_html: "<strong>Michaela Russ</strong> führt diesen Weg in der dritten Generation weiter. Gemeinsam steht die Familie für Produktionen, die professionell organisiert sind und trotzdem menschlich bleiben. Daraus ist ein Team entstanden, das Kultur mit Haltung, Verlässlichkeit und Leidenschaft umsetzt."
       company:
         eyebrow: "Konzertdirektion Russ"
-        title_html: "Vier Unternehmen.<br>Eine Vision."
+        title_html: "Konzertdirektion Russ: Eine ganze Welt aus Konzerten, Künstlern und Events."
         intro: "Wir wollen Menschen glücklich machen."
         button: "Konzertdirektion"
         open_aria: "%{title} öffnen"
@@ -156,6 +156,11 @@ de:
         eyebrow: "Heute"
         title: "Tradition ist für uns kein Rückblick, sondern Vertrauen in das, was als Nächstes kommt."
         text: "Russ Live steht für Erfahrung ohne Stillstand, für Qualität ohne Attitüde und für Produktionen, die Kultur als gemeinsame Aufgabe begreifen."
+        placeholder_paragraphs:
+          - "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae justo sed nibh facilisis luctus. Donec posuere, sem in cursus gravida, mi nunc luctus velit, sed fermentum ligula lorem at nibh."
+          - "Praesent non magna vitae arcu pretium dictum. Morbi consequat, nibh in tempor facilisis, lorem massa dignissim risus, at tincidunt sem nibh id purus. Suspendisse potenti."
+          - "Aliquam erat volutpat. Curabitur sed mi at lacus commodo finibus. Vivamus euismod, lorem vel porta viverra, lectus ipsum luctus neque, in volutpat augue ipsum non erat."
+          - "Maecenas luctus, arcu a malesuada fermentum, libero neque accumsan urna, vitae suscipit justo sapien at elit. Cras vulputate nibh sed lectus posuere, sit amet congue mauris feugiat."
     services:
       meta:
         title: "Services | Russ Live"

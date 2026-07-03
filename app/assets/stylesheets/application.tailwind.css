@@ -2082,6 +2082,7 @@ h3 {
 }
 
 .about-page {
+  --about-editorial-block-gap: clamp(2.25rem, 3vw, 3.5rem);
   background:
     radial-gradient(circle at top center, rgba(255, 255, 255, .95), rgba(248, 247, 244, 0) 52%),
     linear-gradient(180deg, rgba(255, 255, 255, .58), rgba(255, 255, 255, 0) 440px),
@@ -2091,22 +2092,23 @@ h3 {
 .about-hero {
   align-items: center;
   display: grid;
-  gap: clamp(42px, 4vw, 64px);
-  grid-template-columns: minmax(460px, 36rem) minmax(440px, 31rem);
-  justify-content: center;
+  gap: clamp(5rem, 7vw, 8.5rem);
+  grid-template-columns: minmax(0, 44rem) minmax(0, 40rem);
+  justify-content: space-between;
   margin: 0 auto;
-  max-width: 76rem;
-  min-height: min(70svh, 760px);
+  max-width: 104rem;
+  min-height: min(78svh, 860px);
+  width: 100%;
 }
 
 .about-hero-copy {
-  max-width: 40rem;
+  max-width: 44rem;
 }
 
 .about-hero-copy h1 {
-  font-size: clamp(3.6rem, 4.8vw, 5rem);
+  font-size: clamp(4rem, 5vw, 5.85rem);
   hyphens: none;
-  letter-spacing: -.05em;
+  letter-spacing: 0;
   line-height: .92;
   margin: 0;
   overflow-wrap: normal;
@@ -2125,38 +2127,37 @@ h3 {
 
 .about-hero-copy > p:last-child {
   color: var(--muted);
-  font-size: clamp(1.08rem, 1.28vw, 1.3rem);
+  font-size: clamp(1.24rem, 1.5vw, 1.58rem);
   line-height: 1.45;
-  margin: 1.5rem 0 0;
-  max-width: 17rem;
+  margin: 1.8rem 0 0;
+  max-width: 22rem;
 }
 
 .about-hero-collage {
   display: grid;
-  gap: 0.75rem;
+  gap: clamp(0.75rem, 1vw, 1rem);
   grid-template-columns: minmax(0, .82fr) minmax(0, .9fr);
   grid-template-rows: auto auto;
-  max-width: 31rem;
+  max-width: 39rem;
   width: 100%;
 }
 
 @media (min-width: 1500px) {
   .about-hero {
-    column-gap: 3.25rem;
-    grid-template-columns: 40rem 31rem;
-    justify-content: center;
-    max-width: 78rem;
+    column-gap: 8.5rem;
+    grid-template-columns: 45rem 42rem;
+    max-width: 108rem;
     padding-left: 0;
     padding-right: 0;
   }
 
   .about-hero-copy {
-    max-width: 40rem;
+    max-width: 45rem;
     justify-self: start;
   }
 
   .about-hero-collage {
-    max-width: 31rem;
+    max-width: 42rem;
     justify-self: start;
   }
 }
@@ -2203,6 +2204,7 @@ h3 {
   display: flex;
   margin: 0 auto;
   max-width: 1180px;
+  padding-bottom: var(--about-editorial-block-gap);
   padding-top: 0;
 }
 
@@ -2231,10 +2233,11 @@ h3 {
   background: #050505;
   color: #fff;
   display: grid;
-  gap: clamp(26px, 3vw, 44px);
-  grid-template-columns: minmax(320px, .64fr) minmax(0, 1.36fr);
-  margin: clamp(2.2rem, 4vw, 4rem) 0;
-  padding: clamp(2.5rem, 5vw, 4rem) var(--brand-left);
+  gap: clamp(1.75rem, 3vw, 2.75rem);
+  grid-template-columns: 1fr;
+  margin: clamp(3rem, 6vw, 5rem) 0 0;
+  padding: clamp(2.8rem, 5vw, 4.5rem) var(--brand-left) clamp(2.75rem, 4.5vw, 4rem);
+  text-align: center;
 }
 
 .about-company-band .eyebrow,
@@ -2243,12 +2246,21 @@ h3 {
   color: rgba(255, 255, 255, .72);
 }
 
+.about-company-band-copy {
+  margin: 0 auto;
+  max-width: 76rem;
+  width: 100%;
+}
+
 .about-company-band-copy h2 {
   color: #fff;
-  font-size: clamp(2.4rem, 3.8vw, 4.25rem);
-  line-height: .92;
-  margin: 0;
-  max-width: 22rem;
+  font-size: clamp(2rem, 3.2vw, 3.8rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.12;
+  margin: 0 auto;
+  max-width: 76rem;
+  text-wrap: balance;
 }
 
 .about-company-band-copy p:last-child {
@@ -2260,14 +2272,21 @@ h3 {
 }
 
 .about-company-band-grid {
+  align-items: center;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(1.6rem, 2.4vw, 2.1rem) clamp(2.8rem, 4vw, 5rem);
-  padding-top: .2rem;
+  gap: clamp(1.25rem, 2.4vw, 2.5rem);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0 auto;
+  max-width: 74rem;
+  width: 100%;
 }
 
 .about-company-card {
   min-width: 0;
+}
+
+.about-company-card-duplicate {
+  display: none;
 }
 
 .about-company-card a {
@@ -2279,28 +2298,27 @@ h3 {
   display: grid;
   height: 100%;
   justify-items: center;
-  min-height: 5.8rem;
-  overflow: hidden;
-  padding: .35rem 0;
+  min-height: clamp(3.8rem, 5vw, 5.4rem);
+  overflow: visible;
+  padding: 0;
   position: relative;
   text-decoration: none;
-  transition: transform .18s ease;
+  transition: opacity .18s ease, transform .18s ease;
 }
 
 .about-company-card a:hover,
 .about-company-card a:focus-visible {
+  opacity: .72;
   transform: translateY(-2px);
 }
 
 .about-company-logo {
   align-items: center;
   display: flex;
-  height: clamp(5rem, 5.6vw, 6.2rem);
+  height: clamp(3.3rem, 4.2vw, 4.8rem);
   justify-content: center;
   margin: 0;
   opacity: 1;
-  transform: translateY(0);
-  transition: opacity .22s ease, transform .22s ease;
   width: 100%;
 }
 
@@ -2313,44 +2331,46 @@ h3 {
 }
 
 .about-company-card-live .about-company-logo img {
-  width: min(14.4rem, 100%);
+  width: min(18rem, 100%);
 }
 
 .about-company-card-artists .about-company-logo img {
-  width: min(15.8rem, 100%);
+  width: min(19rem, 100%);
 }
 
 .about-company-card-service .about-company-logo img {
-  width: min(14.9rem, 100%);
+  width: min(19.2rem, 100%);
 }
 
 .about-company-card-klassik .about-company-logo img {
-  width: min(15.1rem, 100%);
+  width: min(19rem, 100%);
 }
 
 .about-company-hover-copy {
-  align-content: center;
-  display: grid;
-  justify-items: center;
-  inset: 0;
-  opacity: 0;
-  max-width: 18rem;
-  padding: .5rem;
-  position: absolute;
-  text-align: center;
-  transform: translateY(12px);
-  transition: opacity .2s ease, transform .2s ease;
+  display: none;
+}
+
+@keyframes aboutCompanyLogoSlide {
+  to {
+    transform: translateX(-400%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-company-band-grid {
+    animation: none !important;
+  }
 }
 
 .about-company-hover-copy h3 {
-  color: #fff;
+  color: #050505;
   font-size: 1rem;
   line-height: 1.1;
   margin: 0 0 .75rem;
 }
 
 .about-company-hover-copy p {
-  color: rgba(255, 255, 255, .78);
+  color: rgba(5, 5, 5, .72);
   font-size: .98rem;
   line-height: 1.5;
   margin: 0;
@@ -2358,8 +2378,7 @@ h3 {
 
 .about-company-card a:hover .about-company-logo,
 .about-company-card a:focus-visible .about-company-logo {
-  opacity: 0;
-  transform: translateY(-10px) scale(.98);
+  opacity: 1;
 }
 
 .about-company-card a:hover .about-company-hover-copy,
@@ -2374,10 +2393,13 @@ h3 {
   gap: clamp(20px, 3vw, 42px);
   grid-template-columns: minmax(0, 1.02fr) minmax(320px, .98fr);
   margin: 0 auto;
-  max-width: 1320px;
+  max-width: none;
+  padding-left: var(--brand-left);
+  padding-right: var(--brand-left);
 }
 
 .about-history-section-first {
+  padding-bottom: 0;
   padding-top: 0;
 }
 
@@ -2400,62 +2422,58 @@ h3 {
 
 .about-history-image-portrait {
   aspect-ratio: auto;
-  justify-self: center;
-  max-width: 56rem;
+  justify-self: stretch;
+  max-width: none;
   width: 100%;
 }
 
 @media (min-width: 1400px) {
   .about-hero {
-    gap: 1.5rem;
-    grid-template-columns: 27rem 29rem;
+    column-gap: 9.5rem;
+    grid-template-columns: 30rem 32rem;
     justify-content: center;
-    max-width: none;
+    max-width: 82rem;
   }
 
   .about-hero-copy {
-    max-width: 27rem;
+    max-width: 30rem;
   }
 
   .about-hero-collage {
-    max-width: 29rem;
+    max-width: 32rem;
   }
 
   .about-company-band {
-    grid-template-columns: 21rem 1fr;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: var(--brand-left);
+    padding-right: var(--brand-left);
   }
 
   .about-company-band-grid {
-    align-items: center;
-    gap: 2rem 3.5rem;
-    justify-content: center;
+    gap: 1.5rem 2.4rem;
   }
 
   .about-company-card a {
-    min-height: 4.75rem;
-    padding: 0;
+    min-height: 5rem;
   }
 
   .about-company-logo {
-    height: 4.2rem;
+    height: 4.6rem;
   }
 
   .about-company-card-live .about-company-logo img {
-    width: 12.8rem;
+    width: 18rem;
   }
 
   .about-company-card-artists .about-company-logo img {
-    width: 14rem;
+    width: 19rem;
   }
 
   .about-company-card-service .about-company-logo img {
-    width: 13.3rem;
+    width: 19.2rem;
   }
 
   .about-company-card-klassik .about-company-logo img {
-    width: 13.7rem;
+    width: 19rem;
   }
 
   .about-history-section {
@@ -2472,7 +2490,8 @@ h3 {
 }
 
 .about-history-copy h2,
-.about-closing-copy h2 {
+.about-closing-copy h2,
+.about-editorial-block h2 {
   font-size: clamp(2rem, 3.4vw, 3.55rem);
   letter-spacing: -.04em;
   line-height: .98;
@@ -2482,6 +2501,123 @@ h3 {
 
 .about-history-copy-narrow {
   max-width: 31rem;
+}
+
+.about-quote-band {
+  align-items: center;
+  background: #050505;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  margin: var(--about-editorial-block-gap) 0 clamp(2.5rem, 4vw, 4rem);
+  padding: clamp(2.6rem, 4.6vw, 4.25rem) var(--brand-left);
+  text-align: center;
+}
+
+.about-quote-band h2 {
+  color: #fff;
+  font-size: clamp(2rem, 3.2vw, 3.8rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.12;
+  margin: 0;
+  max-width: 76rem;
+  text-wrap: balance;
+}
+
+.about-editorial-section {
+  align-items: start;
+  color: #050505;
+  display: grid;
+  gap: clamp(3rem, 6vw, 6.5rem);
+  grid-template-columns: minmax(18rem, .86fr) minmax(24rem, 1.14fr);
+  margin: 0;
+  max-width: none;
+  padding: 0 var(--brand-left) clamp(5rem, 9vw, 8rem);
+}
+
+.about-editorial-visuals {
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(0, .55fr);
+  max-width: 54rem;
+  row-gap: clamp(1.5rem, 2.4vw, 2.75rem);
+  width: 100%;
+}
+
+.about-editorial-image {
+  margin: 0;
+  overflow: hidden;
+}
+
+.about-editorial-image img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.about-editorial-image-award {
+  aspect-ratio: 3 / 4.45;
+  grid-column: 1 / -1;
+  justify-self: stretch;
+  max-width: none;
+  width: 100%;
+}
+
+.about-editorial-note {
+  align-self: end;
+  color: rgba(5, 5, 5, .72);
+  font-size: clamp(1rem, 1.25vw, 1.16rem);
+  grid-column: 1;
+  line-height: 1.55;
+  margin: clamp(1.5rem, 3vw, 3rem) 0 0;
+  max-width: 18rem;
+}
+
+.about-editorial-image-small {
+  aspect-ratio: 1.24 / 1;
+  grid-column: 2;
+  grid-row: 3;
+  justify-self: end;
+  margin-top: clamp(-1.4rem, -1.5vw, -.5rem);
+  max-width: 22rem;
+  width: 100%;
+}
+
+.about-editorial-image-large {
+  aspect-ratio: .78 / 1;
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: end;
+  max-width: 20rem;
+  width: 100%;
+}
+
+.about-editorial-copy {
+  display: grid;
+  gap: var(--about-editorial-block-gap);
+  max-width: 46rem;
+  padding-top: .25rem;
+}
+
+.about-editorial-block h2 {
+  color: #050505;
+}
+
+.about-editorial-block p {
+  color: rgba(5, 5, 5, .78);
+  font-size: clamp(1rem, 1.18vw, 1.18rem);
+  line-height: 1.55;
+  margin: 0;
+  max-width: 43rem;
+}
+
+.about-editorial-block p + p {
+  margin-top: 1.5rem;
+}
+
+.about-editorial-block-closing {
+  padding-top: clamp(.5rem, 1.5vw, 1.4rem);
 }
 
 .about-city-visuals {
@@ -5246,6 +5382,7 @@ h3 {
   .about-story-lead,
   .about-history-section,
   .about-company-band,
+  .about-editorial-section,
   .reference-detail-hero,
   .job-hero,
   .job-detail {
@@ -5253,7 +5390,13 @@ h3 {
   }
 
   .about-hero {
+    gap: clamp(2.25rem, 6vw, 3.5rem);
     min-height: 0;
+  }
+
+  .page-header + .page-main > .about-hero:first-child {
+    padding-bottom: clamp(2.5rem, 6vw, 4rem);
+    padding-top: clamp(4rem, 10vw, 5.5rem);
   }
 
   .about-hero-copy {
@@ -5261,10 +5404,12 @@ h3 {
   }
 
   .about-hero-copy > p:last-child {
+    margin-top: 1.25rem;
     max-width: min(28rem, 100%);
   }
 
   .about-hero-collage {
+    gap: clamp(.5rem, 1.6vw, .75rem);
     margin-left: 0;
     max-width: min(36rem, 100%);
   }
@@ -5285,7 +5430,7 @@ h3 {
   }
 
   .about-company-band {
-    margin: clamp(3rem, 8vw, 5rem) 0;
+    margin: clamp(3rem, 8vw, 5rem) 0 0;
     padding-left: var(--brand-left);
     padding-right: var(--brand-left);
   }
@@ -5295,27 +5440,23 @@ h3 {
   }
 
   .about-company-card a {
-    min-height: 8.6rem;
-    padding: 1rem .75rem;
+    min-height: 4.8rem;
+    padding: 0;
   }
 
   .about-company-card:nth-child(2n + 1) a,
   .about-company-card:nth-child(2n) a {
-    padding-left: .75rem;
-    padding-right: .75rem;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .about-company-hover-copy {
-    opacity: 1;
-    padding: 1.2rem;
-    position: static;
-    transform: none;
+    display: none;
   }
 
   .about-company-card a:hover .about-company-logo,
   .about-company-card a:focus-visible .about-company-logo {
-    opacity: 0;
-    transform: none;
+    opacity: 1;
   }
 
   .about-company-hover-copy h3 {
@@ -5328,6 +5469,51 @@ h3 {
 
   .about-history-section-award .about-history-image {
     order: -1;
+  }
+
+  .about-history-section-first {
+    padding-bottom: 0;
+  }
+
+  .about-editorial-section {
+    gap: clamp(2.5rem, 8vw, 4rem);
+    padding-left: var(--brand-left);
+    padding-right: var(--brand-left);
+    padding-top: 0;
+  }
+
+  .about-quote-band {
+    padding-left: var(--brand-left);
+    padding-right: var(--brand-left);
+  }
+
+  .about-editorial-visuals {
+    grid-template-columns: minmax(0, .8fr) minmax(0, .95fr);
+    max-width: min(38rem, 100%);
+  }
+
+  .about-editorial-image-award {
+    max-width: 100%;
+  }
+
+  .about-editorial-note {
+    max-width: 22rem;
+  }
+
+  .about-editorial-image-small {
+    margin-top: clamp(1.75rem, 5vw, 3.5rem);
+    max-width: 17rem;
+  }
+
+  .about-editorial-image-large {
+    max-width: 18rem;
+  }
+
+  .about-editorial-copy {
+    gap: var(--about-editorial-block-gap);
+    max-width: 100%;
+    order: -1;
+    padding-top: 0;
   }
 
   .about-city-visuals {
@@ -5740,6 +5926,21 @@ h3 {
     --services-jump-height: 58px;
   }
 
+  .about-page {
+    --about-editorial-block-gap: 2.5rem;
+  }
+
+  .about-quote-band {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+  }
+
+  .about-quote-band h2 {
+    font-size: clamp(1.7rem, 8vw, 2.45rem);
+    line-height: 1.16;
+  }
+
   h1 {
     font-size: 2.35rem;
     max-width: 100%;
@@ -5790,28 +5991,117 @@ h3 {
     line-height: .92;
   }
 
+  .page-header + .page-main > .about-hero:first-child {
+    padding-bottom: 2.25rem;
+    padding-top: clamp(2.75rem, 12vw, 3.75rem);
+  }
+
+  .about-hero {
+    gap: 1.75rem;
+  }
+
   .about-hero-copy > p:last-child {
     font-size: 1rem;
+    margin-top: 1rem;
+  }
+
+  .about-hero-collage {
+    gap: .45rem;
   }
 
   .about-company-band-grid {
     grid-template-columns: 1fr;
   }
 
+  .about-company-band {
+    gap: 1.75rem;
+    overflow: hidden;
+    padding-bottom: 2.35rem;
+    padding-top: 2.35rem;
+  }
+
+  .about-company-band-copy h2 {
+    font-size: clamp(1.7rem, 8vw, 2.45rem);
+    line-height: 1.16;
+  }
+
   .about-company-card a,
   .about-company-card:nth-child(2n + 1) a,
   .about-company-card:nth-child(2n) a {
-    min-height: 8.6rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    min-height: 8.75rem;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .about-company-band-grid {
+    animation: aboutCompanyLogoSlide 16s linear infinite;
+    display: flex;
+    gap: 0;
+    max-width: min(34rem, 92vw);
+    overflow: visible;
+    will-change: transform;
+  }
+
+  .about-company-card,
+  .about-company-card-duplicate {
+    display: block;
+    flex: 0 0 100%;
+    width: 100%;
   }
 
   .about-company-logo {
-    height: 3.1rem;
+    height: 8rem;
+  }
+
+  .about-company-logo img,
+  .about-company-card-live .about-company-logo img,
+  .about-company-card-artists .about-company-logo img,
+  .about-company-card-service .about-company-logo img,
+  .about-company-card-klassik .about-company-logo img {
+    width: min(31rem, 90vw);
   }
 
   .about-company-hover-copy {
     padding: 1rem;
+  }
+
+  .about-editorial-section {
+    padding-bottom: clamp(3.5rem, 12vw, 5rem);
+  }
+
+  .about-editorial-visuals {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 1.35rem;
+  }
+
+  .about-editorial-image-award,
+  .about-editorial-image-small,
+  .about-editorial-image-large,
+  .about-editorial-note {
+    grid-column: 1;
+    grid-row: auto;
+    justify-self: start;
+  }
+
+  .about-editorial-image-award {
+    justify-self: stretch;
+    max-width: 100%;
+  }
+
+  .about-editorial-note {
+    margin-top: .4rem;
+    max-width: 100%;
+  }
+
+  .about-editorial-image-small {
+    margin-left: auto;
+    margin-top: 1.6rem;
+    max-width: min(18rem, 78vw);
+  }
+
+  .about-editorial-image-large {
+    margin-left: clamp(1.5rem, 10vw, 3rem);
+    max-width: min(19rem, 82vw);
   }
 
   .about-history-image-small {
