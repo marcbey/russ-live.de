@@ -251,6 +251,15 @@ de:
       paragraphs:
         location: "Die Konzertdirektion Russ befindet sich im Herzen der Stuttgarter Innenstadt am Charlottenplatz 17. In direkter Nachbarschaft liegen das Neue Schloss und das Landesmuseum Württemberg."
         directions: "Vom Hauptbahnhof kommend, nehmen Sie die Stadtbahn bis zur Haltestelle Charlottenplatz und gehen zum Ausgang Holzstraße oder Planie. Hier geht es zum Fahrplan."
+      form:
+        title: "Nachricht vorbereiten"
+        name: "Name"
+        company: "Firma"
+        email: "E-Mail"
+        phone: "Telefon"
+        message: "Nachricht"
+        submit: "E-Mail vorbereiten"
+        subject: "Kontaktanfrage"
     impressum:
       meta:
         title: "Impressum | Russ Live"

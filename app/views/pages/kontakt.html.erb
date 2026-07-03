@@ -1,12 +1,146 @@
+<% company_areas = [
+  {
+    key: "klassik",
+    logo: "russ_live/about/russ-klassik-logo.png",
+    title: "Russ Klassik",
+    url: "https://russ-klassik.de/",
+    text: t("pages.about.company.areas.klassik")
+  },
+  {
+    key: "live",
+    logo: "russ_live/about/russ-live-area-logo.png",
+    title: "Russ Live",
+    url: "https://www.michaelrussgmbh.de/",
+    text: t("pages.about.company.areas.live")
+  },
+  {
+    key: "artists",
+    logo: "russ_live/about/russ-artists-logo.png",
+    title: "Russ Artists",
+    url: "https://russ-artists.de/",
+    text: t("pages.about.company.areas.artists")
+  },
+  {
+    key: "service",
+    logo: "russ_live/about/russ-service-logo.png",
+    title: "Russ Service",
+    url: "https://www.ordnerdienste-stuttgart.de/",
+    text: t("pages.about.company.areas.service")
+  }
+] %>
+
 <main id="main-content" class="page-main public-page contact-page" tabindex="-1">
       <section class="public-section section split" aria-labelledby="contact-title">
-        <div><h1 id="contact-title">Charlottenplatz 17</h1></div>
-        <address class="public-contact-card rich-copy">
-          <p><%= t("pages.contact.paragraphs.location") %></p>
-          <p><%= t("pages.contact.paragraphs.directions") %></p>
-          <p>Charlottenplatz 17<br>70173 Stuttgart</p>
-          <p>Fon: +49 (0) 711 16 353 11<br>Mail: info@russ-live.de</p>
-          <p>Tickethotline: +49 (0) 711 550 660 77</p>
-        </address>
+        <div class="contact-location-visual">
+          <h1 id="contact-title" class="sr-only">Charlottenplatz 17</h1>
+          <%= image_tag "russ_live/contact/charlottenplatz17.jpg",
+                        alt: "Gebäude am Charlottenplatz 17",
+                        class: "contact-location-image",
+                        loading: "lazy",
+                        decoding: "async" %>
+        </div>
+        <div class="contact-details">
+          <address class="public-contact-card rich-copy">
+            <p><%= t("pages.contact.paragraphs.location") %></p>
+            <p><%= t("pages.contact.paragraphs.directions") %></p>
+            <p>Charlottenplatz 17<br>70173 Stuttgart</p>
+            <p>Fon: +49 (0) 711 16 353 11<br>Mail: info@russ-live.de</p>
+            <p>Tickethotline: +49 (0) 711 550 660 77</p>
+          </address>
+
+          <form class="contact-mail-form"
+                action="mailto:info@russ-live.de"
+                method="post"
+                enctype="text/plain"
+                data-controller="contact-mail"
+                data-action="submit->contact-mail#prepare"
+                data-contact-mail-recipient-value="info@russ-live.de"
+                data-contact-mail-subject-value="<%= t("pages.contact.form.subject") %>"
+                data-contact-mail-name-label-value="<%= t("pages.contact.form.name") %>"
+                data-contact-mail-company-label-value="<%= t("pages.contact.form.company") %>"
+                data-contact-mail-email-label-value="<%= t("pages.contact.form.email") %>"
+                data-contact-mail-phone-label-value="<%= t("pages.contact.form.phone") %>">
+            <h2><%= t("pages.contact.form.title") %></h2>
+
+            <div class="contact-mail-field-grid">
+              <div class="form-field">
+                <label class="form-label" for="contact_company"><%= t("pages.contact.form.company") %></label>
+                <input class="form-input"
+                       id="contact_company"
+                       name="company"
+                       type="text"
+                       autocomplete="organization"
+                       data-contact-mail-target="company">
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="contact_name"><%= t("pages.contact.form.name") %></label>
+                <input class="form-input"
+                       id="contact_name"
+                       name="name"
+                       type="text"
+                       autocomplete="name"
+                       required
+                       data-contact-mail-target="name">
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="contact_email"><%= t("pages.contact.form.email") %></label>
+                <input class="form-input"
+                       id="contact_email"
+                       name="email"
+                       type="email"
+                       autocomplete="email"
+                       required
+                       data-contact-mail-target="email">
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="contact_phone"><%= t("pages.contact.form.phone") %></label>
+                <input class="form-input"
+                       id="contact_phone"
+                       name="phone"
+                       type="tel"
+                       autocomplete="tel"
+                       data-contact-mail-target="phone">
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="contact_message"><%= t("pages.contact.form.message") %></label>
+              <textarea class="form-textarea"
+                        id="contact_message"
+                        name="message"
+                        rows="4"
+                        required
+                        data-contact-mail-target="message"></textarea>
+            </div>
+
+            <button class="public-button section-button contact-mail-button" type="submit"><%= t("pages.contact.form.submit") %></button>
+          </form>
+        </div>
+      </section>
+
+      <section class="public-section about-company-band" aria-labelledby="contact-company-band-title">
+        <div class="about-company-band-copy">
+          <h2 id="contact-company-band-title"><%= t("pages.about.company.title_html") %></h2>
+        </div>
+
+        <div class="about-company-band-grid">
+          <% (company_areas + company_areas).each_with_index do |area, index| %>
+            <% duplicate = index >= company_areas.length %>
+            <article class="public-card about-company-card about-company-card-<%= area[:key] %><%= " about-company-card-duplicate" if duplicate %>"<%= " aria-hidden=\"true\"".html_safe if duplicate %>>
+              <a href="<%= area[:url] %>" target="_blank" rel="noopener noreferrer" aria-label="<%= t("pages.about.company.open_aria", title: area[:title]) %>"<%= " tabindex=\"-1\"".html_safe if duplicate %>>
+                <figure class="about-company-logo">
+                  <%= image_tag area[:logo], alt: area[:title] %>
+                </figure>
+                <div class="about-company-hover-copy">
+                  <h3><%= area[:title] %></h3>
+                  <p><%= area[:text] %></p>
+                </div>
+              </a>
+            </article>
+          <% end %>
+        </div>
       </section>
     </main>
