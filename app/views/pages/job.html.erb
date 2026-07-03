@@ -1,14 +1,5 @@
 <main id="main-content" class="page-main public-page job-page" tabindex="-1">
   <section class="public-hero public-hero-dark section job-template-hero" aria-labelledby="job-title">
-    <div class="job-template-hero-media">
-      <%= image_tag job_image_source(@selected_job.job_image) || image_path("russ_live/jobs/cateringhilfen.jpg"),
-                    alt: @selected_job.job_image&.display_alt_text || @selected_job.title,
-                    width: 6144,
-                    height: 3456,
-                    decoding: "async",
-                    fetchpriority: "high" %>
-    </div>
-
     <div class="job-template-hero-copy">
       <h1 id="job-title"><%= @selected_job.title %></h1>
       <p><%= @selected_job.employment %></p>

@@ -241,8 +241,13 @@ de:
         second_text: "Wir arbeiten mit Leidenschaft, packen gemeinsam an und schaffen Events, die in Erinnerung bleiben."
       quotes:
         aria: "Stimmen aus dem Team"
-        text: "Man erlebt Events aus einer Perspektive, die sonst niemand sieht."
-        footer: "Luca, Stagehand seit 2022"
+        items:
+          - text: "Man erlebt Events aus einer Perspektive, die sonst niemand sieht."
+            footer: "Luca, Stagehand seit 2022"
+          - text: "Beim ersten Ton bekomme ich immer noch Gänsehaut."
+            footer: "Julia, Cateringaushilfe seit 2023"
+          - text: "Kein Einsatz ist gleich, aber am Ende zählt immer das Teamgefühl."
+            footer: "Mert, Logistikhelfer seit 2021"
     job:
       meta:
         title: "Jobs | Russ Live"

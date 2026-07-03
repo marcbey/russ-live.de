@@ -96,10 +96,10 @@
     </article>
 
     <section class="job-quotes" aria-label="<%= t("pages.jobs.quotes.aria") %>">
-      <% 3.times do %>
+      <% t("pages.jobs.quotes.items").each do |quote| %>
         <blockquote class="job-quote">
-          <p><%= t("pages.jobs.quotes.text") %></p>
-          <footer><%= t("pages.jobs.quotes.footer") %></footer>
+          <p><%= quote[:text] %></p>
+          <footer><%= quote[:footer] %></footer>
         </blockquote>
       <% end %>
     </section>

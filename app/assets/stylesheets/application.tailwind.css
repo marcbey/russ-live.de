@@ -3667,9 +3667,9 @@ h3 {
   isolation: isolate;
   margin-inline: 0;
   max-width: none;
-  min-height: min(620px, 82svh);
+  min-height: min(500px, 68svh);
   overflow: hidden;
-  padding: clamp(172px, 16vw, 220px) clamp(20px, 7vw, 110px) clamp(68px, 8vw, 104px);
+  padding: clamp(142px, 12vw, 176px) var(--brand-left) clamp(50px, 6vw, 74px);
   position: relative;
 }
 
@@ -3720,12 +3720,13 @@ h3 {
 }
 
 .job-template-hero h1 {
-  font-size: clamp(4.2rem, 5.6vw, 7rem);
+  font-size: clamp(3.5rem, 5vw, 5.8rem);
   hyphens: none;
-  letter-spacing: -.05em;
+  letter-spacing: -.035em;
   line-height: .92;
   max-width: none;
   overflow-wrap: normal;
+  text-transform: uppercase;
   white-space: nowrap;
 }
 
@@ -4071,6 +4072,8 @@ h3 {
   margin-inline: 0;
   max-width: none;
   padding-bottom: clamp(58px, 7vw, 92px);
+  padding-left: var(--brand-left);
+  padding-right: var(--brand-left);
   padding-top: clamp(42px, 6vw, 74px);
   scroll-margin-top: var(--header-nav-height);
 }
@@ -4114,22 +4117,21 @@ h3 {
 }
 
 .job-list li {
+  align-items: start;
   color: var(--ink);
-  font-size: clamp(1.2rem, 1.8vw, 1.72rem);
-  line-height: 1.18;
-  padding-left: 42px;
-  position: relative;
+  column-gap: 16px;
+  display: grid;
+  font-size: clamp(1.02rem, 1.2vw, 1.12rem);
+  grid-template-columns: 18px minmax(0, 1fr);
+  line-height: 1.55;
+  padding-left: 0;
 }
 
 .job-list li::before {
-  background: var(--ink);
-  border-radius: 999px;
-  content: "";
-  height: 14px;
-  left: 0;
-  position: absolute;
-  top: .35em;
-  width: 14px;
+  content: "→";
+  font-size: 1rem;
+  font-weight: 650;
+  line-height: 1.55;
 }
 
 .job-apply h2 {
@@ -5578,8 +5580,8 @@ h3 {
 
   .job-template-hero {
     align-items: end;
-    min-height: min(520px, var(--mobile-hero-screen-height));
-    padding: clamp(var(--mobile-hero-content-top), 12svh, 128px) var(--brand-left) clamp(48px, 8svh, 64px);
+    min-height: min(420px, var(--mobile-hero-screen-height));
+    padding: clamp(var(--mobile-hero-content-top), 10svh, 96px) var(--brand-left) clamp(40px, 7svh, 54px);
   }
 
   .job-overview-hero::after {
@@ -6271,12 +6273,12 @@ h3 {
   }
 
   .job-template-hero {
-    min-height: min(420px, var(--mobile-hero-screen-height));
-    padding: clamp(var(--mobile-hero-content-top), 10svh, 72px) var(--brand-left) clamp(38px, 8svh, 52px);
+    min-height: min(340px, var(--mobile-hero-screen-height));
+    padding: clamp(var(--mobile-hero-content-top), 9svh, 64px) var(--brand-left) clamp(32px, 7svh, 44px);
   }
 
   .job-template-hero h1 {
-    font-size: clamp(2.45rem, 11vw, 3.7rem);
+    font-size: clamp(2.3rem, 10.2vw, 3.25rem);
     white-space: normal;
   }
 
