@@ -4787,14 +4787,32 @@ h3 {
   }
 
   .site-footer {
-    align-items: start;
+    align-items: center;
     flex-direction: column;
+    justify-content: center;
+    text-align: center;
   }
 
   .site-footer-brand {
-    align-items: start;
+    align-items: center;
     flex-direction: column;
     gap: 10px;
+  }
+
+  .site-footer nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 18px;
+    justify-content: center;
+    max-width: 30rem;
+    width: 100%;
+  }
+
+  .site-footer nav a {
+    align-items: center;
+    display: inline-flex;
+    justify-content: center;
+    min-height: 34px;
   }
 
   .services-body .page-header + .page-main {
@@ -5633,7 +5651,6 @@ h3 {
   }
 
   .events-strip,
-  .site-footer,
   .section-head {
     align-items: start;
     flex-direction: column;
