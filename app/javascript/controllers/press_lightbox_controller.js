@@ -60,10 +60,11 @@ export default class extends Controller {
     const src = trigger.dataset.lightboxSrc || ""
     const download = trigger.dataset.lightboxDownload || src
     const alt = trigger.dataset.lightboxAlt || this.fallbackAlt
+    const caption = trigger.dataset.lightboxCaption || ""
 
     this.imageTarget.src = src
     this.imageTarget.alt = alt
-    this.captionTarget.textContent = alt
+    this.captionTarget.textContent = caption
     this.downloadTarget.href = download
   }
 

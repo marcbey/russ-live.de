@@ -10,15 +10,12 @@ export default class extends Controller {
 
   connect() {
     this.render()
+    this.scrollToSearchAnchor()
   }
 
   submit(event) {
     event.preventDefault()
     this.render()
-  }
-
-  reset() {
-    window.requestAnimationFrame(() => this.render())
   }
 
   render() {
@@ -43,6 +40,21 @@ export default class extends Controller {
 
   normalize(value) {
     return value.toLocaleLowerCase(this.localeValue).normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+  }
+
+  scrollToSearchAnchor() {
+    if (window.location.hash !== "#press-search") return
+    if (!window.matchMedia("(max-width: 1070px)").matches) return
+
+    this.element.querySelector(".press-hero")?.classList.add("is-search-anchor")
+
+    window.requestAnimationFrame(() => {
+      const header = document.querySelector(".site-header")
+      const headerHeight = header?.getBoundingClientRect().height || 0
+      const top = this.element.querySelector("#press-search").getBoundingClientRect().top + window.scrollY - headerHeight - 10
+
+      window.scrollTo({ top: Math.max(top, 0), behavior: "auto" })
+    })
   }
 
   get pluralLabel() {

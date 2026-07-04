@@ -27,8 +27,9 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Ärztin Live"
     assert_includes response.body, press_artist_path("arztin-live")
     assert_includes response.body, "1 Presseeintrag"
-    assert_select ".press-search[data-action=?]", "submit->press-search#submit reset->press-search#reset"
+    assert_select "#press-search.press-search[data-action=?]", "submit->press-search#submit"
     assert_select "#press-search-input[data-action=?]", "input->press-search#render search->press-search#render"
+    assert_select ".press-search button[type=submit] svg"
     assert_not_includes response.body, "Hidden Act"
     assert_not_includes response.body, visible_event.title
   end
@@ -121,6 +122,7 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Liederhalle Stuttgart"
     assert_includes response.body, "Weitere Termine"
     assert_includes response.body, "https://tickets.example/abc"
+    assert_includes response.body, "#{presse_path}#press-search"
   end
 
   test "show prefers rich press text over event info" do
@@ -148,18 +150,26 @@ class PressControllerTest < ActionDispatch::IntegrationTest
       start_at: Time.zone.local(2026, 8, 1, 20)
     )
     create_event_image!(event:, purpose: EventImage::PURPOSE_DETAIL_HERO, alt_text: "Eventbild", filename: "event-image.jpg")
-    create_event_image!(event:, purpose: EventImage::PURPOSE_SLIDER, alt_text: "Freigegebenes Pressefoto", filename: "press-image.jpg")
+    create_event_image!(
+      event:,
+      purpose: EventImage::PURPOSE_SLIDER,
+      alt_text: "Freigegebenes Pressefoto",
+      sub_text: "Credit: Test Fotografin",
+      filename: "press-image.jpg"
+    )
 
     get press_artist_path("image-artist")
 
     assert_response :success
     assert_includes response.body, "Bildergalerie"
-    assert_includes response.body, "Freigegebenes Pressefoto"
-    assert_equal 2, response.body.scan("Pressemappe downloaden").size
-    assert_equal 2, response.body.scan('data-turbo="false"').size
+    assert_includes response.body, 'data-lightbox-alt="Freigegebenes Pressefoto"'
+    assert_includes response.body, "© Test Fotografin"
+    assert_not_includes response.body, "<span>Freigegebenes Pressefoto</span>"
+    assert_equal 3, response.body.scan("Pressemappe downloaden").size
+    assert_equal 3, response.body.scan('data-turbo="false"').size
     assert_includes response.body, press_artist_download_path("image-artist")
     assert_includes response.body, "/rails/active_storage/representations/"
-    assert_includes response.body, "Bild downloaden"
+    assert_includes response.body, 'class="press-gallery-download"'
     assert_includes response.body, "disposition=attachment"
     assert_includes response.body, "data-lightbox-download="
   end
@@ -275,12 +285,13 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     ])
   end
 
-  def create_event_image!(event:, purpose:, alt_text:, filename: "press-image.jpg", content: "press image")
+  def create_event_image!(event:, purpose:, alt_text:, sub_text: nil, filename: "press-image.jpg", content: "press image")
     image = EventImage.insert_all!([
       {
         event_id: event.id,
         purpose:,
         alt_text:,
+        sub_text:,
         created_at: Time.current,
         updated_at: Time.current
       }

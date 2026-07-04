@@ -345,9 +345,9 @@ en:
       search:
         aria: "Search artists"
         label: "Search artists"
-        placeholder: "Enter name"
-        reset: "Reset"
-        reset_aria: "Reset search"
+        placeholder: "Artist search"
+        submit: "Search"
+        submit_aria: "Search artists"
       directory:
         eyebrow: "Overview"
         title: "Artists A-Z"

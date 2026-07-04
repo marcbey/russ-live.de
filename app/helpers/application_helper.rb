@@ -190,6 +190,17 @@ module ApplicationHelper
     ].select { |_, value| value.present? }
   end
 
+  def press_image_credit(image)
+    credit = image&.sub_text.to_s.strip
+    return if credit.blank?
+    return credit if credit.start_with?("©")
+
+    cleaned_credit = credit.sub(/\A(?:credit|credits|copyright|foto|photo|bild)\s*:?\s*/i, "").strip
+    return if cleaned_credit.blank?
+
+    "© #{cleaned_credit}"
+  end
+
   private
     def stored_image_source(stored_image, route_helper:)
       return if stored_image.blank?

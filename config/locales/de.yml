@@ -345,9 +345,9 @@ de:
       search:
         aria: "Künstler suchen"
         label: "Künstler suchen"
-        placeholder: "Name eingeben"
-        reset: "Zurücksetzen"
-        reset_aria: "Suche zurücksetzen"
+        placeholder: "Künstlersuche"
+        submit: "Suchen"
+        submit_aria: "Künstlersuche ausführen"
       directory:
         eyebrow: "Übersicht"
         title: "Künstler A-Z"
