@@ -63,6 +63,7 @@ class PagesController < ApplicationController
   def job
     @jobs = Job.published.with_contact_and_image.ordered.to_a
     @selected_job = find_job!(params[:slug])
+    @job_overview_hero_image = "russ_live/jobs/overview-hero.jpg"
     @page_meta = PAGE_META.fetch(:job).merge(
       title: @selected_job.meta_title.presence || t("pages.job.meta.dynamic_title", title: @selected_job.title),
       description: @selected_job.meta_description.presence || t("pages.job.meta.description")

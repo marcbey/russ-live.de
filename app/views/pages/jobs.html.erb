@@ -1,6 +1,6 @@
 <main id="main-content" class="page-main public-page job-page" tabindex="-1" data-controller="job-filter">
-  <section class="public-hero public-hero-dark section job-overview-hero" aria-labelledby="jobs-title">
-    <div class="job-overview-hero-media">
+  <section class="public-hero public-hero-dark section public-page-hero job-overview-hero" aria-labelledby="jobs-title">
+    <div class="public-page-hero-media job-overview-hero-media">
       <%= image_tag @job_overview_hero_image,
                     alt: t("pages.jobs.hero.image_alt"),
                     width: 2565,
@@ -9,7 +9,7 @@
                     fetchpriority: "high" %>
     </div>
 
-    <div class="job-overview-hero-copy">
+    <div class="public-page-hero-copy job-overview-hero-copy">
       <h1 id="jobs-title">
         <span><%= t("pages.jobs.hero.title_first_line") %></span>
         <span><%= t("pages.jobs.hero.title_second_line") %></span>

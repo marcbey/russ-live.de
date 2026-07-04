@@ -166,9 +166,13 @@ en:
         title: "Services | Russ Live"
         description: "Russ Live services: local delivery, production, marketing, staffing and ticketing for live entertainment in Stuttgart."
       hero:
-        image_alt: "Live stage as the key visual for Russ Live services"
+        image_alt: "Concert crowd with red stage light as the key visual for Russ Live services"
+        title_lines:
+          - "Everything a"
+          - "live event needs"
         intro: "From the first site visit to final load-out: Russ Live brings together promoter expertise, production, marketing, staffing and ticketing for concerts, shows and cultural formats in the Stuttgart region."
       nav_aria: "Service areas"
+      staff_jobs_button: "Job openings"
       contacts:
         aria: "Contacts"
         paul:
@@ -209,7 +213,7 @@ en:
         description: "Russ Live references: concerts, shows and cultural formats from Stuttgart and the region."
     references:
       hero:
-        title: "Projects, projects, projects..."
+        title: "Projects we are proud of"
         intro: "Concerts, shows and cultural formats from Stuttgart and the region."
     jobs:
       meta:
@@ -334,6 +338,25 @@ en:
       requirements: "Requirements"
       apply_title: "We look forward to your application!"
       contact: "Contact person"
+      form:
+        salutation: "Salutation"
+        salutations:
+          blank: "Please choose"
+          female: "Ms"
+          male: "Mr"
+          diverse: "Diverse"
+        first_name: "First name"
+        last_name: "Last name"
+        address: "Address"
+        city: "City"
+        phone: "Phone"
+        email: "Email"
+        position: "Position"
+        message: "Application text"
+        email_greeting: "Hello Sebastian,"
+        email_interest_line: "I am interested in the position %{title}."
+        email_personal_details_heading: "My details:"
+        submit: "Prepare email"
   press:
     index:
       hero:

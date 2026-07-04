@@ -1,13 +1,20 @@
 <main id="main-content" class="page-main public-page job-page" tabindex="-1">
-  <section class="public-hero public-hero-dark section job-template-hero" aria-labelledby="job-title">
-    <div class="job-template-hero-copy">
+  <section class="public-hero public-hero-dark section public-page-hero job-overview-hero" aria-labelledby="job-title">
+    <div class="public-page-hero-media job-overview-hero-media">
+      <%= image_tag @job_overview_hero_image,
+                    alt: t("pages.jobs.hero.image_alt"),
+                    width: 2565,
+                    height: 1067,
+                    decoding: "async",
+                    fetchpriority: "high" %>
+    </div>
+
+    <div class="public-page-hero-copy job-overview-hero-copy">
       <h1 id="job-title"><%= @selected_job.title %></h1>
-      <p><%= @selected_job.employment %></p>
+      <p><%= @selected_job.intro %></p>
       <div class="job-overview-hero-actions">
-        <% if @selected_job.join_recruiting_url.present? %>
-          <%= link_to t("jobs.apply_now"), @selected_job.join_recruiting_url, class: "public-button public-button-primary section-button", target: "_blank", rel: "noopener noreferrer" %>
-        <% end %>
         <%= link_to t("jobs.back_to_overview"), jobs_path, class: "public-button public-button-outline section-button section-button-outline-light" %>
+        <%= link_to t("jobs.apply_now"), "#job-application", class: "public-button public-button-primary section-button", data: { anchor_position: "flush" } %>
         <%= public_backend_link(
               label: t("public.actions.edit"),
               path: backend_jobs_path(job_id: @selected_job.id),
@@ -20,10 +27,6 @@
 
   <section class="public-section section job-detail" id="job-detail" aria-label="<%= @selected_job.detail_label %>">
     <article class="job-content">
-      <div class="job-detail-hero" id="<%= @selected_job.detail_id %>">
-        <p><%= @selected_job.intro %></p>
-      </div>
-
       <div class="job-section">
         <p class="eyebrow"><%= t("jobs.detail.responsibilities") %></p>
         <ul class="job-list">
@@ -42,16 +45,134 @@
         </ul>
       </div>
 
-      <div class="job-apply">
+      <div class="job-apply" id="job-application">
         <h2><%= t("jobs.detail.apply_title") %></h2>
-        <% if @selected_job.join_recruiting_url.present? %>
-          <%= link_to t("jobs.apply_now"), @selected_job.join_recruiting_url, class: "public-button public-button-primary section-button", target: "_blank", rel: "noopener noreferrer" %>
-        <% elsif @selected_job.contact&.email.present? %>
-          <%= mail_to @selected_job.contact.email,
-                      @selected_job.contact.email,
-                      subject: @selected_job.application_email_subject,
-                      class: "public-button public-button-primary section-button" %>
-        <% end %>
+        <% application_recipient = @selected_job.contact&.email.presence || "info@russ-live.de" %>
+        <form class="job-application-form"
+              action="mailto:<%= application_recipient %>"
+              method="post"
+              enctype="text/plain"
+              data-controller="job-application-mail"
+              data-action="submit->job-application-mail#prepare"
+              data-job-application-mail-recipient-value="<%= application_recipient %>"
+              data-job-application-mail-subject-value="<%= @selected_job.application_email_subject %>"
+              data-job-application-mail-greeting-value="<%= t("jobs.detail.form.email_greeting") %>"
+              data-job-application-mail-interest-line-value="<%= t("jobs.detail.form.email_interest_line", title: @selected_job.title) %>"
+              data-job-application-mail-personal-details-heading-value="<%= t("jobs.detail.form.email_personal_details_heading") %>"
+              data-job-application-mail-salutation-label-value="<%= t("jobs.detail.form.salutation") %>"
+              data-job-application-mail-first-name-label-value="<%= t("jobs.detail.form.first_name") %>"
+              data-job-application-mail-last-name-label-value="<%= t("jobs.detail.form.last_name") %>"
+              data-job-application-mail-address-label-value="<%= t("jobs.detail.form.address") %>"
+              data-job-application-mail-city-label-value="<%= t("jobs.detail.form.city") %>"
+              data-job-application-mail-phone-label-value="<%= t("jobs.detail.form.phone") %>"
+              data-job-application-mail-email-label-value="<%= t("jobs.detail.form.email") %>"
+              data-job-application-mail-position-label-value="<%= t("jobs.detail.form.position") %>"
+              data-job-application-mail-message-label-value="<%= t("jobs.detail.form.message") %>">
+          <div class="job-application-field-grid">
+            <div class="form-field">
+              <label class="form-label" for="job_application_salutation"><%= t("jobs.detail.form.salutation") %></label>
+              <select class="form-input"
+                      id="job_application_salutation"
+                      name="salutation"
+                      required
+                      data-job-application-mail-target="salutation">
+                <option value=""><%= t("jobs.detail.form.salutations.blank") %></option>
+                <option value="<%= t("jobs.detail.form.salutations.female") %>"><%= t("jobs.detail.form.salutations.female") %></option>
+                <option value="<%= t("jobs.detail.form.salutations.male") %>"><%= t("jobs.detail.form.salutations.male") %></option>
+                <option value="<%= t("jobs.detail.form.salutations.diverse") %>"><%= t("jobs.detail.form.salutations.diverse") %></option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="job_application_first_name"><%= t("jobs.detail.form.first_name") %></label>
+              <input class="form-input"
+                     id="job_application_first_name"
+                     name="first_name"
+                     type="text"
+                     autocomplete="given-name"
+                     required
+                     data-job-application-mail-target="firstName">
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="job_application_last_name"><%= t("jobs.detail.form.last_name") %></label>
+              <input class="form-input"
+                     id="job_application_last_name"
+                     name="last_name"
+                     type="text"
+                     autocomplete="family-name"
+                     required
+                     data-job-application-mail-target="lastName">
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="job_application_address"><%= t("jobs.detail.form.address") %></label>
+              <input class="form-input"
+                     id="job_application_address"
+                     name="address"
+                     type="text"
+                     autocomplete="street-address"
+                     required
+                     data-job-application-mail-target="address">
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="job_application_city"><%= t("jobs.detail.form.city") %></label>
+              <input class="form-input"
+                     id="job_application_city"
+                     name="city"
+                     type="text"
+                     autocomplete="address-level2"
+                     required
+                     data-job-application-mail-target="city">
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="job_application_phone"><%= t("jobs.detail.form.phone") %></label>
+              <input class="form-input"
+                     id="job_application_phone"
+                     name="phone"
+                     type="tel"
+                     autocomplete="tel"
+                     required
+                     data-job-application-mail-target="phone">
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="job_application_email"><%= t("jobs.detail.form.email") %></label>
+              <input class="form-input"
+                     id="job_application_email"
+                     name="email"
+                     type="email"
+                     autocomplete="email"
+                     required
+                     data-job-application-mail-target="email">
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="job_application_position"><%= t("jobs.detail.form.position") %></label>
+              <input class="form-input"
+                     id="job_application_position"
+                     name="position"
+                     type="text"
+                     value="<%= @selected_job.title %>"
+                     readonly
+                     data-job-application-mail-target="position">
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="job_application_message"><%= t("jobs.detail.form.message") %></label>
+            <textarea class="form-textarea"
+                      id="job_application_message"
+                      name="message"
+                      rows="6"
+                      required
+                      data-job-application-mail-target="message"></textarea>
+          </div>
+
+          <button class="public-button public-button-primary section-button job-application-submit" type="submit"><%= t("jobs.detail.form.submit") %></button>
+        </form>
       </div>
     </article>
 

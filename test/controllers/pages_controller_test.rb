@@ -75,7 +75,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
       root_path => "Ihr örtlicher",
       unternehmen_path => "Veranstaltungen",
       services_path => "Live",
-      referenzen_path => "Projekte, Projekte, Projekte",
+      referenzen_path => "Projekte auf die wir stolz sind",
       jobs_path => "Unsere aktuellen Jobangebote",
       job_path("stagehands") => "Jobdetails Stagehands",
       presse_path => "Presseinfos für",
@@ -495,6 +495,20 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Stagehands"
     assert_includes response.body, "Jobdetails Stagehands"
     assert_includes response.body, "Auf- und Abbau von Bühnen-, Licht- und Tontechnik"
+    assert_includes response.body, 'href="#job-application"'
+    assert_includes response.body, 'data-controller="job-application-mail"'
+    assert_includes response.body, 'data-job-application-mail-greeting-value="Hallo Sebastian,"'
+    assert_includes response.body, 'data-job-application-mail-interest-line-value="Ich interessiere mich für die Stelle Stagehands."'
+    assert_includes response.body, 'data-job-application-mail-personal-details-heading-value="Meine Daten:"'
+    assert_includes response.body, 'id="job_application_salutation"'
+    assert_includes response.body, 'id="job_application_first_name"'
+    assert_includes response.body, 'id="job_application_last_name"'
+    assert_includes response.body, 'id="job_application_address"'
+    assert_includes response.body, 'id="job_application_city"'
+    assert_includes response.body, 'id="job_application_phone"'
+    assert_includes response.body, 'id="job_application_email"'
+    assert_includes response.body, 'id="job_application_position"'
+    assert_includes response.body, 'id="job_application_message"'
   end
 
   test "jobs overview links to separate job pages" do

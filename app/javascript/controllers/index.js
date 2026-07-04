@@ -9,6 +9,7 @@ import BackendListFocusController from "./backend_list_focus_controller"
 import ContactMailController from "./contact_mail_controller"
 import EventsSliderController from "./events_slider_controller"
 import FilterClearController from "./filter_clear_controller"
+import JobApplicationMailController from "./job_application_mail_controller"
 import JobFilterController from "./job_filter_controller"
 import JobProfileNavController from "./job_profile_nav_controller"
 import MobileMenuController from "./mobile_menu_controller"
@@ -27,6 +28,7 @@ application.register("backend-list-focus", BackendListFocusController)
 application.register("contact-mail", ContactMailController)
 application.register("events-slider", EventsSliderController)
 application.register("filter-clear", FilterClearController)
+application.register("job-application-mail", JobApplicationMailController)
 application.register("job-filter", JobFilterController)
 application.register("job-profile-nav", JobProfileNavController)
 application.register("mobile-menu", MobileMenuController)

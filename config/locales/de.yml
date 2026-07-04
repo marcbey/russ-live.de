@@ -96,7 +96,7 @@ de:
         legal_links_html: "© SKS Michael Russ GmbH <br>Impressum<br>Datenschutz­erklärung<br>AGB<br>Jugendschutz"
         staff_equal_opportunity: "Chancengleichheit und Gleichbehandlung ungeachtet ethnischer Herkunft, Hautfarbe, Geschlecht, Religion Staatsangehörigkeit, sexueller Ausrichtung, sozialer Herkunft oder politischer Einstellung, soweit diese auf demokratischen Prinzipien und Toleranz gegenüber Andersdenkenden beruht, wird gewährleistet. Mitarbeiter werden grundsätzlich auf der Grundlage ihrer Qualifikation und ihrer Fähigkeiten ausgesucht, eingestellt und gefördert."
       references:
-        title: "Projekte, auf die wir stolz sind"
+        title: "Projekte auf die wir stolz sind"
       events:
         eyebrow: "Stuttgart-live"
         title: "Nächste Veranstaltungen"
@@ -166,9 +166,13 @@ de:
         title: "Services | Russ Live"
         description: "Services von Russ Live: örtliche Durchführung, Produktion, Marketing, Personal und Ticketing für Live Entertainment in Stuttgart."
       hero:
-        image_alt: "Live-Bühne als Keyvisual für Russ Live Services"
+        image_alt: "Konzertpublikum mit rotem Bühnenlicht als Keyvisual für Russ Live Services"
+        title_lines:
+          - "Alles, was ein"
+          - "Live-Event braucht"
         intro: "Vom ersten Ortstermin bis zum letzten Abbau: Russ Live bündelt Veranstalter-Know-how, Produktion, Marketing, Personal und Ticketing für Konzerte, Shows und Kulturformate in der Region Stuttgart."
       nav_aria: "Servicebereiche"
+      staff_jobs_button: "Jobangebote"
       contacts:
         aria: "Ansprechpartner"
         paul:
@@ -209,7 +213,7 @@ de:
         description: "Referenzen von Russ Live: Konzerte, Shows und Kulturformate aus Stuttgart und der Region."
     references:
       hero:
-        title: "Projekte, Projekte, Projekte..."
+        title: "Projekte auf die wir stolz sind"
         intro: "Konzerte, Shows und Kulturformate aus Stuttgart und der Region."
     jobs:
       meta:
@@ -334,6 +338,25 @@ de:
       requirements: "Anforderungen"
       apply_title: "Wir freuen uns auf Deine Bewerbung!"
       contact: "Ansprechpartner"
+      form:
+        salutation: "Anrede"
+        salutations:
+          blank: "Bitte wählen"
+          female: "Frau"
+          male: "Herr"
+          diverse: "Divers"
+        first_name: "Vorname"
+        last_name: "Name"
+        address: "Adresse"
+        city: "Stadt"
+        phone: "Telefon"
+        email: "E-Mail"
+        position: "Stelle"
+        message: "Bewerbungstext"
+        email_greeting: "Hallo Sebastian,"
+        email_interest_line: "Ich interessiere mich für die Stelle %{title}."
+        email_personal_details_heading: "Meine Daten:"
+        submit: "E-Mail vorbereiten"
   press:
     index:
       hero:
