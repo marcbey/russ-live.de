@@ -5287,10 +5287,10 @@ h3 {
   }
 
   .references-body .site-header:not(.is-scrolled):not(.is-menu-open) {
-    --header-logo-filter: brightness(0) invert(1);
-    --header-nav-color: #fff;
-    background: transparent;
-    box-shadow: none;
+    --header-logo-filter: none;
+    --header-nav-color: var(--ink);
+    background: #fff;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .08);
   }
 
   body:has(.press-detail-page) .page-header:not(.is-menu-open) {
@@ -5401,6 +5401,10 @@ h3 {
 
   .services-body .page-header + .page-main {
     padding-top: 86px;
+  }
+
+  .jobs-body .page-header + .page-main {
+    padding-top: var(--mobile-header-height);
   }
 
   .references-body .page-header + .page-main {
@@ -5542,6 +5546,18 @@ h3 {
     width: min(var(--header-logo-width-mobile), calc(100vw - 116px));
   }
 
+  .public-page-hero-copy {
+    box-sizing: border-box;
+    justify-self: start;
+    max-width: min(680px, calc(100vw - (var(--brand-left) * 2)));
+    width: calc(100vw - (var(--brand-left) * 2));
+  }
+
+  .public-page-hero .public-page-hero-copy > p,
+  .job-overview-hero-copy > p:not(.eyebrow) {
+    max-width: min(320px, calc(100vw - (var(--brand-left) * 2)));
+  }
+
   .hero::after {
     background: transparent;
   }
@@ -5655,12 +5671,10 @@ h3 {
     filter: none;
   }
 
-  .services-hero {
-    min-height: min(820px, var(--mobile-hero-screen-height));
-  }
-
-  .references-hero {
-    min-height: min(380px, var(--mobile-hero-screen-height));
+  .services-hero,
+  .references-hero,
+  .job-overview-hero {
+    min-height: min(410px, var(--mobile-hero-screen-height));
   }
 
   .references-hero::after {
@@ -5682,8 +5696,8 @@ h3 {
   }
 
   .references-hero-copy {
-    align-self: end;
-    padding: clamp(118px, 22svh, 164px) var(--brand-left) clamp(62px, 11svh, 92px);
+    align-self: start;
+    padding: clamp(30px, 7svh, 56px) var(--brand-left) clamp(28px, 6svh, 46px);
   }
 
   .references-hero h1 {
@@ -5693,7 +5707,7 @@ h3 {
   }
 
   .references-hero-copy > p:last-child {
-    max-width: min(560px, calc(100vw - 56px));
+    max-width: min(320px, calc(100vw - (var(--brand-left) * 2)));
   }
 
   .job-hero {
@@ -5715,8 +5729,8 @@ h3 {
   }
 
   .services-hero-copy {
-    align-self: end;
-    padding: clamp(150px, 25svh, 210px) var(--brand-left) clamp(96px, 15svh, 150px);
+    align-self: start;
+    padding: clamp(30px, 7svh, 56px) var(--brand-left) clamp(28px, 6svh, 46px);
   }
 
   .services-hero h1 {
@@ -5725,7 +5739,7 @@ h3 {
   }
 
   .services-hero-copy > p:last-child {
-    max-width: min(620px, calc(100vw - 56px));
+    max-width: min(320px, calc(100vw - (var(--brand-left) * 2)));
   }
 
   .services-jump-nav a {
@@ -5984,7 +5998,7 @@ h3 {
 
   .job-overview-hero {
     align-items: end;
-    min-height: min(620px, var(--mobile-hero-screen-height));
+    min-height: min(410px, var(--mobile-hero-screen-height));
     padding: clamp(var(--mobile-hero-content-top), 12svh, 128px) var(--brand-left) clamp(48px, 8svh, 64px);
   }
 
@@ -6750,20 +6764,18 @@ h3 {
     grid-row: span 2;
   }
 
-  .services-hero {
-    min-height: min(760px, var(--mobile-hero-screen-height));
-  }
-
   .home-hero {
     min-height: min(760px, var(--mobile-hero-screen-height));
   }
 
-  .references-hero {
-    min-height: min(370px, var(--mobile-hero-screen-height));
+  .services-hero,
+  .references-hero,
+  .job-overview-hero {
+    min-height: min(400px, var(--mobile-hero-screen-height));
   }
 
   .references-hero-copy {
-    padding: clamp(104px, 21svh, 148px) var(--brand-left) clamp(58px, 11svh, 88px);
+    padding: clamp(30px, 7svh, 56px) var(--brand-left) clamp(28px, 6svh, 46px);
   }
 
   .references-hero h1 {
@@ -6773,13 +6785,23 @@ h3 {
   }
 
   .job-overview-hero {
-    min-height: min(540px, var(--mobile-hero-screen-height));
-    padding: clamp(116px, 25svh, calc(var(--mobile-hero-content-top) + 128px)) var(--brand-left) clamp(42px, 9svh, 56px);
+    min-height: min(400px, var(--mobile-hero-screen-height));
+    padding: 0;
+  }
+
+  .job-detail-page-body .job-overview-hero {
+    min-height: min(460px, var(--mobile-hero-screen-height));
   }
 
   .job-overview-hero h1 {
     font-size: clamp(2.3rem, 10.2vw, 3.25rem);
     max-width: 13ch;
+  }
+
+  .job-detail-page-body .job-overview-hero h1 {
+    font-size: clamp(1.9rem, 7.8vw, 2.45rem);
+    max-width: 100%;
+    overflow-wrap: break-word;
   }
 
   .job-template-hero {
@@ -6788,7 +6810,8 @@ h3 {
   }
 
   .job-template-hero h1 {
-    font-size: clamp(2.3rem, 10.2vw, 3.25rem);
+    font-size: clamp(1.9rem, 7.8vw, 2.45rem);
+    overflow-wrap: break-word;
     white-space: normal;
   }
 
@@ -6920,7 +6943,7 @@ h3 {
   }
 
   .services-hero-copy {
-    padding: clamp(128px, 24svh, 180px) var(--brand-left) clamp(72px, 14svh, 132px);
+    padding: clamp(30px, 7svh, 56px) var(--brand-left) clamp(28px, 6svh, 46px);
   }
 
   .home-hero-copy {
