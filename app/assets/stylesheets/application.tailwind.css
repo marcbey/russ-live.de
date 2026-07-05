@@ -3852,12 +3852,22 @@ h3 {
   transform: translateY(-1px);
 }
 
+.job-overview-hero-actions .public-button-primary {
+  border: 1px solid rgba(255, 255, 255, .5);
+}
+
+.job-overview-hero-actions .public-button-primary:hover,
+.job-overview-hero-actions .public-button-primary:focus-visible {
+  border-color: #fff;
+}
+
 .job-overview-listing {
   background: #f8f5ef;
   margin-inline: 0;
   max-width: none;
   padding-bottom: clamp(58px, 7vw, 88px);
   padding-top: clamp(58px, 7vw, 88px);
+  scroll-margin-top: var(--header-nav-height);
 }
 
 .job-overview-heading {
@@ -4595,6 +4605,12 @@ h3 {
   display: grid;
   gap: clamp(24px, 4vw, 56px);
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.press-letter-column {
+  display: grid;
+  gap: clamp(24px, 4vw, 56px);
+  min-width: 0;
 }
 
 .press-letter-group {
@@ -5543,6 +5559,7 @@ h3 {
 
   .brand img {
     filter: var(--header-logo-filter);
+    transform: translateY(2px);
     width: min(var(--header-logo-width-mobile), calc(100vw - 116px));
   }
 
@@ -6003,6 +6020,10 @@ h3 {
     padding: clamp(var(--mobile-hero-content-top), 12svh, 128px) var(--brand-left) clamp(48px, 8svh, 64px);
   }
 
+  .jobs-overview-body .job-overview-hero {
+    min-height: min(340px, var(--mobile-hero-screen-height));
+  }
+
   .job-template-hero {
     align-items: end;
     min-height: min(420px, var(--mobile-hero-screen-height));
@@ -6071,6 +6092,10 @@ h3 {
   .job-story-band,
   .job-quotes {
     grid-template-columns: 1fr;
+  }
+
+  .job-story-card {
+    row-gap: clamp(30px, 6vw, 52px);
   }
 
   .job-application-field-grid {
@@ -6153,9 +6178,13 @@ h3 {
   .press-hero {
     aspect-ratio: auto;
     min-height: min(410px, var(--mobile-hero-screen-height));
-    padding-bottom: 28px;
+    padding-bottom: 18px;
     padding-left: 0;
     padding-right: 0;
+  }
+
+  .press-body .press-hero {
+    min-height: min(360px, var(--mobile-hero-screen-height));
   }
 
   .press-hero-media img {
@@ -6790,6 +6819,10 @@ h3 {
     padding: 0;
   }
 
+  .jobs-overview-body .job-overview-hero {
+    min-height: min(340px, var(--mobile-hero-screen-height));
+  }
+
   .job-detail-page-body .job-overview-hero {
     min-height: min(460px, var(--mobile-hero-screen-height));
   }
@@ -6822,6 +6855,7 @@ h3 {
 
   .job-overview-listing {
     padding-top: 44px;
+    scroll-margin-top: var(--mobile-header-height);
   }
 
   .job-overview-heading h2,
@@ -6865,7 +6899,7 @@ h3 {
 
   .press-hero {
     aspect-ratio: auto;
-    min-height: min(400px, var(--mobile-hero-screen-height));
+    min-height: min(360px, var(--mobile-hero-screen-height));
   }
 
   .press-hero h1 {

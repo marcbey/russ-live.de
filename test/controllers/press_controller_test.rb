@@ -76,6 +76,25 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "1 Presseeintrag"
   end
 
+  test "index renders artist letters in continuous columns" do
+    %w[A B C D E F].each_with_index do |letter, index|
+      create_event!(
+        artist_name: "#{letter} Artist",
+        normalized_artist_name: "#{letter.downcase} artist",
+        publish_on_russ_live: true,
+        start_at: Time.zone.local(2026, 6, index + 1, 20)
+      )
+    end
+
+    get presse_path
+
+    assert_response :success
+    assert_select ".press-letter-column", 2 do |columns|
+      assert_equal %w[A B C], columns.first.css(".press-letter-group h3").map(&:text)
+      assert_equal %w[D E F], columns[1].css(".press-letter-group h3").map(&:text)
+    end
+  end
+
   test "index falls back when russ live publish flag is unavailable" do
     create_event!(
       artist_name: "Fallback Artist",

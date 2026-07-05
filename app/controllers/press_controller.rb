@@ -12,6 +12,7 @@ class PressController < ApplicationController
   def index
     @press_artists = press_artists
     @press_artist_groups = PressArtist.grouped(@press_artists)
+    @press_artist_group_columns = @press_artist_groups.to_a.in_groups(2, false).reject(&:empty?)
     @press_artist_count = @press_artists.size
 
     render "pages/presse"

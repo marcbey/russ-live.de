@@ -40,17 +40,21 @@
     </div>
 
     <div class="public-directory press-letter-grid" data-press-directory>
-      <% @press_artist_groups.each do |letter, artists| %>
-        <section class="press-letter-group" data-letter-group data-press-search-target="group">
-          <h3><%= letter %></h3>
-          <div class="press-artist-list">
-            <% artists.each do |artist| %>
-              <%= link_to press_artist_path(artist.slug), class: "public-card press-artist-card", data: { press_search_target: "card", artist_name: artist.name } do %>
-                <span><%= artist.name %></span>
-              <% end %>
-            <% end %>
-          </div>
-        </section>
+      <% @press_artist_group_columns.each do |letter_groups| %>
+        <div class="press-letter-column">
+          <% letter_groups.each do |letter, artists| %>
+            <section class="press-letter-group" data-letter-group data-press-search-target="group">
+              <h3><%= letter %></h3>
+              <div class="press-artist-list">
+                <% artists.each do |artist| %>
+                  <%= link_to press_artist_path(artist.slug), class: "public-card press-artist-card", data: { press_search_target: "card", artist_name: artist.name } do %>
+                    <span><%= artist.name %></span>
+                  <% end %>
+                <% end %>
+              </div>
+            </section>
+          <% end %>
+        </div>
       <% end %>
     </div>
     <p class="press-empty" data-press-search-target="empty" hidden><%= t("press.index.empty") %></p>

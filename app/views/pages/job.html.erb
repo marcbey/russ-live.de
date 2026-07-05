@@ -13,7 +13,7 @@
       <h1 id="job-title"><%= @selected_job.title %></h1>
       <p><%= @selected_job.intro %></p>
       <div class="job-overview-hero-actions">
-        <%= link_to t("jobs.back_to_overview"), jobs_path, class: "public-button public-button-outline section-button section-button-outline-light" %>
+        <%= link_to t("jobs.back_to_overview"), jobs_path(anchor: "jobs-list"), class: "public-button public-button-outline section-button section-button-outline-light" %>
         <%= link_to t("jobs.apply_now"), "#job-application", class: "public-button public-button-primary section-button", data: { anchor_position: "flush" } %>
         <%= public_backend_link(
               label: t("public.actions.edit"),
