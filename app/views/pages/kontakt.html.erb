@@ -32,7 +32,6 @@
 <main id="main-content" class="page-main public-page contact-page" tabindex="-1">
       <section class="public-section section split" aria-labelledby="contact-title">
         <div class="contact-location-visual">
-          <h1 id="contact-title" class="sr-only">Charlottenplatz 17</h1>
           <%= image_tag "russ_live/contact/charlottenplatz17.jpg",
                         alt: "Gebäude am Charlottenplatz 17",
                         class: "contact-location-image",
@@ -40,6 +39,8 @@
                         decoding: "async" %>
         </div>
         <div class="contact-details">
+          <h1 id="contact-title" class="contact-title"><%= t("pages.contact.title") %></h1>
+
           <address class="public-contact-card rich-copy">
             <p><%= t("pages.contact.paragraphs.location") %></p>
             <p><%= t("pages.contact.paragraphs.directions") %></p>

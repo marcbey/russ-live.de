@@ -144,6 +144,23 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "#{presse_path}#press-search"
   end
 
+  test "show hides ticket button for past primary event" do
+    event = create_event!(
+      artist_name: "Past Artist",
+      normalized_artist_name: "past artist",
+      publish_on_russ_live: true,
+      start_at: 1.year.ago
+    )
+    create_event_offer!(event_id: event.id, ticket_url: "https://tickets.example/%{event_id}", source_event_id: "past")
+
+    get press_artist_path("past-artist")
+
+    assert_response :success
+    assert_includes response.body, "Vergangene Veranstaltung"
+    assert_not_includes response.body, "https://tickets.example/past"
+    assert_select ".press-event-ticket-button", 0
+  end
+
   test "show prefers rich press text over event info" do
     event = create_event!(
       artist_name: "Press Rich",
@@ -180,12 +197,12 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     get press_artist_path("image-artist")
 
     assert_response :success
-    assert_includes response.body, "Bildergalerie"
+    assert_includes response.body, "Pressefotos"
     assert_includes response.body, 'data-lightbox-alt="Freigegebenes Pressefoto"'
     assert_includes response.body, "© Test Fotografin"
     assert_not_includes response.body, "<span>Freigegebenes Pressefoto</span>"
-    assert_equal 3, response.body.scan("Pressemappe downloaden").size
-    assert_equal 3, response.body.scan('data-turbo="false"').size
+    assert_equal 2, response.body.scan("Pressemappe downloaden").size
+    assert_equal 2, response.body.scan('data-turbo="false"').size
     assert_includes response.body, press_artist_download_path("image-artist")
     assert_includes response.body, "/rails/active_storage/representations/"
     assert_includes response.body, 'class="press-gallery-download"'

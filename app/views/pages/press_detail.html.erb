@@ -44,12 +44,13 @@
       <p class="eyebrow"><%= t("press.detail.event.eyebrow") %></p>
       <dl>
         <% primary_event = @press_artist.primary_event %>
+        <% primary_event_current = primary_event.start_at.future? %>
         <div><dt><%= t("press.detail.event.date") %></dt><dd><%= l(primary_event.start_at.to_date, format: "%d. %B %Y") %></dd></div>
         <div><dt><%= t("press.detail.event.time") %></dt><dd><%= l(primary_event.start_at, format: t("time.formats.event_time")) %></dd></div>
         <% if primary_event.venue.present? %>
           <div><dt><%= t("press.detail.event.location") %></dt><dd><%= primary_event.venue %></dd></div>
         <% end %>
-        <div><dt><%= t("press.detail.event.status") %></dt><dd><%= primary_event.start_at.future? ? t("press.detail.event.current") : t("press.detail.event.past") %></dd></div>
+        <div><dt><%= t("press.detail.event.status") %></dt><dd><%= primary_event_current ? t("press.detail.event.current") : t("press.detail.event.past") %></dd></div>
         <% if @press_artist.additional_events.any? %>
           <div>
             <dt><%= t("press.detail.event.more_dates") %></dt>
@@ -61,7 +62,9 @@
           </div>
         <% end %>
       </dl>
-      <a class="public-button public-button-primary section-button press-event-ticket-button" href="<%= @press_artist.ticket_url %>" target="_blank" rel="noreferrer"><%= t("events.tickets") %></a>
+      <% if primary_event_current %>
+        <a class="public-button public-button-primary section-button press-event-ticket-button" href="<%= @press_artist.ticket_url %>" target="_blank" rel="noreferrer"><%= t("events.tickets") %></a>
+      <% end %>
     </aside>
   </section>
 
@@ -71,10 +74,6 @@
         <div>
           <p class="eyebrow"><%= t("press.detail.downloads.eyebrow") %></p>
           <h2 id="press-download-title"><%= t("press.detail.downloads.title") %></h2>
-        </div>
-        <div class="press-download-actions press-download-actions-desktop">
-          <%= link_to t("press.detail.download_presskit"), press_artist_download_path(@press_artist.slug), class: "public-button public-button-primary section-button", data: { turbo: false } %>
-          <%= link_to t("press.detail.back"), presse_path(anchor: "press-search"), class: "public-button section-button press-download-back-button" %>
         </div>
       </div>
       <div class="public-media-grid press-gallery" data-press-gallery>
@@ -103,7 +102,7 @@
           </figure>
         <% end %>
       </div>
-      <div class="press-download-actions press-download-actions-mobile">
+      <div class="press-download-actions press-download-actions-footer">
         <%= link_to t("press.detail.download_presskit"), press_artist_download_path(@press_artist.slug), class: "public-button public-button-primary section-button", data: { turbo: false } %>
         <%= link_to t("press.detail.back"), presse_path(anchor: "press-search"), class: "public-button section-button press-download-back-button" %>
       </div>

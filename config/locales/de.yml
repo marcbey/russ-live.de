@@ -269,7 +269,7 @@ de:
         position: "Position"
         category: "Bereich"
         location: "Einsatzort"
-        inquiry: "Anfrage"
+        inquiry: "Details"
       empty: "Aktuell sind keine Jobs veröffentlicht."
       story:
         aria: "Einblicke in die Arbeitswelt"
@@ -300,6 +300,7 @@ de:
         title: "Kontakt | Russ Live"
         description: "Kontakt zur SKS Michael Russ GmbH am Charlottenplatz in Stuttgart."
     contact:
+      title: "Kontakt"
       paragraphs:
         location: "Die Konzertdirektion Russ befindet sich im Herzen der Stuttgarter Innenstadt am Charlottenplatz 17. In direkter Nachbarschaft liegen das Neue Schloss und das Landesmuseum Württemberg."
         directions: "Vom Hauptbahnhof kommend, nehmen Sie die Stadtbahn bis zur Haltestelle Charlottenplatz und gehen zum Ausgang Holzstraße oder Planie. Hier geht es zum Fahrplan."
@@ -367,6 +368,7 @@ de:
   jobs:
     apply_now: "Jetzt bewerben"
     back_to_overview: "Zur Übersicht"
+    list_action: "Mehr Infos"
     filters:
       aria: "Jobs nach Bereichen filtern"
     detail:
@@ -445,7 +447,7 @@ de:
         usage: "Die Verwendung des Bild- und Textmaterials ist für redaktionelle Zwecke kostenfrei. Bei Pressefotos ist der im Dateinamen oder in den Metadaten hinterlegte Credit zu beachten."
       downloads:
         eyebrow: "Downloads"
-        title: "Bildergalerie"
+        title: "Pressefotos"
       gallery_image_label: "Pressefoto %{name} %{index}"
       fallback_image_alt: "Pressebild"
       download_image: "Bild downloaden"
