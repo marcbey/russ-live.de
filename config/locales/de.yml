@@ -32,6 +32,7 @@ de:
       company: "Unternehmen"
       company_submenu_aria: "Unternehmen Untermenü"
       about: "Über uns"
+      team: "Team"
       references: "Referenzen"
       services: "Services"
       jobs: "Jobs"
@@ -110,6 +111,46 @@ de:
       meta:
         title: "Über uns | Russ Live"
         description: "Über Russ Live: Geschichte, Haltung und Menschen hinter den Veranstaltungen."
+    team:
+      meta:
+        title: "Team | Russ Live"
+        description: "Das Team von Russ Live: Ansprechpartnerinnen und Ansprechpartner aus Geschäftsleitung, Projektmanagement, Marketing, Produktion, Ticketing und Buchhaltung."
+      hero:
+        eyebrow: "Unternehmen"
+        title: "Team"
+        intro: "Hinter jeder Veranstaltung stehen Menschen, die Planung, Kommunikation, Technik, Personal und Zahlen zusammenbringen."
+      grid_aria: "Teammitglieder"
+      members:
+        michaela_russ:
+          role: "Geschäftsleitung"
+        paul_woog:
+          role: "Geschäftsleitung"
+        johanna_backmund:
+          role: "Projektmanagement / Accounting"
+        arnulf_woock:
+          role: "Presse- & Öffentlichkeitsarbeit"
+        sarah_sandner:
+          role: "Marketing"
+        katharina_schopper:
+          role: "Grafik / Layout"
+        chantal_erler:
+          role: "Marketing Online / Social Media"
+        tanja_ullenboom:
+          role: "Produktionsleitung"
+        sebastian_kraenzlein:
+          role: "Personaldisposition"
+        michael_wechselberger:
+          role: "Personaldisposition"
+        tim_wilka:
+          role: "Ticketing"
+        elke_vierneisel:
+          role: "Buchhaltung"
+        gabi_cremer:
+          role: "Buchhaltung"
+        jenny_hefner:
+          role: "Buchhaltung"
+        penny:
+          role: "Feel-Good-Management"
     about:
       hero:
         eyebrow: "Über uns"

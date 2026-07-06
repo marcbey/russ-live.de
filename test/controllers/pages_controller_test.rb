@@ -20,7 +20,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   test "signed out visitors do not see backend navigation or edit buttons" do
     create_reference_with_image!(title: "VISIBLE REFERENCE", position: 1, tag_list: "Concert")
 
-    [ root_path, referenzen_path, jobs_path, job_path("stagehands"), unternehmen_path ].each do |path|
+    [ root_path, referenzen_path, jobs_path, job_path("stagehands"), unternehmen_path, team_path ].each do |path|
       get path
 
       assert_response :success
@@ -63,17 +63,20 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
 
     sign_in_as(admin)
 
-    get unternehmen_path
+    [ unternehmen_path, team_path ].each do |path|
+      get path
 
-    assert_response :success
-    assert_includes response.body, 'data-role="public-backend-nav-link"'
-    assert_not_includes response.body, 'data-role="public-admin-edit-link"'
+      assert_response :success
+      assert_includes response.body, 'data-role="public-backend-nav-link"'
+      assert_not_includes response.body, 'data-role="public-admin-edit-link"'
+    end
   end
 
   test "renders public pages" do
     {
       root_path => "Ihr örtlicher",
       unternehmen_path => "Veranstaltungen",
+      team_path => "Michaela Russ",
       services_path => "Live",
       referenzen_path => "Projekte auf die wir stolz sind",
       jobs_path => "Unsere aktuellen Jobangebote",
@@ -112,6 +115,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     [
       root_path,
       unternehmen_path,
+      team_path,
       services_path,
       referenzen_path,
       jobs_path,

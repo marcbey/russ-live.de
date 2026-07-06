@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   root "pages#home"
 
   get "unternehmen", to: "pages#unternehmen"
+  get "unternehmen/team", to: "pages#team", as: :team
   get "services", to: "pages#services"
   get "referenzen", to: "pages#referenzen"
   get "referenzbilder/:id", to: "reference_images#show", as: :reference_image
@@ -41,6 +42,7 @@ Rails.application.routes.draw do
 
   get "index.html", to: redirect("/")
   get "unternehmen.html", to: redirect("/unternehmen")
+  get "unternehmen/team.html", to: redirect("/unternehmen/team")
   get "services.html", to: redirect("/services")
   get "referenzen.html", to: redirect("/referenzen")
   get "jobs.html", to: redirect("/jobs")

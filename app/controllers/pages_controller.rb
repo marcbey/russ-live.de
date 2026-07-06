@@ -6,6 +6,7 @@ class PagesController < ApplicationController
   PAGE_META = {
     home: { body_class: "home-body" },
     unternehmen: {},
+    team: { body_class: "team-body" },
     services: { body_class: "services-body" },
     referenzen: { body_class: "references-body" },
     jobs: { body_class: "jobs-body jobs-overview-body" },
@@ -41,6 +42,7 @@ class PagesController < ApplicationController
     head :bad_request
   end
   def unternehmen; end
+  def team; end
   def services; end
   def referenzen
     @references = Reference.published.with_image.ordered.to_a

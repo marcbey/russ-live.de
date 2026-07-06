@@ -8,9 +8,10 @@
       <%= link_to t("public.header.backend"), backend_root_path, class: "public-admin-nav-link", data: { role: "public-backend-nav-link" } %>
     <% end %>
     <div class="nav-item has-submenu">
-      <%= link_to t("public.header.company"), unternehmen_path, class: public_nav_class(%i[unternehmen referenzen]) %>
+      <%= link_to t("public.header.company"), unternehmen_path, class: public_nav_class(%i[unternehmen team referenzen]) %>
       <div class="nav-submenu" aria-label="<%= t("public.header.company_submenu_aria") %>">
         <%= link_to t("public.header.about"), unternehmen_path, public_nav_aria(:unternehmen) || {} %>
+        <%= link_to t("public.header.team"), team_path, public_nav_aria(:team) || {} %>
         <%= link_to t("public.header.references"), referenzen_path, public_nav_aria(:referenzen) || {} %>
       </div>
     </div>
