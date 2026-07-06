@@ -2849,9 +2849,9 @@ h3 {
   }
 
   .team-hero-media img {
-    object-position: 62% 70%;
-    transform: scale(1.02);
-    transform-origin: 62% 70%;
+    object-position: 62% 88%;
+    transform: scale(1.14);
+    transform-origin: 62% 88%;
   }
 
   .team-hero-copy h1 {
