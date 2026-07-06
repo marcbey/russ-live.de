@@ -194,15 +194,4 @@
         </article>
       </section>
 
-      <% if @service_references.any? %>
-        <section class="public-section section services-showcase" aria-labelledby="services-showcase-title">
-          <div class="section-head">
-            <h2 id="services-showcase-title"><%= t("pages.services.showcase.title") %></h2>
-          </div>
-          <%= render "pages/reference_slider",
-                     references: @service_references,
-                     slider_classes: "klassik-slider klassik-slider-page services-reference-slider" %>
-        </section>
-      <% end %>
-
     </main>

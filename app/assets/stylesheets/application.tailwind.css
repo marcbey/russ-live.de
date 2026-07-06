@@ -2093,57 +2093,6 @@ h3 {
   grid-column: 1;
 }
 
-.services-showcase {
-  background: #111;
-  color: #fff;
-  margin-inline: 0;
-  max-width: none;
-}
-
-.services-showcase .section-head {
-  margin-inline: auto;
-  max-width: var(--max);
-}
-
-.services-showcase .eyebrow {
-  color: rgba(255, 255, 255, .62);
-}
-
-.services-showcase h2 {
-  max-width: 940px;
-}
-
-.services-reference-slider {
-  margin-top: 24px;
-}
-
-.services-showcase .klassik-slider-meta h3,
-.services-showcase .klassik-slider-meta p {
-  color: #fff;
-}
-
-.services-showcase .klassik-slider-marker {
-  background: #fff;
-}
-
-.services-showcase .section-button {
-  background: #fff;
-  color: #111;
-}
-
-.services-showcase .public-admin-link {
-  background: #c32026;
-  border-color: #c32026;
-  color: #fff;
-}
-
-.services-showcase .public-admin-link:hover,
-.services-showcase .public-admin-link:focus-visible {
-  background: #a61a1f;
-  border-color: #a61a1f;
-  color: #fff;
-}
-
 .sr-only {
   border: 0;
   clip: rect(0, 0, 0, 0);

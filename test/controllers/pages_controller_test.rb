@@ -359,57 +359,20 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Juni 2025 - März 2026 · Museum"
   end
 
-  test "services renders reference slider for published image references with concert tags" do
+  test "services omits reference slider even with published concert references" do
     concert = create_reference_with_image!(title: "CONCERT", position: 1, tag_list: "concert")
     create_reference_with_image!(title: "KONZERT", position: 2, tag_list: "Konzert")
     create_reference_with_image!(title: "LIVE", position: 3, tag_list: "Live")
-    create_reference_with_image!(title: "LIVEHOUSE", position: 4, tag_list: "Livehouse")
-    create_reference_with_image!(title: "OPEN AIR", position: 5, tag_list: "Open Air")
-    create_reference_with_image!(title: "DRAFT CONCERT", status: "draft", position: 6, tag_list: "Concert")
-    Reference.create!(
-      title: "CONCERT WITHOUT IMAGE",
-      starts_on: Date.new(2026, 5, 1),
-      location: "Stuttgart",
-      status: "published",
-      position: 7,
-      tag_list: "Concert"
-    )
-
-    get services_path
-
-    assert_response :success
-    assert_includes response.body, "services-showcase"
-    assert_includes response.body, "services-reference-slider"
-    assert_includes response.body, concert.title
-    assert_includes response.body, "KONZERT"
-    assert_includes response.body, "LIVE"
-    assert_includes response.body, "/assets/russ_live/references/01-disgusting-food-museum"
-    assert_not_includes response.body, "LIVEHOUSE"
-    assert_not_includes response.body, "OPEN AIR"
-    assert_not_includes response.body, "DRAFT CONCERT"
-    assert_not_includes response.body, "CONCERT WITHOUT IMAGE"
-    assert_not_includes response.body, "Five Finger Death Punch"
-    assert_not_includes response.body, "russ_live/references/featured/bild1.jpg"
-  end
-
-  test "services omits reference slider without matching concert references" do
-    create_reference_with_image!(title: "OPEN AIR", position: 1, tag_list: "Open Air")
-    Reference.create!(
-      title: "CONCERT WITHOUT IMAGE",
-      starts_on: Date.new(2026, 5, 1),
-      location: "Stuttgart",
-      status: "published",
-      position: 2,
-      tag_list: "Concert"
-    )
 
     get services_path
 
     assert_response :success
     assert_not_includes response.body, "services-showcase"
     assert_not_includes response.body, "services-reference-slider"
-    assert_not_includes response.body, "OPEN AIR"
-    assert_not_includes response.body, "CONCERT WITHOUT IMAGE"
+    assert_not_includes response.body, concert.title
+    assert_not_includes response.body, "KONZERT"
+    assert_not_includes response.body, "LIVE"
+    assert_not_includes response.body, "/assets/russ_live/references/01-disgusting-food-museum"
   end
 
   test "renders public references with tag filters instead of year filters" do
