@@ -2275,7 +2275,7 @@ h3 {
   display: grid;
   gap: clamp(1.75rem, 3vw, 2.75rem);
   grid-template-columns: 1fr;
-  margin: clamp(3rem, 6vw, 5rem) 0 0;
+  margin: var(--about-editorial-block-gap) 0 clamp(2.5rem, 4vw, 4rem);
   padding: clamp(2.8rem, 5vw, 4.5rem) var(--brand-left) clamp(2.75rem, 4.5vw, 4rem);
   text-align: center;
 }
@@ -2313,15 +2313,17 @@ h3 {
 
 .about-company-band-grid {
   align-items: center;
-  display: grid;
-  gap: clamp(1.25rem, 2.4vw, 2.5rem);
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: nowrap;
+  gap: clamp(.25rem, .7vw, .75rem);
+  justify-content: center;
   margin: 0 auto;
-  max-width: 74rem;
+  max-width: min(88rem, 100%);
   width: 100%;
 }
 
 .about-company-card {
+  flex: 0 1 clamp(17rem, 21vw, 21rem);
   min-width: 0;
 }
 
@@ -2338,27 +2340,28 @@ h3 {
   display: grid;
   height: 100%;
   justify-items: center;
-  min-height: clamp(3.8rem, 5vw, 5.4rem);
+  min-height: clamp(4.8rem, 6vw, 6.6rem);
   overflow: visible;
   padding: 0;
   position: relative;
   text-decoration: none;
-  transition: opacity .18s ease, transform .18s ease;
+  transition: transform .18s ease;
 }
 
 .about-company-card a:hover,
 .about-company-card a:focus-visible {
-  opacity: .72;
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .about-company-logo {
   align-items: center;
   display: flex;
-  height: clamp(3.3rem, 4.2vw, 4.8rem);
+  height: clamp(5.2rem, 6vw, 7.2rem);
   justify-content: center;
   margin: 0;
   opacity: 1;
+  transform-origin: center;
+  transition: transform .24s ease;
   width: 100%;
 }
 
@@ -2368,22 +2371,23 @@ h3 {
   max-width: 100%;
   object-fit: contain;
   object-position: center;
+  transform-origin: center;
 }
 
 .about-company-card-live .about-company-logo img {
-  width: min(18rem, 100%);
+  width: min(22rem, 100%);
 }
 
 .about-company-card-artists .about-company-logo img {
-  width: min(19rem, 100%);
+  width: min(23rem, 100%);
 }
 
 .about-company-card-service .about-company-logo img {
-  width: min(19.2rem, 100%);
+  width: min(23.2rem, 100%);
 }
 
 .about-company-card-klassik .about-company-logo img {
-  width: min(19rem, 100%);
+  width: min(23rem, 100%);
 }
 
 .about-company-hover-copy {
@@ -2399,6 +2403,11 @@ h3 {
 @media (prefers-reduced-motion: reduce) {
   .about-company-band-grid {
     animation: none !important;
+  }
+
+  .about-company-card a:hover .about-company-logo,
+  .about-company-card a:focus-visible .about-company-logo {
+    transform: scale(1.025);
   }
 }
 
@@ -2419,6 +2428,7 @@ h3 {
 .about-company-card a:hover .about-company-logo,
 .about-company-card a:focus-visible .about-company-logo {
   opacity: 1;
+  transform: scale(1.025);
 }
 
 .about-company-card a:hover .about-company-hover-copy,
@@ -6031,18 +6041,25 @@ h3 {
   }
 
   .about-company-band {
-    margin: clamp(3rem, 8vw, 5rem) 0 0;
+    margin: var(--about-editorial-block-gap) 0 clamp(2.5rem, 4vw, 4rem);
     padding-left: var(--brand-left);
     padding-right: var(--brand-left);
   }
 
   .about-company-band-grid {
+    display: grid;
+    gap: .75rem 1rem;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: min(44rem, 100%);
   }
 
   .about-company-card a {
-    min-height: 4.8rem;
+    min-height: 6.6rem;
     padding: 0;
+  }
+
+  .about-company-logo {
+    height: clamp(5.6rem, 9vw, 6.8rem);
   }
 
   .about-company-card:nth-child(2n + 1) a,

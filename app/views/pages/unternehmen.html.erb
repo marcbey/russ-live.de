@@ -78,12 +78,27 @@
     </div>
   </section>
 
-  <section class="about-quote-band" aria-labelledby="about-quote-title">
-    <h2 id="about-quote-title">
-      <span aria-hidden="true">»</span>
-      <%= t("pages.about.closing.title") %>
-      <span aria-hidden="true">«</span>
-    </h2>
+  <section class="public-section about-company-band" aria-labelledby="about-company-band-title">
+    <div class="about-company-band-copy">
+      <h2 id="about-company-band-title"><%= t("pages.about.company.title_html") %></h2>
+    </div>
+
+    <div class="about-company-band-grid">
+      <% (company_areas + company_areas).each_with_index do |area, index| %>
+        <% duplicate = index >= company_areas.length %>
+        <article class="public-card about-company-card about-company-card-<%= area[:key] %><%= " about-company-card-duplicate" if duplicate %>"<%= " aria-hidden=\"true\"".html_safe if duplicate %>>
+          <a href="<%= area[:url] %>" target="_blank" rel="noopener noreferrer" aria-label="<%= t("pages.about.company.open_aria", title: area[:title]) %>"<%= " tabindex=\"-1\"".html_safe if duplicate %>>
+            <figure class="about-company-logo">
+              <%= image_tag area[:logo], alt: area[:title] %>
+            </figure>
+            <div class="about-company-hover-copy">
+              <h3><%= area[:title] %></h3>
+              <p><%= area[:text] %></p>
+            </div>
+          </a>
+        </article>
+      <% end %>
+    </div>
   </section>
 
   <section class="public-section section about-editorial-section" aria-labelledby="about-award-title">
@@ -139,26 +154,11 @@
     </div>
   </section>
 
-  <section class="public-section about-company-band" aria-labelledby="about-company-band-title">
-    <div class="about-company-band-copy">
-      <h2 id="about-company-band-title"><%= t("pages.about.company.title_html") %></h2>
-    </div>
-
-    <div class="about-company-band-grid">
-      <% (company_areas + company_areas).each_with_index do |area, index| %>
-        <% duplicate = index >= company_areas.length %>
-        <article class="public-card about-company-card about-company-card-<%= area[:key] %><%= " about-company-card-duplicate" if duplicate %>"<%= " aria-hidden=\"true\"".html_safe if duplicate %>>
-          <a href="<%= area[:url] %>" target="_blank" rel="noopener noreferrer" aria-label="<%= t("pages.about.company.open_aria", title: area[:title]) %>"<%= " tabindex=\"-1\"".html_safe if duplicate %>>
-            <figure class="about-company-logo">
-              <%= image_tag area[:logo], alt: area[:title] %>
-            </figure>
-            <div class="about-company-hover-copy">
-              <h3><%= area[:title] %></h3>
-              <p><%= area[:text] %></p>
-            </div>
-          </a>
-        </article>
-      <% end %>
-    </div>
+  <section class="about-quote-band" aria-labelledby="about-quote-title">
+    <h2 id="about-quote-title">
+      <span aria-hidden="true">»</span>
+      <%= t("pages.about.closing.title") %>
+      <span aria-hidden="true">«</span>
+    </h2>
   </section>
 </main>
