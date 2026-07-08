@@ -94,7 +94,9 @@ beschränkt auf Einträge mit den Tags `Concert`, `Konzert` oder `Live`.
 Bestehende Referenzen werden beim Einspielen der Russ-Migration als
 veröffentlichte Startdaten übernommen. Neue Uploads werden im Rails-Storage
 unter `storage/reference_images` abgelegt und über Russ Live ausgeliefert; die
-readonly Stuttgart-Live-Datenbank bleibt davon unberührt.
+readonly Stuttgart-Live-Datenbank bleibt davon unberührt. JPEG-, PNG- und
+WebP-Uploads werden beim Speichern automatisch auf Webgröße komprimiert und als
+WebP ausgeliefert.
 
 Wenn bestehende Referenzen bereits andere Positionszahlen in der Datenbank
 haben, kann die Reihenfolge einmal lückenlos neu nummeriert werden:
@@ -105,6 +107,16 @@ mise exec -- bin/rails russ:references:renumber_positions
 
 Die Aufgabe übernimmt die aktuelle sichtbare Reihenfolge und schreibt daraus
 fortlaufende Positionswerte von oben nach unten.
+
+Bereits gespeicherte Russ-Live-Uploads können nachträglich auf dieselbe
+Webgröße gebracht werden:
+
+```bash
+mise exec -- bin/rails images:optimize_uploads
+```
+
+Der Task verarbeitet Referenz-, Slider-, Job- und Ansprechpartnerbilder im
+Russ-Live-Storage.
 
 ## Jobs und Ansprechpartner
 
@@ -119,7 +131,8 @@ Auf `/jobs` erscheinen nur veröffentlichte Jobs. Die Bereichs-Kategorien werden
 dort als Filter angeboten; Job-Detailseiten zeigen dagegen nur das ausgewählte
 Profil, den hinterlegten Ansprechpartner und den Bewerbungslink, falls eine
 JOIN-URL gepflegt ist. Job- und Ansprechpartnerbilder werden unter
-`storage/job_images` beziehungsweise `storage/contact_images` abgelegt.
+`storage/job_images` beziehungsweise `storage/contact_images` abgelegt und beim
+Upload ebenfalls als komprimierte WebP-Dateien gespeichert.
 
 ## Mehrsprachigkeit
 

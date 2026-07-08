@@ -26,4 +26,23 @@ class ReferenceImageTest < ActiveSupport::TestCase
     assert_equal 50.0, image.card_focus_y_value
     assert_equal 100.0, image.card_zoom_value
   end
+
+  test "compresses uploaded images to webp web size" do
+    image = @reference.create_reference_image!
+    upload = Rack::Test::UploadedFile.new(
+      Rails.root.join("app/assets/images/russ_live/keyvisuals/services-production.jpg"),
+      "image/jpeg"
+    )
+
+    image.write_uploaded_file!(upload)
+    image.reload
+
+    assert_equal "reference_images/#{image.id}/original.webp", image.file_path
+    assert_equal "services-production.webp", image.filename
+    assert_equal "image/webp", image.content_type
+    assert_operator image.byte_size, :<, upload.size
+
+    optimized_image = Vips::Image.new_from_file(image.file_disk_path.to_s)
+    assert_operator [ optimized_image.width, optimized_image.height ].max, :<=, RussImageUploadOptimizer::MAX_DIMENSION
+  end
 end

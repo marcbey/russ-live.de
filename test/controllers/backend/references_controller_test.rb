@@ -87,7 +87,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, "01-disgusting-food-museum.jpg"
     assert_includes response.body, "image/jpeg"
-    assert_includes response.body, "514 KB"
+    assert_includes response.body, "276 KB"
   end
 
   test "hides image detail fields until a reference image exists" do
@@ -162,7 +162,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     assert_equal 62.77, reference.reference_image.card_focus_x_value
     assert_equal 33.55, reference.reference_image.card_focus_y_value
     assert_equal 280.0, reference.reference_image.card_zoom_value
-    assert_equal "03-neil-young.jpg", reference.reference_image.filename
+    assert_equal "03-neil-young.webp", reference.reference_image.filename
     assert_redirected_to backend_references_path(reference_id: reference.id, editor_tab: "image", status: "draft")
   end
 
@@ -376,7 +376,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     reference.reload
     assert_nil reference.reference_image.asset_path
     assert_predicate reference.reference_image, :uploaded?
-    assert_equal "03-neil-young.jpg", reference.reference_image.filename
+    assert_equal "03-neil-young.webp", reference.reference_image.filename
 
     get backend_references_path(reference_id: reference.id, editor_tab: "image")
 
@@ -407,7 +407,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     assert_predicate reference.reference_image, :slider_uploaded?
     assert_equal "Slider Alt", reference.reference_image.slider_alt_text
     assert_equal "Slider Credit", reference.reference_image.slider_sub_text
-    assert_equal "03-neil-young.jpg", reference.reference_image.slider_filename
+    assert_equal "03-neil-young.webp", reference.reference_image.slider_filename
     assert_nil reference.reference_image.filename
     assert_equal "russ_live/references/01-disgusting-food-museum.jpg", reference.reference_image.asset_path
 
@@ -447,7 +447,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     reference.reload
     assert_nil reference.reference_image.filename
     assert_equal "russ_live/references/01-disgusting-food-museum.jpg", reference.reference_image.asset_path
-    assert_equal "03-neil-young.jpg", reference.reference_image.slider_filename
+    assert_equal "03-neil-young.webp", reference.reference_image.slider_filename
     assert_equal "New Slider Alt", reference.reference_image.slider_alt_text
   end
 

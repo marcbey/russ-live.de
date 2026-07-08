@@ -28,19 +28,25 @@ module RussImageUpload
     validate_upload!(upload)
     purge_file!
 
-    extension = File.extname(upload.original_filename.to_s).presence || Rack::Mime::MIME_TYPES.invert[upload.content_type].to_s
+    extension = RussImageUploadOptimizer.target_extension(
+      content_type: upload.content_type,
+      original_filename: upload.original_filename
+    )
     relative_path = File.join(storage_directory, id.to_s, "original#{extension}")
     target = Rails.root.join("storage", relative_path)
-
-    FileUtils.mkdir_p(target.dirname)
-    FileUtils.cp(upload.tempfile.path, target)
+    optimized_upload = RussImageUploadOptimizer.call(
+      source_path: upload.tempfile.path,
+      target_path: target,
+      original_filename: upload.original_filename,
+      content_type: upload.content_type
+    )
 
     update!(
       asset_path: nil,
       file_path: relative_path,
-      filename: upload.original_filename,
-      content_type: upload.content_type,
-      byte_size: upload.size
+      filename: optimized_upload.filename,
+      content_type: optimized_upload.content_type,
+      byte_size: optimized_upload.byte_size
     )
   end
 

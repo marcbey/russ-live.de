@@ -75,14 +75,20 @@ class ReferenceImage < RussRecord
     validate_upload!(upload)
     purge_file!(variant: variant)
 
-    extension = File.extname(upload.original_filename.to_s).presence || Rack::Mime::MIME_TYPES.invert[upload.content_type].to_s
+    extension = RussImageUploadOptimizer.target_extension(
+      content_type: upload.content_type,
+      original_filename: upload.original_filename
+    )
     relative_path = File.join("reference_images", id.to_s, "#{variant_basename(variant)}#{extension}")
     target = Rails.root.join("storage", relative_path)
+    optimized_upload = RussImageUploadOptimizer.call(
+      source_path: upload.tempfile.path,
+      target_path: target,
+      original_filename: upload.original_filename,
+      content_type: upload.content_type
+    )
 
-    FileUtils.mkdir_p(target.dirname)
-    FileUtils.cp(upload.tempfile.path, target)
-
-    update!(uploaded_attributes(relative_path, upload, variant: variant))
+    update!(uploaded_attributes(relative_path, optimized_upload, variant: variant))
   end
 
   def purge_file!(variant: DEFAULT_VARIANT)
@@ -126,17 +132,17 @@ class ReferenceImage < RussRecord
         {
           slider_asset_path: nil,
           slider_file_path: relative_path,
-          slider_filename: upload.original_filename,
+          slider_filename: upload.filename,
           slider_content_type: upload.content_type,
-          slider_byte_size: upload.size
+          slider_byte_size: upload.byte_size
         }
       else
         {
           asset_path: nil,
           file_path: relative_path,
-          filename: upload.original_filename,
+          filename: upload.filename,
           content_type: upload.content_type,
-          byte_size: upload.size
+          byte_size: upload.byte_size
         }
       end
     end

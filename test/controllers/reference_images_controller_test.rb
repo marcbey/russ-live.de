@@ -43,7 +43,7 @@ class ReferenceImagesControllerTest < ActionDispatch::IntegrationTest
     get reference_image_path(image, variant: :slider)
 
     assert_response :success
-    assert_equal "image/jpeg", response.media_type
+    assert_equal "image/webp", response.media_type
     assert_equal File.binread(Rails.root.join("storage", image.slider_file_path)), response.body
   end
 end
