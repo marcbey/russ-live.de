@@ -476,6 +476,9 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'id="job_application_email"'
     assert_includes response.body, 'id="job_application_position"'
     assert_includes response.body, 'id="job_application_message"'
+    assert_includes response.body, "Erzähle uns etwas von dir"
+    assert_includes response.body, "Es wird eine E-Mail vorbereitet."
+    assert_includes response.body, "Anschreiben, Zeugnisse und Lebenslauf"
   end
 
   test "jobs overview links to separate job pages" do
