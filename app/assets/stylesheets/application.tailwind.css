@@ -40,7 +40,7 @@
   --hero-copy-top: clamp(230px, 27vh, 330px);
   --first-text-top: calc(var(--hero-copy-top) - 96px);
   --public-hero-desktop-height: clamp(560px, 34vw, 640px);
-  --public-hero-copy-top: clamp(188px, 11vw, 228px);
+  --public-hero-copy-top: clamp(228px, 13vw, 278px);
   --public-hero-copy-bottom: clamp(20px, 2vw, 32px);
   --public-hero-title-size: clamp(2.85rem, 4.55vw, 5.25rem);
   --job-profile-nav-height: 78px;
@@ -2710,8 +2710,14 @@ h3 {
   margin: 0;
   max-width: none;
   overflow: hidden;
-  padding: clamp(150px, 13vw, 218px) var(--brand-left) clamp(64px, 7vw, 112px);
+  padding: clamp(230px, 17vw, 310px) var(--brand-left) clamp(64px, 7vw, 112px);
   position: relative;
+}
+
+@media (min-width: 1071px) {
+  .team-body .page-header + .page-main > .team-hero:first-child {
+    padding-top: clamp(230px, 17vw, 310px);
+  }
 }
 
 .team-hero::after {
@@ -2856,7 +2862,7 @@ h3 {
 @media (max-width: 640px) {
   .team-body .page-header + .page-main > .team-hero:first-child {
     padding-bottom: clamp(2.25rem, 9vw, 3.25rem);
-    padding-top: clamp(3rem, 11vw, 4rem);
+    padding-top: clamp(4.5rem, 15vw, 6rem);
   }
 
   .team-hero-media img {
@@ -2886,6 +2892,12 @@ h3 {
 
   .team-card p {
     font-size: .92rem;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1070px) {
+  .team-body .page-header + .page-main > .team-hero:first-child {
+    padding-top: var(--mobile-hero-copy-top);
   }
 }
 
@@ -5357,6 +5369,7 @@ h3 {
     --job-profile-nav-height: 64px;
     --mobile-header-height: 86px;
     --mobile-hero-content-top: 78px;
+    --mobile-hero-copy-top: clamp(54px, 9svh, 82px);
     --mobile-hero-screen-height: calc(100svh - var(--mobile-header-height));
     --services-jump-height: 64px;
   }
@@ -5868,7 +5881,7 @@ h3 {
 
   .references-hero-copy {
     align-self: start;
-    padding: clamp(30px, 7svh, 56px) var(--brand-left) clamp(28px, 6svh, 46px);
+    padding: var(--mobile-hero-copy-top) var(--brand-left) clamp(28px, 6svh, 46px);
   }
 
   .references-hero h1 {
@@ -5901,7 +5914,7 @@ h3 {
 
   .services-hero-copy {
     align-self: start;
-    padding: clamp(30px, 7svh, 56px) var(--brand-left) clamp(28px, 6svh, 46px);
+    padding: var(--mobile-hero-copy-top) var(--brand-left) clamp(28px, 6svh, 46px);
   }
 
   .services-hero h1 {
@@ -6218,7 +6231,7 @@ h3 {
     align-self: start;
     margin-left: 0;
     max-width: min(540px, calc(100vw - 56px));
-    padding-top: clamp(30px, 7svh, 56px);
+    padding-top: var(--mobile-hero-copy-top);
     transform: none;
   }
 
@@ -6684,6 +6697,7 @@ h3 {
     --job-profile-nav-height: 58px;
     --mobile-header-height: 68px;
     --mobile-hero-content-top: 34px;
+    --mobile-hero-copy-top: clamp(48px, 12svh, 76px);
     --mobile-hero-screen-height: calc(100svh - var(--mobile-header-height));
     --services-jump-height: 58px;
   }
@@ -6979,7 +6993,7 @@ h3 {
   }
 
   .references-hero-copy {
-    padding: clamp(30px, 7svh, 56px) var(--brand-left) clamp(28px, 6svh, 46px);
+    padding: var(--mobile-hero-copy-top) var(--brand-left) clamp(28px, 6svh, 46px);
   }
 
   .references-hero h1 {
@@ -7013,7 +7027,7 @@ h3 {
   }
 
   .job-detail-page-body .job-overview-hero-copy {
-    padding-top: clamp(40px, calc(7svh + 10px), 66px);
+    padding-top: clamp(58px, calc(10svh + 10px), 88px);
   }
 
   .job-template-hero {
@@ -7185,7 +7199,7 @@ h3 {
   }
 
   .services-hero-copy {
-    padding: clamp(30px, 7svh, 56px) var(--brand-left) clamp(28px, 6svh, 46px);
+    padding: var(--mobile-hero-copy-top) var(--brand-left) clamp(28px, 6svh, 46px);
   }
 
   .home-hero-copy {
