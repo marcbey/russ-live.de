@@ -17,6 +17,12 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href='https://www.stuttgart-live.de/passwords/new']", text: "Passwort vergessen"
   end
 
+  test "nested references login path redirects to canonical login" do
+    get "/referenzen/login"
+
+    assert_redirected_to new_session_path
+  end
+
   test "login creates a local Russ session and redirects to backend" do
     assert_difference -> { Session.count }, 1 do
       assert_difference -> { LoginAttempt.where(outcome: "successful").count }, 1 do

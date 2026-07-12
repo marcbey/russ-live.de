@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get "/login", to: redirect("/session/new"), as: :login
+  get "/referenzen/login", to: redirect("/session/new")
   resource :session, only: [ :new, :create, :destroy ]
   post "language/:locale", to: "locales#update", as: :locale
 
