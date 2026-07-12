@@ -30,6 +30,8 @@ class Reference < RussRecord
 
   scope :ordered, -> { order(position: :desc, starts_on: :desc, id: :asc) }
   scope :published, -> { where(status: "published") }
+  scope :featured, -> { where(featured: true) }
+  scope :regular, -> { where(featured: false) }
   scope :with_image, -> { includes(:reference_image) }
   scope :tagged_with_any, lambda { |tags|
     normalized_tags = Array(tags).map { |tag| tag.to_s.strip.downcase }.reject(&:blank?).uniq
@@ -114,6 +116,10 @@ class Reference < RussRecord
     return description_en.presence || description if locale.to_s == "en"
 
     description
+  end
+
+  def featured_image?
+    reference_image&.image? || reference_image&.slider_image?
   end
 
   def build_reference_image_with_defaults

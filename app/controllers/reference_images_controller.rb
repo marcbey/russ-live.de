@@ -17,18 +17,18 @@ class ReferenceImagesController < ApplicationController
 
   private
     def uploaded_image_path(reference_image)
-      directory = Rails.root.join("storage", "reference_images", reference_image.id.to_s)
-      return unless directory.directory?
+      path = reference_image.file_disk_path(variant: current_variant)
+      return if path.blank? || !path.file?
 
-      basename = slider_variant? ? "slider." : "original."
-      path = directory.children.find { |child| child.file? && child.basename.to_s.start_with?(basename) }
-      return if path.blank?
-
-      real_directory = directory.realpath.to_s
+      real_directory = Rails.root.join("storage", "reference_images", reference_image.id.to_s).realpath.to_s
       real_path = path.realpath.to_s
       return unless real_path.start_with?("#{real_directory}/")
 
       path
+    end
+
+    def current_variant
+      slider_variant? ? ReferenceImage::SLIDER_VARIANT : ReferenceImage::DEFAULT_VARIANT
     end
 
     def slider_variant?

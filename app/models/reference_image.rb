@@ -20,7 +20,8 @@ class ReferenceImage < RussRecord
   belongs_to :reference
 
   normalizes :alt_text, :sub_text, :filename, :content_type,
-             :slider_alt_text, :slider_sub_text, :slider_filename, :slider_content_type,
+             :slider_alt_text, :slider_sub_text, :slider_badge_text,
+             :slider_filename, :slider_content_type,
              with: ->(value) { value.to_s.strip }
 
   validates :grid_variant, inclusion: { in: GRID_VARIANTS }
@@ -32,6 +33,7 @@ class ReferenceImage < RussRecord
   validates :filename, length: { maximum: 250 }, allow_blank: true
   validates :slider_alt_text, length: { maximum: 180 }, allow_blank: true
   validates :slider_sub_text, length: { maximum: 250 }, allow_blank: true
+  validates :slider_badge_text, length: { maximum: 80 }, allow_blank: true
   validates :slider_filename, length: { maximum: 250 }, allow_blank: true
   before_validation :normalize_image_values
 

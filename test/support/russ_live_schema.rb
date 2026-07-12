@@ -11,6 +11,7 @@ module RussLiveSchema
     add_reference_description_en(connection)
     add_reference_display_date(connection)
     add_reference_tags(connection)
+    add_reference_featured(connection)
     create_reference_images(connection)
     add_reference_slider_image_fields(connection)
     create_contacts(connection)
@@ -59,6 +60,7 @@ module RussLiveSchema
       table.string :tags, array: true, default: [], null: false
       table.text :description
       table.text :description_en
+      table.boolean :featured, default: false, null: false
       table.string :status, default: "draft", null: false
       table.integer :position, default: 0, null: false
       table.timestamps
@@ -66,6 +68,7 @@ module RussLiveSchema
 
     connection.add_index :references, :status
     connection.add_index :references, :tags, using: :gin
+    connection.add_index :references, :featured
   end
 
   def add_reference_description_en(connection)
@@ -90,6 +93,16 @@ module RussLiveSchema
     connection.add_index :references, :tags, using: :gin
   end
 
+  def add_reference_featured(connection)
+    return unless table_exists?(connection, :references)
+
+    unless connection.column_exists?(:references, :featured)
+      connection.add_column :references, :featured, :boolean, default: false, null: false
+    end
+
+    connection.add_index :references, :featured unless connection.index_exists?(:references, :featured)
+  end
+
   def create_reference_images(connection)
     return if table_exists?(connection, :reference_images)
 
@@ -108,6 +121,7 @@ module RussLiveSchema
       table.bigint :byte_size
       table.string :slider_alt_text
       table.string :slider_sub_text
+      table.string :slider_badge_text
       table.string :slider_asset_path
       table.string :slider_file_path
       table.string :slider_content_type
@@ -125,6 +139,7 @@ module RussLiveSchema
     {
       slider_alt_text: :string,
       slider_sub_text: :string,
+      slider_badge_text: :string,
       slider_asset_path: :string,
       slider_file_path: :string,
       slider_content_type: :string,

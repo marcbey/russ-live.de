@@ -30,6 +30,17 @@
 
         <aside class="event-image-crop-sidebar">
           <div class="event-image-meta-inline-form">
+            <label class="form-checkbox">
+              <%= hidden_field_tag "reference_slider_image[featured]", "0" %>
+              <%= check_box_tag "reference_slider_image[featured]", "1", reference.featured? %>
+              <span>Hauptprojekt / im Slider anzeigen</span>
+            </label>
+            <p class="event-image-crop-hint">Zeigt diese Referenz im Startseiten-Slider und oben auf der Referenzseite. Sliderprojekte erscheinen zusätzlich unten als Kachel.</p>
+          </div>
+
+          <div class="event-image-sidebar-divider" aria-hidden="true"></div>
+
+          <div class="event-image-meta-inline-form">
             <label class="form-label" for="reference_slider_image_file">Slider-Bild</label>
             <%= file_field_tag "reference_slider_image[file]",
                                accept: "image/*",
@@ -55,6 +66,11 @@
           <div class="event-image-meta-inline-form">
             <label class="form-label" for="reference_slider_image_alt_text">Alt-Text</label>
             <%= text_field_tag "reference_slider_image[alt_text]", reference_image.slider_alt_text, id: "reference_slider_image_alt_text", class: "form-input" %>
+          </div>
+
+          <div class="event-image-meta-inline-form">
+            <label class="form-label" for="reference_slider_image_badge_text">Bandarole</label>
+            <%= text_field_tag "reference_slider_image[badge_text]", reference_image.slider_badge_text, id: "reference_slider_image_badge_text", class: "form-input", maxlength: 80, placeholder: "z. B. Open Air, Ausstellung, Show" %>
           </div>
 
           <div class="event-image-meta-inline-form">

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_18_143000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_12_154000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -110,6 +110,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_18_143000) do
     t.bigint "reference_id", null: false
     t.string "slider_alt_text"
     t.string "slider_asset_path"
+    t.string "slider_badge_text"
     t.bigint "slider_byte_size"
     t.string "slider_content_type"
     t.string "slider_file_path"
@@ -125,6 +126,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_18_143000) do
     t.text "description"
     t.text "description_en"
     t.string "display_date"
+    t.boolean "featured", default: false, null: false
     t.string "location", null: false
     t.integer "position", default: 0, null: false
     t.string "production"
@@ -133,6 +135,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_18_143000) do
     t.string "tags", default: [], null: false, array: true
     t.string "title", null: false
     t.datetime "updated_at", null: false
+    t.index ["featured"], name: "index_references_on_featured"
     t.index ["position", "starts_on"], name: "index_references_on_position_and_starts_on"
     t.index ["status"], name: "index_references_on_status"
     t.index ["tags"], name: "index_references_on_tags", using: :gin

@@ -98,6 +98,7 @@ en:
         staff_equal_opportunity: "Equal opportunity and equal treatment regardless of ethnic origin, skin color, gender, religion, nationality, sexual orientation, social background or political views, insofar as these are based on democratic principles and tolerance toward different opinions, are ensured. Employees are selected, hired and supported on the basis of their qualifications and abilities."
       references:
         title: "Projects we are proud of"
+        show_all: "All references"
       events:
         eyebrow: "Stuttgart-live"
         title: "Upcoming events"
@@ -350,6 +351,8 @@ en:
         title: "Press | Russ Live"
         description: "Russ Live press area with press texts, image material and event data for media and partners."
   references:
+    featured_aria: "Featured projects"
+    featured_title: "Highlights"
     filters:
       aria: "Filter references by tags"
     grid_aria: "Reference projects"

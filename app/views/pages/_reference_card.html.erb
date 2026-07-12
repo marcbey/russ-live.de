@@ -1,9 +1,10 @@
 <% reference_image = reference.reference_image %>
 <% image_source = reference_image_source(reference_image) %>
-<% dimensions = reference_card_dimensions(reference_image) %>
+<% force_square = local_assigns.fetch(:force_square, false) %>
+<% dimensions = force_square ? { width: 600, height: 600 } : reference_card_dimensions(reference_image) %>
 <% localized_description = reference.localized_description %>
 
-<%= tag.figure class: "public-card reference-card #{reference_grid_class(reference_image)}",
+<%= tag.figure class: "public-card reference-card #{force_square ? 'reference-card-grid-1-1' : reference_grid_class(reference_image)}",
                data: { reference_tags: reference.tag_slugs.join(" ") }.merge(reference_image_render_data(reference_image)) do %>
   <button class="reference-card-flip" type="button" aria-pressed="false" aria-label="<%= t("references.card.details_aria", title: reference.title) %>">
     <span class="reference-card-face reference-card-front" aria-hidden="true" data-reference-image-render-target="frame">

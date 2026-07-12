@@ -13,9 +13,9 @@
   <div class="backend-split backend-inbox-split">
     <aside class="backend-list-column">
       <div class="backend-list-toolbar">
-        <nav class="backend-status-row" aria-label="Referenzen nach Status filtern">
+        <nav class="backend-status-row" aria-label="Referenzen filtern">
           <% Backend::ReferencesController::FILTERS.each do |filter| %>
-            <% label = { "all" => "Alle", "draft" => "Entwürfe", "published" => "Veröffentlicht" }.fetch(filter) %>
+            <% label = { "all" => "Alle", "slider" => "Slider", "draft" => "Entwürfe", "published" => "Veröffentlicht" }.fetch(filter) %>
             <%= link_to label,
                         backend_references_path(status: (filter unless filter == "all"), query: @query_filter),
                         class: "status-chip #{'status-chip-active' if @status_filter == filter}",

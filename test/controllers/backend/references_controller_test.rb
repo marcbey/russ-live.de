@@ -25,7 +25,22 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_includes response.body, "Referenzen"
+    assert_select ".backend-status-row .status-chip", "Slider"
     assert_includes response.body, "KISS"
+  end
+
+  test "filters references by slider flag" do
+    sign_in_as(@admin)
+    slider_reference = create_reference!(title: "Slider Projekt", featured: true)
+    create_reference!(title: "Normale Referenz")
+
+    get backend_references_path(status: "slider")
+
+    assert_response :success
+    assert_select ".backend-status-row .status-chip-active", "Slider"
+    assert_select ".backend-reference-list-title", text: "Slider Projekt"
+    assert_select ".backend-reference-list-title", text: "Normale Referenz", count: 0
+    assert_select "a.backend-reference-list-item[href*='status=slider'][href*='reference_id=#{slider_reference.id}']"
   end
 
   test "renders both editor panels in one form with client side tabs" do
@@ -42,12 +57,14 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'name="reference[title]"'
     assert_includes response.body, 'name="reference[display_date]"'
     assert_includes response.body, 'name="reference[position]"'
+    assert_includes response.body, 'name="reference_slider_image[featured]"'
     assert_includes response.body, 'name="reference[location]"'
     assert_includes response.body, 'name="reference[tag_list]"'
     assert_includes response.body, 'name="reference[description_en]"'
     assert_includes response.body, 'name="reference_image[grid_variant]"'
     assert_includes response.body, 'name="reference_image[card_zoom]"'
     assert_includes response.body, 'name="reference_slider_image[alt_text]"'
+    assert_includes response.body, 'name="reference_slider_image[badge_text]"'
     assert_select ".editor-tabs-actions .button-danger", "Referenz löschen"
     assert_select ".editor-tabs-actions .button-success", "Neue Referenz"
     assert_operator response.body.index("Referenz löschen"), :<, response.body.index("Neue Referenz")
@@ -112,12 +129,13 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
 
     assert_difference -> { Reference.count }, 1 do
       assert_difference -> { ReferenceImage.count }, 1 do
-        post backend_references_path, params: reference_payload(title: "Neue Referenz", status: "published")
+        post backend_references_path, params: reference_payload(title: "Neue Referenz", status: "published", featured: "1")
       end
     end
 
     reference = Reference.last
     assert_equal "published", reference.status
+    assert_predicate reference, :featured?
     assert_equal 1, reference.position
     assert_equal [ "Open Air", "Clubkonzert" ], reference.tags
     assert_equal "Juni 2025 - März 2026", reference.display_date
@@ -295,6 +313,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
       editor_tab: "slider",
       reference_slider_image: {
         alt_text: "Slider Alt",
+        badge_text: "Open Air",
         sub_text: "Slider Copyright"
       }
     }
@@ -303,9 +322,45 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     reference.reload
     assert_equal "Neil Young", reference.title
     assert_equal "Slider Alt", reference.reference_image.slider_alt_text
+    assert_equal "Open Air", reference.reference_image.slider_badge_text
     assert_equal "Slider Copyright", reference.reference_image.slider_sub_text
     assert_nil reference.reference_image.filename
     assert_equal "russ_live/references/01-disgusting-food-museum.jpg", reference.reference_image.asset_path
+  end
+
+  test "updates featured flag from slider tab" do
+    sign_in_as(@admin)
+    reference = create_reference!(title: "Neil Young", status: "published")
+
+    patch backend_reference_path(reference), params: {
+      editor_tab: "slider",
+      reference_slider_image: {
+        featured: "1",
+        alt_text: "Slider Alt"
+      }
+    }
+
+    assert_redirected_to backend_references_path(reference_id: reference.id, editor_tab: "slider")
+    assert_predicate reference.reload, :featured?
+    follow_redirect!
+    assert_response :success
+    assert_select 'input[name="reference_slider_image[featured]"][value="1"][checked]'
+  end
+
+  test "clears featured flag from slider tab" do
+    sign_in_as(@admin)
+    reference = create_reference!(title: "Neil Young", status: "published", featured: true)
+
+    patch backend_reference_path(reference), params: {
+      editor_tab: "slider",
+      reference_slider_image: {
+        featured: "0",
+        alt_text: "Slider Alt"
+      }
+    }
+
+    assert_redirected_to backend_references_path(reference_id: reference.id, editor_tab: "slider")
+    assert_not_predicate reference.reload, :featured?
   end
 
   test "updates reference and image params from one save" do
@@ -397,6 +452,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
       editor_tab: "slider",
       reference_slider_image: {
         alt_text: "Slider Alt",
+        badge_text: "Show",
         sub_text: "Slider Credit",
         file: upload
       }
@@ -406,6 +462,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     reference.reload
     assert_predicate reference.reference_image, :slider_uploaded?
     assert_equal "Slider Alt", reference.reference_image.slider_alt_text
+    assert_equal "Show", reference.reference_image.slider_badge_text
     assert_equal "Slider Credit", reference.reference_image.slider_sub_text
     assert_equal "03-neil-young.webp", reference.reference_image.slider_filename
     assert_nil reference.reference_image.filename
@@ -452,12 +509,13 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
   end
 
   private
-    def create_reference!(title:, status: "published", tag_list: nil)
+    def create_reference!(title:, status: "published", tag_list: nil, featured: false)
       Reference.create!(
         title: title,
         starts_on: Date.new(2026, 5, 1),
         location: "Stuttgart",
         status: status,
+        featured: featured,
         position: 1,
         tag_list: tag_list
       ).tap do |reference|
@@ -469,7 +527,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
       end
     end
 
-    def reference_payload(title:, status:, zoom: "110", focus_x: "45")
+    def reference_payload(title:, status:, zoom: "110", focus_x: "45", featured: "0")
       {
         reference: {
           title: title,
@@ -480,7 +538,8 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
           tag_list: "Open Air, Clubkonzert",
           description: "Beschreibung",
           description_en: "English description",
-          status: status
+          status: status,
+          featured: featured
         },
         reference_image: {
           alt_text: title,

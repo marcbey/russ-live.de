@@ -37,6 +37,9 @@ class ReferenceImagesControllerTest < ActionDispatch::IntegrationTest
       Rails.root.join("app/assets/images/russ_live/references/03-neil-young.jpg"),
       "image/jpeg"
     )
+    stale_slider_path = Rails.root.join("storage", "reference_images", image.id.to_s, "slider.jpg")
+    FileUtils.mkdir_p(stale_slider_path.dirname)
+    File.binwrite(stale_slider_path, "stale")
     image.write_uploaded_file!(upload, variant: ReferenceImage::SLIDER_VARIANT)
     image.reload
 

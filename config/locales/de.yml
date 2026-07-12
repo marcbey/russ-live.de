@@ -98,6 +98,7 @@ de:
         staff_equal_opportunity: "Chancengleichheit und Gleichbehandlung ungeachtet ethnischer Herkunft, Hautfarbe, Geschlecht, Religion Staatsangehörigkeit, sexueller Ausrichtung, sozialer Herkunft oder politischer Einstellung, soweit diese auf demokratischen Prinzipien und Toleranz gegenüber Andersdenkenden beruht, wird gewährleistet. Mitarbeiter werden grundsätzlich auf der Grundlage ihrer Qualifikation und ihrer Fähigkeiten ausgesucht, eingestellt und gefördert."
       references:
         title: "Projekte auf die wir stolz sind"
+        show_all: "Alle Referenzen"
       events:
         eyebrow: "Stuttgart-live"
         title: "Nächste Veranstaltungen"
@@ -350,6 +351,8 @@ de:
         title: "Presse | Russ Live"
         description: "Pressebereich von Russ Live mit Pressetexten, Bildmaterial und Veranstaltungsdaten für Medien und Partner."
   references:
+    featured_aria: "Hauptprojekte"
+    featured_title: "Highlights"
     filters:
       aria: "Referenzen nach Tags filtern"
     grid_aria: "Referenzprojekte"

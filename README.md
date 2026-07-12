@@ -83,13 +83,19 @@ Referenzen werden als Russ-eigene Domain-Daten in der `russ`-Datenbank
 verwaltet. Das Backend unter `/backend/references` bietet eine
 stuttgart-live-inspirierte Inbox mit Liste, Suche, Statusfilter und
 Editor-Panel. Pro Referenz gibt es einen eigenen Eventbild-ähnlichen Bildeditor
-mit Grid-Variante, Ausschnitt und Zoom; diese Werte steuern die Kachel auf
-`/referenzen`. Die Beschreibung wird getrennt für Deutsch und Englisch gepflegt;
-fehlt die englische Beschreibung, zeigt die englische Seite die deutsche
-Beschreibung als Fallback.
+mit Ausschnitt und Zoom; auf `/referenzen` werden normale Referenzen als
+quadratische Kacheln gezeigt. Im Slider-Tab kann eine Referenz als
+`Hauptprojekt / im Slider anzeigen` markiert werden. Diese Hauptprojekte
+erscheinen im Referenzslider auf der Startseite und zusätzlich oben auf
+`/referenzen`, aber nicht noch einmal im darunterliegenden Kachelgrid. Für den
+Slider kann ein breites separates Slider-Bild gepflegt werden; fehlt es, fällt
+die Ausgabe auf das normale Referenzbild zurück.
 
-Auf `/services` nutzt der Referenzslider dieselben veröffentlichten Referenzen,
-beschränkt auf Einträge mit den Tags `Concert`, `Konzert` oder `Live`.
+Die Beschreibung wird getrennt für Deutsch und Englisch gepflegt; fehlt die
+englische Beschreibung, zeigt die englische Seite die deutsche Beschreibung als
+Fallback.
+
+Auf `/services` wird kein Referenzslider mehr ausgegeben.
 
 Bestehende Referenzen werden beim Einspielen der Russ-Migration als
 veröffentlichte Startdaten übernommen. Neue Uploads werden im Rails-Storage

@@ -24,7 +24,7 @@ class PagesController < ApplicationController
   before_action :set_page_meta, except: :homepage_lane
 
   def home
-    @home_references = Reference.published.with_image.ordered.to_a.select { |reference| reference.reference_image&.image? }
+    @home_references = Reference.published.featured.with_image.ordered.to_a.select(&:featured_image?)
     @home_events_page = home_events_page
     @home_events = @home_events_page.events
     @home_events_next_cursor = @home_events_page.next_cursor
@@ -45,7 +45,11 @@ class PagesController < ApplicationController
   def team; end
   def services; end
   def referenzen
-    @references = Reference.published.with_image.ordered.to_a
+    references = Reference.published.with_image.ordered.to_a
+    @featured_references = prioritized_featured_references(
+      references.select { |reference| reference.featured? && reference.featured_image? }
+    )
+    @references = references
     @reference_tags = Reference.tags_from(@references)
   end
   def jobs
@@ -91,5 +95,13 @@ class PagesController < ApplicationController
       cursor: cursor,
       per_page: per_page.presence || HOME_EVENTS_PER_PAGE
     ).call
+  end
+
+  def prioritized_featured_references(references)
+    selected_id = params[:reference_id].to_i
+    return references unless selected_id.positive?
+
+    selected_references, remaining_references = references.partition { |reference| reference.id == selected_id }
+    selected_references + remaining_references
   end
 end

@@ -1,6 +1,19 @@
 module Backend
   class ReferencesController < BaseController
-    FILTERS = %w[all draft published].freeze
+    FILTERS = %w[all slider draft published].freeze
+    REFERENCE_PARAMETER_KEYS = %i[
+      title
+      starts_on_input
+      display_date
+      location
+      production
+      tag_list
+      description
+      description_en
+      status
+      position
+      featured
+    ].freeze
 
     before_action :set_filters
     before_action :set_reference, only: %i[edit update destroy]
@@ -77,7 +90,13 @@ module Backend
 
       def filtered_references
         scope = Reference.with_image.ordered.matching(@query_filter)
-        scope = scope.where(status: @status_filter) unless @status_filter == "all"
+        scope = if @status_filter == "slider"
+          scope.featured
+        elsif @status_filter == "all"
+          scope
+        else
+          scope.where(status: @status_filter)
+        end
         scope.to_a
       end
 
@@ -89,12 +108,12 @@ module Backend
       end
 
       def reference_params
-        params.require(:reference).permit(:title, :starts_on_input, :display_date, :location, :production, :tag_list, :description, :description_en, :status, :position)
+        params.require(:reference).permit(*REFERENCE_PARAMETER_KEYS)
       end
 
       def create_reference_params
         params.fetch(:reference, ActionController::Parameters.new)
-          .permit(:title, :starts_on_input, :display_date, :location, :production, :tag_list, :description, :description_en, :status, :position)
+          .permit(*REFERENCE_PARAMETER_KEYS)
           .reverse_merge(
             title: fallback_reference_title,
             starts_on: Time.zone.today,
@@ -119,6 +138,8 @@ module Backend
         params.fetch(:reference_slider_image, ActionController::Parameters.new).permit(
           :alt_text,
           :sub_text,
+          :badge_text,
+          :featured,
           :remove_image
         )
       end
@@ -152,9 +173,12 @@ module Backend
 
       def prepare_slider_image(reference)
         image = reference.reference_image || reference.build_reference_image
+        slider_params = slider_image_params
+        reference.featured = ActiveModel::Type::Boolean.new.cast(slider_params[:featured]) if slider_params.key?(:featured)
         image.assign_attributes(
-          slider_alt_text: slider_image_params[:alt_text],
-          slider_sub_text: slider_image_params[:sub_text]
+          slider_alt_text: slider_params[:alt_text],
+          slider_sub_text: slider_params[:sub_text],
+          slider_badge_text: slider_params[:badge_text]
         )
 
         return unless remove_slider_image_requested? && uploaded_slider_image.blank?

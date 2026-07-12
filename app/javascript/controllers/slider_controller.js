@@ -13,13 +13,14 @@ export default class extends Controller {
     this.activeIndex = Math.max(0, this.slides.findIndex((slide) => slide.classList.contains("is-active")))
 
     this.slides.forEach((slide, index) => {
-      slide.addEventListener("click", () => this.setActive(index), { signal: this.abortController.signal })
+      slide.addEventListener("click", () => this.handleSlideClick(slide, index), { signal: this.abortController.signal })
       slide.addEventListener("keydown", (event) => {
         if (event.key !== "Enter" && event.key !== " ") return
 
         event.preventDefault()
-        this.setActive(index)
+        this.handleSlideClick(slide, index)
       }, { signal: this.abortController.signal })
+      this.bindFlip(slide, index)
     })
 
     this.previousButton?.addEventListener("click", () => {
@@ -48,6 +49,16 @@ export default class extends Controller {
     this.render()
   }
 
+  handleSlideClick(slide, index) {
+    if (index !== this.activeIndex) {
+      this.resetFlippedSlides()
+      this.setActive(index)
+      return
+    }
+
+    if (slide.dataset.linkUrl) window.location.href = slide.dataset.linkUrl
+  }
+
   render() {
     if (!this.slides.length) return
 
@@ -61,6 +72,7 @@ export default class extends Controller {
       slide.classList.toggle("is-next", index === next)
       slide.classList.toggle("is-hidden", !isActive && index !== previous && index !== next)
       slide.setAttribute("aria-hidden", isActive ? "false" : "true")
+      if (!isActive) this.setFlipped(slide, slide.querySelector(".klassik-slide-flip-button"), false)
     })
 
     if (this.title) this.title.textContent = this.slides[this.activeIndex].dataset.title || ""
@@ -70,5 +82,61 @@ export default class extends Controller {
       this.meta.classList.remove("is-updating")
       window.requestAnimationFrame(() => this.meta.classList.add("is-updating"))
     }
+  }
+
+  resetFlippedSlides() {
+    this.slides.forEach((slide) => {
+      this.setFlipped(slide, slide.querySelector(".klassik-slide-flip-button"), false)
+    })
+  }
+
+  bindFlip(slide, index) {
+    const button = slide.querySelector(".klassik-slide-flip-button")
+    if (!button) return
+
+    let lastPointerType = ""
+
+    button.addEventListener("pointerdown", (event) => {
+      lastPointerType = event.pointerType
+    }, { signal: this.abortController.signal })
+
+    button.addEventListener("touchend", () => {
+      lastPointerType = "touch"
+    }, { passive: true, signal: this.abortController.signal })
+
+    button.addEventListener("click", (event) => {
+      event.stopPropagation()
+
+      if (index !== this.activeIndex) {
+        this.setActive(index)
+        return
+      }
+
+      if (this.usesHover() || lastPointerType !== "touch") {
+        button.blur()
+        return
+      }
+
+      this.setFlipped(slide, button, !slide.classList.contains("is-flipped"))
+    }, { signal: this.abortController.signal })
+
+    slide.addEventListener("mouseenter", () => {
+      if (this.usesHover() && index === this.activeIndex) this.setFlipped(slide, button, true)
+    }, { signal: this.abortController.signal })
+
+    slide.addEventListener("mouseleave", () => {
+      if (this.usesHover()) this.setFlipped(slide, button, false)
+    }, { signal: this.abortController.signal })
+  }
+
+  setFlipped(slide, button, flipped) {
+    if (!button) return
+
+    slide.classList.toggle("is-flipped", flipped)
+    button.setAttribute("aria-pressed", String(flipped))
+  }
+
+  usesHover() {
+    return window.matchMedia("(hover: hover) and (pointer: fine)").matches
   }
 }
