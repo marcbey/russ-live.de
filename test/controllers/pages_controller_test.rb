@@ -429,10 +429,10 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get referenzen_path
 
     assert_response :success
-    assert_select ".references-featured-band .references-featured-heading h2", "Highlights"
-    assert_operator response.body.index("references-featured-heading"), :<, response.body.index("reference-featured-slider")
+    assert_select ".references-featured-band .references-featured-heading", count: 0
     assert_select ".references-featured-band .reference-featured-slider"
-    assert_operator response.body.index("reference-featured-slider"), :<, response.body.index("references-filter-nav")
+    assert_operator response.body.index("reference-featured-slider"), :<, response.body.index("references-filter-band")
+    assert_operator response.body.index("references-filter-band"), :<, response.body.index("reference-highlight-grid")
     assert_select ".reference-featured-slider .klassik-slide-flip-button[aria-label=?]", "Details zu HAUPTPROJEKT anzeigen"
     assert_select ".reference-featured-slider .klassik-slide-back[style*=?]", "background: #000"
     assert_select ".reference-featured-slider .klassik-slider-meta", count: 0

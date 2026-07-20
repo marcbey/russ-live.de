@@ -60,19 +60,5 @@
     <p class="press-empty" data-press-search-target="empty" hidden><%= t("press.index.empty") %></p>
   </section>
 
-  <section class="public-section section press-contact-strip" aria-labelledby="press-contact-title">
-    <div>
-      <h2 id="press-contact-title"><%= t("press.index.contact.title") %></h2>
-      <p><%= t("press.index.contact.text") %></p>
-    </div>
-    <article class="public-contact-card press-contact-card">
-      <%= image_tag "russ_live/team/arnulf-woock.jpg", alt: "Arnulf Woock", loading: "lazy", decoding: "async", width: 600, height: 600 %>
-      <div>
-        <h3>Arnulf Woock</h3>
-        <p><%= t("press.index.contact.role") %></p>
-        <a href="mailto:arnulfwoock@michaelrussgmbh.de">arnulfwoock@michaelrussgmbh.de</a>
-        <a href="tel:+497111635320">+49.711.16 353 20</a>
-      </div>
-    </article>
-  </section>
+  <%= render "pages/press_contact" %>
 </main>

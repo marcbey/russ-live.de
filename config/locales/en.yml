@@ -291,6 +291,12 @@ en:
             footer: "Julia, catering assistant since 2023"
           - text: "No shift is ever the same, but the team feeling is always there at the end."
             footer: "Mert, logistics helper since 2021"
+          - text: "You get into the rhythm quickly because someone from the team is always thinking along."
+            footer: "Nina, admissions since 2024"
+          - text: "A lot happens between setup, doors and showtime. That is exactly what makes it exciting."
+            footer: "Tom, stagehand since 2023"
+          - text: "I like that you see what you are working for right away: full venues and a great atmosphere."
+            footer: "Aylin, security since 2022"
     job:
       meta:
         title: "Jobs | Russ Live"

@@ -1,10 +1,10 @@
 <main id="main-content" class="page-main public-page services-page" tabindex="-1">
       <section class="public-hero public-hero-dark public-page-hero services-hero" aria-labelledby="services-title">
         <div class="public-page-hero-media services-hero-media">
-          <%= image_tag "russ_live/keyvisuals/references-stage.jpg",
+          <%= image_tag "russ_live/keyvisuals/services-local.jpg",
                         alt: t("pages.services.hero.image_alt"),
-                        width: 2600,
-                        height: 975,
+                        width: 2400,
+                        height: 1350,
                         decoding: "async",
                         fetchpriority: "high" %>
         </div>
@@ -55,10 +55,10 @@
             </div>
           </div>
           <figure class="public-card service-chapter-visual service-chapter-visual-filled">
-            <%= image_tag "russ_live/keyvisuals/services-festival-hero.jpg",
+            <%= image_tag "russ_live/keyvisuals/services-local-stadium.jpg",
                           alt: "",
-                          width: 8688,
-                          height: 5792,
+                          width: 1200,
+                          height: 893,
                           loading: "lazy",
                           decoding: "async" %>
           </figure>
@@ -162,17 +162,8 @@
           </figure>
         </article>
 
-<article class="service-chapter" id="ticketing">
+<article class="service-chapter service-chapter-ticketportal" id="ticketing">
           <h2><%= t("services.items.ticketing.title") %></h2>
-          <div class="service-chapter-copy">
-            <p><%= t("services.items.ticketing.paragraphs.first") %></p>
-            <p><%= t("services.items.ticketing.paragraphs.second") %></p>
-            <%= link_to "Stuttgart-Live",
-                        "https://www.stuttgart-live.de/",
-                        class: "public-button public-button-primary section-button",
-                        target: "_blank",
-                        rel: "noopener noreferrer" %>
-          </div>
           <figure class="public-card service-chapter-visual service-chapter-visual-filled service-chapter-visual-ticketportal">
             <div class="service-ticketportal-laptop">
               <%= image_tag "russ_live/keyvisuals/services-ticketportal.png",
@@ -191,6 +182,14 @@
                             decoding: "async" %>
             </div>
           </figure>
+          <div class="service-chapter-copy">
+            <p><%= t("services.items.ticketing.paragraphs.first") %></p>
+            <%= link_to "Stuttgart-Live",
+                        "https://www.stuttgart-live.de/",
+                        class: "public-button public-button-primary section-button",
+                        target: "_blank",
+                        rel: "noopener noreferrer" %>
+          </div>
         </article>
       </section>
 

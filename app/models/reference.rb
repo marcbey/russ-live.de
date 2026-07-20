@@ -61,7 +61,9 @@ class Reference < RussRecord
       .map(&:to_s)
       .map(&:strip)
       .reject(&:blank?)
-      .uniq { |tag| tag.downcase }
+      .group_by(&:downcase)
+      .values
+      .map { |variants| variants.max_by { |tag| tag.count("A-Z") } }
       .sort_by(&:downcase)
   end
 

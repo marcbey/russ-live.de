@@ -22,27 +22,18 @@
 
   <% if @featured_references.any? %>
     <section id="referenz-highlights" class="public-section section references-featured-band" aria-label="<%= t("references.featured_aria") %>">
-      <div class="references-featured-heading">
-        <h2><%= t("references.featured_title") %></h2>
-      </div>
       <%= render "pages/reference_slider", references: @featured_references, slider_classes: "klassik-slider reference-featured-slider", show_meta: false, flip_enabled: true %>
-      <nav class="public-filter-nav references-filter-nav" aria-label="<%= t("references.filters.aria") %>">
-        <button type="button" data-reference-tag="all" aria-pressed="true"><%= t("public.filters.all") %></button>
-        <% @reference_tags.each do |reference_tag| %>
-          <button type="button" data-reference-tag="<%= Reference.tag_slug(reference_tag) %>" aria-pressed="false"><%= reference_tag %></button>
-        <% end %>
-      </nav>
-    </section>
-  <% else %>
-    <section class="public-section section references-filter-band" aria-label="<%= t("references.filters.aria") %>">
-      <nav class="public-filter-nav references-filter-nav" aria-label="<%= t("references.filters.aria") %>">
-        <button type="button" data-reference-tag="all" aria-pressed="true"><%= t("public.filters.all") %></button>
-        <% @reference_tags.each do |reference_tag| %>
-          <button type="button" data-reference-tag="<%= Reference.tag_slug(reference_tag) %>" aria-pressed="false"><%= reference_tag %></button>
-        <% end %>
-      </nav>
     </section>
   <% end %>
+
+  <section class="public-section section references-filter-band" aria-label="<%= t("references.filters.aria") %>">
+    <nav class="public-filter-nav references-filter-nav" aria-label="<%= t("references.filters.aria") %>">
+      <button type="button" data-reference-tag="all" aria-pressed="true"><%= t("public.filters.all") %></button>
+      <% @reference_tags.each do |reference_tag| %>
+        <button type="button" data-reference-tag="<%= Reference.tag_slug(reference_tag) %>" aria-pressed="false"><%= reference_tag %></button>
+      <% end %>
+    </nav>
+  </section>
 
   <section class="public-section section references-band" aria-label="<%= t("references.grid_aria") %>">
     <% if @references.any? %>

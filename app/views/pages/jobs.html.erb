@@ -32,54 +32,31 @@
       </div>
     </div>
 
-    <div class="public-directory job-table" role="table" aria-label="<%= t("pages.jobs.list.aria") %>">
-      <div class="job-table-row job-table-row-head" role="row">
-        <span role="columnheader"><%= t("pages.jobs.list.position") %></span>
-        <span role="columnheader"><%= t("pages.jobs.list.category") %></span>
-        <span role="columnheader"><%= t("pages.jobs.list.location") %></span>
-        <span role="columnheader"><%= t("pages.jobs.list.inquiry") %></span>
+    <div class="job-overview-offers">
+      <div class="job-overview-kicker">
+        <h3><%= t("pages.jobs.story.first_title") %></h3>
+        <p><%= t("pages.jobs.story.first_text") %></p>
       </div>
 
-      <% @jobs.each do |job| %>
-        <%= link_to job_path(job.slug), class: "public-card job-table-row", role: "row", data: { job_categories: job.category_slugs.join(" ") } do %>
-          <span class="job-table-position" role="cell">
-            <strong><%= job.title %></strong>
-            <% if job.badge.present? %>
-              <span class="job-table-badge"><%= job.badge %></span>
-            <% end %>
-          </span>
-          <span role="cell"><%= job.category_list %></span>
-          <span role="cell"><%= job.location %></span>
-          <span class="job-table-action" role="cell">
-            <span><%= t("jobs.list_action") %></span>
-            <span aria-hidden="true">→</span>
-          </span>
+      <div class="public-directory job-table" aria-label="<%= t("pages.jobs.list.aria") %>">
+        <% @jobs.each do |job| %>
+          <%= link_to job_path(job.slug), class: "public-card job-table-row", data: { job_categories: job.category_slugs.join(" ") } do %>
+            <span class="job-table-position">
+              <strong><%= job.title %></strong>
+            </span>
+            <span class="job-table-action">
+              <span><%= t("jobs.list_action") %></span>
+              <span aria-hidden="true">→</span>
+            </span>
+          <% end %>
         <% end %>
-      <% end %>
+      </div>
     </div>
     <% if @jobs.empty? %>
       <p class="references-empty"><%= t("pages.jobs.empty") %></p>
     <% end %>
-  </section>
 
-  <section class="public-section section job-story-grid" id="jobs-story" aria-label="<%= t("pages.jobs.story.aria") %>">
-    <article class="job-story-card">
-      <figure class="job-story-image">
-        <%= image_tag "russ_live/jobs/stage-before.jpg",
-                      alt: t("pages.jobs.story.stage_image_alt"),
-                      loading: "lazy",
-                      decoding: "async",
-                      width: 3827,
-                      height: 2554 %>
-      </figure>
-      <div class="job-story-copy">
-        <p class="eyebrow"><%= t("pages.jobs.story.first_eyebrow") %></p>
-        <h2><%= t("pages.jobs.story.first_title") %></h2>
-        <p><%= t("pages.jobs.story.first_text") %></p>
-      </div>
-    </article>
-
-    <article class="job-story-band">
+    <div class="job-story-band">
       <div class="job-story-band-copy">
         <p class="eyebrow"><%= t("pages.jobs.story.second_eyebrow") %></p>
         <h2><%= t("pages.jobs.story.second_title") %></h2>
@@ -90,18 +67,37 @@
                       alt: t("pages.jobs.story.crowd_image_alt"),
                       loading: "lazy",
                       decoding: "async",
-                      width: 4200,
-                      height: 2787 %>
+                      width: 2200,
+                      height: 1467 %>
       </figure>
-    </article>
+    </div>
+  </section>
 
-    <section class="job-quotes" aria-label="<%= t("pages.jobs.quotes.aria") %>">
-      <% t("pages.jobs.quotes.items").each do |quote| %>
-        <blockquote class="job-quote">
-          <p><%= quote[:text] %></p>
-          <footer><%= quote[:footer] %></footer>
+  <section class="public-section section job-quotes-band" aria-label="<%= t("pages.jobs.quotes.aria") %>">
+    <div class="job-quotes">
+      <% t("pages.jobs.quotes.items").each_slice(2) do |quote_group| %>
+        <blockquote class="job-quote job-quote-rotator">
+          <% quote_group.each_with_index do |quote, quote_index| %>
+            <span class="job-quote-slide job-quote-slide-<%= quote_index + 1 %>">
+              <p><%= quote[:text] %></p>
+              <footer><%= quote[:footer] %></footer>
+            </span>
+          <% end %>
         </blockquote>
       <% end %>
-    </section>
+    </div>
   </section>
+
+  <div class="job-overview-image-strip" aria-hidden="true">
+    <% [
+      "russ_live/jobs/stage-before.jpg",
+      "russ_live/jobs/catering-team.jpg",
+      "russ_live/jobs/forklift-driver.jpg",
+      "russ_live/jobs/stagehand-crew.jpg",
+      "russ_live/jobs/festival-leaflets.jpg",
+      "russ_live/jobs/security-guard.jpg"
+    ].each do |image| %>
+      <span class="job-overview-image-strip-tile" style="--job-strip-image: url('<%= image_path image %>')"></span>
+    <% end %>
+  </div>
 </main>
