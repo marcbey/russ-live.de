@@ -8,6 +8,7 @@ class PressController < ApplicationController
   }.freeze
 
   before_action :set_page_context
+  before_action :set_public_header_jobs, except: :download
 
   def index
     @press_artists = press_artists
@@ -52,6 +53,10 @@ class PressController < ApplicationController
       title: t("pages.presse.meta.title"),
       description: t("pages.presse.meta.description")
     )
+  end
+
+  def set_public_header_jobs
+    @public_header_jobs = Job.published.ordered.select(:id, :title, :slug).to_a
   end
 
   def press_artists

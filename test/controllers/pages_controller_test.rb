@@ -96,6 +96,22 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "renders published jobs in main navigation submenu" do
+    get root_path
+
+    assert_response :success
+    assert_select ".nav-submenu-jobs[aria-label=?]", "Jobangebote Untermenü" do
+      assert_select "a[href=?]", jobs_path(anchor: "jobs-list"), text: "Alle Jobangebote"
+      assert_select "a[href=?]", job_path("cateringhilfen"), text: "Cateringhilfen"
+      assert_select "a[href=?]", job_path("stagehands"), text: "Stagehands"
+    end
+
+    get job_path("stagehands")
+
+    assert_response :success
+    assert_select ".nav-submenu-jobs a[aria-current='page'][href=?]", job_path("stagehands"), text: "Stagehands"
+  end
+
   test "sets english locale by cookie" do
     post locale_path(:en), params: { return_to: root_path }
 

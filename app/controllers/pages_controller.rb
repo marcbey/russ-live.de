@@ -22,6 +22,7 @@ class PagesController < ApplicationController
   STUTTGART_LIVE_SKS_HIGHLIGHTS_URL = "https://www.stuttgart-live.de/highlights?filter=sks".freeze
 
   before_action :set_page_meta, except: :homepage_lane
+  before_action :set_public_header_jobs, except: :homepage_lane
 
   def home
     @home_references = Reference.published.featured.with_image.ordered.to_a.select(&:featured_image?)
@@ -103,5 +104,9 @@ class PagesController < ApplicationController
 
     selected_references, remaining_references = references.partition { |reference| reference.id == selected_id }
     selected_references + remaining_references
+  end
+
+  def set_public_header_jobs
+    @public_header_jobs = Job.published.ordered.select(:id, :title, :slug).to_a
   end
 end

@@ -36,6 +36,8 @@ en:
       references: "References"
       services: "Services"
       jobs: "Jobs"
+      jobs_submenu_aria: "Job openings submenu"
+      all_jobs: "All job openings"
       press: "Press"
       contact: "Contact"
       language_aria: "Change language"

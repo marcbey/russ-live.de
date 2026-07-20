@@ -36,6 +36,8 @@ de:
       references: "Referenzen"
       services: "Services"
       jobs: "Jobs"
+      jobs_submenu_aria: "Jobangebote Untermenü"
+      all_jobs: "Alle Jobangebote"
       press: "Presse"
       contact: "Kontakt"
       language_aria: "Sprache wechseln"
