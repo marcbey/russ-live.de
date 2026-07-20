@@ -2035,10 +2035,18 @@ h3 {
   box-sizing: border-box;
   grid-column: 1;
   grid-row: 2;
-  max-width: 52rem;
+  max-width: min(36rem, 100%);
   padding-left: var(--brand-left);
   padding-right: var(--service-chapter-content-gap);
   padding-top: clamp(22px, 2.6vw, 42px);
+}
+
+.service-chapter-text {
+  max-width: 100%;
+}
+
+.service-chapter-text-columns {
+  max-width: min(52rem, 100%);
 }
 
 .service-chapter-copy p {
@@ -2048,8 +2056,24 @@ h3 {
   margin: 0;
 }
 
-.service-chapter-copy p + p {
+.service-chapter-text p + p {
   margin-top: 18px;
+}
+
+@media (min-width: 1280px) {
+  .service-chapter-text-columns {
+    column-count: 2;
+    column-gap: clamp(28px, 3.4vw, 54px);
+    column-width: 18rem;
+  }
+
+  .service-chapter-text-columns p {
+    break-inside: avoid;
+  }
+
+  .service-chapter-text-columns p + p {
+    margin-top: 0;
+  }
 }
 
 .service-contact-heading {
@@ -3945,6 +3969,316 @@ h3 {
 
 .holding {
   padding-top: 80px;
+}
+
+.legal-section {
+  max-width: min(1180px, calc(100vw - (var(--brand-left) * 2)));
+}
+
+.legal-section-youth {
+  max-width: min(1700px, calc(100vw - (var(--brand-left) * 2)));
+}
+
+.legal-section h1,
+.legal-section h2,
+.legal-section h3 {
+  color: var(--ink);
+  font-family: "Neue Rational", sans-serif;
+}
+
+.legal-section h1 {
+  font-weight: 400;
+  hyphens: none;
+  max-width: none;
+  overflow-wrap: normal;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.legal-copy {
+  max-width: 46rem;
+}
+
+.legal-copy-long {
+  max-width: none;
+}
+
+.legal-copy-youth {
+  max-width: none;
+}
+
+.legal-copy h2 {
+  border-top: 1px solid var(--line);
+  font-size: clamp(1.55rem, 2.1vw, 2.25rem);
+  line-height: 1.06;
+  margin: clamp(36px, 5vw, 62px) 0 0;
+  padding-top: clamp(22px, 3vw, 34px);
+}
+
+.legal-copy h2:first-child {
+  border-top: 0;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.legal-copy h3 {
+  color: var(--ink);
+  font-size: clamp(1.08rem, 1.25vw, 1.25rem);
+  font-weight: 650;
+  line-height: 1.2;
+  margin: 28px 0 0;
+  text-transform: none;
+}
+
+.legal-copy p,
+.legal-copy li {
+  color: var(--muted);
+  font-size: clamp(1rem, 1vw, 1.12rem);
+  line-height: 1.55;
+}
+
+.legal-copy p {
+  margin: 14px 0 0;
+}
+
+.legal-copy ol,
+.legal-copy ul {
+  color: var(--muted);
+  margin: 18px 0 0;
+  padding-left: 1.35rem;
+}
+
+.legal-copy li + li {
+  margin-top: 14px;
+}
+
+.legal-copy a {
+  color: var(--ink);
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: .18em;
+}
+
+.legal-youth-layout {
+  align-items: start;
+  display: grid;
+  gap: clamp(42px, 5vw, 78px);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.legal-youth-copy {
+  max-width: 58rem;
+}
+
+.legal-youth-form {
+  border-top: 1px solid var(--ink);
+  color: var(--ink);
+  display: grid;
+  font-family: "Neue Rational", sans-serif;
+  gap: clamp(22px, 3vw, 34px);
+  max-width: 42rem;
+  padding-top: 22px;
+}
+
+.legal-youth-form .legal-youth-form-kicker {
+  color: var(--ink);
+  font-size: .78rem;
+  font-weight: 650;
+  letter-spacing: .08em;
+  line-height: 1.1;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.legal-youth-form h2 {
+  border-top: 0;
+  color: var(--ink);
+  font-size: clamp(1.8rem, 2.4vw, 2.6rem);
+  line-height: .98;
+  margin: 0;
+  padding: 0;
+}
+
+.legal-youth-form h3 {
+  color: var(--ink);
+  font-size: clamp(1.02rem, 1.15vw, 1.18rem);
+  font-weight: 650;
+  line-height: 1.18;
+  margin: 0;
+}
+
+.legal-youth-form p,
+.legal-youth-form li {
+  color: var(--ink);
+  font-size: clamp(.94rem, .96vw, 1.05rem);
+  line-height: 1.42;
+  margin: 0;
+}
+
+.legal-form-block {
+  display: grid;
+  gap: 12px;
+}
+
+.legal-form-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.legal-form-field,
+.legal-form-note {
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  min-height: 72px;
+  padding: 12px 14px;
+}
+
+.legal-form-field {
+  display: grid;
+  gap: 8px;
+}
+
+.legal-form-field-wide {
+  grid-column: 1 / -1;
+}
+
+.legal-form-field-tall {
+  min-height: 86px;
+}
+
+.legal-form-field span {
+  color: var(--ink);
+  font-size: .78rem;
+  font-weight: 650;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.legal-form-field input {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--ink);
+  border-radius: 0;
+  color: var(--ink);
+  font: inherit;
+  min-height: 32px;
+  outline: 0;
+  padding: 4px 0;
+  width: 100%;
+}
+
+.legal-form-field input:focus-visible {
+  border-bottom-width: 2px;
+}
+
+.legal-form-field input::placeholder {
+  color: rgba(17, 17, 17, .44);
+}
+
+.legal-form-note {
+  font-size: clamp(.9rem, .94vw, 1rem);
+  min-height: 0;
+}
+
+.legal-form-info {
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 14px;
+  padding-top: 22px;
+}
+
+.legal-form-info h3 {
+  font-size: clamp(1.45rem, 2vw, 2.05rem);
+  line-height: 1;
+}
+
+.legal-form-info ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.legal-form-info li + li {
+  margin-top: 8px;
+}
+
+@media (max-width: 760px) {
+  .legal-section h1 {
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+
+  .legal-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.legal-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.legal-copy .legal-action-button {
+  align-items: center;
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: "Neue Rational", sans-serif;
+  font-size: .98rem;
+  font-weight: 650;
+  justify-content: center;
+  justify-self: start;
+  min-height: 48px;
+  padding: 0 20px;
+  text-decoration: none;
+}
+
+.legal-copy .legal-action-button-secondary {
+  background: #fff;
+  color: var(--ink);
+}
+
+.legal-copy .legal-action-button:hover,
+.legal-copy .legal-action-button:focus-visible {
+  background: #333;
+  border-color: #333;
+  color: #fff;
+  text-decoration: none;
+}
+
+.legal-copy .legal-action-button-secondary:hover,
+.legal-copy .legal-action-button-secondary:focus-visible {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+@media (min-width: 1280px) {
+  .legal-copy-long {
+    column-count: 2;
+    column-gap: clamp(44px, 5vw, 78px);
+  }
+
+  .legal-copy-long h2,
+  .legal-copy-long h3,
+  .legal-copy-long p {
+    break-inside: avoid;
+  }
+
+  .legal-youth-layout {
+    grid-template-columns: minmax(0, 58rem) minmax(30rem, 52rem);
+    justify-content: space-between;
+  }
+}
+
+@media print {
+  .legal-form-actions {
+    display: none;
+  }
 }
 
 .job-page {
@@ -7751,12 +8085,12 @@ h3 {
   display: grid;
   gap: 22px;
   justify-items: center;
-  max-width: 56rem;
+  max-width: min(36rem, 100%);
   padding: 0;
 }
 
 .service-chapter.service-chapter-ticketportal .service-chapter-copy p {
-  max-width: 52rem;
+  max-width: 100%;
 }
 
 .service-chapter.service-chapter-ticketportal .section-button {

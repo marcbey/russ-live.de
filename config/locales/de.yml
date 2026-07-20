@@ -329,9 +329,9 @@ de:
       liability: "Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich."
     datenschutz:
       meta:
-        title: "Datenschutz | Russ Live"
+        title: "Datenschutzerklärung | Russ Live"
         description: "Datenschutz der SKS Michael Russ GmbH."
-      title: "Datenschutz"
+      title: "Datenschutzerklärung"
       placeholder: "Sorry, aber Du suchst gerade nach etwas, was hier nicht ist."
     agb:
       meta:
@@ -341,7 +341,7 @@ de:
       placeholder: "Die Allgemeinen Geschäftsbedingungen werden hier statisch vorbereitet und können später mit den final freigegebenen Texten ergänzt werden."
     jugendschutz:
       meta:
-        title: "Jugendschutz | Russ Live"
+        title: "Kinder- und Jugendschutz | Russ Live"
         description: "Jugendschutz der SKS Michael Russ GmbH."
       title: "Jugendschutz"
       paragraphs:

@@ -12,6 +12,7 @@ import FilterClearController from "./filter_clear_controller"
 import JobApplicationMailController from "./job_application_mail_controller"
 import JobFilterController from "./job_filter_controller"
 import JobProfileNavController from "./job_profile_nav_controller"
+import LegalPrintController from "./legal_print_controller"
 import MobileMenuController from "./mobile_menu_controller"
 import PressLightboxController from "./press_lightbox_controller"
 import PressSearchController from "./press_search_controller"
@@ -31,6 +32,7 @@ application.register("filter-clear", FilterClearController)
 application.register("job-application-mail", JobApplicationMailController)
 application.register("job-filter", JobFilterController)
 application.register("job-profile-nav", JobProfileNavController)
+application.register("legal-print", LegalPrintController)
 application.register("mobile-menu", MobileMenuController)
 application.register("press-lightbox", PressLightboxController)
 application.register("press-search", PressSearchController)

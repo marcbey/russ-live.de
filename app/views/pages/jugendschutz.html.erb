@@ -1,11 +1,8 @@
 <main id="main-content" class="page-main public-page legal-page" tabindex="-1">
-      <section class="public-section section holding" aria-labelledby="legal-title">
-        <p class="eyebrow"><%= t("pages.legal.eyebrow") %></p>
+      <section class="public-section section holding legal-section legal-section-youth" aria-labelledby="legal-title">
         <h1 id="legal-title"><%= t("pages.jugendschutz.title") %></h1>
-        <div class="rich-copy">
-          <% t("pages.jugendschutz.paragraphs").each do |paragraph| %>
-            <p><%= paragraph %></p>
-          <% end %>
+        <div class="rich-copy legal-copy legal-copy-youth">
+          <%= render "pages/legal/jugendschutz_#{I18n.locale}" %>
         </div>
       </section>
     </main>

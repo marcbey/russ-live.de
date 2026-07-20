@@ -135,6 +135,36 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "renders localized legal page content" do
+    get agb_path
+
+    assert_response :success
+    assert_includes response.body, "Bestellbedingungen der SKS Michael Russ GmbH"
+    assert_includes response.body, "Stand: 01.07.2022"
+
+    get datenschutz_path
+
+    assert_response :success
+    assert_includes response.body, "Host Europe"
+    assert_includes response.body, "Google Analytics"
+
+    post locale_path(:en), params: { return_to: agb_path }
+    assert_redirected_to agb_path
+
+    get agb_path
+
+    assert_response :success
+    assert_includes response.body, "Ordering conditions of SKS Michael Russ GmbH"
+    assert_includes response.body, "Last updated: 1 July 2022"
+
+    get jugendschutz_path
+
+    assert_response :success
+    assert_includes response.body, "Youth Protection"
+    assert_includes response.body, "Print"
+    assert_includes response.body, "Download PDF"
+  end
+
   test "sets german locale by cookie" do
     post locale_path(:de), params: { return_to: root_path }
 

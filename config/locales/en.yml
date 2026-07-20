@@ -329,9 +329,9 @@ en:
       liability: "Despite careful content checks, we assume no liability for the content of external links. The operators of the linked pages are solely responsible for their content."
     datenschutz:
       meta:
-        title: "Privacy | Russ Live"
+        title: "Privacy Policy | Russ Live"
         description: "Privacy information of SKS Michael Russ GmbH."
-      title: "Privacy"
+      title: "Privacy Policy"
       placeholder: "Sorry, you are looking for something that is not here."
     agb:
       meta:
@@ -341,9 +341,9 @@ en:
       placeholder: "The general terms and conditions are being prepared here statically and can later be supplemented with the finally approved text."
     jugendschutz:
       meta:
-        title: "Youth protection | Russ Live"
+        title: "Child and Youth Protection | Russ Live"
         description: "Youth protection information of SKS Michael Russ GmbH."
-      title: "Youth protection"
+      title: "Youth Protection"
       paragraphs:
         - "Many people, high volumes, show times late into the evening: is this event suitable for my child? Please consider this carefully; nobody knows your child as well as you do. You can call us at any time on 0711-55066077 or email info@stuttgart-live.de. We will be happy to advise you, because sometimes investing in childcare is more relaxed for everyone."
         - "Age recommendations and age restrictions are regulated in detail for every event. They are legally binding and form part of our general terms and conditions. You can find the age restrictions in the respective event description on this website."

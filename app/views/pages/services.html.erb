@@ -22,8 +22,10 @@
 <article class="service-chapter" id="local">
           <h2><%= t("services.items.local.title") %></h2>
           <div class="service-chapter-copy">
-            <p><%= t("services.items.local.paragraphs.first") %></p>
-            <p><%= t("services.items.local.paragraphs.second") %></p>
+            <div class="service-chapter-text service-chapter-text-columns">
+              <p><%= t("services.items.local.paragraphs.first") %></p>
+              <p><%= t("services.items.local.paragraphs.second") %></p>
+            </div>
             <p class="service-contact-heading"><%= t("pages.services.contacts.aria") %></p>
             <div class="service-contact-grid" aria-label="<%= t("pages.services.contacts.aria") %>">
               <article class="service-contact-card">
@@ -67,8 +69,10 @@
 <article class="service-chapter service-chapter-reverse" id="production">
           <h2><%= t("services.items.production.title") %></h2>
           <div class="service-chapter-copy">
-            <p><%= t("services.items.production.paragraphs.first") %></p>
-            <p><%= t("services.items.production.paragraphs.second") %></p>
+            <div class="service-chapter-text service-chapter-text-columns">
+              <p><%= t("services.items.production.paragraphs.first") %></p>
+              <p><%= t("services.items.production.paragraphs.second") %></p>
+            </div>
             <p class="service-contact-heading"><%= t("pages.services.contacts.aria") %></p>
             <div class="service-contact-grid" aria-label="<%= t("pages.services.contacts.aria") %>">
               <article class="service-contact-card">
@@ -99,7 +103,9 @@
 <article class="service-chapter" id="marketing">
           <h2><%= t("services.items.marketing.title") %></h2>
           <div class="service-chapter-copy">
-            <p><%= t("services.items.marketing.paragraphs.first") %></p>
+            <div class="service-chapter-text">
+              <p><%= t("services.items.marketing.paragraphs.first") %></p>
+            </div>
             <p class="service-contact-heading"><%= t("pages.services.contacts.aria") %></p>
             <div class="service-contact-grid" aria-label="<%= t("pages.services.contacts.aria") %>">
               <article class="service-contact-card">
@@ -130,8 +136,10 @@
 <article class="service-chapter service-chapter-reverse" id="staff">
           <h2><%= t("services.items.staff.title") %></h2>
           <div class="service-chapter-copy">
-            <p><%= t("services.items.staff.paragraphs.first") %></p>
-            <p><%= t("services.items.staff.paragraphs.second") %></p>
+            <div class="service-chapter-text service-chapter-text-columns">
+              <p><%= t("services.items.staff.paragraphs.first") %></p>
+              <p><%= t("services.items.staff.paragraphs.second") %></p>
+            </div>
             <%= link_to t("pages.services.staff_jobs_button"),
                         jobs_path,
                         class: "public-button public-button-primary section-button service-staff-jobs-button" %>
@@ -183,7 +191,9 @@
             </div>
           </figure>
           <div class="service-chapter-copy">
-            <p><%= t("services.items.ticketing.paragraphs.first") %></p>
+            <div class="service-chapter-text">
+              <p><%= t("services.items.ticketing.paragraphs.first") %></p>
+            </div>
             <%= link_to "Stuttgart-Live",
                         "https://www.stuttgart-live.de/",
                         class: "public-button public-button-primary section-button",

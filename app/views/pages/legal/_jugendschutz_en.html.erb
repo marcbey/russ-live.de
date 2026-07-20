@@ -1,0 +1,125 @@
+<div class="legal-youth-layout">
+  <div class="legal-youth-copy">
+    <p>Many people, high volume levels and event times late into the evening: is this event suitable for my child? Please consider this carefully. Nobody knows your child as well as you do. You can call us at any time on 0711-55066077 or email info@stuttgart-live.de. We will be happy to advise you, because sometimes investing in childcare is the more relaxed option for everyone.</p>
+
+    <p>Age recommendations and age restrictions are regulated in detail for each event. They are legally binding and form part of our General Terms and Conditions. You will find the age restrictions in the respective event description.</p>
+
+    <p>In general, age restrictions follow these rules: children under 8 are usually not allowed to attend evening events and concerts. Children under 14 may usually only attend events when accompanied by an authorized guardian. Young people aged 14 to under 16 may usually attend concerts until 10 p.m.; young people over 16 may attend until midnight. After that, attendance is only possible when accompanied by a parent, legal guardian or authorized guardian.</p>
+
+    <p>Parents or legal guardians are the mother and/or father or the legal guardian. An authorized guardian may be any adult over 18 if they actually assume parental duties with the parents' consent. They must be able to fulfil the supervisory duties assigned to them, meaning they must be able to guide and supervise the young people entrusted to them.</p>
+
+    <p>A parental authorization form signed by the parents must be presented. A copy of the relevant parent's ID must also be enclosed. The responsible person must supervise the child during the event and requires an admission ticket. Each accompanying person may supervise no more than two children. All children and young people under 18 should be able to identify themselves with a child ID or personal ID.</p>
+  </div>
+
+  <form class="legal-youth-form" aria-labelledby="youth-form-title" data-controller="legal-print">
+    <p class="legal-youth-form-kicker">Form</p>
+    <h2 id="youth-form-title">Authorization of a supervisory adult under the German Youth Protection Act</h2>
+
+    <div class="legal-form-block">
+      <h3>Parents/legal guardians</h3>
+      <div class="legal-form-grid">
+        <label class="legal-form-field">
+          <span>First name, last name</span>
+          <input type="text" name="parent_name" autocomplete="name">
+        </label>
+        <label class="legal-form-field">
+          <span>Phone</span>
+          <input type="tel" name="parent_phone" autocomplete="tel">
+        </label>
+        <label class="legal-form-field legal-form-field-wide">
+          <span>Address</span>
+          <input type="text" name="parent_address" autocomplete="street-address">
+        </label>
+      </div>
+    </div>
+
+    <div class="legal-form-block">
+      <h3>My daughter/my son</h3>
+      <div class="legal-form-grid">
+        <label class="legal-form-field">
+          <span>First name, last name</span>
+          <input type="text" name="child_name">
+        </label>
+        <label class="legal-form-field">
+          <span>Age</span>
+          <input type="text" name="child_age" inputmode="numeric">
+        </label>
+      </div>
+      <div class="legal-form-grid">
+        <label class="legal-form-field legal-form-field-tall">
+          <span>Event date</span>
+          <input type="text" name="event_date" placeholder="DD.MM.YYYY">
+        </label>
+        <label class="legal-form-field legal-form-field-tall">
+          <span>Permission valid until</span>
+          <input type="text" name="permission_until" placeholder="Time">
+        </label>
+      </div>
+      <p class="legal-form-note">Will be accompanied for a cinema visit/restaurant visit/disco visit by an authorized supervisory adult pursuant to Section 1(1) no. 4 of the German Youth Protection Act.</p>
+    </div>
+
+    <div class="legal-form-block">
+      <h3>The authorized supervisory adult is:</h3>
+      <div class="legal-form-grid">
+        <label class="legal-form-field">
+          <span>First name, last name</span>
+          <input type="text" name="guardian_name" autocomplete="name">
+        </label>
+        <label class="legal-form-field">
+          <span>Phone</span>
+          <input type="tel" name="guardian_phone" autocomplete="tel">
+        </label>
+        <label class="legal-form-field legal-form-field-wide">
+          <span>Address</span>
+          <input type="text" name="guardian_address" autocomplete="street-address">
+        </label>
+      </div>
+    </div>
+
+    <div class="legal-form-block">
+      <h3>Signatures/date</h3>
+      <div class="legal-form-grid">
+        <label class="legal-form-field">
+          <span>Parents/legal guardians, date</span>
+          <input type="text" name="parent_signature_date">
+        </label>
+        <label class="legal-form-field">
+          <span>Authorized supervisory adult, date</span>
+          <input type="text" name="guardian_signature_date">
+        </label>
+      </div>
+    </div>
+
+    <div class="legal-form-info">
+      <h3>Youth protection through authorized supervisory adults</h3>
+      <p>Dear parents, under the German Youth Protection Act you may appoint an “authorized supervisory adult” to accompany your child. When accompanied by this person, whom you must expressly authorize, the following are permitted:</p>
+      <ul>
+        <li>cinema visits by children under 6 years of age</li>
+        <li>attendance at dance events by children and young people under 16</li>
+        <li>visits to restaurants by children and young people under 16</li>
+        <li>attendance at these offers by older children or young people outside the statutory time limits.</li>
+      </ul>
+      <p>The law does not prescribe a specific form for the appointment. You are welcome to use the form printed above and enter all important information there.</p>
+      <p>Please consider the following when issuing the authorization:</p>
+      <ul>
+        <li>The authorized supervisory adult must be of legal age and should be able to identify themselves.</li>
+        <li>They must be mature enough and able to provide your child with the necessary support responsibly.</li>
+        <li>The authorized supervisory adult also assumes legal responsibility for your child, for example the duty of supervision.</li>
+        <li>Please make sure your child can get home safely when attending evening events.</li>
+        <li>Please make sure the authorized supervisory adult is not under the influence of alcohol or other drugs while accompanying your child.</li>
+        <li>Please make sure the authorized supervisory adult is familiar with the rules of the German Youth Protection Act.</li>
+      </ul>
+      <p>If your child attends events run by child and youth welfare organizations, the respective organizers are considered authorized supervisory adults within the meaning of the law, provided the events are specifically for children or young people. No separate authorization is then required.</p>
+      <p>Completing the form will help your daughter/son at many events to prove to organizers, the police or other supervisory persons that you consent to your child's attendance.</p>
+    </div>
+
+    <div class="legal-form-actions">
+      <button type="button" class="legal-action-button" data-action="legal-print#print">Print</button>
+      <%= link_to "Download PDF",
+                  "https://www.michaelrussgmbh.de/wp-content/uploads/2022/10/Formular-fuer-Erziehungsberechtigte-Person.pdf",
+                  class: "legal-action-button legal-action-button-secondary",
+                  target: "_blank",
+                  rel: "noopener noreferrer" %>
+    </div>
+  </form>
+</div>
