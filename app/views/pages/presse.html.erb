@@ -16,16 +16,52 @@
       </h1>
       <p><%= t("press.index.hero.intro") %></p>
 
-      <form id="press-search" class="press-search" role="search" aria-label="<%= t("press.index.search.aria") %>" data-action="submit->press-search#submit">
+      <form id="press-search" class="press-search" role="search" aria-label="<%= t("press.index.search.aria") %>" data-press-search-target="form" data-action="submit->press-search#submit focusout->press-search#scheduleClose">
         <label class="sr-only" for="press-search-input"><%= t("press.index.search.label") %></label>
-        <div>
-          <input id="press-search-input" type="search" name="q" autocomplete="off" placeholder="<%= t("press.index.search.placeholder") %>" data-press-search-target="input" data-action="input->press-search#render search->press-search#render">
+        <div class="press-search-field">
+          <input id="press-search-input" type="search" name="q" autocomplete="off" placeholder="<%= t("press.index.search.placeholder") %>" role="combobox" aria-autocomplete="list" aria-controls="press-search-suggestions" aria-expanded="false" data-press-search-target="input" data-action="focus->press-search#render input->press-search#render search->press-search#render keydown->press-search#navigate">
           <button type="submit" aria-label="<%= t("press.index.search.submit_aria") %>">
             <span class="sr-only"><%= t("press.index.search.submit") %></span>
             <svg aria-hidden="true" viewBox="0 0 48 32" focusable="false">
               <path d="M1 16h42m0 0L29 2m14 14L29 30" />
             </svg>
           </button>
+        </div>
+        <div id="press-search-suggestions" class="press-search-suggestions" role="listbox" aria-label="<%= t("press.index.search.suggestions_aria") %>" data-press-search-target="suggestions" hidden>
+          <% @press_artists.each_with_index do |artist, index| %>
+            <% primary_event = artist.primary_event %>
+            <% hero_image = artist.hero_image %>
+            <%= link_to press_artist_path(artist.slug),
+                        id: "press-search-suggestion-#{index}",
+                        class: "press-search-suggestion",
+                        role: "option",
+                        aria: { selected: "false" },
+                        data: {
+                          press_search_target: "suggestion",
+                          artist_name: artist.name,
+                          suggestion_text: [ artist.name, primary_event&.title ].compact.join(" ")
+                        } do %>
+              <span class="press-search-suggestion-image" aria-hidden="true">
+                <% if hero_image.respond_to?(:press_variant) %>
+                  <%= image_tag hero_image.press_variant(:gallery_mobile),
+                                alt: "",
+                                loading: "lazy",
+                                decoding: "async" %>
+                <% else %>
+                  <%= image_tag hero_image,
+                                alt: "",
+                                loading: "lazy",
+                                decoding: "async" %>
+                <% end %>
+              </span>
+              <span class="press-search-suggestion-copy">
+                <strong><%= artist.name %></strong>
+                <% if primary_event&.title.present? %>
+                  <span><%= primary_event.title %></span>
+                <% end %>
+              </span>
+            <% end %>
+          <% end %>
         </div>
       </form>
     </div>

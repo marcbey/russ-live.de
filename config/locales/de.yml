@@ -421,6 +421,7 @@ de:
         placeholder: "Künstlersuche"
         submit: "Suchen"
         submit_aria: "Künstlersuche ausführen"
+        suggestions_aria: "Suchvorschläge für Künstler"
       directory:
         eyebrow: "Übersicht"
         title: "Künstler A-Z"

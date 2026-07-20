@@ -27,11 +27,28 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Ärztin Live"
     assert_includes response.body, press_artist_path("arztin-live")
     assert_includes response.body, "1 Presseeintrag"
-    assert_select "#press-search.press-search[data-action=?]", "submit->press-search#submit"
-    assert_select "#press-search-input[data-action=?]", "input->press-search#render search->press-search#render"
+    assert_select "#press-search.press-search[data-action=?]", "submit->press-search#submit focusout->press-search#scheduleClose"
+    assert_select "#press-search-input[role=?][aria-controls=?][aria-expanded=?][data-action=?]",
+      "combobox",
+      "press-search-suggestions",
+      "false",
+      "focus->press-search#render input->press-search#render search->press-search#render keydown->press-search#navigate"
     assert_select ".press-search button[type=submit] svg"
+    assert_select "#press-search-suggestions.press-search-suggestions[role=?][aria-label=?][hidden]",
+      "listbox",
+      "Suchvorschläge für Künstler"
+    assert_select ".press-search-suggestion[href=?][data-press-search-target=?][data-artist-name=?][data-suggestion-text*=?]",
+      press_artist_path("arztin-live"),
+      "suggestion",
+      "Ärztin Live",
+      visible_event.title
+    assert_select ".press-search-suggestion .press-search-suggestion-image img"
+    assert_select ".press-search-suggestion .press-search-suggestion-copy strong", "Ärztin Live"
+    assert_select ".press-search-suggestion .press-search-suggestion-copy span", visible_event.title
     assert_not_includes response.body, "Hidden Act"
-    assert_not_includes response.body, visible_event.title
+    assert_select ".press-letter-grid" do |directory|
+      assert_not_includes directory.to_html, visible_event.title
+    end
   end
 
   test "index renders english static press copy while keeping artist model data" do

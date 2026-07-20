@@ -421,6 +421,7 @@ en:
         placeholder: "Artist search"
         submit: "Search"
         submit_aria: "Search artists"
+        suggestions_aria: "Artist search suggestions"
       directory:
         eyebrow: "Overview"
         title: "Artists A-Z"
