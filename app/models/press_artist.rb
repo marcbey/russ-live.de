@@ -96,10 +96,14 @@ class PressArtist
   end
 
   def press_images_for(event)
-    event_image_blob_id = event.event_image&.file&.blob_id
-
-    event.event_images
+    slider_images = event.event_images
       .sort_by { |image| [ image.created_at || Time.zone.at(0), image.id.to_i ] }
-      .reject { |image| image.file.blob_id == event_image_blob_id }
+      .select { |image| image.slider? && image.file.attached? }
+    return slider_images if slider_images.any?
+
+    event_image = event.event_image
+    return [] unless event_image&.file&.attached?
+
+    [ event_image ]
   end
 end

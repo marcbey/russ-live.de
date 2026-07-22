@@ -250,16 +250,62 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_equal [ [ "1-press-image.jpg", "press image" ] ], entries
   end
 
-  test "download returns not found when artist only has an event image" do
+  test "show renders event image as fallback press download when no slider images exist" do
     event = create_event!(
       artist_name: "Only Event Image",
       normalized_artist_name: "only event image",
       publish_on_russ_live: true,
       start_at: Time.zone.local(2026, 8, 1, 20)
     )
-    create_event_image!(event:, purpose: EventImage::PURPOSE_DETAIL_HERO, alt_text: "Nur Eventbild")
+    create_event_image!(event:, purpose: EventImage::PURPOSE_DETAIL_HERO, alt_text: "Nur Eventbild", filename: "event-image.jpg")
+
+    get press_artist_path("only-event-image")
+
+    assert_response :success
+    assert_includes response.body, "Pressefotos"
+    assert_includes response.body, "Nur Eventbild"
+    assert_equal 2, response.body.scan("Pressemappe downloaden").size
+    assert_includes response.body, press_artist_download_path("only-event-image")
+    assert_includes response.body, "Bild downloaden"
+  end
+
+  test "download sends a zip with fallback event image when no slider images exist" do
+    event = create_event!(
+      artist_name: "Only Event Image",
+      normalized_artist_name: "only event image",
+      publish_on_russ_live: true,
+      start_at: Time.zone.local(2026, 8, 1, 20)
+    )
+    create_event_image!(
+      event:,
+      purpose: EventImage::PURPOSE_DETAIL_HERO,
+      alt_text: "ZIP Eventbild",
+      filename: "event-image.jpg",
+      content: "event image"
+    )
 
     get press_artist_download_path("only-event-image")
+
+    assert_response :success
+    assert_equal "application/zip", response.media_type
+    assert_match(/attachment; filename="only-event-image-pressebilder.zip"/, response.headers["Content-Disposition"])
+
+    entries = []
+    Zip::File.open_buffer(StringIO.new(response.body)) do |zip|
+      entries = zip.map { |entry| [ entry.name, entry.get_input_stream.read ] }
+    end
+    assert_equal [ [ "1-event-image.jpg", "event image" ] ], entries
+  end
+
+  test "download returns not found when artist has no attached images" do
+    create_event!(
+      artist_name: "No Images",
+      normalized_artist_name: "no images",
+      publish_on_russ_live: true,
+      start_at: Time.zone.local(2026, 8, 1, 20)
+    )
+
+    get press_artist_download_path("no-images")
 
     assert_response :not_found
   end
