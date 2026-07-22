@@ -22,7 +22,12 @@
 
   <% if @featured_references.any? %>
     <section id="referenz-highlights" class="public-section section references-featured-band" aria-label="<%= t("references.featured_aria") %>">
-      <%= render "pages/reference_slider", references: @featured_references, slider_classes: "klassik-slider reference-featured-slider", show_meta: false, flip_enabled: true %>
+      <%= render "pages/reference_marquee",
+                 references: @featured_references,
+                 marquee_classes: "reference-featured-marquee reference-marquee-large",
+                 aria_label: t("references.featured_aria"),
+                 image_variant: :slider,
+                 show_cta: false %>
     </section>
   <% end %>
 

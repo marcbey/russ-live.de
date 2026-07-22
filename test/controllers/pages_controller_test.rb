@@ -245,7 +245,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "locale="
   end
 
-  test "homepage omits reference slider without published featured references with images" do
+  test "homepage renders reference marquee with published square references" do
     Reference.create!(
       title: "Referenz ohne Bild",
       starts_on: Date.new(2026, 5, 1),
@@ -253,15 +253,18 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
       featured: true,
       status: "published"
     )
-    create_reference_with_image!(title: "Normale Referenz", position: 1, tag_list: "Concert")
+    reference = create_reference_with_image!(title: "Normale Referenz", position: 1, tag_list: "Concert")
 
     get root_path
 
     assert_response :success
-    assert_not_includes response.body, "home-references-band"
+    assert_select ".home-references-band .reference-marquee"
+    assert_select ".home-references-band .reference-marquee-cta .reference-marquee-detail-button[href=?]", referenzen_path, count: 1
+    assert_select ".home-references-band .reference-marquee-card .reference-marquee-detail-button", count: 0
     assert_not_includes response.body, "Referenz ohne Bild"
-    assert_not_includes response.body, "Normale Referenz"
-    assert_not_includes response.body, "DISGUSTING FOOD MUSEUM"
+    assert_includes response.body, "Normale Referenz"
+    assert_match %r{01-disgusting-food-museum-[a-f0-9]+\.jpg}, response.body
+    assert_select ".home-references-band .klassik-slider", count: 0
   end
 
   test "renders reference image crop and zoom styles on public reference surfaces" do
@@ -303,14 +306,10 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "--reference-image-focus-x: 35.0%"
     assert_includes response.body, "--reference-image-focus-y: 65.0%"
     assert_includes response.body, "--reference-image-zoom: 1.45"
-    assert_includes response.body, 'data-controller="reference-image-render"'
-    assert_includes response.body, 'data-reference-image-render-focus-x-value="35.0"'
-    assert_includes response.body, 'data-reference-image-render-focus-y-value="65.0"'
-    assert_includes response.body, 'data-reference-image-render-zoom-value="145.0"'
-    assert_includes response.body, 'data-reference-image-render-target="frame"'
+    assert_select ".home-references-band .reference-marquee-cta .reference-marquee-detail-button[href=?]", referenzen_path, count: 1
   end
 
-  test "homepage prefers dedicated slider image for references" do
+  test "homepage uses square reference image instead of dedicated slider image" do
     reference = Reference.create!(
       title: "NEIL YOUNG",
       starts_on: Date.new(2024, 6, 29),
@@ -330,13 +329,18 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get root_path
 
     assert_response :success
-    assert_match %r{03-neil-young-[a-f0-9]+\.jpg}, response.body
-    assert_includes response.body, "Slider Alt"
+    assert_match %r{01-disgusting-food-museum-[a-f0-9]+\.jpg}, response.body
+    assert_no_match %r{03-neil-young-[a-f0-9]+\.jpg}, response.body
+    assert_not_includes response.body, "variant=slider"
+    assert_not_includes response.body, "Slider Alt"
+    assert_select ".home-references-band .reference-marquee-card .reference-marquee-front[data-reference-image-render-target=?]", "frame"
+    assert_select ".home-references-band .reference-marquee-card .reference-marquee-back .reference-card-name", "NEIL YOUNG"
+    assert_select ".home-references-band .reference-marquee-card .reference-marquee-detail-button", count: 0
+    assert_select ".home-references-band .reference-marquee-cta .reference-marquee-detail-button", "Zur Referenzseite"
     assert_select ".home-references-band .klassik-slider-meta", count: 0
-    assert_not_includes response.body, "data-reference-image-render-focus-x-value="
   end
 
-  test "homepage renders featured references with slider image only" do
+  test "homepage skips references with slider image only" do
     reference = Reference.create!(
       title: "SLIDER ONLY",
       starts_on: Date.new(2024, 6, 29),
@@ -354,37 +358,41 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get root_path
 
     assert_response :success
-    assert_select ".home-references-band"
-    assert_includes response.body, "SLIDER ONLY"
-    assert_match %r{03-neil-young-[a-f0-9]+\.jpg}, response.body
-    assert_includes response.body, "Nur Slider Alt"
+    assert_select ".home-references-band", count: 0
+    assert_not_includes response.body, "SLIDER ONLY"
+    assert_no_match %r{03-neil-young-[a-f0-9]+\.jpg}, response.body
+    assert_not_includes response.body, "Nur Slider Alt"
   end
 
-  test "homepage reference slider links to selected reference page slide" do
+  test "homepage reference marquee overview button links to reference page" do
     first = create_reference_with_image!(title: "ERSTES PROJEKT", position: 2, tag_list: "Festival", featured: true)
     second = create_reference_with_image!(title: "ZWEITES PROJEKT", position: 1, tag_list: "Open Air", featured: true)
-    first.reference_image.update!(slider_badge_text: "Festival")
-    second.reference_image.update!(slider_badge_text: "Open Air")
+    first.reference_image.update!(slider_asset_path: "russ_live/references/02-david-garrett.jpg", slider_badge_text: "Festival")
+    second.reference_image.update!(slider_asset_path: "russ_live/references/03-neil-young.jpg", slider_badge_text: "Open Air")
 
     get root_path
 
     assert_response :success
-    assert_select ".home-references-band .klassik-slider-footer a[href=?]", referenzen_path, "Alle Referenzen"
-    assert_select ".home-references-band .klassik-slide[data-link-url=?]", referenzen_path(reference_id: first.id, anchor: "referenz-highlights")
-    assert_select ".home-references-band .klassik-slide[data-link-url=?]", referenzen_path(reference_id: second.id, anchor: "referenz-highlights")
-    assert_select ".home-references-band .klassik-slide-badge", text: "Festival"
-    assert_select ".home-references-band .klassik-slide-badge", text: "Open Air"
+    assert_select ".home-references-band .reference-marquee-card[href]", count: 0
+    assert_select ".home-references-band .reference-marquee-card .reference-marquee-detail-button", count: 0
+    assert_select ".home-references-band .reference-marquee-cta .reference-marquee-detail-button[href=?]", referenzen_path, count: 1
+    assert_select ".home-references-band .reference-marquee-cta .reference-marquee-detail-button", "Zur Referenzseite"
+    assert_select ".home-references-band .klassik-slide-badge", count: 0
+    assert_not_includes response.body, "Festival"
+    assert_not_includes response.body, "Open Air"
 
     get referenzen_path(reference_id: second.id)
 
     assert_response :success
     assert_select "#referenz-highlights"
-    assert_select ".reference-featured-slider .klassik-slide.is-active[data-title=?]", second.title
-    assert_select ".reference-featured-slider .klassik-slide.is-active > .klassik-slide-badge", "Open Air"
-    assert_select ".reference-featured-slider .klassik-slide-flip-button .klassik-slide-badge", count: 0
+    assert_select ".references-featured-band .reference-featured-marquee.reference-marquee-large"
+    assert_select ".references-featured-band .reference-featured-slider", count: 0
+    assert_operator response.body.index("ZWEITES PROJEKT"), :<, response.body.index("ERSTES PROJEKT")
+    assert_match %r{03-neil-young-[a-f0-9]+\.jpg}, response.body
+    assert_match %r{02-david-garrett-[a-f0-9]+\.jpg}, response.body
   end
 
-  test "homepage falls back to normal reference image when no slider image exists" do
+  test "homepage renders normal reference image when no slider image exists" do
     reference = Reference.create!(
       title: "NEIL YOUNG",
       starts_on: Date.new(2024, 6, 29),
@@ -406,11 +414,12 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_match %r{01-disgusting-food-museum-[a-f0-9]+\.jpg}, response.body
-    assert_includes response.body, "Main Alt"
-    assert_includes response.body, 'data-reference-image-render-focus-x-value="35.0"'
+    assert_includes response.body, "--reference-image-focus-x: 35.0%"
+    assert_includes response.body, "--reference-image-focus-y: 65.0%"
+    assert_includes response.body, "--reference-image-zoom: 1.45"
   end
 
-  test "homepage renders uploaded slider image when available" do
+  test "homepage ignores uploaded slider image when normal reference image is available" do
     reference = Reference.create!(
       title: "NEIL YOUNG",
       starts_on: Date.new(2024, 6, 29),
@@ -434,9 +443,10 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get root_path
 
     assert_response :success
-    assert_includes response.body, "/referenzbilder/#{reference_image.id}"
-    assert_includes response.body, "variant=slider"
-    assert_includes response.body, "Uploaded Slider Alt"
+    assert_match %r{01-disgusting-food-museum-[a-f0-9]+\.jpg}, response.body
+    assert_not_includes response.body, "/referenzbilder/#{reference_image.id}"
+    assert_not_includes response.body, "variant=slider"
+    assert_not_includes response.body, "Uploaded Slider Alt"
   end
 
   test "public reference surfaces prefer freeform display date when present" do
@@ -463,12 +473,18 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get root_path
 
     assert_response :success
-    assert_includes response.body, "Juni 2025 - März 2026 · Museum"
+    assert_not_includes response.body, "Juni 2025 - März 2026 · Museum"
+    assert_select ".home-references-band .reference-marquee-cta .reference-marquee-detail-button[href=?]", referenzen_path, count: 1
   end
 
-  test "reference page renders featured slider references again in square regular grid" do
+  test "reference page renders featured slider references as large marquee and again in square regular grid" do
     featured = create_reference_with_image!(title: "HAUPTPROJEKT", position: 2, tag_list: "Festival", featured: true)
-    featured.reference_image.update!(grid_variant: "2x2")
+    featured.reference_image.update!(
+      grid_variant: "2x2",
+      slider_asset_path: "russ_live/references/03-neil-young.jpg",
+      slider_alt_text: "Hauptprojekt Slider"
+    )
+    featured_without_slider = create_reference_with_image!(title: "FEATURED OHNE SLIDER", position: 3, tag_list: "Theater", featured: true)
     regular = create_reference_with_image!(title: "NORMALE KACHEL", position: 1, tag_list: "Open Air")
     regular.reference_image.update!(grid_variant: "2x2")
 
@@ -476,18 +492,24 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select ".references-featured-band .references-featured-heading", count: 0
-    assert_select ".references-featured-band .reference-featured-slider"
-    assert_operator response.body.index("reference-featured-slider"), :<, response.body.index("references-filter-band")
+    assert_select ".references-featured-band .reference-featured-marquee.reference-marquee-large"
+    assert_select ".references-featured-band .reference-marquee-cta", count: 0
+    assert_select ".references-featured-band .reference-featured-slider", count: 0
+    assert_operator response.body.index("reference-featured-marquee"), :<, response.body.index("references-filter-band")
     assert_operator response.body.index("references-filter-band"), :<, response.body.index("reference-highlight-grid")
-    assert_select ".reference-featured-slider .klassik-slide-flip-button[aria-label=?]", "Details zu HAUPTPROJEKT anzeigen"
-    assert_select ".reference-featured-slider .klassik-slide-back[style*=?]", "background: #000"
-    assert_select ".reference-featured-slider .klassik-slider-meta", count: 0
+    assert_select ".reference-featured-marquee .reference-marquee-card .reference-card-name", text: "HAUPTPROJEKT"
+    assert_select ".reference-featured-marquee .reference-marquee-card .reference-card-name", text: "FEATURED OHNE SLIDER", count: 0
+    assert_match %r{03-neil-young-[a-f0-9]+\.jpg}, response.body
+    assert_includes response.body, "Hauptprojekt Slider"
+    assert_select ".reference-featured-marquee .klassik-slider-meta", count: 0
     assert_select ".reference-highlight-grid .reference-card-name", text: featured.title
+    assert_select ".reference-highlight-grid .reference-card-name", text: featured_without_slider.title
     assert_select ".reference-highlight-grid .reference-card-name", text: regular.title
     assert_select ".reference-highlight-grid .reference-card-grid-2-2", count: 0
-    assert_select ".reference-highlight-grid .reference-card-grid-1-1", count: 2
+    assert_select ".reference-highlight-grid .reference-card-grid-1-1", count: 3
     assert_includes response.body, 'data-reference-tag="open-air"'
     assert_includes response.body, 'data-reference-tag="festival"'
+    assert_includes response.body, 'data-reference-tag="theater"'
   end
 
   test "services omits reference slider even with published concert references" do

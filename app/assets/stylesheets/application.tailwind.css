@@ -1026,6 +1026,7 @@ h3 {
 .references-filter-band {
   background: #fff;
   color: var(--ink);
+  display: none;
   margin-inline: 0;
   max-width: none;
   padding-bottom: clamp(22px, 3vw, 42px);
@@ -1100,10 +1101,281 @@ h3 {
 .home-references-band {
   background: #000;
   color: #fff;
+  overflow: hidden;
+  padding-bottom: clamp(58px, 7vw, 110px);
 }
 
 .home-references-band .eyebrow {
   color: rgba(255, 255, 255, .62);
+}
+
+.reference-marquee {
+  --reference-marquee-gap: clamp(14px, 1.8vw, 34px);
+  margin: clamp(34px, 4vw, 64px) calc(50% - 50vw) 0;
+  overflow: hidden;
+  position: relative;
+  touch-action: pan-y;
+  user-select: none;
+  width: 100vw;
+}
+
+.reference-marquee-controls {
+  display: flex;
+  gap: 8px;
+  position: absolute;
+  right: clamp(18px, 4vw, 64px);
+  top: clamp(12px, 2vw, 28px);
+  z-index: 4;
+}
+
+.reference-marquee-arrow {
+  align-items: center;
+  appearance: none;
+  background: rgba(0, 0, 0, .72);
+  border: 1px solid rgba(255, 255, 255, .72);
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: clamp(1.8rem, 2.4vw, 2.6rem);
+  font-weight: 300;
+  height: clamp(46px, 4vw, 58px);
+  justify-content: center;
+  line-height: 1;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 0 4px;
+  transition: background-color .2s, border-color .2s, transform .2s;
+  width: clamp(46px, 4vw, 58px);
+}
+
+.reference-marquee-arrow:hover,
+.reference-marquee-arrow:focus-visible {
+  background: #fff;
+  border-color: #fff;
+  color: #000;
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.reference-marquee-track {
+  cursor: grab;
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.reference-marquee.is-dragging .reference-marquee-track {
+  cursor: grabbing;
+}
+
+.reference-marquee-group {
+  display: flex;
+  flex: 0 0 auto;
+  gap: var(--reference-marquee-gap);
+  padding-right: var(--reference-marquee-gap);
+}
+
+.reference-marquee-card {
+  aspect-ratio: 1 / 1;
+  background: #111;
+  display: block;
+  flex: 0 0 clamp(220px, 24vw, 440px);
+  overflow: hidden;
+  position: relative;
+  transform-style: preserve-3d;
+  width: clamp(220px, 24vw, 440px);
+}
+
+.reference-marquee-face {
+  aspect-ratio: 1 / 1;
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  transform-style: preserve-3d;
+  width: 100%;
+}
+
+.reference-marquee-front,
+.reference-marquee-back {
+  backface-visibility: hidden;
+  inset: 0;
+  position: absolute;
+}
+
+.reference-marquee-front {
+  background: #000;
+  opacity: 1;
+  transform: rotateY(0deg);
+  transition:
+    opacity .08s linear .1s,
+    transform .58s cubic-bezier(.2, .72, .2, 1);
+}
+
+.reference-marquee-back {
+  background: #10100f;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1vw, 18px);
+  justify-content: flex-start;
+  line-height: 1.05;
+  opacity: 0;
+  overflow-y: auto;
+  padding: clamp(18px, 2vw, 34px) clamp(18px, 2.3vw, 42px);
+  transform: rotateY(-92deg);
+  transition:
+    opacity .08s linear .12s,
+    transform .58s cubic-bezier(.2, .72, .2, 1);
+}
+
+.reference-marquee-card:hover .reference-marquee-front,
+.reference-marquee-card:focus-within .reference-marquee-front {
+  opacity: 0;
+  transform: rotateY(92deg);
+  transition:
+    opacity .08s linear,
+    transform .58s cubic-bezier(.2, .72, .2, 1);
+}
+
+.reference-marquee-card:hover .reference-marquee-back,
+.reference-marquee-card:focus-within .reference-marquee-back {
+  opacity: 1;
+  transform: rotateY(0deg);
+}
+
+.reference-marquee-front img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--reference-image-focus-x, 50%) var(--reference-image-focus-y, 50%);
+  transform: scale(var(--reference-image-zoom, 1));
+  transform-origin: var(--reference-image-focus-x, 50%) var(--reference-image-focus-y, 50%);
+  width: 100%;
+}
+
+.reference-marquee-card:focus-within {
+  outline: 3px solid #fff;
+  outline-offset: -6px;
+  z-index: 2;
+}
+
+.reference-marquee-back .reference-card-name {
+  font-size: clamp(1.05rem, 2.1vw, 2.55rem);
+  letter-spacing: 0;
+}
+
+.reference-marquee-back .reference-card-copy {
+  -webkit-line-clamp: 4;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+}
+
+.reference-marquee-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(24px, 3vw, 44px);
+  padding: 0 clamp(18px, 4vw, 64px);
+  position: relative;
+  z-index: 3;
+}
+
+.reference-marquee-detail-button {
+  align-self: center;
+  background: #fff;
+  border: 1px solid #fff;
+  border-radius: 999px;
+  color: #000;
+  display: inline-flex;
+  font-size: clamp(.74rem, .78vw, .9rem);
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1;
+  min-height: 44px;
+  padding: 15px clamp(18px, 1.8vw, 28px) 14px;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color .2s, border-color .2s, color .2s, transform .2s;
+}
+
+.reference-marquee-detail-button:hover,
+.reference-marquee-detail-button:focus-visible {
+  background: transparent;
+  color: #fff;
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.reference-marquee-large {
+  --reference-marquee-gap: clamp(18px, 2vw, 42px);
+  margin-top: 0;
+  padding: 0;
+}
+
+.reference-marquee-large .reference-marquee-card {
+  aspect-ratio: 23 / 10;
+  flex-basis: clamp(520px, 62vw, 980px);
+  width: clamp(520px, 62vw, 980px);
+}
+
+.reference-marquee-large .reference-marquee-face {
+  aspect-ratio: 23 / 10;
+}
+
+.reference-marquee-large .reference-marquee-back {
+  padding: clamp(26px, 3vw, 58px) clamp(28px, 4vw, 72px);
+}
+
+.reference-marquee-large .reference-marquee-back .reference-card-name {
+  font-size: clamp(1rem, 2.2vw, 2.9rem);
+  max-width: 11ch;
+}
+
+.reference-marquee-large .reference-marquee-back .reference-card-copy {
+  -webkit-line-clamp: 5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reference-marquee-track {
+    transform: none;
+  }
+
+  .reference-marquee-front,
+  .reference-marquee-back {
+    transition: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .reference-marquee {
+    --reference-marquee-gap: clamp(12px, 4vw, 22px);
+    margin-top: clamp(28px, 8vw, 44px);
+  }
+
+  .reference-marquee-card {
+    flex-basis: clamp(170px, 52vw, 260px);
+    width: clamp(170px, 52vw, 260px);
+  }
+
+  .reference-marquee-large {
+    padding: 0;
+  }
+
+  .reference-marquee-large .reference-marquee-card {
+    aspect-ratio: 16 / 10;
+    flex-basis: clamp(280px, 84vw, 520px);
+    width: clamp(280px, 84vw, 520px);
+  }
+
+  .reference-marquee-large .reference-marquee-face {
+    aspect-ratio: 16 / 10;
+  }
+
+  .reference-marquee-large .reference-marquee-back .reference-card-name {
+    font-size: clamp(.8rem, 3.5vw, 1.18rem);
+  }
 }
 
 .references-featured-band {
@@ -1112,6 +1384,7 @@ h3 {
   margin-inline: 0;
   max-width: none;
   padding-inline: 0;
+  padding-top: 0;
 }
 
 .references-featured-band .klassik-slider {

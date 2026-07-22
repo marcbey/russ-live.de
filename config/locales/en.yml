@@ -361,6 +361,8 @@ en:
   references:
     featured_aria: "Featured projects"
     featured_title: "Highlights"
+    overview_link: "Open reference page"
+    overview_aria: "Open reference page"
     filters:
       aria: "Filter references by tags"
     grid_aria: "Reference projects"

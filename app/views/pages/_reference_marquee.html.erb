@@ -1,0 +1,87 @@
+<% lane_references = references.to_a %>
+<% repeated_references = lane_references.cycle.take([ lane_references.length * 3, 9 ].max) %>
+<% marquee_classes = [ "reference-marquee", local_assigns[:marquee_classes] ].compact.join(" ") %>
+<% marquee_label = local_assigns.fetch(:aria_label, t("pages.home.references.title")) %>
+<% base_speed = local_assigns.fetch(:base_speed, 15) %>
+<% show_cta = local_assigns.fetch(:show_cta, true) %>
+<% image_variant = local_assigns.fetch(:image_variant, :card).to_sym %>
+
+<div class="<%= marquee_classes %>"
+     aria-label="<%= marquee_label %>"
+     data-controller="reference-marquee"
+     data-reference-marquee-base-speed-value="<%= base_speed %>">
+  <div class="reference-marquee-controls" aria-label="<%= marquee_label %>">
+    <button class="reference-marquee-arrow reference-marquee-arrow-prev"
+            type="button"
+            aria-label="<%= t("references.slider.previous") %>"
+            data-action="reference-marquee#previous">‹</button>
+    <button class="reference-marquee-arrow reference-marquee-arrow-next"
+            type="button"
+            aria-label="<%= t("references.slider.next") %>"
+            data-action="reference-marquee#next">›</button>
+  </div>
+  <div class="reference-marquee-track" data-reference-marquee-target="track">
+    <% 2.times do |group_index| %>
+      <%= tag.div class: "reference-marquee-group",
+                  data: { reference_marquee_target: "group" },
+                  aria: { hidden: ("true" if group_index.positive?) } do %>
+        <% repeated_references.each do |reference| %>
+          <% reference_image = reference.reference_image %>
+          <% slider_image = image_variant == :slider %>
+          <% image_source = slider_image ? reference_slider_image_source(reference_image) : reference_image_source(reference_image) %>
+          <% image_alt = slider_image ? reference_image&.display_slider_alt_text : "" %>
+          <% image_style = slider_image ? nil : reference_image_style(reference_image) %>
+          <% image_render_data = slider_image ? {} : reference_image_render_data(reference_image) %>
+          <% frame_data = slider_image ? {} : { reference_image_render_target: "frame" } %>
+          <% image_data = slider_image ? {} : { reference_image_render_target: "image" } %>
+          <% localized_description = reference.localized_description %>
+          <%= tag.div class: "reference-marquee-card",
+                      data: image_render_data do %>
+            <%= tag.span class: "reference-marquee-face reference-marquee-front",
+                         aria: { hidden: "true" },
+                         data: frame_data do %>
+              <% if image_source.present? %>
+                <%= image_tag image_source,
+                              alt: image_alt,
+                              loading: "lazy",
+                              decoding: "async",
+                              width: slider_image ? 920 : 600,
+                              height: slider_image ? 400 : 600,
+                              style: image_style,
+                              data: image_data %>
+              <% else %>
+                <span class="reference-card-placeholder"></span>
+              <% end %>
+            <% end %>
+            <span class="reference-marquee-face reference-marquee-back">
+              <span class="reference-card-name"><%= reference.title %></span>
+              <span class="reference-card-back-content">
+                <span class="reference-card-meta-group">
+                  <span class="reference-card-meta reference-card-meta-plain"><%= reference_date_label(reference) %></span>
+                  <span class="reference-card-meta reference-card-meta-plain"><%= reference.location %></span>
+                </span>
+                <% if reference.production.present? %>
+                  <span class="reference-card-meta reference-card-meta-inline">
+                    <strong><%= t("references.card.production") %></strong>
+                    <span><%= reference.production %></span>
+                  </span>
+                <% end %>
+                <% if localized_description.present? %>
+                  <span class="reference-card-copy"><%= localized_description %></span>
+                <% end %>
+              </span>
+            </span>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+  <% if show_cta %>
+    <div class="reference-marquee-cta">
+      <%= link_to t("references.overview_link"),
+                  referenzen_path,
+                  class: "reference-marquee-detail-button",
+                  aria: { label: t("references.overview_aria") } %>
+    </div>
+  <% end %>
+</div>

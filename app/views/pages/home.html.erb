@@ -86,11 +86,7 @@
             <p class="eyebrow"><%= t("public.header.references") %></p>
             <h2 id="references-title"><%= t("pages.home.references.title") %></h2>
           </div>
-          <%= render "pages/reference_slider",
-                     references: @home_references,
-                     link_slides: true,
-                     button_label: t("pages.home.references.show_all"),
-                     button_path: referenzen_path %>
+          <%= render "pages/reference_marquee", references: @home_references %>
         </section>
       <% end %>
 

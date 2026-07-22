@@ -16,6 +16,7 @@ import LegalPrintController from "./legal_print_controller"
 import MobileMenuController from "./mobile_menu_controller"
 import PressLightboxController from "./press_lightbox_controller"
 import PressSearchController from "./press_search_controller"
+import ReferenceMarqueeController from "./reference_marquee_controller"
 import ReferenceMosaicController from "./reference_mosaic_controller"
 import ReferenceImageCropPreviewController from "./reference_image_crop_preview_controller"
 import ReferenceImageRenderController from "./reference_image_render_controller"
@@ -36,6 +37,7 @@ application.register("legal-print", LegalPrintController)
 application.register("mobile-menu", MobileMenuController)
 application.register("press-lightbox", PressLightboxController)
 application.register("press-search", PressSearchController)
+application.register("reference-marquee", ReferenceMarqueeController)
 application.register("reference-mosaic", ReferenceMosaicController)
 application.register("reference-image-crop-preview", ReferenceImageCropPreviewController)
 application.register("reference-image-render", ReferenceImageRenderController)

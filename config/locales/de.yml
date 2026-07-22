@@ -361,6 +361,8 @@ de:
   references:
     featured_aria: "Hauptprojekte"
     featured_title: "Highlights"
+    overview_link: "Zur Referenzseite"
+    overview_aria: "Referenzseite öffnen"
     filters:
       aria: "Referenzen nach Tags filtern"
     grid_aria: "Referenzprojekte"

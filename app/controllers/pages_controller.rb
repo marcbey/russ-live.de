@@ -25,7 +25,9 @@ class PagesController < ApplicationController
   before_action :set_public_header_jobs, except: :homepage_lane
 
   def home
-    @home_references = Reference.published.featured.with_image.ordered.to_a.select(&:featured_image?)
+    @home_references = Reference.published.with_image.ordered.to_a.select do |reference|
+      reference.reference_image&.image?
+    end
     @home_events_page = home_events_page
     @home_events = @home_events_page.events
     @home_events_next_cursor = @home_events_page.next_cursor
@@ -48,7 +50,7 @@ class PagesController < ApplicationController
   def referenzen
     references = Reference.published.with_image.ordered.to_a
     @featured_references = prioritized_featured_references(
-      references.select { |reference| reference.featured? && reference.featured_image? }
+      references.select { |reference| reference.featured? && reference.reference_image&.slider_image? }
     )
     @references = references
     @reference_tags = Reference.tags_from(@references)
