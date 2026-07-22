@@ -155,6 +155,17 @@ Statische UI-, Marketing-, Presse-, Job- und Rechtstexte liegen in
 aus Referenzen, Ansprechpartnern und Jobs sowie angebundene Event-/Pressetexte
 bleiben vorerst einsprachig aus den jeweiligen Datenquellen.
 
+## Pressebilder aus Stuttgart Live
+
+Der Pressebereich zeigt nur veröffentlichte Stuttgart-Live-Events, die über den
+Haken „Auf Russ Live veröffentlichen“ freigegeben sind. Für die
+Pressebild-Galerie und das ZIP werden zuerst die im Stuttgart-Live-Tab
+„Presse“ gepflegten Sliderbilder verwendet. Wenn für ein freigegebenes Event
+keine Sliderbilder vorhanden sind, verwendet Russ Live stattdessen das Eventbild
+aus dem Tab „Eventbild“ zusätzlich zum Header als Pressebild und nimmt es in das
+ZIP auf. Ohne angehängte Slider- oder Eventbilder wird kein Bilder-Download
+angeboten.
+
 ## Entwicklung starten
 
 ```bash
