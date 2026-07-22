@@ -18,53 +18,46 @@
         </div>
       </section>
 
-      <section class="service-chapters" aria-label="<%= t("pages.services.details_aria") %>">
-<article class="service-chapter" id="local">
-          <h2><%= t("services.items.local.title") %></h2>
-          <div class="service-chapter-copy">
-            <div class="service-chapter-text service-chapter-text-columns">
-              <p><%= t("services.items.local.paragraphs.first") %></p>
-              <p><%= t("services.items.local.paragraphs.second") %></p>
-            </div>
-            <p class="service-contact-heading"><%= t("pages.services.contacts.aria") %></p>
-            <div class="service-contact-grid" aria-label="<%= t("pages.services.contacts.aria") %>">
-              <article class="service-contact-card">
-                <%= image_tag "russ_live/team/paul-woog.jpg",
-                              alt: t("pages.services.contacts.paul.name"),
-                              loading: "lazy",
-                              decoding: "async",
-                              width: 1024,
-                              height: 1024 %>
-                <div class="service-contact-meta">
-                  <h3><%= t("pages.services.contacts.paul.name") %></h3>
-                  <p><%= t("pages.services.contacts.paul.role") %></p>
-                  <p><%= mail_to t("pages.services.contacts.paul.email"), t("pages.services.contacts.paul.email") %></p>
-                </div>
-              </article>
-              <article class="service-contact-card">
-                <%= image_tag "russ_live/team/johanna-backmund.jpg",
-                              alt: t("pages.services.contacts.johanna.name"),
-                              loading: "lazy",
-                              decoding: "async",
-                              width: 1024,
-                              height: 1024 %>
-                <div class="service-contact-meta">
-                  <h3><%= t("pages.services.contacts.johanna.name") %></h3>
-                  <p><%= t("pages.services.contacts.johanna.role") %></p>
-                  <p><%= mail_to t("pages.services.contacts.johanna.email"), t("pages.services.contacts.johanna.email") %></p>
-                </div>
-              </article>
-            </div>
+      <section class="public-section section services-overview" id="local" aria-labelledby="services-local-title">
+        <div class="services-overview-inner">
+          <h2 id="services-local-title"><%= t("services.items.local.title") %></h2>
+          <div class="services-overview-copy">
+            <p><%= t("services.items.local.paragraphs.first") %></p>
+            <p><%= t("services.items.local.paragraphs.second") %></p>
           </div>
-          <figure class="public-card service-chapter-visual service-chapter-visual-filled">
-            <%= image_tag "russ_live/keyvisuals/services-local-stadium.jpg",
-                          alt: "",
-                          width: 1200,
-                          height: 893,
-                          loading: "lazy",
-                          decoding: "async" %>
-          </figure>
-        </article>
+          <p class="service-contact-heading"><%= t("pages.services.contacts.aria") %></p>
+          <div class="service-contact-grid services-overview-contact-grid" aria-label="<%= t("pages.services.contacts.aria") %>">
+            <article class="service-contact-card">
+              <%= image_tag "russ_live/team/paul-woog.jpg",
+                            alt: t("pages.services.contacts.paul.name"),
+                            loading: "lazy",
+                            decoding: "async",
+                            width: 1024,
+                            height: 1024 %>
+              <div class="service-contact-meta">
+                <h3><%= t("pages.services.contacts.paul.name") %></h3>
+                <p><%= t("pages.services.contacts.paul.role") %></p>
+                <p><%= mail_to t("pages.services.contacts.paul.email"), t("pages.services.contacts.paul.email") %></p>
+              </div>
+            </article>
+            <article class="service-contact-card">
+              <%= image_tag "russ_live/team/johanna-backmund.jpg",
+                            alt: t("pages.services.contacts.johanna.name"),
+                            loading: "lazy",
+                            decoding: "async",
+                            width: 1024,
+                            height: 1024 %>
+              <div class="service-contact-meta">
+                <h3><%= t("pages.services.contacts.johanna.name") %></h3>
+                <p><%= t("pages.services.contacts.johanna.role") %></p>
+                <p><%= mail_to t("pages.services.contacts.johanna.email"), t("pages.services.contacts.johanna.email") %></p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="service-chapters" aria-label="<%= t("pages.services.details_aria") %>">
 
 <article class="service-chapter service-chapter-reverse" id="production">
           <h2><%= t("services.items.production.title") %></h2>

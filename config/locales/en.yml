@@ -58,9 +58,9 @@ en:
   services:
     items:
       local:
-        title: "Local promoter"
+        title: "We are the local promoter in the Stuttgart metropolitan region."
         paragraphs:
-          first: "We are the local promoter for the Stuttgart metropolitan region. Every year, we bring a wide range of artists from rock, pop and entertainment to the stage, drawing on decades of experience as part of Konzertdirektion Russ."
+          first: "Every year, we bring a wide range of artists from rock, pop and entertainment to the stage, drawing on decades of experience as part of Konzertdirektion Russ."
           second: "The size of the event does not matter to us: from clubs to stadium concerts, we find the right venue, develop communication plans, handle ticket sales and provide the staff needed for a strong production. We also deliver business events and major public events professionally."
       production:
         title: "Production & Technology"
@@ -267,7 +267,7 @@ en:
         title_second_line: "of our event team"
         intro: "Our strength: professionally organizing major events with quality, responsibility, fresh ideas and a love of music."
       list:
-        title: "Our current job openings"
+        title: "Current job openings"
         aria: "Job openings"
         position: "Position"
         category: "Area"

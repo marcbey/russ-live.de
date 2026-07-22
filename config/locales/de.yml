@@ -58,9 +58,9 @@ de:
   services:
     items:
       local:
-        title: "Örtlicher Veranstalter"
+        title: "Wir sind der örtliche Veranstalter in der Metropolregion Stuttgart."
         paragraphs:
-          first: "Wir sind der örtliche Veranstalter in der Metropolregion Stuttgart. Jedes Jahr bringen wir eine Vielzahl an Künstler*innen aus Rock, Pop und Unterhaltung auf die Bühne und können hierbei als Unternehmen der Konzertdirektion Russ auf eine langjährige Erfahrung zurückgreifen."
+          first: "Jedes Jahr bringen wir eine Vielzahl an Künstler*innen aus Rock, Pop und Unterhaltung auf die Bühne und können hierbei als Unternehmen der Konzertdirektion Russ auf eine langjährige Erfahrung zurückgreifen."
           second: "Dabei spielt die Größe der Veranstaltung für uns keine Rolle – wir finden von Club- bis hin zu Stadionkonzerten die optimale Location, erarbeiten passende Kommunikationspläne, kümmern uns um den Kartenverkauf und stellen mit unserem Personal die ideale Produktion sicher. Auch Businessevents oder öffentliche Großveranstaltungen werden mit uns professionell umgesetzt."
       production:
         title: "Produktion & Technik"
@@ -267,7 +267,7 @@ de:
         title_second_line: "unseres Event-Teams"
         intro: "Unsere Stärke: große Events professionell organisieren – mit Qualität, Verantwortung, frischen Ideen und Liebe zur Musik."
       list:
-        title: "Unsere aktuellen Jobangebote"
+        title: "Aktuelle Jobangebote"
         aria: "Jobangebote"
         position: "Position"
         category: "Bereich"
