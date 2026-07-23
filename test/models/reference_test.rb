@@ -108,6 +108,32 @@ class ReferenceTest < ActiveSupport::TestCase
     assert_equal Date.new(2025, 7, 1), reference.starts_on
   end
 
+  test "german month display date without year uses the current year" do
+    reference = create_reference!(
+      title: "Summer",
+      status: "published",
+      position: 1,
+      starts_on: Date.new(2025, 1, 1)
+    )
+
+    reference.update!(display_date: "September")
+
+    assert_equal Date.new(Time.zone.today.year, 9, 1), reference.starts_on
+  end
+
+  test "german month display date accepts short years" do
+    reference = create_reference!(
+      title: "Summer",
+      status: "published",
+      position: 1,
+      starts_on: Date.new(2025, 1, 1)
+    )
+
+    reference.update!(display_date: "September 25")
+
+    assert_equal Date.new(2025, 9, 1), reference.starts_on
+  end
+
   test "display date ranges use the latest mentioned month for sorting" do
     reference = create_reference!(
       title: "Long Run",
@@ -119,6 +145,19 @@ class ReferenceTest < ActiveSupport::TestCase
     reference.update!(display_date: "Juni 2025 - März 2026")
 
     assert_equal Date.new(2026, 3, 1), reference.starts_on
+  end
+
+  test "display date month ranges without years use the latest mentioned month" do
+    reference = create_reference!(
+      title: "Long Run",
+      status: "published",
+      position: 1,
+      starts_on: Date.new(2025, 1, 1)
+    )
+
+    reference.update!(display_date: "Juli - September")
+
+    assert_equal Date.new(Time.zone.today.year, 9, 1), reference.starts_on
   end
 
   test "month display dates sort newest month first" do

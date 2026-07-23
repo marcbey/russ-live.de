@@ -97,6 +97,13 @@ class Reference < RussRecord
     tag.to_s.parameterize
   end
 
+  def self.sort_date_from_display_date(value, fallback_year: Time.zone.today.year)
+    input = value.to_s.strip
+    return if input.blank?
+
+    parse_exact_date(input) || parse_month_name_date(input, fallback_year: fallback_year)
+  end
+
   def tag_list
     tags.to_a.join(", ")
   end
@@ -158,7 +165,7 @@ class Reference < RussRecord
     def assign_starts_on_from_display_date
       return if defined?(@starts_on_input)
 
-      parsed_date = parse_display_date(display_date)
+      parsed_date = self.class.sort_date_from_display_date(display_date)
       self.starts_on = parsed_date if parsed_date.present?
     end
 
@@ -177,29 +184,34 @@ class Reference < RussRecord
       input = value.to_s.strip
       return if input.blank?
 
-      Date.strptime(input, DATE_INPUT_FORMAT)
+      self.class.parse_exact_date(input)
+    end
+
+    def self.parse_exact_date(value)
+      Date.strptime(value, DATE_INPUT_FORMAT)
     rescue ArgumentError
       begin
-        Date.iso8601(input)
+        Date.iso8601(value)
       rescue ArgumentError
         nil
       end
     end
 
-    def parse_display_date(value)
-      input = value.to_s.strip
-      return if input.blank?
-
-      parse_starts_on_input(input) || parse_month_name_date(input)
-    end
-
-    def parse_month_name_date(value)
+    def self.parse_month_name_date(value, fallback_year:)
       normalized_input = I18n.transliterate(value.to_s).downcase
-      matches = normalized_input.scan(/\b(#{MONTH_NAME_PATTERN})\b\.?\s+(\d{4})/)
+      matches = normalized_input.scan(/\b(#{MONTH_NAME_PATTERN})\b\.?(?:\s+(\d{4}|\d{2}))?/)
       month_name, year = matches.last
       return if month_name.blank?
 
-      Date.new(year.to_i, MONTH_NAMES.fetch(month_name), 1)
+      Date.new(normalized_year(year, fallback_year: fallback_year), MONTH_NAMES.fetch(month_name), 1)
+    end
+
+    def self.normalized_year(value, fallback_year:)
+      year = value.to_i
+      return fallback_year if year.zero?
+      return 2000 + year if year < 100
+
+      year
     end
 
     def normalized_tag_values(value)
