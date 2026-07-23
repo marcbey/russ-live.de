@@ -7,7 +7,9 @@ Rails.application.routes.draw do
   namespace :backend do
     resources :contacts, except: :show
     resources :jobs, except: :show
-    resources :references, except: :show
+    resources :references, except: :show do
+      patch :publish, on: :member
+    end
     root "dashboard#show"
   end
 

@@ -93,6 +93,10 @@ erscheinen im Referenzslider auf der Startseite und zusätzlich oben auf
 Slider kann ein breites separates Slider-Bild gepflegt werden; fehlt es, fällt
 die Ausgabe auf das normale Referenzbild zurück.
 
+Gespeicherte Entwürfe können im Editor über `Veröffentlichen` direkt sichtbar
+geschaltet werden. Danach erscheinen sie im Filter `Veröffentlicht` und auf der
+öffentlichen Referenzseite.
+
 Die Beschreibung wird getrennt für Deutsch und Englisch gepflegt; fehlt die
 englische Beschreibung, zeigt die englische Seite die deutsche Beschreibung als
 Fallback.

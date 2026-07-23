@@ -72,6 +72,26 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     assert_match(/Referenz löschen.*Neue Referenz/m, response.body)
   end
 
+  test "renders publish action for draft references" do
+    sign_in_as(@admin)
+    reference = create_reference!(title: "Draft", status: "draft")
+
+    get backend_references_path(status: "draft", reference_id: reference.id)
+
+    assert_response :success
+    assert_select ".editor-tabs-actions form[action='#{publish_backend_reference_path(reference, query: nil)}'] button.button-success", "Veröffentlichen"
+  end
+
+  test "publishes draft references from editor action" do
+    sign_in_as(@admin)
+    reference = create_reference!(title: "Draft", status: "draft")
+
+    patch publish_backend_reference_path(reference)
+
+    assert_redirected_to backend_references_path(reference_id: reference.id, status: "published")
+    assert_equal "published", reference.reload.status
+  end
+
   test "searches references by tags" do
     sign_in_as(@admin)
     create_reference!(title: "KISS", tag_list: "Open Air")

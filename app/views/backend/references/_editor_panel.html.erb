@@ -23,6 +23,12 @@
     <div class="editor-actions editor-tabs-actions">
       <button type="submit" form="<%= form_id %>" class="button button-compact">Speichern</button>
       <% if reference.persisted? %>
+        <% unless reference.published? %>
+          <%= button_to "Veröffentlichen",
+                        publish_backend_reference_path(reference, query: @query_filter),
+                        method: :patch,
+                        class: "button button-success button-compact" %>
+        <% end %>
         <%= button_to "Referenz löschen",
                       backend_reference_path(reference, status: (@status_filter unless @status_filter == "all"), query: @query_filter),
                       method: :delete,

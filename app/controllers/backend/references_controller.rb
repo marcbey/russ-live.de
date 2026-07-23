@@ -15,7 +15,7 @@ module Backend
     ].freeze
 
     before_action :set_filters
-    before_action :set_reference, only: %i[edit update destroy]
+    before_action :set_reference, only: %i[edit update publish destroy]
 
     def index
       prepare_index_state
@@ -63,6 +63,11 @@ module Backend
         flash.now[:alert] = "Referenz konnte nicht gespeichert werden."
         render_invalid_state(:unprocessable_entity)
       end
+    end
+
+    def publish
+      @reference.update!(status: "published")
+      redirect_to backend_references_path(reference_id: @reference.id, status: "published", query: @query_filter.presence), notice: "Referenz wurde veröffentlicht."
     end
 
     def destroy
