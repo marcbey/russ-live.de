@@ -1002,28 +1002,49 @@ h3 {
   height: 100%;
   max-width: none;
   object-fit: cover;
-  object-position: center center;
+  object-position: left top;
   width: 100%;
 }
 
 .reference-hero-slide-copy {
-  background: #050505;
+  background: rgba(5, 5, 5, .8);
   bottom: clamp(28px, 4vw, 72px);
   color: #fff;
   display: grid;
   gap: clamp(10px, 1vw, 16px);
-  max-width: min(560px, calc(100vw - (var(--brand-left) * 2)));
+  max-width: min(clamp(560px, 30vw, 720px), calc(100vw - (var(--brand-left) * 2)));
   padding: clamp(22px, 2.5vw, 42px);
   position: absolute;
   right: var(--brand-left);
   z-index: 2;
 }
 
+@media (min-width: 1800px) {
+  .reference-hero-slider {
+    min-height: clamp(860px, 44vw, 1120px);
+  }
+
+  .reference-hero-slider::before {
+    height: clamp(230px, 16vw, 340px);
+  }
+
+  .reference-hero-slide-copy {
+    bottom: clamp(72px, 4.4vw, 110px);
+    max-width: min(clamp(760px, 32vw, 920px), calc(100vw - (var(--brand-left) * 2)));
+    padding: clamp(42px, 2.7vw, 64px);
+  }
+}
+
 .reference-hero-slide-copy h2 {
   font-size: clamp(1.55rem, 3.2vw, 4.1rem);
   font-weight: 650;
+  hyphens: manual;
   letter-spacing: 0;
   line-height: .92;
+  overflow-wrap: normal;
+  text-wrap: balance;
+  white-space: normal;
+  word-break: normal;
 }
 
 .reference-hero-slide-meta {
