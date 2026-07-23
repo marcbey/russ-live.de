@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_12_154000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_23_090000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -115,6 +115,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_12_154000) do
     t.string "slider_content_type"
     t.string "slider_file_path"
     t.string "slider_filename"
+    t.string "slider_mobile_asset_path"
+    t.bigint "slider_mobile_byte_size"
+    t.string "slider_mobile_content_type"
+    t.string "slider_mobile_file_path"
+    t.string "slider_mobile_filename"
     t.string "slider_sub_text"
     t.string "sub_text"
     t.datetime "updated_at", null: false

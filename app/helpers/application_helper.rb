@@ -68,6 +68,13 @@ module ApplicationHelper
     image_path(reference_image.slider_asset_path) if reference_image.slider_asset_path.present?
   end
 
+  def reference_slider_mobile_image_source(reference_image)
+    return if reference_image.blank?
+    return reference_image_path(reference_image, variant: :slider_mobile, v: reference_image.updated_at.to_i) if reference_image.slider_mobile_uploaded?
+
+    image_path(reference_image.slider_mobile_asset_path) if reference_image.slider_mobile_asset_path.present?
+  end
+
   def reference_image_style(reference_image)
     return if reference_image.blank?
 
@@ -114,6 +121,20 @@ module ApplicationHelper
     filename = reference_image.slider_filename.presence || File.basename(reference_image.slider_asset_path.to_s)
     content_type = reference_image.slider_content_type.presence || Rack::Mime.mime_type(File.extname(filename), nil)
     byte_size = reference_image.slider_byte_size.presence || reference_image_slider_asset_byte_size(reference_image)
+
+    [
+      [ t("file_metadata.name"), filename ],
+      [ t("file_metadata.type"), content_type ],
+      [ t("file_metadata.size"), (number_to_human_size(byte_size) if byte_size.present?) ]
+    ].select { |_, value| value.present? }
+  end
+
+  def reference_slider_mobile_image_file_metadata(reference_image)
+    return [] if reference_image.blank? || !reference_image.slider_mobile_image?
+
+    filename = reference_image.slider_mobile_filename.presence || File.basename(reference_image.slider_mobile_asset_path.to_s)
+    content_type = reference_image.slider_mobile_content_type.presence || Rack::Mime.mime_type(File.extname(filename), nil)
+    byte_size = reference_image.slider_mobile_byte_size.presence || reference_image_slider_mobile_asset_byte_size(reference_image)
 
     [
       [ t("file_metadata.name"), filename ],
@@ -238,6 +259,17 @@ module ApplicationHelper
 
       asset_root = Rails.root.join("app/assets/images")
       asset_path = asset_root.join(reference_image.slider_asset_path).cleanpath
+      return unless asset_path.to_s.start_with?("#{asset_root}/")
+      return unless File.file?(asset_path)
+
+      File.size(asset_path)
+    end
+
+    def reference_image_slider_mobile_asset_byte_size(reference_image)
+      return if reference_image.slider_mobile_asset_path.blank?
+
+      asset_root = Rails.root.join("app/assets/images")
+      asset_path = asset_root.join(reference_image.slider_mobile_asset_path).cleanpath
       return unless asset_path.to_s.start_with?("#{asset_root}/")
       return unless File.file?(asset_path)
 

@@ -49,4 +49,21 @@ class ReferenceImagesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "image/webp", response.media_type
     assert_equal File.binread(Rails.root.join("storage", image.slider_file_path)), response.body
   end
+
+  test "serves uploaded mobile slider variant" do
+    reference = Reference.create!(title: "Konzert", starts_on: Date.new(2026, 5, 1), location: "Stuttgart", status: "published")
+    image = reference.create_reference_image!(asset_path: "russ_live/references/01-disgusting-food-museum.jpg")
+    upload = Rack::Test::UploadedFile.new(
+      Rails.root.join("app/assets/images/russ_live/references/03-neil-young.jpg"),
+      "image/jpeg"
+    )
+    image.write_uploaded_file!(upload, variant: ReferenceImage::SLIDER_MOBILE_VARIANT)
+    image.reload
+
+    get reference_image_path(image, variant: :slider_mobile)
+
+    assert_response :success
+    assert_equal "image/webp", response.media_type
+    assert_equal File.binread(Rails.root.join("storage", image.slider_mobile_file_path)), response.body
+  end
 end

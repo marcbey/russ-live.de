@@ -1,6 +1,7 @@
 class ReferenceImage < RussRecord
   DEFAULT_VARIANT = :default
   SLIDER_VARIANT = :slider
+  SLIDER_MOBILE_VARIANT = :slider_mobile
   GRID_VARIANT_1X1 = "1x1".freeze
   GRID_VARIANT_2X1 = "2x1".freeze
   GRID_VARIANT_1X2 = "1x2".freeze
@@ -22,6 +23,7 @@ class ReferenceImage < RussRecord
   normalizes :alt_text, :sub_text, :filename, :content_type,
              :slider_alt_text, :slider_sub_text, :slider_badge_text,
              :slider_filename, :slider_content_type,
+             :slider_mobile_filename, :slider_mobile_content_type,
              with: ->(value) { value.to_s.strip }
 
   validates :grid_variant, inclusion: { in: GRID_VARIANTS }
@@ -35,6 +37,7 @@ class ReferenceImage < RussRecord
   validates :slider_sub_text, length: { maximum: 250 }, allow_blank: true
   validates :slider_badge_text, length: { maximum: 80 }, allow_blank: true
   validates :slider_filename, length: { maximum: 250 }, allow_blank: true
+  validates :slider_mobile_filename, length: { maximum: 250 }, allow_blank: true
   before_validation :normalize_image_values
 
   def uploaded?
@@ -51,6 +54,14 @@ class ReferenceImage < RussRecord
 
   def slider_image?
     image_for?(SLIDER_VARIANT)
+  end
+
+  def slider_mobile_uploaded?
+    uploaded_for?(SLIDER_MOBILE_VARIANT)
+  end
+
+  def slider_mobile_image?
+    image_for?(SLIDER_MOBILE_VARIANT)
   end
 
   def display_alt_text
@@ -118,25 +129,55 @@ class ReferenceImage < RussRecord
     end
 
     def file_path_for(variant)
-      variant == SLIDER_VARIANT ? slider_file_path : file_path
+      case variant
+      when SLIDER_VARIANT
+        slider_file_path
+      when SLIDER_MOBILE_VARIANT
+        slider_mobile_file_path
+      else
+        file_path
+      end
     end
 
     def asset_path_for(variant)
-      variant == SLIDER_VARIANT ? slider_asset_path : asset_path
+      case variant
+      when SLIDER_VARIANT
+        slider_asset_path
+      when SLIDER_MOBILE_VARIANT
+        slider_mobile_asset_path
+      else
+        asset_path
+      end
     end
 
     def variant_basename(variant)
-      variant == SLIDER_VARIANT ? "slider" : "original"
+      case variant
+      when SLIDER_VARIANT
+        "slider"
+      when SLIDER_MOBILE_VARIANT
+        "slider-mobile"
+      else
+        "original"
+      end
     end
 
     def uploaded_attributes(relative_path, upload, variant:)
-      if variant == SLIDER_VARIANT
+      case variant
+      when SLIDER_VARIANT
         {
           slider_asset_path: nil,
           slider_file_path: relative_path,
           slider_filename: upload.filename,
           slider_content_type: upload.content_type,
           slider_byte_size: upload.byte_size
+        }
+      when SLIDER_MOBILE_VARIANT
+        {
+          slider_mobile_asset_path: nil,
+          slider_mobile_file_path: relative_path,
+          slider_mobile_filename: upload.filename,
+          slider_mobile_content_type: upload.content_type,
+          slider_mobile_byte_size: upload.byte_size
         }
       else
         {

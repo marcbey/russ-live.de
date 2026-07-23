@@ -64,6 +64,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'name="reference_image[grid_variant]"'
     assert_includes response.body, 'name="reference_image[card_zoom]"'
     assert_includes response.body, 'name="reference_slider_image[alt_text]"'
+    assert_includes response.body, 'name="reference_slider_image[mobile_file]"'
     assert_includes response.body, 'name="reference_slider_image[badge_text]"'
     assert_select ".editor-tabs-actions .button-danger", "Referenz löschen"
     assert_select ".editor-tabs-actions .button-success", "Neue Referenz"
@@ -473,6 +474,35 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, "/referenzbilder/#{reference.reference_image.id}"
     assert_includes response.body, "variant=slider"
+  end
+
+  test "uploaded mobile slider image stores separate file and metadata" do
+    sign_in_as(@admin)
+    reference = create_reference!(title: "Neil Young", status: "published")
+    upload = Rack::Test::UploadedFile.new(
+      Rails.root.join("app/assets/images/russ_live/references/03-neil-young.jpg"),
+      "image/jpeg"
+    )
+
+    patch backend_reference_path(reference), params: {
+      editor_tab: "slider",
+      reference_slider_image: {
+        mobile_file: upload
+      }
+    }
+
+    assert_redirected_to backend_references_path(reference_id: reference.id, editor_tab: "slider")
+    reference.reload
+    assert_predicate reference.reference_image, :slider_mobile_uploaded?
+    assert_equal "03-neil-young.webp", reference.reference_image.slider_mobile_filename
+    assert_nil reference.reference_image.slider_filename
+    assert_equal "russ_live/references/01-disgusting-food-museum.jpg", reference.reference_image.asset_path
+
+    get backend_references_path(reference_id: reference.id, editor_tab: "slider")
+
+    assert_response :success
+    assert_includes response.body, "/referenzbilder/#{reference.reference_image.id}"
+    assert_includes response.body, "variant=slider_mobile"
   end
 
   test "replacing slider image keeps main reference image intact" do

@@ -1,33 +1,16 @@
 <main id="main-content" class="page-main public-page references-page" tabindex="-1" data-controller="reference-mosaic">
-  <section class="public-hero public-hero-editorial public-page-hero references-hero" aria-labelledby="references-title">
-    <div class="public-page-hero-media references-hero-media">
-      <%= image_tag "russ_live/keyvisuals/services-stage-lights.jpg",
-                    alt: "",
-                    width: 2400,
-                    height: 600,
-                    decoding: "async",
-                    fetchpriority: "high" %>
-    </div>
-    <div class="public-page-hero-copy references-hero-copy">
-      <h1 id="references-title"><%= t("pages.references.hero.title") %></h1>
-      <p><%= t("pages.references.hero.intro") %></p>
-      <%= public_backend_link(
-            label: t("public.actions.edit"),
-            path: backend_references_path,
-            aria_label: t("public.actions.edit_references"),
-            wrapper_class: "public-admin-link-row"
-          ) %>
-    </div>
-  </section>
-
   <% if @featured_references.any? %>
-    <section id="referenz-highlights" class="public-section section references-featured-band" aria-label="<%= t("references.featured_aria") %>">
-      <%= render "pages/reference_marquee",
-                 references: @featured_references,
-                 marquee_classes: "reference-featured-marquee reference-marquee-large",
-                 aria_label: t("references.featured_aria"),
-                 image_variant: :slider,
-                 show_cta: false %>
+    <%= render "pages/reference_hero_slider", references: @featured_references %>
+  <% else %>
+    <section class="public-hero public-hero-editorial public-page-hero references-hero references-hero-static" aria-label="<%= t("references.featured_aria") %>">
+      <div class="public-page-hero-media references-hero-media">
+        <%= image_tag "russ_live/keyvisuals/services-stage-lights.jpg",
+                      alt: "",
+                      width: 2400,
+                      height: 600,
+                      decoding: "async",
+                      fetchpriority: "high" %>
+      </div>
     </section>
   <% end %>
 
@@ -41,6 +24,17 @@
   </section>
 
   <section class="public-section section references-band" aria-label="<%= t("references.grid_aria") %>">
+    <div class="references-intro">
+      <h1 id="references-title"><%= t("pages.references.hero.title") %></h1>
+      <p><%= t("pages.references.hero.intro") %></p>
+      <%= public_backend_link(
+            label: t("public.actions.edit"),
+            path: backend_references_path,
+            aria_label: t("public.actions.edit_references"),
+            wrapper_class: "public-admin-link-row"
+          ) %>
+    </div>
+
     <% if @references.any? %>
       <div class="reference-grid reference-highlight-grid" data-layout="grid">
         <%= render partial: "pages/reference_card", collection: @references, as: :reference, locals: { force_square: true } %>

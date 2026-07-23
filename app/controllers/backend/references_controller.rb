@@ -140,6 +140,7 @@ module Backend
           :sub_text,
           :badge_text,
           :featured,
+          :remove_mobile_image,
           :remove_image
         )
       end
@@ -152,11 +153,16 @@ module Backend
         params.dig(:reference_slider_image, :file)
       end
 
+      def uploaded_slider_mobile_image
+        params.dig(:reference_slider_image, :mobile_file)
+      end
+
       def fallback_reference_title
         reference_image_params[:alt_text].presence ||
           slider_image_params[:alt_text].presence ||
           uploaded_image&.original_filename.to_s.sub(/\.[^.]+\z/, "").presence ||
           uploaded_slider_image&.original_filename.to_s.sub(/\.[^.]+\z/, "").presence ||
+          uploaded_slider_mobile_image&.original_filename.to_s.sub(/\.[^.]+\z/, "").presence ||
           "Neue Referenz"
       end
 
@@ -181,6 +187,17 @@ module Backend
           slider_badge_text: slider_params[:badge_text]
         )
 
+        if remove_slider_mobile_image_requested? && uploaded_slider_mobile_image.blank?
+          image.purge_file!(variant: ReferenceImage::SLIDER_MOBILE_VARIANT)
+          image.assign_attributes(
+            slider_mobile_asset_path: nil,
+            slider_mobile_file_path: nil,
+            slider_mobile_filename: nil,
+            slider_mobile_content_type: nil,
+            slider_mobile_byte_size: nil
+          )
+        end
+
         return unless remove_slider_image_requested? && uploaded_slider_image.blank?
 
         image.purge_file!(variant: ReferenceImage::SLIDER_VARIANT)
@@ -199,6 +216,7 @@ module Backend
           reference.reference_image&.save!
           reference.reference_image&.write_uploaded_file!(uploaded_image) if uploaded_image.present?
           reference.reference_image&.write_uploaded_file!(uploaded_slider_image, variant: ReferenceImage::SLIDER_VARIANT) if uploaded_slider_image.present?
+          reference.reference_image&.write_uploaded_file!(uploaded_slider_mobile_image, variant: ReferenceImage::SLIDER_MOBILE_VARIANT) if uploaded_slider_mobile_image.present?
         end
 
         true
@@ -212,6 +230,10 @@ module Backend
 
       def remove_slider_image_requested?
         ActiveModel::Type::Boolean.new.cast(slider_image_params[:remove_image])
+      end
+
+      def remove_slider_mobile_image_requested?
+        ActiveModel::Type::Boolean.new.cast(slider_image_params[:remove_mobile_image])
       end
 
       def render_invalid_state(status)

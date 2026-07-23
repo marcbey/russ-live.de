@@ -127,6 +127,11 @@ module RussLiveSchema
       table.string :slider_content_type
       table.string :slider_filename
       table.bigint :slider_byte_size
+      table.string :slider_mobile_asset_path
+      table.string :slider_mobile_file_path
+      table.string :slider_mobile_content_type
+      table.string :slider_mobile_filename
+      table.bigint :slider_mobile_byte_size
       table.timestamps
     end
 
@@ -144,7 +149,12 @@ module RussLiveSchema
       slider_file_path: :string,
       slider_content_type: :string,
       slider_filename: :string,
-      slider_byte_size: :bigint
+      slider_byte_size: :bigint,
+      slider_mobile_asset_path: :string,
+      slider_mobile_file_path: :string,
+      slider_mobile_content_type: :string,
+      slider_mobile_filename: :string,
+      slider_mobile_byte_size: :bigint
     }.each do |column_name, type|
       next if connection.column_exists?(:reference_images, column_name)
 

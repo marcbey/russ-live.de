@@ -1,5 +1,7 @@
 <% slider_image_source = reference_slider_image_source(reference_image) %>
+<% slider_mobile_image_source = reference_slider_mobile_image_source(reference_image) %>
 <% slider_file_metadata = reference_slider_image_file_metadata(reference_image) %>
+<% slider_mobile_file_metadata = reference_slider_mobile_image_file_metadata(reference_image) %>
 
 <section class="backend-section backend-section-media event-image-section">
   <div class="backend-section-body">
@@ -60,6 +62,39 @@
               <% end %>
             </dl>
           </div>
+
+          <div class="event-image-sidebar-divider" aria-hidden="true"></div>
+
+          <div class="event-image-meta-inline-form">
+            <label class="form-label" for="reference_slider_image_mobile_file">Mobiles Slider-Bild</label>
+            <%= file_field_tag "reference_slider_image[mobile_file]",
+                               accept: "image/*",
+                               id: "reference_slider_image_mobile_file",
+                               class: "form-input" %>
+            <p class="event-image-crop-hint">Optionales Hochformat-Bild für die mobile Referenzseite. Wenn leer, wird das normale Slider-Bild verwendet.</p>
+            <dl class="event-image-file-meta"
+                aria-label="Aktuelle mobile Slider-Bilddatei"
+                <%= "hidden" if slider_mobile_file_metadata.empty? %>>
+              <% slider_mobile_file_metadata.each do |label, value| %>
+                <div>
+                  <dt><%= label %></dt>
+                  <dd><%= value %></dd>
+                </div>
+              <% end %>
+            </dl>
+            <% if slider_mobile_image_source.present? %>
+              <%= image_tag slider_mobile_image_source,
+                            alt: reference_image.display_slider_alt_text,
+                            class: "event-image-crop-preview-image" %>
+            <% end %>
+          </div>
+
+          <% if reference_image.slider_mobile_image? %>
+            <label class="form-checkbox">
+              <%= check_box_tag "reference_slider_image[remove_mobile_image]", "1", false %>
+              <span>Mobiles Slider-Bild entfernen</span>
+            </label>
+          <% end %>
 
           <div class="event-image-sidebar-divider" aria-hidden="true"></div>
 

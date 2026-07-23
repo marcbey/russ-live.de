@@ -385,8 +385,11 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "#referenz-highlights"
-    assert_select ".references-featured-band .reference-featured-marquee.reference-marquee-large"
-    assert_select ".references-featured-band .reference-featured-slider", count: 0
+    assert_select ".reference-hero-slider[data-controller=?]", "reference-hero-slider"
+    assert_select ".reference-hero-slider .reference-hero-slide-copy h2", text: second.title
+    assert_select ".reference-hero-slider .reference-hero-slide-copy h2", text: first.title
+    assert_select ".reference-featured-marquee", count: 0
+    assert_select ".reference-featured-slider", count: 0
     assert_operator response.body.index("ZWEITES PROJEKT"), :<, response.body.index("ERSTES PROJEKT")
     assert_match %r{03-neil-young-[a-f0-9]+\.jpg}, response.body
     assert_match %r{02-david-garrett-[a-f0-9]+\.jpg}, response.body
@@ -477,11 +480,19 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select ".home-references-band .reference-marquee-cta .reference-marquee-detail-button[href=?]", referenzen_path, count: 1
   end
 
-  test "reference page renders featured slider references as large marquee and again in square regular grid" do
-    featured = create_reference_with_image!(title: "HAUPTPROJEKT", position: 2, tag_list: "Festival", featured: true)
+  test "reference page renders featured slider references as full width hero slider and again in square regular grid" do
+    featured = create_reference_with_image!(
+      title: "HAUPTPROJEKT",
+      position: 2,
+      tag_list: "Festival",
+      featured: true,
+      description: "Eine große Referenz mit Sliderbild."
+    )
+    featured.update!(production: "Russ Live Produktion")
     featured.reference_image.update!(
       grid_variant: "2x2",
       slider_asset_path: "russ_live/references/03-neil-young.jpg",
+      slider_mobile_asset_path: "russ_live/references/02-david-garrett.jpg",
       slider_alt_text: "Hauptprojekt Slider"
     )
     featured_without_slider = create_reference_with_image!(title: "FEATURED OHNE SLIDER", position: 3, tag_list: "Theater", featured: true)
@@ -492,16 +503,29 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select ".references-featured-band .references-featured-heading", count: 0
-    assert_select ".references-featured-band .reference-featured-marquee.reference-marquee-large"
-    assert_select ".references-featured-band .reference-marquee-cta", count: 0
-    assert_select ".references-featured-band .reference-featured-slider", count: 0
-    assert_operator response.body.index("reference-featured-marquee"), :<, response.body.index("references-filter-band")
+    assert_select ".reference-hero-slider[data-controller=?]", "reference-hero-slider"
+    assert_select ".reference-hero-slider .reference-hero-slide", count: 1
+    assert_select ".reference-hero-slider .reference-hero-slide-copy h2", text: "HAUPTPROJEKT"
+    assert_select ".reference-hero-slider .reference-hero-slide-copy", text: /Stuttgart/
+    assert_select ".reference-hero-slider .reference-hero-slide-copy", text: /#{Regexp.escape(featured.display_date_text)}/
+    assert_select ".reference-hero-slider .reference-hero-slide-copy", text: /Russ Live Produktion/
+    assert_select ".reference-hero-slider .reference-hero-slide-copy", text: /Eine große Referenz mit Sliderbild/
+    assert_select ".reference-hero-slider .reference-hero-slide-copy h2", text: "FEATURED OHNE SLIDER", count: 0
+    assert_select ".reference-hero-slider .reference-hero-slider-controls", count: 0
+    assert_select ".reference-featured-marquee", count: 0
+    assert_select ".reference-featured-slider", count: 0
+    assert_operator response.body.index("reference-hero-slider"), :<, response.body.index("references-filter-band")
     assert_operator response.body.index("references-filter-band"), :<, response.body.index("reference-highlight-grid")
-    assert_select ".reference-featured-marquee .reference-marquee-card .reference-card-name", text: "HAUPTPROJEKT"
-    assert_select ".reference-featured-marquee .reference-marquee-card .reference-card-name", text: "FEATURED OHNE SLIDER", count: 0
+    assert_operator response.body.index("references-intro"), :<, response.body.index("reference-highlight-grid")
+    assert_select ".references-intro #references-title", text: I18n.t("pages.references.hero.title")
+    assert_select ".references-intro p", text: I18n.t("pages.references.hero.intro")
     assert_match %r{03-neil-young-[a-f0-9]+\.jpg}, response.body
+    assert_select ".reference-hero-slider picture source[media=?]", "(max-width: 760px)", count: 1 do |sources|
+      assert_match %r{02-david-garrett-[a-f0-9]+\.jpg}, sources.first["srcset"]
+    end
+    assert_select ".reference-hero-slider picture img[src*=?]", "03-neil-young", count: 1
     assert_includes response.body, "Hauptprojekt Slider"
-    assert_select ".reference-featured-marquee .klassik-slider-meta", count: 0
+    assert_select ".klassik-slider-meta", count: 0
     assert_select ".reference-highlight-grid .reference-card-name", text: featured.title
     assert_select ".reference-highlight-grid .reference-card-name", text: featured_without_slider.title
     assert_select ".reference-highlight-grid .reference-card-name", text: regular.title
@@ -510,6 +534,19 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'data-reference-tag="open-air"'
     assert_includes response.body, 'data-reference-tag="festival"'
     assert_includes response.body, 'data-reference-tag="theater"'
+  end
+
+  test "reference page falls back to static hero when no featured slider images exist" do
+    reference = create_reference_with_image!(title: "NUR KACHEL", position: 1, tag_list: "Ausstellung", featured: true)
+
+    get referenzen_path
+
+    assert_response :success
+    assert_select ".references-hero-static"
+    assert_select ".reference-hero-slider", count: 0
+    assert_select ".references-intro #references-title", text: I18n.t("pages.references.hero.title")
+    assert_operator response.body.index("references-intro"), :<, response.body.index("reference-highlight-grid")
+    assert_select ".reference-highlight-grid .reference-card-name", text: reference.title
   end
 
   test "services omits reference slider even with published concert references" do

@@ -28,26 +28,61 @@ class ReferenceImagesController < ApplicationController
     end
 
     def current_variant
-      slider_variant? ? ReferenceImage::SLIDER_VARIANT : ReferenceImage::DEFAULT_VARIANT
+      return ReferenceImage::SLIDER_VARIANT if slider_variant?
+      return ReferenceImage::SLIDER_MOBILE_VARIANT if slider_mobile_variant?
+
+      ReferenceImage::DEFAULT_VARIANT
     end
 
     def slider_variant?
       params[:variant] == "slider"
     end
 
+    def slider_mobile_variant?
+      params[:variant] == "slider_mobile"
+    end
+
     def current_variant_uploaded?(reference_image)
-      slider_variant? ? reference_image.slider_uploaded? : reference_image.uploaded?
+      case current_variant
+      when ReferenceImage::SLIDER_VARIANT
+        reference_image.slider_uploaded?
+      when ReferenceImage::SLIDER_MOBILE_VARIANT
+        reference_image.slider_mobile_uploaded?
+      else
+        reference_image.uploaded?
+      end
     end
 
     def current_variant_asset_path(reference_image)
-      slider_variant? ? reference_image.slider_asset_path : reference_image.asset_path
+      case current_variant
+      when ReferenceImage::SLIDER_VARIANT
+        reference_image.slider_asset_path
+      when ReferenceImage::SLIDER_MOBILE_VARIANT
+        reference_image.slider_mobile_asset_path
+      else
+        reference_image.asset_path
+      end
     end
 
     def current_variant_content_type(reference_image)
-      slider_variant? ? reference_image.slider_content_type : reference_image.content_type
+      case current_variant
+      when ReferenceImage::SLIDER_VARIANT
+        reference_image.slider_content_type
+      when ReferenceImage::SLIDER_MOBILE_VARIANT
+        reference_image.slider_mobile_content_type
+      else
+        reference_image.content_type
+      end
     end
 
     def current_variant_filename(reference_image)
-      slider_variant? ? reference_image.slider_filename : reference_image.filename
+      case current_variant
+      when ReferenceImage::SLIDER_VARIANT
+        reference_image.slider_filename
+      when ReferenceImage::SLIDER_MOBILE_VARIANT
+        reference_image.slider_mobile_filename
+      else
+        reference_image.filename
+      end
     end
 end

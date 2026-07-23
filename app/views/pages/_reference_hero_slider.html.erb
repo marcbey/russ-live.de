@@ -1,0 +1,56 @@
+<section id="referenz-highlights"
+         class="reference-hero-slider"
+         aria-label="<%= t("references.featured_aria") %>"
+         data-controller="reference-hero-slider"
+         data-reference-hero-slider-interval-value="6200">
+  <div class="reference-hero-slider-stage">
+    <% references.each_with_index do |reference, index| %>
+      <% reference_image = reference.reference_image %>
+      <% image_source = reference_slider_image_source(reference_image) %>
+      <% mobile_image_source = reference_slider_mobile_image_source(reference_image) %>
+      <% localized_description = reference.localized_description %>
+      <article class="reference-hero-slide <%= "is-active" if index.zero? %>"
+               aria-hidden="<%= index.zero? ? "false" : "true" %>"
+               data-reference-hero-slider-target="slide">
+        <picture>
+          <% if mobile_image_source.present? %>
+            <source media="(max-width: 760px)" srcset="<%= mobile_image_source %>">
+          <% end %>
+          <%= image_tag image_source,
+                        alt: reference_image&.display_slider_alt_text || reference.title,
+                        loading: index.zero? ? "eager" : "lazy",
+                        decoding: "async",
+                        fetchpriority: index.zero? ? "high" : "auto",
+                        width: 1920,
+                        height: 835 %>
+        </picture>
+        <div class="reference-hero-slide-copy">
+          <h2><%= reference.title %></h2>
+          <div class="reference-hero-slide-meta">
+            <span><%= reference_date_label(reference) %></span>
+            <span><%= reference.location %></span>
+            <% if reference.production.present? %>
+              <span><%= reference.production %></span>
+            <% end %>
+          </div>
+          <% if localized_description.present? %>
+            <p><%= localized_description %></p>
+          <% end %>
+        </div>
+      </article>
+    <% end %>
+  </div>
+
+  <% if references.size > 1 %>
+    <div class="reference-hero-slider-controls" aria-label="<%= t("references.featured_aria") %>">
+      <button class="reference-hero-slider-arrow reference-hero-slider-arrow-prev"
+              type="button"
+              aria-label="<%= t("references.slider.previous") %>"
+              data-action="reference-hero-slider#previous">‹</button>
+      <button class="reference-hero-slider-arrow reference-hero-slider-arrow-next"
+              type="button"
+              aria-label="<%= t("references.slider.next") %>"
+              data-action="reference-hero-slider#next">›</button>
+    </div>
+  <% end %>
+</section>
