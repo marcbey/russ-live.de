@@ -1,5 +1,34 @@
 class Reference < RussRecord
   DATE_INPUT_FORMAT = "%d.%m.%Y".freeze
+  MONTH_NAMES = {
+    "januar" => 1,
+    "jan" => 1,
+    "februar" => 2,
+    "feb" => 2,
+    "maerz" => 3,
+    "marz" => 3,
+    "maer" => 3,
+    "mar" => 3,
+    "april" => 4,
+    "apr" => 4,
+    "mai" => 5,
+    "juni" => 6,
+    "jun" => 6,
+    "juli" => 7,
+    "jul" => 7,
+    "august" => 8,
+    "aug" => 8,
+    "september" => 9,
+    "sep" => 9,
+    "sept" => 9,
+    "oktober" => 10,
+    "okt" => 10,
+    "november" => 11,
+    "nov" => 11,
+    "dezember" => 12,
+    "dez" => 12
+  }.freeze
+  MONTH_NAME_PATTERN = MONTH_NAMES.keys.sort_by { |month_name| -month_name.length }.join("|")
   STATUSES = %w[draft published].freeze
   TAG_SPLIT_PATTERN = /[\n,]+/
   attr_writer :starts_on_input
@@ -129,7 +158,7 @@ class Reference < RussRecord
     def assign_starts_on_from_display_date
       return if defined?(@starts_on_input)
 
-      parsed_date = parse_starts_on_input(display_date)
+      parsed_date = parse_display_date(display_date)
       self.starts_on = parsed_date if parsed_date.present?
     end
 
@@ -155,6 +184,22 @@ class Reference < RussRecord
       rescue ArgumentError
         nil
       end
+    end
+
+    def parse_display_date(value)
+      input = value.to_s.strip
+      return if input.blank?
+
+      parse_starts_on_input(input) || parse_month_name_date(input)
+    end
+
+    def parse_month_name_date(value)
+      normalized_input = I18n.transliterate(value.to_s).downcase
+      matches = normalized_input.scan(/\b(#{MONTH_NAME_PATTERN})\b\.?\s+(\d{4})/)
+      month_name, year = matches.last
+      return if month_name.blank?
+
+      Date.new(year.to_i, MONTH_NAMES.fetch(month_name), 1)
     end
 
     def normalized_tag_values(value)

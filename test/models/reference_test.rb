@@ -95,6 +95,42 @@ class ReferenceTest < ActiveSupport::TestCase
     assert_equal "18.05.2026", reference.display_date_text
   end
 
+  test "german month display date updates starts_on automatically" do
+    reference = create_reference!(
+      title: "Summer",
+      status: "published",
+      position: 1,
+      starts_on: Date.new(2025, 1, 1)
+    )
+
+    reference.update!(display_date: "Juli 2025")
+
+    assert_equal Date.new(2025, 7, 1), reference.starts_on
+  end
+
+  test "display date ranges use the latest mentioned month for sorting" do
+    reference = create_reference!(
+      title: "Long Run",
+      status: "published",
+      position: 1,
+      starts_on: Date.new(2025, 1, 1)
+    )
+
+    reference.update!(display_date: "Juni 2025 - März 2026")
+
+    assert_equal Date.new(2026, 3, 1), reference.starts_on
+  end
+
+  test "month display dates sort newest month first" do
+    july = create_reference!(title: "Juli", status: "published", position: 1, starts_on: Date.new(2025, 1, 1))
+    september = create_reference!(title: "September", status: "published", position: 1, starts_on: Date.new(2025, 1, 1))
+
+    july.update!(display_date: "Juli 2025")
+    september.update!(display_date: "September 2025")
+
+    assert_equal [ september, july ], Reference.ordered.to_a
+  end
+
   test "normalizes tag list and exposes slugs" do
     reference = create_reference!(
       title: "Tagged",
