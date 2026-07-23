@@ -14,9 +14,6 @@ class Reference < RussRecord
   before_validation :assign_starts_on_from_display_date
   before_validation :normalize_position
   before_validation :normalize_tags
-  before_save :reposition_siblings, if: :should_reposition_siblings?
-  before_destroy :remember_position_for_destroy
-  after_destroy :close_position_gap_after_destroy
 
   validates :title, presence: true, length: { maximum: 180 }
   validates :starts_on, presence: true
@@ -28,7 +25,7 @@ class Reference < RussRecord
   validates :status, inclusion: { in: STATUSES }
   validates :position, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
-  scope :ordered, -> { order(position: :desc, starts_on: :desc, id: :asc) }
+  scope :ordered, -> { order(starts_on: :desc, id: :desc) }
   scope :published, -> { where(status: "published") }
   scope :featured, -> { where(featured: true) }
   scope :regular, -> { where(featured: false) }
@@ -69,17 +66,6 @@ class Reference < RussRecord
 
   def self.tag_slug(tag)
     tag.to_s.parameterize
-  end
-
-  def self.renumber_positions!
-    references = ordered.to_a
-    total = references.size
-
-    transaction do
-      references.each_with_index do |reference, index|
-        reference.update_columns(position: total - index, updated_at: reference.updated_at)
-      end
-    end
   end
 
   def tag_list
@@ -134,16 +120,6 @@ class Reference < RussRecord
       self.position = 1 if position.to_i <= 0
     end
 
-    def remember_position_for_destroy
-      @destroyed_position = position
-    end
-
-    def close_position_gap_after_destroy
-      return if @destroyed_position.blank?
-
-      self.class.where("position > ?", @destroyed_position).update_all("position = position - 1")
-    end
-
     def assign_starts_on_from_input
       return unless defined?(@starts_on_input)
 
@@ -155,36 +131,6 @@ class Reference < RussRecord
 
       parsed_date = parse_starts_on_input(display_date)
       self.starts_on = parsed_date if parsed_date.present?
-    end
-
-    def should_reposition_siblings?
-      position.present? && will_save_change_to_position?
-    end
-
-    def reposition_siblings
-      self.position = normalized_target_position
-
-      return reposition_siblings_for_create if new_record?
-
-      previous_position = position_in_database.to_i
-      return if position == previous_position
-
-      if position < previous_position
-        self.class.where.not(id: id).where(position: position...previous_position).update_all("position = position + 1")
-      else
-        self.class.where.not(id: id).where(position: (previous_position + 1)..position).update_all("position = position - 1")
-      end
-    end
-
-    def reposition_siblings_for_create
-      self.class.where("position >= ?", position).update_all("position = position + 1")
-    end
-
-    def normalized_target_position
-      max_position = self.class.maximum(:position).to_i
-      highest_allowed_position = new_record? ? max_position + 1 : [ max_position, 1 ].max
-
-      position.to_i.clamp(1, highest_allowed_position)
     end
 
     def normalize_tags

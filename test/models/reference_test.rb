@@ -52,60 +52,18 @@ class ReferenceTest < ActiveSupport::TestCase
 
   test "published scope and ordering" do
     draft = create_reference!(title: "Draft", status: "draft", position: 1)
-    published_first = create_reference!(title: "First", status: "published", position: 2, starts_on: Date.new(2024, 1, 1))
-    published_late = create_reference!(title: "Late", status: "published", position: 3, starts_on: Date.new(2025, 1, 1))
+    published_first = create_reference!(title: "First", status: "published", position: 9, starts_on: Date.new(2024, 1, 1))
+    published_late = create_reference!(title: "Late", status: "published", position: 1, starts_on: Date.new(2025, 1, 1))
 
     assert_equal [ published_late, published_first ], Reference.published.ordered.to_a
     assert_not_includes Reference.published, draft
   end
 
-  test "inserting a reference at an occupied position shifts later positions up" do
-    first = create_reference!(title: "First", status: "published", position: 1)
-    second = create_reference!(title: "Second", status: "published", position: 2)
-    inserted = create_reference!(title: "Inserted", status: "published", position: 2)
+  test "references with the same date show newest records first" do
+    first = create_reference!(title: "First", status: "published", position: 9, starts_on: Date.new(2026, 1, 1))
+    second = create_reference!(title: "Second", status: "published", position: 1, starts_on: Date.new(2026, 1, 1))
 
-    assert_equal 1, first.reload.position
-    assert_equal 3, second.reload.position
-    assert_equal 2, inserted.reload.position
-    assert_equal [ second, inserted, first ], Reference.ordered.to_a
-  end
-
-  test "moving a reference to an occupied position shifts the affected range" do
-    first = create_reference!(title: "First", status: "published", position: 1)
-    second = create_reference!(title: "Second", status: "published", position: 2)
-    third = create_reference!(title: "Third", status: "published", position: 3)
-
-    first.update!(position: 2)
-
-    assert_equal 1, second.reload.position
-    assert_equal 2, first.reload.position
-    assert_equal 3, third.reload.position
-    assert_equal [ third, first, second ], Reference.ordered.to_a
-  end
-
-  test "destroying a reference closes the position gap" do
-    first = create_reference!(title: "First", status: "published", position: 1)
-    second = create_reference!(title: "Second", status: "published", position: 2)
-    third = create_reference!(title: "Third", status: "published", position: 3)
-
-    second.destroy!
-
-    assert_equal 1, first.reload.position
-    assert_equal 2, third.reload.position
-    assert_equal [ third, first ], Reference.ordered.to_a
-  end
-
-  test "renumber positions rebuilds a gapless descending sequence" do
-    first = create_reference!(title: "First", status: "published", position: 1)
-    second = create_reference!(title: "Second", status: "published", position: 3)
-    third = create_reference!(title: "Third", status: "published", position: 6)
-
-    Reference.renumber_positions!
-
-    assert_equal 1, first.reload.position
-    assert_equal 2, second.reload.position
-    assert_equal 3, third.reload.position
-    assert_equal [ third, second, first ], Reference.ordered.to_a
+    assert_equal [ second, first ], Reference.ordered.to_a
   end
 
   test "display date text prefers freeform display date over sort date" do

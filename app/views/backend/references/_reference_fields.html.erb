@@ -13,11 +13,6 @@
       <p class="form-hint">Freie Anzeige für Website und Backend. Ein exaktes Datum wie `18.05.2026` wird intern automatisch übernommen.</p>
     </div>
     <div>
-      <%= form.label :position, "Sortierung", class: "form-label" %>
-      <%= form.number_field :position, class: "form-input", min: 1, step: 1 %>
-      <p class="form-hint">`1` steht unten. Größere Zahlen wandern weiter nach oben.</p>
-    </div>
-    <div>
       <%= form.label :location, "Location", class: "form-label" %>
       <%= form.text_field :location, class: "form-input" %>
     </div>

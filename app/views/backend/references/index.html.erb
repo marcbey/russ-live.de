@@ -13,6 +13,12 @@
   <div class="backend-split backend-inbox-split">
     <aside class="backend-list-column">
       <div class="backend-list-toolbar">
+        <div class="backend-list-toolbar-actions">
+          <%= link_to "Neue Referenz",
+                      new_backend_reference_path(status: (@status_filter unless @status_filter == "all"), query: @query_filter),
+                      class: "button button-success button-compact" %>
+        </div>
+
         <nav class="backend-status-row" aria-label="Referenzen filtern">
           <% Backend::ReferencesController::FILTERS.each do |filter| %>
             <% label = { "all" => "Alle", "slider" => "Slider", "draft" => "Entwürfe", "published" => "Veröffentlicht" }.fetch(filter) %>

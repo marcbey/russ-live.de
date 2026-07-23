@@ -25,6 +25,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_includes response.body, "Referenzen"
+    assert_select ".backend-list-toolbar-actions .button-success", "Neue Referenz"
     assert_select ".backend-status-row .status-chip", "Slider"
     assert_includes response.body, "KISS"
   end
@@ -56,7 +57,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'data-reference-image-crop-preview-tab-param="slider"'
     assert_includes response.body, 'name="reference[title]"'
     assert_includes response.body, 'name="reference[display_date]"'
-    assert_includes response.body, 'name="reference[position]"'
+    assert_not_includes response.body, 'name="reference[position]"'
     assert_includes response.body, 'name="reference_slider_image[featured]"'
     assert_includes response.body, 'name="reference[location]"'
     assert_includes response.body, 'name="reference[tag_list]"'
@@ -68,7 +69,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'name="reference_slider_image[badge_text]"'
     assert_select ".editor-tabs-actions .button-danger", "Referenz löschen"
     assert_select ".editor-tabs-actions .button-success", "Neue Referenz"
-    assert_operator response.body.index("Referenz löschen"), :<, response.body.index("Neue Referenz")
+    assert_match(/Referenz löschen.*Neue Referenz/m, response.body)
   end
 
   test "searches references by tags" do
@@ -210,58 +211,18 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "18.05.2026", Reference.last.display_date
   end
 
-  test "creating a reference at an occupied position shifts later references up" do
+  test "references are listed by newest date first" do
     sign_in_as(@admin)
-    lower = create_reference!(title: "Lower")
-    higher = create_reference!(title: "Higher")
+    older = create_reference!(title: "Older")
+    newer = create_reference!(title: "Newer")
 
-    lower.update!(position: 1)
-    higher.update!(position: 2)
+    older.update!(starts_on: Date.new(2024, 5, 1), position: 9)
+    newer.update!(starts_on: Date.new(2026, 5, 1), position: 1)
 
-    assert_difference -> { Reference.count }, 1 do
-      post backend_references_path, params: {
-        reference: {
-          title: "Inserted",
-          starts_on_input: "19.05.2026",
-          display_date: "Mai 2026",
-          location: "Stuttgart",
-          status: "published",
-          position: 2
-        },
-        reference_image: {
-          alt_text: "Inserted",
-          grid_variant: "1x1",
-          card_focus_x: "50",
-          card_focus_y: "50",
-          card_zoom: "100"
-        }
-      }
-    end
+    get backend_references_path
 
-    inserted = Reference.find_by!(title: "Inserted")
-
-    assert_equal 1, lower.reload.position
-    assert_equal 3, higher.reload.position
-    assert_equal 2, inserted.position
-  end
-
-  test "destroying a reference closes the position gap" do
-    sign_in_as(@admin)
-    lower = create_reference!(title: "Lower")
-    middle = create_reference!(title: "Middle")
-    higher = create_reference!(title: "Higher")
-
-    lower.update!(position: 1)
-    middle.update!(position: 2)
-    higher.update!(position: 3)
-
-    assert_difference -> { Reference.count }, -1 do
-      delete backend_reference_path(middle)
-    end
-
-    assert_redirected_to backend_references_path
-    assert_equal 1, lower.reload.position
-    assert_equal 2, higher.reload.position
+    assert_response :success
+    assert_operator response.body.index("Newer"), :<, response.body.index("Older")
   end
 
   test "updates reference image crop values and hides unpublished references from public page" do

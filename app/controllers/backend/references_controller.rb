@@ -11,7 +11,6 @@ module Backend
       description
       description_en
       status
-      position
       featured
     ].freeze
 
@@ -23,7 +22,7 @@ module Backend
     end
 
     def new
-      @selected_reference = Reference.new(status: "draft", starts_on: Time.zone.today, position: next_position)
+      @selected_reference = Reference.new(status: "draft", starts_on: Time.zone.today)
       @selected_reference.build_reference_image_with_defaults
       @references = filtered_references
       @active_editor_tab = editor_tab
@@ -41,7 +40,6 @@ module Backend
 
     def create
       @selected_reference = Reference.new(create_reference_params)
-      @selected_reference.position = next_position if @selected_reference.position.to_i <= 0
       prepare_reference_image(@selected_reference)
       prepare_slider_image(@selected_reference)
 
@@ -240,10 +238,6 @@ module Backend
         @references = filtered_references
         @active_editor_tab = editor_tab
         render :index, status: status
-      end
-
-      def next_position
-        Reference.maximum(:position).to_i + 1
       end
 
       def editor_tab

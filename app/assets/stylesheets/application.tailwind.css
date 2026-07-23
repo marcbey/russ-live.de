@@ -3867,8 +3867,13 @@ h3 {
   align-self: start;
   background: var(--backend-bg);
   display: grid;
-  gap: 0;
+  gap: 12px;
   z-index: 4;
+}
+
+.backend-list-toolbar-actions {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .backend-status-row {

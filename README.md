@@ -84,7 +84,9 @@ verwaltet. Das Backend unter `/backend/references` bietet eine
 stuttgart-live-inspirierte Inbox mit Liste, Suche, Statusfilter und
 Editor-Panel. Pro Referenz gibt es einen eigenen Eventbild-ähnlichen Bildeditor
 mit Ausschnitt und Zoom; auf `/referenzen` werden normale Referenzen als
-quadratische Kacheln gezeigt. Im Slider-Tab kann eine Referenz als
+quadratische Kacheln gezeigt. Referenzen werden automatisch nach Datum sortiert,
+die aktuellsten stehen oben; das gilt auch für Slider-Referenzen. Im Slider-Tab
+kann eine Referenz als
 `Hauptprojekt / im Slider anzeigen` markiert werden. Diese Hauptprojekte
 erscheinen im Referenzslider auf der Startseite und zusätzlich oben auf
 `/referenzen`, aber nicht noch einmal im darunterliegenden Kachelgrid. Für den
@@ -103,16 +105,6 @@ unter `storage/reference_images` abgelegt und über Russ Live ausgeliefert; die
 readonly Stuttgart-Live-Datenbank bleibt davon unberührt. JPEG-, PNG- und
 WebP-Uploads werden beim Speichern automatisch auf Webgröße komprimiert und als
 WebP ausgeliefert.
-
-Wenn bestehende Referenzen bereits andere Positionszahlen in der Datenbank
-haben, kann die Reihenfolge einmal lückenlos neu nummeriert werden:
-
-```bash
-mise exec -- bin/rails russ:references:renumber_positions
-```
-
-Die Aufgabe übernimmt die aktuelle sichtbare Reihenfolge und schreibt daraus
-fortlaufende Positionswerte von oben nach unten.
 
 Bereits gespeicherte Russ-Live-Uploads können nachträglich auf dieselbe
 Webgröße gebracht werden:
