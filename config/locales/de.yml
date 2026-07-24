@@ -96,7 +96,7 @@ de:
         local_partners: "u.a. Live Nation, Karsten Jahnke Konzertdirektion, Wizard Live"
         production_contact_html: "Geschäftsleitung<br>Telefon +49.711.16 353 27"
         marketing_contact_html: "Marketing<br>Telefon +49.711.16 353 16<br>/ sarahsandner@russ-live.de"
-        legal_links_html: "© SKS Michael Russ GmbH <br>Impressum<br>Datenschutz­erklärung<br>AGB<br>Jugendschutz"
+        legal_links_html: "© SKS Michael Russ GmbH <br>Impressum<br>Datenschutz<br>AGB<br>Jugendschutz"
         staff_equal_opportunity: "Chancengleichheit und Gleichbehandlung ungeachtet ethnischer Herkunft, Hautfarbe, Geschlecht, Religion Staatsangehörigkeit, sexueller Ausrichtung, sozialer Herkunft oder politischer Einstellung, soweit diese auf demokratischen Prinzipien und Toleranz gegenüber Andersdenkenden beruht, wird gewährleistet. Mitarbeiter werden grundsätzlich auf der Grundlage ihrer Qualifikation und ihrer Fähigkeiten ausgesucht, eingestellt und gefördert."
       references:
         title: "Projekte auf die wir stolz sind"
@@ -109,7 +109,6 @@ de:
         previous: "Vorherige Veranstaltungen"
         next: "Nächste Veranstaltungen"
         show_all: "Alle anzeigen"
-        all_events: "Alle Veranstaltungen auf Stuttgart-live.de"
     unternehmen:
       meta:
         title: "Über uns | Russ Live"
@@ -331,9 +330,9 @@ de:
       liability: "Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich."
     datenschutz:
       meta:
-        title: "Datenschutzerklärung | Russ Live"
+        title: "Datenschutz | Russ Live"
         description: "Datenschutz der SKS Michael Russ GmbH."
-      title: "Datenschutzerklärung"
+      title: "Datenschutz"
       placeholder: "Sorry, aber Du suchst gerade nach etwas, was hier nicht ist."
     agb:
       meta:

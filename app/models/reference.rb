@@ -101,7 +101,7 @@ class Reference < RussRecord
     input = value.to_s.strip
     return if input.blank?
 
-    parse_exact_date(input) || parse_month_name_date(input, fallback_year: fallback_year)
+    parse_exact_date(input) || latest_sort_date_candidate(input, fallback_year: fallback_year)
   end
 
   def tag_list
@@ -188,22 +188,60 @@ class Reference < RussRecord
     end
 
     def self.parse_exact_date(value)
-      Date.strptime(value, DATE_INPUT_FORMAT)
+      input = value.to_s.strip
+      match = input.match(/\A(\d{1,2})\.(\d{1,2})\.(\d{4}|\d{2})\z/)
+      return date_from_parts(match[1], match[2], match[3]) if match.present?
+
+      return Date.iso8601(input) if input.match?(/\A\d{4}-\d{2}-\d{2}\z/)
+
+      nil
     rescue ArgumentError
-      begin
-        Date.iso8601(value)
-      rescue ArgumentError
-        nil
+      nil
+    end
+
+    def self.latest_sort_date_candidate(value, fallback_year:)
+      candidates = embedded_exact_date_candidates(value) + month_name_date_candidates(value, fallback_year: fallback_year)
+
+      candidates.max_by { |candidate| candidate[:index] }&.fetch(:date)
+    end
+
+    def self.embedded_exact_date_candidates(value)
+      value.to_s.to_enum(:scan, /\b(\d{1,2})\.(\d{1,2})\.(\d{4}|\d{2})\b/).filter_map do
+        match = Regexp.last_match
+        date = date_from_parts(match[1], match[2], match[3])
+
+        { date: date, index: match.begin(0) } if date.present?
       end
     end
 
-    def self.parse_month_name_date(value, fallback_year:)
+    def self.month_name_date_candidates(value, fallback_year:)
       normalized_input = I18n.transliterate(value.to_s).downcase
-      matches = normalized_input.scan(/\b(#{MONTH_NAME_PATTERN})\b\.?(?:\s+(\d{4}|\d{2}))?/)
-      month_name, year = matches.last
-      return if month_name.blank?
+      previous_month = nil
+      context_year = nil
 
-      Date.new(normalized_year(year, fallback_year: fallback_year), MONTH_NAMES.fetch(month_name), 1)
+      normalized_input.to_enum(:scan, /\b(#{MONTH_NAME_PATTERN})\b\.?(?:\s+(\d{4}|\d{2}))?/).filter_map do
+        match = Regexp.last_match
+        month = MONTH_NAMES.fetch(match[1])
+        year = inferred_year_for_month(month, match[2], previous_month, context_year, fallback_year: fallback_year)
+        previous_month = month
+        context_year = year
+
+        { date: Date.new(year, month, 1), index: match.begin(0) }
+      end
+    end
+
+    def self.inferred_year_for_month(month, year_text, previous_month, context_year, fallback_year:)
+      return normalized_year(year_text, fallback_year: fallback_year) if year_text.present?
+      return fallback_year if context_year.blank?
+      return context_year + 1 if previous_month.present? && month < previous_month
+
+      context_year
+    end
+
+    def self.date_from_parts(day, month, year)
+      Date.new(normalized_year(year, fallback_year: Time.zone.today.year), month.to_i, day.to_i)
+    rescue Date::Error
+      nil
     end
 
     def self.normalized_year(value, fallback_year:)

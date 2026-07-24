@@ -147,6 +147,45 @@ class ReferenceTest < ActiveSupport::TestCase
     assert_equal Date.new(2026, 3, 1), reference.starts_on
   end
 
+  test "display date ranges use the latest exact date for sorting" do
+    reference = create_reference!(
+      title: "Long Run",
+      status: "published",
+      position: 1,
+      starts_on: Date.new(2025, 1, 1)
+    )
+
+    reference.update!(display_date: "18.05.2025 - 20.06.2026")
+
+    assert_equal Date.new(2026, 6, 20), reference.starts_on
+  end
+
+  test "display date month ranges reuse the previous year for later end months" do
+    reference = create_reference!(
+      title: "Long Run",
+      status: "published",
+      position: 1,
+      starts_on: Date.new(2025, 1, 1)
+    )
+
+    reference.update!(display_date: "Juli 2024 - September")
+
+    assert_equal Date.new(2024, 9, 1), reference.starts_on
+  end
+
+  test "display date month ranges advance the year for earlier end months" do
+    reference = create_reference!(
+      title: "Long Run",
+      status: "published",
+      position: 1,
+      starts_on: Date.new(2025, 1, 1)
+    )
+
+    reference.update!(display_date: "November 2024 - März")
+
+    assert_equal Date.new(2025, 3, 1), reference.starts_on
+  end
+
   test "display date month ranges without years use the latest mentioned month" do
     reference = create_reference!(
       title: "Long Run",

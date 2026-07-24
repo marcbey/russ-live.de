@@ -96,7 +96,7 @@ en:
         local_partners: "Including Live Nation, Karsten Jahnke Konzertdirektion, Wizard Live"
         production_contact_html: "Management<br>Phone +49.711.16 353 27"
         marketing_contact_html: "Marketing<br>Phone +49.711.16 353 16<br>/ sarahsandner@russ-live.de"
-        legal_links_html: "© SKS Michael Russ GmbH <br>Imprint<br>Privacy policy<br>Terms<br>Youth protection"
+        legal_links_html: "© SKS Michael Russ GmbH <br>Imprint<br>Privacy<br>Terms<br>Youth protection"
         staff_equal_opportunity: "Equal opportunity and equal treatment regardless of ethnic origin, skin color, gender, religion, nationality, sexual orientation, social background or political views, insofar as these are based on democratic principles and tolerance toward different opinions, are ensured. Employees are selected, hired and supported on the basis of their qualifications and abilities."
       references:
         title: "Projects we are proud of"
@@ -109,7 +109,6 @@ en:
         previous: "Previous events"
         next: "Next events"
         show_all: "Show all"
-        all_events: "All events on Stuttgart-live.de"
     unternehmen:
       meta:
         title: "About us | Russ Live"
@@ -331,9 +330,9 @@ en:
       liability: "Despite careful content checks, we assume no liability for the content of external links. The operators of the linked pages are solely responsible for their content."
     datenschutz:
       meta:
-        title: "Privacy Policy | Russ Live"
+        title: "Privacy | Russ Live"
         description: "Privacy information of SKS Michael Russ GmbH."
-      title: "Privacy Policy"
+      title: "Privacy"
       placeholder: "Sorry, you are looking for something that is not here."
     agb:
       meta:

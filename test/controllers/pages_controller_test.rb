@@ -729,6 +729,8 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'loading="lazy"'
     assert_includes response.body, 'decoding="async"'
     assert_includes response.body, "https://tickets.example.test/evt-1"
+    assert_operator response.body.index("home-events-viewport"), :<, response.body.index("home-events-all-button")
+    assert_not_includes response.body, "Alle Veranstaltungen auf Stuttgart-live.de"
     assert_not_includes response.body, "Nicht SKS"
     assert_not_includes response.body, "Highlight ohne SKS"
     assert_not_includes response.body, "Vergangen"

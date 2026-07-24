@@ -98,9 +98,6 @@
             <h2 id="events-title"><%= t("pages.home.events.title") %></h2>
             <p class="home-events-intro"><%= t("pages.home.events.intro") %></p>
           </div>
-          <div class="home-events-toolbar">
-            <a class="public-button public-button-primary button home-events-all-button" href="<%= @stuttgart_live_sks_highlights_url %>" target="_blank" rel="noreferrer"><%= t("pages.home.events.show_all") %></a>
-          </div>
         </div>
 
         <div class="home-events-viewport">
@@ -112,7 +109,7 @@
             <%= render "pages/event_slider_cards", events: @home_events %>
           </div>
         </div>
-        <a class="public-text-link home-events-link" href="<%= @stuttgart_live_sks_highlights_url %>" target="_blank" rel="noreferrer"><%= t("pages.home.events.all_events") %></a>
+        <a class="public-button public-button-primary home-events-all-button" href="<%= @stuttgart_live_sks_highlights_url %>" target="_blank" rel="noreferrer"><%= t("pages.home.events.show_all") %></a>
       </section>
       <% end %>
     </main>
