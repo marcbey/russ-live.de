@@ -11,12 +11,40 @@
     <p>Es ist eine Vollmacht zur Erziehungsbeauftragung vorzuweisen, die von den Eltern unterschrieben ist. Zudem ist eine Ausweiskopie des entsprechenden Elternteils beizufügen. Die verantwortliche Person hat das Kind auch während der Veranstaltung zu beaufsichtigen und benötigt eine Eintrittskarte. Pro Begleitperson können nur zwei Kinder beaufsichtigt werden. Alle Kinder und Jugendlichen unter 18 Jahren sollten sich mit einem Kinder- oder Personalausweis ausweisen können.</p>
   </div>
 
-  <div class="legal-youth-form-panel" data-controller="legal-print">
-    <form class="legal-youth-form" aria-labelledby="youth-form-title">
+  <div class="legal-youth-form-panel" data-controller="legal-print legal-tabs">
+    <div class="legal-youth-tabs" role="tablist" aria-label="Jugendschutz Bereiche">
+      <button id="youth-form-tab"
+              class="legal-youth-tab is-active"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="youth-form-panel"
+              data-legal-tabs-target="tab"
+              data-action="click->legal-tabs#select keydown->legal-tabs#navigate">
+        Formular
+      </button>
+      <button id="youth-info-tab"
+              class="legal-youth-tab"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="youth-info-panel"
+              tabindex="-1"
+              data-legal-tabs-target="tab"
+              data-action="click->legal-tabs#select keydown->legal-tabs#navigate">
+        Info für Eltern
+      </button>
+    </div>
+
+    <div id="youth-form-panel"
+         class="legal-youth-tab-panel is-active"
+         role="tabpanel"
+         aria-labelledby="youth-form-tab"
+         data-legal-tabs-target="panel">
+      <form class="legal-youth-form" aria-labelledby="youth-form-title">
       <%= image_tag "russ_live/logos/russ-live-logo.svg",
                     alt: "Russ Live",
                     class: "legal-youth-print-logo" %>
-      <p class="legal-youth-form-kicker">Formular</p>
       <h2 id="youth-form-title">Erziehungsbeauftragung gemäß Jugendschutzgesetz</h2>
 
     <div class="legal-form-block">
@@ -94,14 +122,20 @@
       </div>
     </div>
 
-    </form>
+      </form>
+    </div>
 
-    <div class="legal-form-info">
+    <div id="youth-info-panel"
+         class="legal-form-info legal-youth-tab-panel"
+         role="tabpanel"
+         aria-labelledby="youth-info-tab"
+         aria-hidden="true"
+         data-legal-tabs-target="panel">
       <%= image_tag "russ_live/logos/russ-live-logo.svg",
                     alt: "Russ Live",
                     class: "legal-youth-print-logo" %>
-      <h3>Jugendschutz durch Erziehungsbeauftragte</h3>
-      <p>Liebe Eltern, nach dem Jugendschutzgesetz haben Sie die Möglichkeit, für die Begleitung Ihres Kindes eine „erziehungsbeauftragte Person“ zu benennen. In Begleitung dieser Person, die Sie ausdrücklich beauftragen müssen, sind gestattet:</p>
+      <h2>Jugendschutz durch Erziehungsbeauftragte</h2>
+      <p>Liebe Eltern,<br>nach dem Jugendschutzgesetz haben Sie die Möglichkeit, für die Begleitung Ihres Kindes eine „erziehungsbeauftragte Person“ zu benennen. In Begleitung dieser Person, die Sie ausdrücklich beauftragen müssen, sind gestattet:</p>
       <ul>
         <li>der Kinobesuch von Kindern unter 6 Jahren</li>
         <li>der Besuch von Tanzveranstaltungen durch Kinder und Jugendliche unter 16 Jahren</li>

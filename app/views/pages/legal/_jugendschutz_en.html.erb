@@ -11,12 +11,40 @@
     <p>A parental authorization form signed by the parents must be presented. A copy of the relevant parent's ID must also be enclosed. The responsible person must supervise the child during the event and requires an admission ticket. Each accompanying person may supervise no more than two children. All children and young people under 18 should be able to identify themselves with a child ID or personal ID.</p>
   </div>
 
-  <div class="legal-youth-form-panel" data-controller="legal-print">
-    <form class="legal-youth-form" aria-labelledby="youth-form-title">
+  <div class="legal-youth-form-panel" data-controller="legal-print legal-tabs">
+    <div class="legal-youth-tabs" role="tablist" aria-label="Youth protection sections">
+      <button id="youth-form-tab"
+              class="legal-youth-tab is-active"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="youth-form-panel"
+              data-legal-tabs-target="tab"
+              data-action="click->legal-tabs#select keydown->legal-tabs#navigate">
+        Form
+      </button>
+      <button id="youth-info-tab"
+              class="legal-youth-tab"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="youth-info-panel"
+              tabindex="-1"
+              data-legal-tabs-target="tab"
+              data-action="click->legal-tabs#select keydown->legal-tabs#navigate">
+        Info for parents
+      </button>
+    </div>
+
+    <div id="youth-form-panel"
+         class="legal-youth-tab-panel is-active"
+         role="tabpanel"
+         aria-labelledby="youth-form-tab"
+         data-legal-tabs-target="panel">
+      <form class="legal-youth-form" aria-labelledby="youth-form-title">
       <%= image_tag "russ_live/logos/russ-live-logo.svg",
                     alt: "Russ Live",
                     class: "legal-youth-print-logo" %>
-      <p class="legal-youth-form-kicker">Form</p>
       <h2 id="youth-form-title">Authorization of a supervisory adult under the German Youth Protection Act</h2>
 
     <div class="legal-form-block">
@@ -94,14 +122,20 @@
       </div>
     </div>
 
-    </form>
+      </form>
+    </div>
 
-    <div class="legal-form-info">
+    <div id="youth-info-panel"
+         class="legal-form-info legal-youth-tab-panel"
+         role="tabpanel"
+         aria-labelledby="youth-info-tab"
+         aria-hidden="true"
+         data-legal-tabs-target="panel">
       <%= image_tag "russ_live/logos/russ-live-logo.svg",
                     alt: "Russ Live",
                     class: "legal-youth-print-logo" %>
-      <h3>Youth protection through authorized supervisory adults</h3>
-      <p>Dear parents, under the German Youth Protection Act you may appoint an “authorized supervisory adult” to accompany your child. When accompanied by this person, whom you must expressly authorize, the following are permitted:</p>
+      <h2>Youth protection through authorized supervisory adults</h2>
+      <p>Dear parents,<br>under the German Youth Protection Act you may appoint an “authorized supervisory adult” to accompany your child. When accompanied by this person, whom you must expressly authorize, the following are permitted:</p>
       <ul>
         <li>cinema visits by children under 6 years of age</li>
         <li>attendance at dance events by children and young people under 16</li>

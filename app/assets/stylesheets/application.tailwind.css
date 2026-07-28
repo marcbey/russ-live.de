@@ -4670,25 +4670,57 @@ h3 {
   max-width: 42rem;
 }
 
+.legal-youth-tabs {
+  border: 1px solid var(--ink);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.legal-youth-tab {
+  appearance: none;
+  background: #fff;
+  border: 0;
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: .98rem;
+  font-weight: 650;
+  min-height: 48px;
+  padding: 0 18px;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+.legal-youth-tab + .legal-youth-tab {
+  border-left: 1px solid var(--ink);
+}
+
+.legal-youth-tab.is-active,
+.legal-youth-tab:hover,
+.legal-youth-tab:focus-visible {
+  background: var(--ink);
+  color: #fff;
+}
+
+.legal-youth-tab:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+.legal-youth-tab-panel:not(.is-active) {
+  display: none;
+}
+
 .legal-youth-form {
-  border-top: 1px solid var(--ink);
+  border-top: 0;
   color: var(--ink);
   display: grid;
   font-family: "Neue Rational", sans-serif;
   gap: clamp(22px, 3vw, 34px);
-  padding-top: 22px;
+  padding-top: 0;
 }
 
-.legal-youth-form .legal-youth-form-kicker {
-  color: var(--ink);
-  font-size: .78rem;
-  font-weight: 650;
-  letter-spacing: .08em;
-  line-height: 1.1;
-  margin: 0;
-}
-
-.legal-youth-form h2 {
+.legal-youth-form h2,
+.legal-form-info h2 {
   border-top: 0;
   color: var(--ink);
   font-size: clamp(1.8rem, 2.4vw, 2.6rem);
@@ -4780,15 +4812,10 @@ h3 {
 }
 
 .legal-form-info {
-  border-top: 1px solid var(--line);
+  border-top: 0;
   display: grid;
   gap: 14px;
-  padding-top: 22px;
-}
-
-.legal-form-info h3 {
-  font-size: clamp(1.45rem, 2vw, 2.05rem);
-  line-height: 1;
+  padding-top: 0;
 }
 
 .legal-form-info ul {
@@ -4938,11 +4965,8 @@ h3 {
     width: 42mm;
   }
 
-  .legal-youth-form .legal-youth-form-kicker {
-    font-size: 7pt;
-  }
-
-  .legal-youth-form h2 {
+  .legal-youth-form h2,
+  .legal-form-info h2 {
     font-size: 17pt;
     line-height: 1.04;
     margin: 0;
@@ -5003,7 +5027,7 @@ h3 {
     padding-top: 0;
   }
 
-  .legal-form-info h3 {
+  .legal-form-info h2 {
     font-size: 17pt;
     line-height: 1.05;
   }
@@ -8966,6 +8990,7 @@ h3 {
   }
 
   .legal-section-youth .legal-youth-copy,
+  .legal-section-youth .legal-youth-tabs,
   .legal-section-youth .legal-form-actions {
     display: none !important;
   }
@@ -8987,6 +9012,11 @@ h3 {
     width: 100% !important;
   }
 
+  .legal-section-youth .legal-youth-tab-panel,
+  .legal-section-youth .legal-youth-tab-panel:not(.is-active) {
+    display: block !important;
+  }
+
   .legal-section-youth .legal-youth-print-logo {
     display: block !important;
     height: auto !important;
@@ -8994,13 +9024,8 @@ h3 {
     width: 39mm !important;
   }
 
-  .legal-section-youth .legal-youth-form .legal-youth-form-kicker {
-    font-size: 6.4pt !important;
-    line-height: 1 !important;
-    margin: 0 !important;
-  }
-
-  .legal-section-youth .legal-youth-form h2 {
+  .legal-section-youth .legal-youth-form h2,
+  .legal-section-youth .legal-form-info h2 {
     font-size: 15.6pt !important;
     line-height: 1.02 !important;
     margin: 0 !important;
@@ -9060,12 +9085,6 @@ h3 {
     margin: 0 !important;
     page-break-before: always !important;
     padding: 0 !important;
-  }
-
-  .legal-section-youth .legal-form-info h3 {
-    font-size: 16pt !important;
-    line-height: 1.05 !important;
-    margin: 0 !important;
   }
 
   .legal-section-youth .legal-form-info p,
