@@ -11,12 +11,13 @@
     <p>A parental authorization form signed by the parents must be presented. A copy of the relevant parent's ID must also be enclosed. The responsible person must supervise the child during the event and requires an admission ticket. Each accompanying person may supervise no more than two children. All children and young people under 18 should be able to identify themselves with a child ID or personal ID.</p>
   </div>
 
-  <form class="legal-youth-form" aria-labelledby="youth-form-title" data-controller="legal-print">
-    <%= image_tag "russ_live/logos/russ-live-logo.svg",
-                  alt: "Russ Live",
-                  class: "legal-youth-print-logo" %>
-    <p class="legal-youth-form-kicker">Form</p>
-    <h2 id="youth-form-title">Authorization of a supervisory adult under the German Youth Protection Act</h2>
+  <div class="legal-youth-form-panel" data-controller="legal-print">
+    <form class="legal-youth-form" aria-labelledby="youth-form-title">
+      <%= image_tag "russ_live/logos/russ-live-logo.svg",
+                    alt: "Russ Live",
+                    class: "legal-youth-print-logo" %>
+      <p class="legal-youth-form-kicker">Form</p>
+      <h2 id="youth-form-title">Authorization of a supervisory adult under the German Youth Protection Act</h2>
 
     <div class="legal-form-block">
       <h3>Parents/legal guardians</h3>
@@ -93,6 +94,8 @@
       </div>
     </div>
 
+    </form>
+
     <div class="legal-form-info">
       <%= image_tag "russ_live/logos/russ-live-logo.svg",
                     alt: "Russ Live",
@@ -127,5 +130,5 @@
                   target: "_blank",
                   rel: "noopener noreferrer" %>
     </div>
-  </form>
+  </div>
 </div>

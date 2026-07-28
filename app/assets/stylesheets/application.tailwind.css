@@ -4619,15 +4619,27 @@ h3 {
 .legal-copy ol,
 .legal-copy ul {
   color: var(--muted);
-  list-style: disc outside;
+  list-style: none;
   margin: 18px 0 0;
-  padding-left: 1.35rem;
+  padding-left: 0;
 }
 
-.legal-copy li::marker,
-.legal-form-info li::marker {
-  color: currentColor;
-  font-size: .62em;
+.legal-copy li,
+.legal-form-info li {
+  padding-left: 1rem;
+  position: relative;
+}
+
+.legal-copy li::before,
+.legal-form-info li::before {
+  background: currentColor;
+  border-radius: 999px;
+  content: "";
+  height: .26rem;
+  left: 0;
+  position: absolute;
+  top: .68em;
+  width: .26rem;
 }
 
 .legal-copy li + li {
@@ -4652,13 +4664,18 @@ h3 {
   max-width: 58rem;
 }
 
+.legal-youth-form-panel {
+  display: grid;
+  gap: clamp(22px, 3vw, 34px);
+  max-width: 42rem;
+}
+
 .legal-youth-form {
   border-top: 1px solid var(--ink);
   color: var(--ink);
   display: grid;
   font-family: "Neue Rational", sans-serif;
   gap: clamp(22px, 3vw, 34px);
-  max-width: 42rem;
   padding-top: 22px;
 }
 
@@ -4775,9 +4792,9 @@ h3 {
 }
 
 .legal-form-info ul {
-  list-style: disc outside;
+  list-style: none;
   margin: 0;
-  padding-left: 1.1rem;
+  padding-left: 0;
 }
 
 .legal-form-info li + li {
@@ -4896,7 +4913,8 @@ h3 {
   .legal-section-youth,
   .legal-copy,
   .legal-copy-youth,
-  .legal-youth-layout {
+  .legal-youth-layout,
+  .legal-youth-form-panel {
     display: block;
     margin: 0;
     max-width: none;
@@ -6760,39 +6778,35 @@ h3 {
 .scroll-top-button {
   align-items: center;
   background: #050505;
-  border: 1px solid rgba(255, 255, 255, .28);
+  border: 0;
   border-radius: 999px;
-  bottom: calc(18px + env(safe-area-inset-bottom));
+  bottom: 24px;
   box-shadow: 0 16px 38px rgba(0, 0, 0, .24);
   color: #fff;
   cursor: pointer;
   display: inline-flex;
-  font-size: .76rem;
-  font-weight: 800;
-  gap: .5rem;
-  letter-spacing: 0;
-  line-height: 1;
-  min-height: 52px;
+  height: 52px;
+  justify-content: center;
   opacity: 0;
-  padding: 0 1.05rem 0 .82rem;
+  padding: 0;
   pointer-events: none;
   position: fixed;
   right: clamp(16px, 3vw, 34px);
-  text-transform: uppercase;
   transform: translateY(.75rem);
-  transition: opacity .2s ease, transform .2s ease, background-color .2s ease;
+  transition: opacity .2s ease, transform .2s ease;
+  width: 52px;
   z-index: 80;
 }
 
 .scroll-top-button.is-visible {
-  opacity: 1;
+  opacity: .72;
   pointer-events: auto;
   transform: translateY(0);
 }
 
 .scroll-top-button:hover,
 .scroll-top-button:focus-visible {
-  background: #e30613;
+  opacity: 1;
 }
 
 .scroll-top-button:focus-visible {
@@ -6802,14 +6816,19 @@ h3 {
 
 .scroll-top-button-icon {
   align-items: center;
-  border: 1px solid rgba(255, 255, 255, .36);
-  border-radius: 999px;
   display: inline-flex;
-  font-size: 1rem;
-  height: 30px;
+  font-size: 1.55rem;
+  font-weight: 500;
+  height: 100%;
   justify-content: center;
   line-height: 1;
-  width: 30px;
+  transition: transform .2s ease;
+  width: 100%;
+}
+
+.scroll-top-button:hover .scroll-top-button-icon,
+.scroll-top-button:focus-visible .scroll-top-button-icon {
+  transform: translateY(-3px);
 }
 
 .public-page {
@@ -8938,4 +8957,136 @@ h3 {
 
 .service-chapter.service-chapter-ticketportal .section-button {
   margin-top: 4px;
+}
+
+@media print {
+  @page {
+    margin: 9mm;
+    size: A4 portrait;
+  }
+
+  .legal-section-youth .legal-youth-copy,
+  .legal-section-youth .legal-form-actions {
+    display: none !important;
+  }
+
+  .legal-section-youth .legal-youth-form-panel {
+    display: block !important;
+    margin: 0 !important;
+    max-width: none !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  .legal-section-youth .legal-youth-form {
+    border: 0 !important;
+    display: grid !important;
+    gap: 3mm !important;
+    max-width: none !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  .legal-section-youth .legal-youth-print-logo {
+    display: block !important;
+    height: auto !important;
+    margin: 0 0 3mm !important;
+    width: 39mm !important;
+  }
+
+  .legal-section-youth .legal-youth-form .legal-youth-form-kicker {
+    font-size: 6.4pt !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+  }
+
+  .legal-section-youth .legal-youth-form h2 {
+    font-size: 15.6pt !important;
+    line-height: 1.02 !important;
+    margin: 0 !important;
+  }
+
+  .legal-section-youth .legal-youth-form h3 {
+    font-size: 9pt !important;
+    line-height: 1.08 !important;
+    margin: 0 !important;
+  }
+
+  .legal-section-youth .legal-form-block {
+    break-inside: avoid !important;
+    display: grid !important;
+    gap: 1.6mm !important;
+    page-break-inside: avoid !important;
+  }
+
+  .legal-section-youth .legal-form-grid {
+    gap: 1.8mm !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .legal-section-youth .legal-form-field,
+  .legal-section-youth .legal-form-note {
+    border-color: #000 !important;
+    min-height: 12.5mm !important;
+    padding: 1.8mm 2.5mm !important;
+  }
+
+  .legal-section-youth .legal-form-field-tall {
+    min-height: 13.5mm !important;
+  }
+
+  .legal-section-youth .legal-form-field span {
+    font-size: 6.6pt !important;
+    line-height: 1.05 !important;
+  }
+
+  .legal-section-youth .legal-form-field input {
+    border-bottom-color: #000 !important;
+    min-height: 5.4mm !important;
+    padding: .6mm 0 !important;
+  }
+
+  .legal-section-youth .legal-form-note {
+    font-size: 7.4pt !important;
+    line-height: 1.16 !important;
+    min-height: auto !important;
+  }
+
+  .legal-section-youth .legal-form-info {
+    border-top: 0 !important;
+    break-before: page !important;
+    display: grid !important;
+    gap: 2.5mm !important;
+    margin: 0 !important;
+    page-break-before: always !important;
+    padding: 0 !important;
+  }
+
+  .legal-section-youth .legal-form-info h3 {
+    font-size: 16pt !important;
+    line-height: 1.05 !important;
+    margin: 0 !important;
+  }
+
+  .legal-section-youth .legal-form-info p,
+  .legal-section-youth .legal-form-info li {
+    font-size: 8.8pt !important;
+    line-height: 1.24 !important;
+    margin: 0 !important;
+  }
+
+  .legal-section-youth .legal-form-info ul {
+    margin: 0 !important;
+    padding-left: 0 !important;
+  }
+
+  .legal-section-youth .legal-form-info li {
+    padding-left: 3.5mm !important;
+  }
+
+  .legal-section-youth .legal-form-info li::before {
+    height: 1mm !important;
+    top: .72em !important;
+    width: 1mm !important;
+  }
 }
