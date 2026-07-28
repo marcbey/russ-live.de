@@ -10,8 +10,8 @@ class Backend::JobsControllerTest < ActionDispatch::IntegrationTest
     Job.delete_all
     ContactImage.delete_all
     Contact.delete_all
-    @admin = create_stuttgart_user!(email_address: "admin@example.com", role: "admin")
-    @contact = Contact.create!(name: "Sebastian Kränzlein", phone_number: "+49.711.16 353 42", email: "personal@example.com")
+    @admin = create_stuttgart_user!(email_address: "admin@russ-live.de", role: "admin")
+    @contact = Contact.create!(name: "Sebastian Kränzlein", phone_number: "+49.711.16 353 42", email: "personal@russ-live.de")
   end
 
   test "requires authentication" do

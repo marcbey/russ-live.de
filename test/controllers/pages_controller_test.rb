@@ -31,7 +31,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
 
   test "backend users see backend navigation and edit buttons on editable public areas" do
     create_reference_with_image!(title: "VISIBLE REFERENCE", position: 1, tag_list: "Concert")
-    admin = create_stuttgart_user!(email_address: "admin@example.com", role: "admin")
+    admin = create_stuttgart_user!(email_address: "admin@russ-live.de", role: "admin")
 
     sign_in_as(admin)
 
@@ -59,7 +59,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "backend users do not see edit buttons on static public pages without backend targets" do
-    admin = create_stuttgart_user!(email_address: "admin@example.com", role: "admin")
+    admin = create_stuttgart_user!(email_address: "admin@russ-live.de", role: "admin")
 
     sign_in_as(admin)
 

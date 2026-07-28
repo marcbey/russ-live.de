@@ -32,5 +32,15 @@
     <%= render "layouts/flash_messages" %>
     <%= yield %>
     <%= render "shared/public_footer" if @page_key.present? %>
+    <% if @page_key.present? %>
+      <button class="scroll-top-button"
+              type="button"
+              data-controller="scroll-top"
+              data-action="scroll-top#scroll"
+              aria-label="<%= t("public.scroll_top") %>">
+        <span class="scroll-top-button-icon" aria-hidden="true">↑</span>
+        <span>TOP</span>
+      </button>
+    <% end %>
   </body>
 </html>

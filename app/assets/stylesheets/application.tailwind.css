@@ -2759,6 +2759,11 @@ h3 {
   position: relative;
 }
 
+.service-chapter#marketing .service-chapter-visual {
+  align-self: start;
+  height: clamp(460px, 42vw, 720px);
+}
+
 .service-chapter-visual-filled {
   background: #111;
 }
@@ -4614,8 +4619,15 @@ h3 {
 .legal-copy ol,
 .legal-copy ul {
   color: var(--muted);
+  list-style: disc outside;
   margin: 18px 0 0;
   padding-left: 1.35rem;
+}
+
+.legal-copy li::marker,
+.legal-form-info li::marker {
+  color: currentColor;
+  font-size: .62em;
 }
 
 .legal-copy li + li {
@@ -4763,12 +4775,17 @@ h3 {
 }
 
 .legal-form-info ul {
+  list-style: disc outside;
   margin: 0;
   padding-left: 1.1rem;
 }
 
 .legal-form-info li + li {
   margin-top: 8px;
+}
+
+.legal-youth-print-logo {
+  display: none;
 }
 
 @media (max-width: 760px) {
@@ -4849,8 +4866,142 @@ h3 {
 }
 
 @media print {
+  @page {
+    margin: 10mm;
+    size: A4 portrait;
+  }
+
+  html,
+  body {
+    background: #fff;
+    color: #000;
+    height: auto;
+    overflow: visible;
+  }
+
+  .site-header,
+  .site-footer,
+  .scroll-top-button,
+  .skip-link,
+  .legal-section-youth > h1,
+  .legal-youth-copy,
   .legal-form-actions {
-    display: none;
+    display: none !important;
+  }
+
+  .page-main,
+  .page-header + .page-main,
+  .page-header + .page-main > .section:first-child,
+  .legal-section,
+  .legal-section-youth,
+  .legal-copy,
+  .legal-copy-youth,
+  .legal-youth-layout {
+    display: block;
+    margin: 0;
+    max-width: none;
+    padding: 0;
+    width: 100%;
+  }
+
+  .legal-youth-form {
+    border: 0;
+    display: grid;
+    gap: 4.5mm;
+    max-width: none;
+    padding: 0;
+    width: 100%;
+  }
+
+  .legal-youth-print-logo {
+    display: block;
+    height: auto;
+    margin: 0 0 4mm;
+    width: 42mm;
+  }
+
+  .legal-youth-form .legal-youth-form-kicker {
+    font-size: 7pt;
+  }
+
+  .legal-youth-form h2 {
+    font-size: 17pt;
+    line-height: 1.04;
+    margin: 0;
+  }
+
+  .legal-youth-form h3 {
+    font-size: 10pt;
+    line-height: 1.1;
+  }
+
+  .legal-youth-form p,
+  .legal-youth-form li {
+    font-size: 8.5pt;
+    line-height: 1.25;
+  }
+
+  .legal-form-block {
+    gap: 2mm;
+    page-break-inside: avoid;
+  }
+
+  .legal-form-grid {
+    gap: 2.4mm;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .legal-form-field,
+  .legal-form-note {
+    border-color: #000;
+    min-height: 15mm;
+    padding: 2.2mm 3mm;
+  }
+
+  .legal-form-field-tall {
+    min-height: 17mm;
+  }
+
+  .legal-form-field span {
+    font-size: 7.3pt;
+  }
+
+  .legal-form-field input {
+    border-bottom-color: #000;
+    min-height: 7mm;
+    padding: 1mm 0;
+  }
+
+  .legal-form-note {
+    min-height: auto;
+  }
+
+  .legal-form-info {
+    border-top: 0;
+    break-before: page;
+    display: grid;
+    gap: 3mm;
+    page-break-before: always;
+    padding-top: 0;
+  }
+
+  .legal-form-info h3 {
+    font-size: 17pt;
+    line-height: 1.05;
+  }
+
+  .legal-form-info ul {
+    margin: 0;
+    padding-left: 5mm;
+  }
+
+  .legal-form-info li + li {
+    margin-top: 1.4mm;
+  }
+
+  .legal-page * {
+    box-shadow: none !important;
+    text-shadow: none !important;
   }
 }
 
@@ -6606,6 +6757,61 @@ h3 {
   color: rgba(255, 255, 255, .72);
 }
 
+.scroll-top-button {
+  align-items: center;
+  background: #050505;
+  border: 1px solid rgba(255, 255, 255, .28);
+  border-radius: 999px;
+  bottom: calc(18px + env(safe-area-inset-bottom));
+  box-shadow: 0 16px 38px rgba(0, 0, 0, .24);
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: .76rem;
+  font-weight: 800;
+  gap: .5rem;
+  letter-spacing: 0;
+  line-height: 1;
+  min-height: 52px;
+  opacity: 0;
+  padding: 0 1.05rem 0 .82rem;
+  pointer-events: none;
+  position: fixed;
+  right: clamp(16px, 3vw, 34px);
+  text-transform: uppercase;
+  transform: translateY(.75rem);
+  transition: opacity .2s ease, transform .2s ease, background-color .2s ease;
+  z-index: 80;
+}
+
+.scroll-top-button.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.scroll-top-button:hover,
+.scroll-top-button:focus-visible {
+  background: #e30613;
+}
+
+.scroll-top-button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+.scroll-top-button-icon {
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, .36);
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: 1rem;
+  height: 30px;
+  justify-content: center;
+  line-height: 1;
+  width: 30px;
+}
+
 .public-page {
   min-width: 0;
 }
@@ -7286,6 +7492,10 @@ h3 {
     grid-column: 1;
     grid-row: auto;
     min-height: clamp(230px, 56vw, 430px);
+  }
+
+  .service-chapter#marketing .service-chapter-visual {
+    height: auto;
   }
 
   .service-ticketportal-laptop {

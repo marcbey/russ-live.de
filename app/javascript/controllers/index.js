@@ -22,6 +22,7 @@ import ReferenceMosaicController from "./reference_mosaic_controller"
 import ReferenceImageCropPreviewController from "./reference_image_crop_preview_controller"
 import ReferenceImageRenderController from "./reference_image_render_controller"
 import ScrolledHeaderController from "./scrolled_header_controller"
+import ScrollTopController from "./scroll_top_controller"
 import ServicesJumpNavController from "./services_jump_nav_controller"
 import SliderController from "./slider_controller"
 import SmoothAnchorController from "./smooth_anchor_controller"
@@ -44,6 +45,7 @@ application.register("reference-mosaic", ReferenceMosaicController)
 application.register("reference-image-crop-preview", ReferenceImageCropPreviewController)
 application.register("reference-image-render", ReferenceImageRenderController)
 application.register("scrolled-header", ScrolledHeaderController)
+application.register("scroll-top", ScrollTopController)
 application.register("services-jump-nav", ServicesJumpNavController)
 application.register("slider", SliderController)
 application.register("smooth-anchor", SmoothAnchorController)

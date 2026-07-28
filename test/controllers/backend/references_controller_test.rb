@@ -8,7 +8,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
     clear_stuttgart_users
     ReferenceImage.delete_all
     Reference.delete_all
-    @admin = create_stuttgart_user!(email_address: "admin@example.com", role: "admin")
+    @admin = create_stuttgart_user!(email_address: "admin@russ-live.de", role: "admin")
   end
 
   test "requires authentication" do

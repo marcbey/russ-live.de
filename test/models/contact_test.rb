@@ -22,11 +22,11 @@ class ContactTest < ActiveSupport::TestCase
     contact = Contact.create!(
       name: "Sebastian Kränzlein",
       phone_number: "+49.711.16 353 42",
-      email: "SEBASTIAN@example.com"
+      email: "SEBASTIAN@russ-live.de"
     )
 
     assert_equal "+497111635342", contact.tel_href
-    assert_equal "sebastian@example.com", contact.email
+    assert_equal "sebastian@russ-live.de", contact.email
   end
 
   test "prevents destroying contacts referenced by jobs" do
@@ -39,6 +39,6 @@ class ContactTest < ActiveSupport::TestCase
 
   private
     def create_contact!
-      Contact.create!(name: "Sebastian Kränzlein", phone_number: "+49.711.16 353 42", email: "personal@example.com")
+      Contact.create!(name: "Sebastian Kränzlein", phone_number: "+49.711.16 353 42", email: "personal@russ-live.de")
     end
 end

@@ -61,7 +61,7 @@ class JobTest < ActiveSupport::TestCase
   end
 
   test "matching searches categories and contact" do
-    contact = Contact.create!(name: "Sebastian Kränzlein", phone_number: "+49", email: "personal@example.com")
+    contact = Contact.create!(name: "Sebastian Kränzlein", phone_number: "+49", email: "personal@russ-live.de")
     tagged = create_job!(title: "Tagged", slug: "tagged", contact: contact, category_list: "Catering")
     create_job!(title: "Other", slug: "other", category_list: "Logistik")
 
