@@ -31,9 +31,10 @@
               </button>
               <div class="accordion-panel">
                 <div class="accordion-panel-inner">
-                  <p><%= t("services.items.production.paragraphs.first") %></p>
-                  <p><%= t("services.items.production.paragraphs.second") %></p>
-                  <p><%= t("pages.home.services.production_contact_html") %></p>
+                  <p><%= t("pages.home.services.summaries.production") %></p>
+                  <%= link_to t("pages.home.services.more_info"),
+                              services_path(anchor: "production"),
+                              class: "public-button public-button-secondary accordion-more-button" %>
                 </div>
               </div>
             </article>
@@ -44,9 +45,10 @@
               </button>
               <div class="accordion-panel">
                 <div class="accordion-panel-inner">
-                  <p><%= t("services.items.marketing.paragraphs.first") %></p>
-                  <p><%= t("pages.home.services.marketing_contact_html") %></p>
-                  <p><%= t("pages.home.services.legal_links_html") %></p>
+                  <p><%= t("pages.home.services.summaries.marketing") %></p>
+                  <%= link_to t("pages.home.services.more_info"),
+                              services_path(anchor: "marketing"),
+                              class: "public-button public-button-secondary accordion-more-button" %>
                 </div>
               </div>
             </article>
@@ -57,9 +59,10 @@
               </button>
               <div class="accordion-panel">
                 <div class="accordion-panel-inner">
-                  <p><%= t("services.items.staff.paragraphs.first") %></p>
-                  <p><%= t("services.items.staff.paragraphs.second") %></p>
-                  <p><%= t("pages.home.services.staff_equal_opportunity") %></p>
+                  <p><%= t("pages.home.services.summaries.staff") %></p>
+                  <%= link_to t("pages.home.services.more_info"),
+                              services_path(anchor: "staff"),
+                              class: "public-button public-button-secondary accordion-more-button" %>
                 </div>
               </div>
             </article>
@@ -70,8 +73,10 @@
               </button>
               <div class="accordion-panel">
                 <div class="accordion-panel-inner">
-                  <p><%= t("services.items.ticketing.paragraphs.first") %></p>
-                  <p><%= t("services.items.ticketing.paragraphs.second") %></p>
+                  <p><%= t("pages.home.services.summaries.ticketing") %></p>
+                  <%= link_to t("pages.home.services.more_info"),
+                              services_path(anchor: "ticketing"),
+                              class: "public-button public-button-secondary accordion-more-button" %>
                 </div>
               </div>
             </article>

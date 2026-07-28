@@ -65,6 +65,7 @@
             <div class="service-chapter-text service-chapter-text-columns">
               <p><%= t("services.items.production.paragraphs.first") %></p>
               <p><%= t("services.items.production.paragraphs.second") %></p>
+              <p><%= t("services.items.production.paragraphs.third") %></p>
             </div>
             <p class="service-contact-heading"><%= t("pages.services.contacts.aria") %></p>
             <div class="service-contact-grid" aria-label="<%= t("pages.services.contacts.aria") %>">
@@ -99,6 +100,27 @@
             <div class="service-chapter-text">
               <p><%= t("services.items.marketing.paragraphs.first") %></p>
             </div>
+            <div class="service-focus" aria-labelledby="marketing-focus-title">
+              <h3 id="marketing-focus-title"><%= t("services.items.marketing.focus_title") %></h3>
+              <div class="accordion service-focus-accordion" data-controller="accordion">
+                <% t("services.items.marketing.focus_areas").each do |focus_area| %>
+                  <article class="accordion-item">
+                    <button class="accordion-trigger" type="button" aria-expanded="false">
+                      <span><%= focus_area[:title] %></span>
+                      <span class="accordion-icon" aria-hidden="true">+</span>
+                    </button>
+                    <div class="accordion-panel">
+                      <div class="accordion-panel-inner">
+                        <p><%= focus_area[:text] %></p>
+                      </div>
+                    </div>
+                  </article>
+                <% end %>
+              </div>
+            </div>
+            <div class="service-chapter-text">
+              <p><%= t("services.items.marketing.paragraphs.conclusion") %></p>
+            </div>
             <p class="service-contact-heading"><%= t("pages.services.contacts.aria") %></p>
             <div class="service-contact-grid" aria-label="<%= t("pages.services.contacts.aria") %>">
               <article class="service-contact-card">
@@ -132,6 +154,17 @@
             <div class="service-chapter-text service-chapter-text-columns">
               <p><%= t("services.items.staff.paragraphs.first") %></p>
               <p><%= t("services.items.staff.paragraphs.second") %></p>
+              <p><%= t("services.items.staff.paragraphs.third") %></p>
+              <p><%= t("services.items.staff.paragraphs.fourth") %></p>
+              <p><%= t("services.items.staff.paragraphs.fifth") %></p>
+            </div>
+            <div class="service-deployment-areas">
+              <h3><%= t("services.items.staff.deployment_title") %></h3>
+              <ul>
+                <% t("services.items.staff.deployment_areas").each do |deployment_area| %>
+                  <li><%= deployment_area %></li>
+                <% end %>
+              </ul>
             </div>
             <%= link_to t("pages.services.staff_jobs_button"),
                         jobs_path,

@@ -858,6 +858,29 @@ h3 {
   margin: 20px 0 0;
 }
 
+.public-button-secondary,
+.accordion-more-button {
+  background: transparent;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  color: var(--ink);
+  transition: var(--button-shape-transition);
+}
+
+.public-button-secondary:hover,
+.public-button-secondary:focus-visible,
+.accordion-more-button:hover,
+.accordion-more-button:focus-visible {
+  background: var(--ink);
+  border-radius: 999px;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.accordion-more-button {
+  margin-top: 20px;
+}
+
 .section-head {
   display: block;
   margin-bottom: 42px;
@@ -2566,6 +2589,81 @@ h3 {
   margin-top: 15px;
 }
 
+.service-focus {
+  margin-top: clamp(24px, 3vw, 38px);
+  max-width: 100%;
+}
+
+.service-focus h3,
+.service-deployment-areas h3 {
+  color: var(--ink);
+  font-size: clamp(1.18rem, 1.4vw, 1.45rem);
+  font-weight: 650;
+  letter-spacing: 0;
+  line-height: 1.12;
+  margin: 0 0 14px;
+}
+
+.service-focus-accordion {
+  border-color: rgba(17, 17, 17, .18);
+  max-width: 100%;
+}
+
+.service-focus-accordion .accordion-trigger {
+  gap: 14px;
+  grid-template-columns: minmax(0, 1fr) 36px;
+  min-height: 56px;
+  padding: 14px 0;
+}
+
+.service-focus-accordion .accordion-trigger span:first-child {
+  font-size: clamp(1rem, 1.05vw, 1.12rem);
+  line-height: 1.18;
+}
+
+.service-focus-accordion .accordion-icon {
+  font-size: 19px;
+  height: 30px;
+  width: 30px;
+}
+
+.service-focus-accordion .accordion-panel {
+  max-width: none;
+  padding-right: 44px;
+}
+
+.service-focus-accordion .accordion-item.is-open .accordion-panel {
+  padding-bottom: 18px;
+}
+
+.service-focus-accordion .accordion-panel p {
+  font-size: clamp(.98rem, 1vw, 1.08rem);
+  line-height: 1.45;
+  margin-top: 8px;
+}
+
+.service-deployment-areas {
+  margin-top: clamp(24px, 3vw, 38px);
+}
+
+.service-deployment-areas ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.service-deployment-areas li {
+  border: 1px solid rgba(17, 17, 17, .18);
+  color: #44413d;
+  font-size: .98rem;
+  line-height: 1.15;
+  min-height: 44px;
+  padding: 13px 16px;
+}
+
 @media (min-width: 1280px) {
   .service-chapter-text-columns {
     column-count: auto;
@@ -3286,7 +3384,7 @@ h3 {
   grid-column: 4 / -1;
   grid-row: 1;
   justify-self: end;
-  margin-top: clamp(16rem, 23vw, 25rem);
+  margin-top: clamp(21rem, 28vw, 31rem);
   width: 100%;
   z-index: 2;
 }
@@ -7208,6 +7306,14 @@ h3 {
     min-height: 0;
     overflow: visible;
     padding: 0;
+  }
+
+  .service-focus-accordion .accordion-panel {
+    padding-right: 0;
+  }
+
+  .service-deployment-areas li {
+    flex: 1 1 180px;
   }
 
   .about-hero,

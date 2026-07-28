@@ -124,6 +124,18 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "?locale="
   end
 
+  test "homepage service summaries link to service sections" do
+    get root_path
+
+    assert_response :success
+    assert_select "#services-accordion a[href=?]", services_path(anchor: "production"), text: I18n.t("pages.home.services.more_info")
+    assert_select "#services-accordion a[href=?]", services_path(anchor: "marketing"), text: I18n.t("pages.home.services.more_info")
+    assert_select "#services-accordion a[href=?]", services_path(anchor: "staff"), text: I18n.t("pages.home.services.more_info")
+    assert_select "#services-accordion a[href=?]", services_path(anchor: "ticketing"), text: I18n.t("pages.home.services.more_info")
+    assert_includes response.body, I18n.t("pages.home.services.summaries.marketing")
+    assert_not_includes response.body, I18n.t("services.items.marketing.paragraphs.first")
+  end
+
   test "renders all public pages in english without missing translation markers" do
     post locale_path(:en), params: { return_to: root_path }
     assert_redirected_to root_path
@@ -563,6 +575,17 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "KONZERT"
     assert_not_includes response.body, "LIVE"
     assert_not_includes response.body, "/assets/russ_live/references/01-disgusting-food-museum"
+  end
+
+  test "services renders expanded service copy and marketing focus accordion" do
+    get services_path
+
+    assert_response :success
+    assert_select "#production", text: /Produktion Ihrer Veranstaltung/
+    assert_select "#marketing .service-focus-accordion .accordion-trigger", count: I18n.t("services.items.marketing.focus_areas").size
+    assert_select "#marketing .service-focus-accordion .accordion-trigger", text: /Social Media & Performance Marketing/
+    assert_select "#marketing .service-focus-accordion .accordion-panel", text: /messbaren Ergebnissen/
+    assert_select "#staff .service-deployment-areas li", text: "Staplerfahrer*innen"
   end
 
   test "renders public references with tag filters instead of year filters" do
