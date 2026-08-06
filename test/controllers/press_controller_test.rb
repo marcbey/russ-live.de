@@ -133,11 +133,12 @@ class PressControllerTest < ActionDispatch::IntegrationTest
 
   test "show renders primary event, fallback press text, venue and further events" do
     venue_id = create_venue!(name: "Liederhalle Stuttgart")
+    primary_start_at = 2.weeks.from_now.change(hour: 20, min: 0, sec: 0)
     first_event = create_event!(
       artist_name: "Future Artist",
       normalized_artist_name: "future artist",
       publish_on_russ_live: true,
-      start_at: Time.zone.local(2026, 8, 1, 20),
+      start_at: primary_start_at,
       event_info: "Fallback Pressetext",
       venue_id:
     )
@@ -146,7 +147,7 @@ class PressControllerTest < ActionDispatch::IntegrationTest
       artist_name: "Future Artist",
       normalized_artist_name: "future artist",
       publish_on_russ_live: true,
-      start_at: Time.zone.local(2026, 9, 1, 20),
+      start_at: primary_start_at + 1.month,
       venue_id:
     )
 
