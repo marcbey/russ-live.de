@@ -195,8 +195,8 @@ en:
         intro: "From Stuttgart. For the world. For three generations, we have created concerts that connect people."
       profile_title: "Company profile"
       story:
-        first_html: "<strong>Michael Russ Jr.</strong> grew into the world of Russ Live with calm closeness, heart and genuine entrepreneurial spirit. Over the years, this became responsibility, experience and a clear sense of how to make culture last."
-        second_html: "<strong>Michaela Russ</strong> continues this path in the third generation. Together, the family stands for productions that are professionally organized while remaining human. This has created a team that delivers culture with attitude, reliability and passion."
+        first_html: "What began with a vision in 1945 is now one of Europe's leading concert agencies. From Stuttgart, Russ has helped shape concert history for decades while preserving its closeness to the region."
+        second_html: "This combination of local roots and international ambition still shapes our view today: we think big, work in partnership and always keep the people behind every production in focus."
       company:
         eyebrow: "Konzertdirektion Russ"
         title_html: "Konzertdirektion Russ: a whole world of concerts, artists and events."
@@ -212,14 +212,17 @@ en:
         eyebrow: "History"
         title: "Our history. Three generations. One attitude."
         image_alt: "Michaela Russ, Michael Russ and a historic family portrait"
-        first: "What began with a vision in 1945 is now one of Europe's leading concert agencies. From Stuttgart, Russ has helped shape concert history for decades while preserving its closeness to the region."
-        second: "This combination of local roots and international ambition still shapes our view today: we think big, work in partnership and always keep the people behind every production in focus."
+        first: "Michael Russ grew into the world of Russ Klassik with calm closeness, heart and genuine entrepreneurial spirit. Over the years, this became responsibility, experience and a clear sense of how to make culture last."
+        second: "Michaela Russ continues this path in the third generation. Together, the family stands for productions that are professionally organized while remaining human. This has created a team that delivers culture with attitude, reliability and passion."
       award:
         eyebrow: "Responsibility"
-        title: "Experience that never stands still."
+        title: "2012 – Paul Woog Becomes Managing Director"
         image_alt: "Michael Russ Jr. with an award and partner at an awards ceremony"
-        first: "Whether tour, one-off show, cultural format or major event: we combine deep industry knowledge with the ambition to keep evolving. This creates the mix of precision, calm and curiosity that defines our work."
-        second: "Awards make us happy. More important to us, however, is that artists, audiences, partners and teams can rely on us."
+        first: "In 2012, Paul Woog becomes managing director of Michael Russ GmbH and expands the long-standing work of Konzertdirektion Erwin Russ in the field of classical music to include pop, rock, shows and entertainment. Since then, we have brought artists to the stage, developed our own event concepts and created special experiences for our audience with concerts, shows and corporate events."
+        second: "Our roots are in Stuttgart, while at the same time we work with artists and partners from all over the world. Thanks to our many years of experience, short paths and a strong network, we can reliably realize even demanding projects – from the first idea through technology, safety, marketing and press relations to ticketing and staff planning."
+        third: "For us, it is not only about successful events. We want to strengthen art and culture in the long term and place great value on fair and respectful relationships with artists, service providers and partners. Sustainability, diversity, equal opportunity and trusting collaboration are a natural part of how we work."
+        rebrand_title: "2024 – Michael Russ Becomes RUSS LIVE"
+        rebrand_html: "In 2024, we reorganize our brand world with new logos, a new website and a shared visual identity. The new corporate identity brings our different areas closer together in communication as well and makes it clearer what belongs to RUSS. From now on, Michael Russ GmbH appears externally as <strong>RUSS LIVE</strong>."
       city:
         eyebrow: "Perspective"
         title: "From Stuttgart to the world."

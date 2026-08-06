@@ -101,7 +101,7 @@
     </div>
   </section>
 
-  <section class="public-section section about-editorial-section" aria-labelledby="about-award-title">
+  <section class="public-section section about-editorial-section" aria-labelledby="about-editorial-title">
     <div class="about-editorial-visuals" aria-hidden="true">
       <figure class="about-editorial-image about-editorial-image-founder">
         <%= image_tag "russ_live/about/michael-michaela.jpg",
@@ -124,21 +124,15 @@
 
     <div class="about-editorial-copy">
       <article class="about-editorial-block">
-        <h2 id="about-award-title"><%= t("pages.about.award.title") %></h2>
+        <h2 id="about-editorial-title"><%= t("pages.about.award.title") %></h2>
         <p><%= t("pages.about.award.first") %></p>
+        <p><%= t("pages.about.award.second") %></p>
+        <p><%= t("pages.about.award.third") %></p>
       </article>
 
       <article class="about-editorial-block">
-        <h2 id="about-city-title"><%= t("pages.about.city.title") %></h2>
-        <p><%= t("pages.about.city.first") %></p>
-        <p><%= t("pages.about.city.second") %></p>
-      </article>
-
-      <article class="about-editorial-block about-editorial-block-closing">
-        <p><%= t("pages.about.closing.text") %></p>
-        <% t("pages.about.closing.placeholder_paragraphs").each do |paragraph| %>
-          <p><%= paragraph %></p>
-        <% end %>
+        <h2 id="about-rebrand-title"><%= t("pages.about.award.rebrand_title") %></h2>
+        <p><%= t("pages.about.award.rebrand_html") %></p>
       </article>
     </div>
   </section>
