@@ -50,6 +50,20 @@ module ApplicationHelper
     end
   end
 
+  def stuttgart_live_brand
+    content_tag(:span, class: "stuttgart-live-word") do
+      safe_join([ tag.strong("STUTTGART"), "LIVE" ])
+    end
+  end
+
+  def format_stuttgart_live_brand(text)
+    safe_join(
+      text.to_s.split(/(stuttgart[- ]?live)/i).map do |chunk|
+        chunk.match?(/\Astuttgart[- ]?live\z/i) ? stuttgart_live_brand : h(chunk)
+      end
+    )
+  end
+
   def reference_date_label(reference)
     reference.display_date_text
   end

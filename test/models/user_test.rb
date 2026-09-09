@@ -7,7 +7,7 @@ class UserTest < ActiveSupport::TestCase
     clear_stuttgart_users
   end
 
-  test "authenticates against Stuttgart Live users" do
+  test "authenticates against STUTTGARTLIVE users" do
     user = create_stuttgart_user!(email_address: "ADMIN@russ-live.de", password: STRONG_PASSWORD)
 
     authenticated = User.authenticate_by(email_address: "admin@russ-live.de", password: STRONG_PASSWORD)

@@ -104,8 +104,9 @@ de:
           - "Sicherheitskräfte"
       ticketing:
         title: "Ticketportal"
+        cta: "Jetzt entdecken!"
         paragraphs:
-          first: "Stuttgart-live ist das Ticketportal mit allen wichtigen Veranstaltungen in der Region Stuttgart: online buchen, schnell, unkompliziert und mit perfektem Service."
+          first: "<strong>STUTTGART</strong>LIVE ist unser Ticketportal mit allen wichtigen Veranstaltungen in der Region Stuttgart: online buchen, schnell, unkompliziert und mit perfektem Service."
           second: "Die Eventdaten bleiben perspektivisch read-only angebunden. Diese Russ-live-Seite greift später nur auf freigegebene Veranstaltungsdaten zu."
   pages:
     home:
@@ -114,7 +115,7 @@ de:
         description: "Russ Live ist örtlicher Veranstalter, Produktionspartner und Full-Service-Dienstleister für Live Entertainment in Stuttgart und der Region."
       hero:
         image_alt: "Goldene Gitarre als Russ Live Keyvisual"
-        intro_html: "Wir sind Ihr örtlicher Veranstalter für Stuttgart.<br>Im Blick haben wir dabei immer die Künstler und das Publikum zugleich.<br>So schaffen wir einzigartige emotionale Momente für bis zu 1 Million Besucher –<br>jedes Jahr."
+        intro_html: "Wir sind Ihr örtlicher Veranstalter für Stuttgart. Im Blick haben wir dabei immer die Künstler und das Publikum zugleich. So schaffen wir einzigartige emotionale Momente für bis zu 1 Million Besucher – jedes Jahr."
       services:
         eyebrow: "Live Entertainment"
         title: "Full service für Veranstaltungen"
@@ -125,7 +126,7 @@ de:
           production: "Wir bringen unsere Erfahrung aus eigenen Konzerten, Tourneen, Open-Air-Formaten und Firmenevents in jede Produktion ein. Gemeinsam mit unserem Netzwerk sorgen wir für eine professionelle, wirtschaftliche und reibungslose Umsetzung."
           marketing: "Wir entwickeln die passende Kommunikationsstrategie und sorgen dafür, dass Ihre Veranstaltung die richtigen Menschen erreicht. Von Social Media über Pressearbeit bis zu Content-Produktion begleiten wir den gesamten Marketingprozess."
           staff: "Mit knapp 500 eigenen Stagehands, Staplerfahrer*innen, Cateringhilfen und Sicherheitskräften verfügen wir über einen starken Personalpool in der Region. Wir übernehmen einzelne Einsätze oder die komplette Personalplanung."
-          ticketing: "Stuttgart-live ist unser Ticketportal für wichtige Veranstaltungen in der Region Stuttgart: online buchen, schnell, unkompliziert und mit perfektem Service."
+          ticketing: "<strong>STUTTGART</strong>LIVE ist unser Ticketportal für wichtige Veranstaltungen in der Region Stuttgart: online buchen, schnell, unkompliziert und mit perfektem Service."
         production_contact_html: "Geschäftsleitung<br>Telefon +49.711.16 353 27"
         marketing_contact_html: "Marketing<br>Telefon +49.711.16 353 16<br>/ sarahsandner@russ-live.de"
         legal_links_html: "© SKS Michael Russ GmbH <br>Impressum<br>Datenschutz<br>AGB<br>Jugendschutz"
@@ -134,7 +135,7 @@ de:
         title: "Projekte auf die wir stolz sind"
         show_all: "Alle Referenzen"
       events:
-        eyebrow: "Stuttgart-live"
+        eyebrow: "<strong>STUTTGART</strong>LIVE"
         title: "Nächste Veranstaltungen"
         intro: "Unser Ticketportal mit allen wichtigen Veranstaltungen in Stuttgart: Online buchen, schnell, unkompliziert, preisgünstig - bei perfektem Service."
         nav_aria: "Veranstaltungen blättern"
@@ -216,13 +217,11 @@ de:
         second: "Michaela Russ führt diesen Weg in der dritten Generation weiter. Gemeinsam steht die Familie für Produktionen, die professionell organisiert sind und trotzdem menschlich bleiben. Daraus ist ein Team entstanden, das Kultur mit Haltung, Verlässlichkeit und Leidenschaft umsetzt."
       award:
         eyebrow: "Verantwortung"
-        title: "2012 – Paul Woog wird Geschäftsführer"
+        title: "Tradition ist für uns kein Rückblick, sondern Vertrauen in das, was als Nächstes kommt."
         image_alt: "Michael Russ Jr. mit Auszeichnung und Partner bei einer Preisverleihung"
         first: "2012 wird Paul Woog Geschäftsführer der Michael Russ GmbH und erweitert die traditionsreiche Arbeit der Konzertdirektion Erwin Russ im Bereich Klassik um Pop, Rock, Shows und Entertainment. Seitdem bringen wir Künstlerinnen und Künstler auf die Bühne, entwickeln eigene Veranstaltungskonzepte und schaffen mit Konzerten, Shows und Firmenevents besondere Erlebnisse für unser Publikum."
         second: "Unsere Wurzeln liegen in Stuttgart, gleichzeitig arbeiten wir mit Künstlern und Partnern aus aller Welt zusammen. Durch unsere langjährige Erfahrung, kurze Wege und ein starkes Netzwerk können wir auch anspruchsvolle Projekte zuverlässig umsetzen – von der ersten Idee über Technik, Sicherheit, Marketing und Pressearbeit bis hin zu Ticketing und Personalplanung."
         third: "Dabei geht es uns nicht nur um erfolgreiche Veranstaltungen. Wir möchten Kunst und Kultur langfristig stärken und legen großen Wert auf einen fairen und respektvollen Umgang mit Künstlern, Dienstleistern und Partnern. Nachhaltigkeit, Diversität, Gleichberechtigung und eine vertrauensvolle Zusammenarbeit gehören für uns selbstverständlich dazu."
-        rebrand_title: "2024 – Aus Michael Russ wird RUSS LIVE"
-        rebrand_html: "2024 sortieren wir unsere Markenwelt neu: mit neuen Logos, einem neuen Internetauftritt und einem gemeinsamen Erscheinungsbild. Die neue Corporate Identity bringt unsere verschiedenen Bereiche auch in der Kommunikation näher zusammen und macht deutlicher sichtbar, was alles zu RUSS gehört. Die Michael Russ GmbH tritt nach außen von nun an als <strong>RUSS LIVE</strong> auf."
       city:
         eyebrow: "Perspektive"
         title: "Von Stuttgart in die Welt."
@@ -252,7 +251,7 @@ de:
       nav_aria: "Servicebereiche"
       staff_jobs_button: "Jobangebote"
       contacts:
-        aria: "Ansprechpartner"
+        aria: "Ansprechpartner*in"
         paul:
           name: "Paul Woog"
           role: "Geschäftsleitung"
@@ -266,9 +265,9 @@ de:
           role: "Marketing"
           email: "sarahsandner@russ-live.de"
         sebastian:
-          name: "Sebastian Kränzlein"
+          name: "Michael Wechselberger"
           role: "Personaldisposition"
-          email: "sebastiankraenzlein@russ-live.de"
+          email: "michaelwechselberger@russ-live.de"
       intro:
         eyebrow: "Full Service"
         title: "Alles, was ein Live-Moment braucht"
@@ -395,7 +394,7 @@ de:
   references:
     featured_aria: "Hauptprojekte"
     featured_title: "Highlights"
-    overview_link: "Zur Referenzseite"
+    overview_link: "Referenzen"
     overview_aria: "Referenzseite öffnen"
     filters:
       aria: "Referenzen nach Tags filtern"
@@ -507,7 +506,7 @@ de:
   events:
     tickets: "Tickets"
     more_info: "Mehr Infos"
-    more_info_title: "%{title} auf Stuttgart Live"
+    more_info_title: "%{title} auf STUTTGARTLIVE"
     price_from: "ab %{price}"
     status:
       canceled: "Abgesagt"

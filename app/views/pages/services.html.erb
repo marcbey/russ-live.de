@@ -172,7 +172,7 @@
             <p class="service-contact-heading"><%= t("pages.services.contacts.aria") %></p>
             <div class="service-contact-grid" aria-label="<%= t("pages.services.contacts.aria") %>">
               <article class="service-contact-card">
-                <%= image_tag "russ_live/team/sebastian-kraenzlein.jpg",
+                <%= image_tag "russ_live/team/michael-wechselberger.jpg",
                               alt: t("pages.services.contacts.sebastian.name"),
                               loading: "lazy",
                               decoding: "async",
@@ -189,8 +189,8 @@
           <figure class="public-card service-chapter-visual service-chapter-visual-filled">
             <%= image_tag "russ_live/jobs/overview-hero.jpg",
                           alt: "",
-                          width: 2565,
-                          height: 1067,
+                          width: 2400,
+                          height: 998,
                           loading: "lazy",
                           decoding: "async" %>
           </figure>
@@ -200,11 +200,11 @@
           <h2><%= t("services.items.ticketing.title") %></h2>
           <figure class="public-card service-chapter-visual service-chapter-visual-filled service-chapter-visual-ticketportal">
             <div class="service-ticketportal-laptop">
-              <%= image_tag "russ_live/keyvisuals/services-ticketportal.png",
+              <%= image_tag "russ_live/keyvisuals/services-ticketportal.jpg",
                             alt: "",
                             class: "service-ticketportal-screen",
-                            width: 1719,
-                            height: 1276,
+                            width: 2016,
+                            height: 1378,
                             loading: "lazy",
                             decoding: "async" %>
               <%= image_tag "russ_live/keyvisuals/laptop_realistic.svg",
@@ -218,13 +218,14 @@
           </figure>
           <div class="service-chapter-copy">
             <div class="service-chapter-text">
-              <p><%= t("services.items.ticketing.paragraphs.first") %></p>
+              <p><%= sanitize(t("services.items.ticketing.paragraphs.first"), tags: %w[strong]) %></p>
             </div>
-            <%= link_to "Stuttgart-Live",
-                        "https://www.stuttgart-live.de/",
+            <%= link_to "https://www.stuttgart-live.de/",
                         class: "public-button public-button-primary section-button",
                         target: "_blank",
-                        rel: "noopener noreferrer" %>
+                        rel: "noopener noreferrer" do %>
+              <%= t("services.items.ticketing.cta") %>
+            <% end %>
           </div>
         </article>
       </section>

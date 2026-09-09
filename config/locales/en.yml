@@ -104,8 +104,9 @@ en:
           - "Security staff"
       ticketing:
         title: "Ticket portal"
+        cta: "Discover now!"
         paragraphs:
-          first: "Stuttgart-live is the ticket portal for all major events in the Stuttgart region: online booking, quick, straightforward and with excellent service."
+          first: "<strong>STUTTGART</strong>LIVE is our ticket portal for all major events in the Stuttgart region: online booking, quick, straightforward and with excellent service."
           second: "Event data will remain connected read-only in the long term. This Russ Live site will only use approved event data."
   pages:
     home:
@@ -114,7 +115,7 @@ en:
         description: "Russ Live is a local promoter, production partner and full-service provider for live entertainment in Stuttgart and the region."
       hero:
         image_alt: "Golden guitar as the Russ Live key visual"
-        intro_html: "We are your local promoter for Stuttgart.<br>We always keep both artists and audiences in view.<br>That is how we create unique emotional moments for up to 1 million visitors –<br>every year."
+        intro_html: "We are your local promoter for Stuttgart. We always keep both artists and audiences in view. That is how we create unique emotional moments for up to 1 million visitors – every year."
       services:
         eyebrow: "Live Entertainment"
         title: "Full service for events"
@@ -125,7 +126,7 @@ en:
           production: "We bring our experience from our own concerts, tours, open-air formats and corporate events into every production. Together with our network, we ensure professional, efficient and smooth delivery."
           marketing: "We develop the right communication strategy and make sure your event reaches the right people. From social media and press relations to content production, we support the entire marketing process."
           staff: "With almost 500 of our own stagehands, forklift drivers, catering assistants and security staff, we have a strong staffing pool in the region. We can support individual deployments or handle complete staff planning."
-          ticketing: "Stuttgart-live is our ticket portal for key events in the Stuttgart region: online booking, fast, straightforward and with excellent service."
+          ticketing: "<strong>STUTTGART</strong>LIVE is our ticket portal for key events in the Stuttgart region: online booking, fast, straightforward and with excellent service."
         production_contact_html: "Management<br>Phone +49.711.16 353 27"
         marketing_contact_html: "Marketing<br>Phone +49.711.16 353 16<br>/ sarahsandner@russ-live.de"
         legal_links_html: "© SKS Michael Russ GmbH <br>Imprint<br>Privacy<br>Terms<br>Youth protection"
@@ -134,7 +135,7 @@ en:
         title: "Projects we are proud of"
         show_all: "All references"
       events:
-        eyebrow: "Stuttgart-live"
+        eyebrow: "<strong>STUTTGART</strong>LIVE"
         title: "Upcoming events"
         intro: "Our ticket portal for all key events in Stuttgart: book online, fast, simple, affordable - with excellent service."
         nav_aria: "Browse events"
@@ -216,13 +217,11 @@ en:
         second: "Michaela Russ continues this path in the third generation. Together, the family stands for productions that are professionally organized while remaining human. This has created a team that delivers culture with attitude, reliability and passion."
       award:
         eyebrow: "Responsibility"
-        title: "2012 – Paul Woog Becomes Managing Director"
+        title: "Tradition is not a look back for us, but trust in what comes next."
         image_alt: "Michael Russ Jr. with an award and partner at an awards ceremony"
         first: "In 2012, Paul Woog becomes managing director of Michael Russ GmbH and expands the long-standing work of Konzertdirektion Erwin Russ in the field of classical music to include pop, rock, shows and entertainment. Since then, we have brought artists to the stage, developed our own event concepts and created special experiences for our audience with concerts, shows and corporate events."
         second: "Our roots are in Stuttgart, while at the same time we work with artists and partners from all over the world. Thanks to our many years of experience, short paths and a strong network, we can reliably realize even demanding projects – from the first idea through technology, safety, marketing and press relations to ticketing and staff planning."
         third: "For us, it is not only about successful events. We want to strengthen art and culture in the long term and place great value on fair and respectful relationships with artists, service providers and partners. Sustainability, diversity, equal opportunity and trusting collaboration are a natural part of how we work."
-        rebrand_title: "2024 – Michael Russ Becomes RUSS LIVE"
-        rebrand_html: "In 2024, we reorganize our brand world with new logos, a new website and a shared visual identity. The new corporate identity brings our different areas closer together in communication as well and makes it clearer what belongs to RUSS. From now on, Michael Russ GmbH appears externally as <strong>RUSS LIVE</strong>."
       city:
         eyebrow: "Perspective"
         title: "From Stuttgart to the world."
@@ -266,9 +265,9 @@ en:
           role: "Marketing"
           email: "sarahsandner@russ-live.de"
         sebastian:
-          name: "Sebastian Kraenzlein"
+          name: "Michael Wechselberger"
           role: "Personnel Scheduling"
-          email: "sebastiankraenzlein@russ-live.de"
+          email: "michaelwechselberger@russ-live.de"
       intro:
         eyebrow: "Full Service"
         title: "Everything a live moment needs"
@@ -395,7 +394,7 @@ en:
   references:
     featured_aria: "Featured projects"
     featured_title: "Highlights"
-    overview_link: "Open reference page"
+    overview_link: "References"
     overview_aria: "Open reference page"
     filters:
       aria: "Filter references by tags"
@@ -507,7 +506,7 @@ en:
   events:
     tickets: "Tickets"
     more_info: "More info"
-    more_info_title: "%{title} on Stuttgart Live"
+    more_info_title: "%{title} on STUTTGARTLIVE"
     price_from: "from %{price}"
     status:
       canceled: "Canceled"

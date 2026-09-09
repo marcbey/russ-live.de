@@ -735,6 +735,14 @@ h3 {
   transform: translateY(-1px);
 }
 
+.stuttgart-live-word {
+  font-weight: 400;
+}
+
+.stuttgart-live-word strong {
+  font-weight: 750;
+}
+
 .public-admin-link-row {
   display: flex;
   flex-wrap: wrap;
@@ -2232,7 +2240,10 @@ h3 {
 
 .references-band .section-button {
   background: #fff;
+  border: 0;
+  box-shadow: none;
   color: #111;
+  outline: 0;
 }
 
 .references-band .section-button:hover,
@@ -2695,7 +2706,7 @@ h3 {
 
 .service-contact-heading {
   color: #77736d;
-  font-size: .82rem;
+  font-size: clamp(1.02rem, 1.1vw, 1.22rem);
   font-weight: 650;
   letter-spacing: .08em;
   margin: 15px 0 0;
@@ -2772,7 +2783,8 @@ h3 {
   position: relative;
 }
 
-.service-chapter#marketing .service-chapter-visual {
+.service-chapter#marketing .service-chapter-visual,
+.service-chapter#staff .service-chapter-visual {
   align-self: start;
   height: clamp(460px, 42vw, 720px);
 }
@@ -3341,7 +3353,7 @@ h3 {
   color: #fff;
   display: flex;
   justify-content: center;
-  margin: var(--about-editorial-block-gap) 0 clamp(2.5rem, 4vw, 4rem);
+  margin: 0;
   padding: clamp(2.6rem, 4.6vw, 4.25rem) var(--brand-left);
   text-align: center;
 }
@@ -3365,7 +3377,7 @@ h3 {
   grid-template-columns: minmax(24rem, 1.05fr) minmax(24rem, .95fr);
   margin: 0;
   max-width: none;
-  padding: 0 var(--brand-left) clamp(5rem, 9vw, 8rem);
+  padding: 0 var(--brand-left);
 }
 
 .about-editorial-visuals {
@@ -7717,7 +7729,8 @@ h3 {
     min-height: clamp(230px, 56vw, 430px);
   }
 
-  .service-chapter#marketing .service-chapter-visual {
+  .service-chapter#marketing .service-chapter-visual,
+  .service-chapter#staff .service-chapter-visual {
     height: auto;
   }
 
@@ -8498,7 +8511,6 @@ h3 {
   }
 
   .about-quote-band {
-    margin-bottom: 2rem;
     padding-bottom: 2rem;
     padding-top: 2rem;
   }
@@ -8645,10 +8657,6 @@ h3 {
 
   .about-company-hover-copy {
     padding: 1rem;
-  }
-
-  .about-editorial-section {
-    padding-bottom: clamp(3.5rem, 12vw, 5rem);
   }
 
   .about-editorial-visuals {

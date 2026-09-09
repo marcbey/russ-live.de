@@ -415,8 +415,30 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select ".home-references-band .reference-marquee-card .reference-marquee-front[data-reference-image-render-target=?]", "frame"
     assert_select ".home-references-band .reference-marquee-card .reference-marquee-back .reference-card-name", "NEIL YOUNG"
     assert_select ".home-references-band .reference-marquee-card .reference-marquee-detail-button", count: 0
-    assert_select ".home-references-band .reference-marquee-cta .reference-marquee-detail-button", "Zur Referenzseite"
+    assert_select ".home-references-band .reference-marquee-cta .reference-marquee-detail-button", "Referenzen"
     assert_select ".home-references-band .klassik-slider-meta", count: 0
+  end
+
+  test "homepage formats stuttgartlive brand in reference titles" do
+    Reference.create!(
+      title: "STUTTGARTLIVE Festival",
+      starts_on: Date.new(2024, 6, 29),
+      location: "Hanns-Martin-Schleyer-Halle",
+      production: "Wizart Promotion",
+      status: "published",
+      featured: true,
+      position: 1
+    ).tap do |reference|
+      reference.create_reference_image!(
+        asset_path: "russ_live/references/01-disgusting-food-museum.jpg",
+        alt_text: "Festival"
+      )
+    end
+
+    get root_path
+
+    assert_response :success
+    assert_includes response.body, '<span class="stuttgart-live-word"><strong>STUTTGART</strong>LIVE</span> Festival'
   end
 
   test "homepage skips references with slider image only" do
@@ -455,7 +477,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select ".home-references-band .reference-marquee-card[href]", count: 0
     assert_select ".home-references-band .reference-marquee-card .reference-marquee-detail-button", count: 0
     assert_select ".home-references-band .reference-marquee-cta .reference-marquee-detail-button[href=?]", referenzen_path, count: 1
-    assert_select ".home-references-band .reference-marquee-cta .reference-marquee-detail-button", "Zur Referenzseite"
+    assert_select ".home-references-band .reference-marquee-cta .reference-marquee-detail-button", "Referenzen"
     assert_select ".home-references-band .klassik-slide-badge", count: 0
     assert_not_includes response.body, "Festival"
     assert_not_includes response.body, "Open Air"
@@ -631,7 +653,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   test "services omits reference slider even with published concert references" do
     concert = create_reference_with_image!(title: "CONCERT", position: 1, tag_list: "concert")
     create_reference_with_image!(title: "KONZERT", position: 2, tag_list: "Konzert")
-    create_reference_with_image!(title: "LIVE", position: 3, tag_list: "Live")
+    create_reference_with_image!(title: "EXTRA SHOW", position: 3, tag_list: "Live")
 
     get services_path
 
@@ -640,7 +662,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "services-reference-slider"
     assert_not_includes response.body, concert.title
     assert_not_includes response.body, "KONZERT"
-    assert_not_includes response.body, "LIVE"
+    assert_not_includes response.body, "EXTRA SHOW"
     assert_not_includes response.body, "/assets/russ_live/references/01-disgusting-food-museum"
   end
 
@@ -848,7 +870,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Cateringhilfen"
   end
 
-  test "homepage renders sks highlights from Stuttgart Live with lazy images" do
+  test "homepage renders sks highlights from STUTTGARTLIVE with lazy images" do
     matching_event = create_event!(
       artist_name: "WILHELMINE",
       title: "magisch Tour 2026",
@@ -872,7 +894,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'loading="lazy"'
     assert_includes response.body, 'decoding="async"'
     assert_includes response.body, "Mehr Infos"
-    assert_includes response.body, "WILHELMINE - magisch Tour 2026 auf Stuttgart Live"
+    assert_includes response.body, "WILHELMINE - magisch Tour 2026 auf STUTTGARTLIVE"
     assert_includes response.body, "https://www.stuttgart-live.de/events/wilhelmine-magisch-tour-2026"
     assert_not_includes response.body, "https://tickets.example.test/evt-1"
     assert_operator response.body.index("home-events-all-link"), :<, response.body.index("home-events-viewport")
