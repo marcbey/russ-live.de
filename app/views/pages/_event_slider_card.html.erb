@@ -2,6 +2,7 @@
 <% image_source = image.is_a?(EventImage) && image.file.attached? ? url_for(image.home_slider_variant) : image&.image_url %>
 <% image_alt = image.is_a?(EventImage) ? image.alt_text.presence : nil %>
 <% image_alt ||= [ event.artist_name, event.title ].compact_blank.join(" - ") %>
+<% event_detail_title = [ event.artist_name, event.title ].compact_blank.join(" - ") %>
 <% ticket_status_label = event.public_ticket_status_label %>
 <% ticket_offer = event.public_ticket_offer %>
 <% display_price =
@@ -33,7 +34,12 @@
     <% if ticket_status_label.present? %>
       <span class="event-slider-status"><%= ticket_status_label %></span>
     <% else %>
-      <a class="public-button public-button-primary event-slider-button" href="<%= event.public_ticket_url %>" target="_blank" rel="noreferrer"><%= t("events.tickets") %></a>
+      <a class="public-button event-slider-button"
+         href="<%= event.public_detail_url %>"
+         target="_blank"
+         rel="noreferrer"
+         title="<%= t("events.more_info_title", title: event_detail_title) %>"
+         aria-label="<%= t("events.more_info_title", title: event_detail_title) %>"><%= t("events.more_info") %></a>
     <% end %>
   </div>
 </article>

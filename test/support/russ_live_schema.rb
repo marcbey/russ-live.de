@@ -17,9 +17,11 @@ module RussLiveSchema
     create_contacts(connection)
     create_contact_images(connection)
     create_jobs(connection)
+    add_job_english_fields(connection)
     create_job_images(connection)
+    create_editable_pages(connection)
 
-    [ Session, LoginAttempt, Reference, ReferenceImage, Contact, ContactImage, Job, JobImage ].each(&:reset_column_information)
+    [ Session, LoginAttempt, Reference, ReferenceImage, Contact, ContactImage, Job, JobImage, EditablePage ].each(&:reset_column_information)
   end
 
   def create_sessions(connection)
@@ -195,19 +197,27 @@ module RussLiveSchema
       table.references :contact
       table.string :slug, null: false
       table.string :title, null: false
+      table.string :title_en
       table.string :badge
+      table.string :badge_en
       table.string :employment
       table.string :location, null: false
       table.text :intro
+      table.text :intro_en
       table.string :highlight_label
       table.string :highlight_title
       table.text :highlight_text
+      table.text :highlight_text_en
       table.text :responsibilities, array: true, default: [], null: false
+      table.text :responsibilities_en, array: true, default: [], null: false
       table.text :requirements, array: true, default: [], null: false
+      table.text :requirements_en, array: true, default: [], null: false
       table.string :categories, array: true, default: [], null: false
       table.string :join_recruiting_url
       table.string :meta_title
+      table.string :meta_title_en
       table.text :meta_description
+      table.text :meta_description_en
       table.string :status, default: "draft", null: false
       table.integer :position, default: 0, null: false
       table.timestamps
@@ -228,6 +238,52 @@ module RussLiveSchema
     end
 
     connection.add_index :job_images, :job_id, unique: true
+  end
+
+  def add_job_english_fields(connection)
+    return unless table_exists?(connection, :jobs)
+
+    {
+      title_en: :string,
+      badge_en: :string,
+      intro_en: :text,
+      highlight_text_en: :text,
+      responsibilities_en: :text,
+      requirements_en: :text,
+      meta_title_en: :string,
+      meta_description_en: :text
+    }.each do |column_name, type|
+      next if connection.column_exists?(:jobs, column_name)
+
+      if %i[responsibilities_en requirements_en].include?(column_name)
+        connection.add_column :jobs, column_name, type, array: true, default: [], null: false
+      else
+        connection.add_column :jobs, column_name, type
+      end
+    end
+  end
+
+  def create_editable_pages(connection)
+    return if table_exists?(connection, :editable_pages)
+
+    connection.create_table :editable_pages do |table|
+      table.string :key, null: false
+      table.string :locale, null: false
+      table.string :title, null: false
+      table.jsonb :content, default: {}, null: false
+      table.string :meta_title
+      table.text :meta_description
+      table.string :status, default: "published", null: false
+      table.string :published_title
+      table.jsonb :published_content, default: {}, null: false
+      table.string :published_meta_title
+      table.text :published_meta_description
+      table.datetime :published_at
+      table.timestamps
+    end
+
+    connection.add_index :editable_pages, [ :key, :locale ], unique: true
+    connection.add_index :editable_pages, :status
   end
 
   def image_columns(table)

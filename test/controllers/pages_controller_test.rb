@@ -8,6 +8,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     clear_stuttgart_users
     JobImage.delete_all
     Job.delete_all
+    EditablePage.delete_all
     ContactImage.delete_all
     Contact.delete_all
     ReferenceImage.delete_all
@@ -48,6 +49,13 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, 'data-role="public-backend-nav-link"'
     assert_includes response.body, "href=\"#{backend_jobs_path}\""
+
+    EditablePage.ensure_defaults!
+
+    get kontakt_path
+
+    assert_response :success
+    assert_includes response.body, "href=\"#{backend_pages_path(page_id: EditablePage.find_by!(key: 'kontakt', locale: I18n.locale.to_s).id)}\""
 
     stagehands_job = Job.find_by!(slug: "stagehands")
 
@@ -119,7 +127,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_response :success
     assert_select "html[lang=?]", "en"
-    assert_includes response.body, "Your local promoter for Stuttgart"
+    assert_includes response.body, "We are your local promoter for Stuttgart"
     assert_includes response.body, "href=\"/services\""
     assert_not_includes response.body, "?locale="
   end
@@ -193,6 +201,65 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Download PDF"
   end
 
+  test "renders published editable page content" do
+    EditablePage.ensure_defaults!
+    page = EditablePage.find_by!(key: "impressum", locale: "de")
+    page.update!(
+      title: "Entwurfstitel",
+      content: { "body_html" => "<p>Entwurfstext</p>" },
+      status: "draft",
+      published_title: "Live Impressum",
+      published_content: { "body_html" => "<p>Live Rechtstext</p>" },
+      published_at: Time.current
+    )
+
+    get impressum_path
+
+    assert_response :success
+    assert_includes response.body, "Live Impressum"
+    assert_includes response.body, "Live Rechtstext"
+    assert_not_includes response.body, "Entwurfstext"
+  end
+
+  test "hides rails view annotation comments from editable page content" do
+    EditablePage.ensure_defaults!
+    page = EditablePage.find_by!(key: "jugendschutz", locale: "de")
+    page.update!(
+      published_content: {
+        "body_html" => <<~HTML
+          <!-- BEGIN app/views/pages/legal/_jugendschutz_de.html.erb -->
+          <p>Bereinigter Jugendschutztext</p>
+          <!-- END app/views/pages/legal/_jugendschutz_de.html.erb -->
+        HTML
+      },
+      published_at: Time.current
+    )
+
+    get jugendschutz_path
+
+    assert_response :success
+    assert_includes response.body, "Bereinigter Jugendschutztext"
+    assert_not_includes response.body, "BEGIN app/views"
+    assert_not_includes response.body, "END app/views"
+  end
+
+  test "renders editable youth protection copy inside static page structure" do
+    EditablePage.ensure_defaults!
+    page = EditablePage.find_by!(key: "jugendschutz", locale: "de")
+    page.update!(
+      published_content: { "body_html" => "<p>Nur dieser Text kommt aus dem Backend.</p>" },
+      published_at: Time.current
+    )
+
+    get jugendschutz_path
+
+    assert_response :success
+    assert_includes response.body, "Nur dieser Text kommt aus dem Backend."
+    assert_includes response.body, "legal-youth-layout"
+    assert_includes response.body, "Drucken"
+    assert_includes response.body, "PDF herunterladen"
+  end
+
   test "sets german locale by cookie" do
     post locale_path(:de), params: { return_to: root_path }
 
@@ -210,7 +277,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "html[lang=?]", "en"
-    assert_includes response.body, "Your local promoter for Stuttgart"
+    assert_includes response.body, "We are your local promoter for Stuttgart"
     assert_not_includes response.body, "href=\"/services?locale=en\""
   end
 
@@ -240,7 +307,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_response :success
     assert_select "html[lang=?]", "en"
-    assert_includes response.body, "Your local promoter for Stuttgart"
+    assert_includes response.body, "We are your local promoter for Stuttgart"
     assert_not_includes response.body, "?locale="
   end
 
@@ -696,7 +763,17 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, job_path("cateringhilfen")
     assert_includes response.body, job_path("stagehands")
+    assert_includes response.body, "Minijob"
     assert_no_match(/Jobdetails Stagehands/, response.body)
+  end
+
+  test "jobs overview renders static mixed team quotes" do
+    get jobs_path
+
+    assert_response :success
+    assert_select ".job-quote", count: 3
+    assert_select ".job-quote-rotator", count: 0
+    assert_select ".job-quote-slide", count: 0
   end
 
   test "jobs overview hides draft jobs and renders category metadata on cards" do
@@ -718,9 +795,13 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "job detail has contact sidebar but no category or profile filters" do
+    Job.find_by!(slug: "stagehands").update!(optional_text: "Optionaler Text für die Detailseite")
+
     get job_path("stagehands")
 
     assert_response :success
+    assert_includes response.body, "Minijob"
+    assert_includes response.body, "Optionaler Text für die Detailseite"
     assert_not_includes response.body, "job-category-filter-nav"
     assert_not_includes response.body, "job-profile-nav"
     assert_includes response.body, "job-sidebar"
@@ -729,10 +810,49 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "mailto:sebastiankraenzlein@russ-live.de?subject=Bewerbung%20Stagehands"
   end
 
+  test "english jobs use translated job content with german fallback" do
+    stagehands = Job.find_by!(slug: "stagehands")
+    stagehands.update!(
+      title_en: "Stage crew",
+      badge_en: "Part-time",
+      intro_en: "Help backstage at live events.",
+      optional_text_en: "You are part of the show team.",
+      responsibilities_en_text: "Setup and teardown\nMove production material",
+      requirements_en_text: "Teamwork\nReliability",
+      meta_title_en: "Stage crew | Jobs",
+      meta_description_en: "English job description"
+    )
+
+    post locale_path(:en), params: { return_to: jobs_path }
+    get jobs_path
+
+    assert_response :success
+    assert_includes response.body, "Stage crew"
+    assert_includes response.body, "Part-time"
+
+    get job_path(stagehands.slug)
+
+    assert_response :success
+    assert_includes response.body, "Stage crew"
+    assert_includes response.body, "Help backstage at live events."
+    assert_includes response.body, "You are part of the show team."
+    assert_includes response.body, "Setup and teardown"
+    assert_includes response.body, "Teamwork"
+    assert_includes response.body, "Stage crew | Jobs"
+
+    Job.find_by!(slug: "cateringhilfen").update!(title_en: "")
+
+    get job_path("cateringhilfen")
+
+    assert_response :success
+    assert_includes response.body, "Cateringhilfen"
+  end
+
   test "homepage renders sks highlights from Stuttgart Live with lazy images" do
     matching_event = create_event!(
       artist_name: "WILHELMINE",
       title: "magisch Tour 2026",
+      slug: "wilhelmine-magisch-tour-2026",
       promoter_id: "10135",
       start_at: 2.days.from_now
     )
@@ -751,8 +871,11 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "https://img.example.test/wilhelmine.jpg"
     assert_includes response.body, 'loading="lazy"'
     assert_includes response.body, 'decoding="async"'
-    assert_includes response.body, "https://tickets.example.test/evt-1"
-    assert_operator response.body.index("home-events-viewport"), :<, response.body.index("home-events-all-button")
+    assert_includes response.body, "Mehr Infos"
+    assert_includes response.body, "WILHELMINE - magisch Tour 2026 auf Stuttgart Live"
+    assert_includes response.body, "https://www.stuttgart-live.de/events/wilhelmine-magisch-tour-2026"
+    assert_not_includes response.body, "https://tickets.example.test/evt-1"
+    assert_operator response.body.index("home-events-all-link"), :<, response.body.index("home-events-viewport")
     assert_not_includes response.body, "Alle Veranstaltungen auf Stuttgart-live.de"
     assert_not_includes response.body, "Nicht SKS"
     assert_not_includes response.body, "Highlight ohne SKS"

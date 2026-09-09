@@ -19,6 +19,7 @@ class PagesController < ApplicationController
   }.freeze
 
   HOME_EVENTS_PER_PAGE = 10
+  JOB_QUOTES_PER_PAGE = 3
   STUTTGART_LIVE_SKS_HIGHLIGHTS_URL = "https://www.stuttgart-live.de/highlights?filter=sks".freeze
 
   before_action :set_page_meta, except: :homepage_lane
@@ -59,6 +60,7 @@ class PagesController < ApplicationController
     @jobs = Job.published.with_contact_and_image.ordered.to_a
     @job_categories = Job.categories_from(@jobs)
     @job_overview_hero_image = "russ_live/jobs/overview-hero.jpg"
+    @job_quotes = t("pages.jobs.quotes.items").sample(JOB_QUOTES_PER_PAGE)
   end
 
   def job
@@ -66,15 +68,29 @@ class PagesController < ApplicationController
     @selected_job = find_job!(params[:slug])
     @job_overview_hero_image = "russ_live/jobs/overview-hero.jpg"
     @page_meta = PAGE_META.fetch(:job).merge(
-      title: @selected_job.meta_title.presence || t("pages.job.meta.dynamic_title", title: @selected_job.title),
-      description: @selected_job.meta_description.presence || t("pages.job.meta.description")
+      title: @selected_job.localized_meta_title.presence || t("pages.job.meta.dynamic_title", title: @selected_job.localized_title),
+      description: @selected_job.localized_meta_description.presence || t("pages.job.meta.description")
     )
   end
-  def kontakt; end
-  def impressum; end
-  def datenschutz; end
-  def agb; end
-  def jugendschutz; end
+  def kontakt
+    set_editable_page(:kontakt)
+  end
+
+  def impressum
+    set_editable_page(:impressum)
+  end
+
+  def datenschutz
+    set_editable_page(:datenschutz)
+  end
+
+  def agb
+    set_editable_page(:agb)
+  end
+
+  def jugendschutz
+    set_editable_page(:jugendschutz)
+  end
 
   private
 
@@ -89,6 +105,14 @@ class PagesController < ApplicationController
     @page_meta = PAGE_META.fetch(@page_key).merge(
       title: t("pages.#{@page_key}.meta.title"),
       description: t("pages.#{@page_key}.meta.description")
+    )
+  end
+
+  def set_editable_page(page_key)
+    @editable_page = EditablePage.public_page(page_key, locale: I18n.locale)
+    @page_meta = @page_meta.merge(
+      title: @editable_page.meta_title.presence || @editable_page.title,
+      description: @editable_page.meta_description.presence || @page_meta[:description]
     )
   end
 

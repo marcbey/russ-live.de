@@ -6,7 +6,13 @@ Rails.application.routes.draw do
 
   namespace :backend do
     resources :contacts, except: :show
-    resources :jobs, except: :show
+    resources :pages, only: [ :index, :update ] do
+      get :preview, on: :member
+    end
+    resources :jobs, except: :show do
+      patch :reorder, on: :collection
+      get :preview, on: :member
+    end
     resources :references, except: :show do
       patch :publish, on: :member
     end

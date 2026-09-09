@@ -10,8 +10,11 @@
     </div>
 
     <div class="public-page-hero-copy job-overview-hero-copy">
-      <h1 id="job-title"><%= @selected_job.title %></h1>
-      <p><%= @selected_job.intro %></p>
+      <% if @selected_job.localized_badge.present? %>
+        <p class="job-hero-badge"><%= @selected_job.localized_badge %></p>
+      <% end %>
+      <h1 id="job-title"><%= @selected_job.localized_title %></h1>
+      <p><%= @selected_job.localized_intro %></p>
       <div class="job-overview-hero-actions">
         <%= link_to t("jobs.back_to_overview"), jobs_path(anchor: "jobs-list"), class: "public-button public-button-outline section-button section-button-outline-light" %>
         <%= link_to t("jobs.apply_now"), "#job-application", class: "public-button public-button-primary section-button", data: { anchor_position: "flush" } %>
@@ -27,10 +30,27 @@
 
   <section class="public-section section job-detail" id="job-detail" aria-label="<%= @selected_job.detail_label %>">
     <article class="job-content">
+      <% if @job_preview %>
+        <div class="job-preview-note">
+          <strong>Vorschau</strong>
+          <% if @selected_job.published? %>
+            <span>Dieser Job ist veröffentlicht.</span>
+          <% else %>
+            <span>Dieser Job ist noch ein Entwurf und nicht öffentlich sichtbar.</span>
+          <% end %>
+        </div>
+      <% end %>
+
+      <% if @selected_job.localized_optional_text.present? %>
+        <div class="job-section job-optional-text">
+          <%= simple_format @selected_job.localized_optional_text %>
+        </div>
+      <% end %>
+
       <div class="job-section">
         <p class="eyebrow"><%= t("jobs.detail.responsibilities") %></p>
         <ul class="job-list">
-          <% @selected_job.responsibilities.each do |responsibility| %>
+          <% @selected_job.localized_responsibilities.each do |responsibility| %>
             <li><%= responsibility %></li>
           <% end %>
         </ul>
@@ -39,7 +59,7 @@
       <div class="job-section">
         <p class="eyebrow"><%= t("jobs.detail.requirements") %></p>
         <ul class="job-list">
-          <% @selected_job.requirements.each do |requirement| %>
+          <% @selected_job.localized_requirements.each do |requirement| %>
             <li><%= requirement %></li>
           <% end %>
         </ul>
@@ -57,7 +77,7 @@
               data-job-application-mail-recipient-value="<%= application_recipient %>"
               data-job-application-mail-subject-value="<%= @selected_job.application_email_subject %>"
               data-job-application-mail-greeting-value="<%= t("jobs.detail.form.email_greeting") %>"
-              data-job-application-mail-interest-line-value="<%= t("jobs.detail.form.email_interest_line", title: @selected_job.title) %>"
+              data-job-application-mail-interest-line-value="<%= t("jobs.detail.form.email_interest_line", title: @selected_job.localized_title) %>"
               data-job-application-mail-personal-details-heading-value="<%= t("jobs.detail.form.email_personal_details_heading") %>"
               data-job-application-mail-salutation-label-value="<%= t("jobs.detail.form.salutation") %>"
               data-job-application-mail-first-name-label-value="<%= t("jobs.detail.form.first_name") %>"
@@ -155,7 +175,7 @@
                      id="job_application_position"
                      name="position"
                      type="text"
-                     value="<%= @selected_job.title %>"
+                     value="<%= @selected_job.localized_title %>"
                      readonly
                      data-job-application-mail-target="position">
             </div>
@@ -181,17 +201,20 @@
     <% if @selected_job.contact.present? %>
       <aside class="job-sidebar" aria-label="<%= t("jobs.detail.contact") %>">
         <div class="public-contact-card job-contact">
-          <p class="eyebrow"><%= t("jobs.detail.contact") %></p>
+          <h2 class="job-contact-heading"><%= t("jobs.detail.contact") %></h2>
           <%= image_tag contact_image_source(@selected_job.contact.contact_image) || image_path("russ_live/team/sebastian-kraenzlein.jpg"),
                         alt: @selected_job.contact.contact_image&.display_alt_text || @selected_job.contact.name,
                         loading: "lazy",
                         decoding: "async",
                         width: 1024,
                         height: 1024 %>
-          <h2><%= @selected_job.contact.name %></h2>
-          <p><%= @selected_job.contact.role %></p>
-          <p><a href="tel:<%= @selected_job.contact.tel_href %>"><%= @selected_job.contact.phone_number %></a></p>
-          <p><%= mail_to @selected_job.contact.email, @selected_job.contact.email, subject: @selected_job.application_email_subject %></p>
+          <h3 class="job-contact-name"><%= @selected_job.contact.name %></h3>
+          <p class="job-contact-role"><%= @selected_job.contact.role %></p>
+          <p class="job-contact-phone">
+            <span>Telefon</span>
+            <a href="tel:<%= @selected_job.contact.tel_href %>"><%= @selected_job.contact.phone_number %></a>
+          </p>
+          <p class="job-contact-email"><%= mail_to @selected_job.contact.email, @selected_job.contact.email, subject: @selected_job.application_email_subject %></p>
           <%= public_backend_link(
                 label: t("public.actions.edit"),
                 path: backend_contacts_path(contact_id: @selected_job.contact.id),

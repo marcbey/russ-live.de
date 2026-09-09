@@ -1,6 +1,7 @@
 <nav class="backend-global-nav" aria-label="Backend Navigation">
   <div class="backend-global-nav-links">
     <%= link_to "Referenzen", backend_references_path, class: ("is-active" if controller_path == "backend/references") %>
+    <%= link_to "Seiten", backend_pages_path, class: ("is-active" if controller_path == "backend/pages") %>
     <%= link_to "Jobs", backend_jobs_path, class: ("is-active" if controller_path == "backend/jobs") %>
     <%= link_to "Ansprechpartner", backend_contacts_path, class: ("is-active" if controller_path == "backend/contacts") %>
   </div>

@@ -46,20 +46,33 @@
       </div>
 
       <div class="backend-reference-list-scroll">
-        <div class="backend-reference-list">
+        <% reorderable_jobs = @status_filter == "all" && @query_filter.blank? %>
+        <% list_data = reorderable_jobs ? { controller: "backend-sortable-list", backend_sortable_list_url_value: reorder_backend_jobs_path } : {} %>
+        <%= tag.div class: "backend-reference-list #{'is-sortable' if reorderable_jobs}", data: list_data do %>
           <% if @jobs.any? %>
             <% @jobs.each do |job| %>
+              <% item_data = reorderable_jobs ? {
+                backend_sortable_list_target: "item",
+                backend_sortable_list_job_id: job.id,
+                action: "dragstart->backend-sortable-list#dragStart dragover->backend-sortable-list#dragOver drop->backend-sortable-list#drop dragend->backend-sortable-list#dragEnd"
+              } : {} %>
               <%= link_to backend_jobs_path(status: (@status_filter unless @status_filter == "all"), query: @query_filter, job_id: job.id),
-                          class: "backend-reference-list-item #{'is-active' if @selected_job&.id == job.id}" do %>
+                          class: "backend-reference-list-item #{'is-active' if @selected_job&.id == job.id}",
+                          draggable: reorderable_jobs,
+                          data: item_data do %>
+                <% if reorderable_jobs %>
+                  <span class="backend-sort-handle" aria-hidden="true">::</span>
+                  <span class="sr-only">Reihenfolge ziehen</span>
+                <% end %>
                 <span class="backend-reference-list-title"><%= job.title %></span>
-                <span class="backend-reference-list-meta"><%= [job.category_list, job.location].compact_blank.join(" · ") %></span>
+                <span class="backend-reference-list-meta"><%= [job.badge, job.location].compact_blank.join(" · ") %></span>
                 <span class="status-badge"><%= job.display_status %></span>
               <% end %>
             <% end %>
           <% else %>
             <p class="empty-state">Keine Jobs zur aktuellen Filterung.</p>
           <% end %>
-        </div>
+        <% end %>
       </div>
     </aside>
 

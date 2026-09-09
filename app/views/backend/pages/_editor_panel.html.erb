@@ -1,0 +1,82 @@
+<% form_id = dom_id(page, :editor_form) %>
+
+<div class="editor-panel">
+  <div class="editor-tabs">
+    <div class="editor-tab-list" role="tablist" aria-label="Seite bearbeiten">
+      <span class="editor-tab is-active" role="tab" aria-selected="true">
+        <%= page.label %> · <%= page.locale.upcase %>
+      </span>
+    </div>
+
+    <div class="editor-actions editor-tabs-actions">
+      <button type="submit" form="<%= form_id %>" class="button button-compact">Speichern</button>
+      <button type="submit" form="<%= form_id %>" name="publish_page" value="1" class="button button-publish button-compact">Veröffentlichen</button>
+      <%= link_to "Vorschau anzeigen",
+                  preview_backend_page_path(page),
+                  class: "button button-secondary button-compact",
+                  target: "_blank",
+                  rel: "noopener" %>
+    </div>
+  </div>
+
+  <%= form_with model: page,
+                url: backend_page_path(page),
+                method: :patch,
+                class: "editor-form",
+                html: { id: form_id },
+                data: { turbo: false } do |form| %>
+    <% if page.errors.any? %>
+      <div class="form-errors">
+        <p>Bitte prüfe die markierten Angaben.</p>
+        <ul>
+          <% page.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <section class="backend-section">
+      <header class="backend-section-header">
+        <h2>Seitendaten</h2>
+      </header>
+
+      <div class="backend-section-body editor-grid">
+        <div class="form-field editor-grid-span-full">
+          <%= form.label :title, "Titel", class: "form-label" %>
+          <%= form.text_field :title, class: "form-input" %>
+        </div>
+
+        <div class="form-field">
+          <%= form.label :meta_title, "SEO-Titel", class: "form-label" %>
+          <%= form.text_field :meta_title, class: "form-input" %>
+        </div>
+
+        <div class="form-field">
+          <%= form.label :meta_description, "SEO-Beschreibung", class: "form-label" %>
+          <%= form.text_area :meta_description, class: "form-textarea", rows: 3 %>
+        </div>
+      </div>
+    </section>
+
+    <section class="backend-section">
+      <header class="backend-section-header">
+        <h2>Inhalt</h2>
+      </header>
+
+      <div class="backend-section-body editor-grid">
+        <% page.field_definitions.each do |field| %>
+          <% input_id = "#{dom_id(page)}_content_#{field.fetch(:name)}" %>
+          <div class="form-field editor-grid-span-full">
+            <%= label_tag input_id, field.fetch(:label), class: "form-label" %>
+            <%= text_area_tag "editable_page[content][#{field.fetch(:name)}]",
+                              page.content_value(field.fetch(:name)),
+                              id: input_id,
+                              class: "form-textarea",
+                              rows: field.fetch(:rows) %>
+          </div>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+</div>

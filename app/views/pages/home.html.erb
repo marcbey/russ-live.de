@@ -10,8 +10,8 @@
                         fetchpriority: "high" %>
         </picture>
         <div class="home-hero-copy">
-          <h1 id="hero-title"><span>Live</span><span>Enter</span><span>Tainment</span></h1>
-          <p id="hero-intro"><%= t("pages.home.hero.intro") %></p>
+          <h1 id="hero-title"><span>Events</span><span>Momente</span><span class="home-hero-title-live">Live</span></h1>
+          <p id="hero-intro"><%= t("pages.home.hero.intro_html") %></p>
           <a class="public-button public-button-primary hero-button home-hero-button" href="#services" data-anchor-position="flush"><%= t("public.header.services") %></a>
         </div>
       </section>
@@ -100,7 +100,13 @@
         <div class="section-head home-events-head">
           <div>
             <p class="eyebrow"><%= t("pages.home.events.eyebrow") %></p>
-            <h2 id="events-title"><%= t("pages.home.events.title") %></h2>
+            <div class="home-events-title-row">
+              <h2 id="events-title"><%= t("pages.home.events.title") %></h2>
+              <a class="home-events-all-link" href="<%= @stuttgart_live_sks_highlights_url %>" target="_blank" rel="noreferrer">
+                <%= t("pages.home.events.show_all") %>
+                <span aria-hidden="true">›</span>
+              </a>
+            </div>
             <p class="home-events-intro"><%= t("pages.home.events.intro") %></p>
           </div>
         </div>
@@ -114,7 +120,6 @@
             <%= render "pages/event_slider_cards", events: @home_events %>
           </div>
         </div>
-        <a class="public-button public-button-primary home-events-all-button" href="<%= @stuttgart_live_sks_highlights_url %>" target="_blank" rel="noreferrer"><%= t("pages.home.events.show_all") %></a>
       </section>
       <% end %>
     </main>

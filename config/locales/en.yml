@@ -114,7 +114,7 @@ en:
         description: "Russ Live is a local promoter, production partner and full-service provider for live entertainment in Stuttgart and the region."
       hero:
         image_alt: "Golden guitar as the Russ Live key visual"
-        intro: "Your local promoter for Stuttgart. We always keep both artists and audiences in view, creating unique emotional moments for up to 1 million visitors every year."
+        intro_html: "We are your local promoter for Stuttgart.<br>We always keep both artists and audiences in view.<br>That is how we create unique emotional moments for up to 1 million visitors –<br>every year."
       services:
         eyebrow: "Live Entertainment"
         title: "Full service for events"
@@ -506,6 +506,8 @@ en:
       next_image: "Next image"
   events:
     tickets: "Tickets"
+    more_info: "More info"
+    more_info_title: "%{title} on Stuttgart Live"
     price_from: "from %{price}"
     status:
       canceled: "Canceled"

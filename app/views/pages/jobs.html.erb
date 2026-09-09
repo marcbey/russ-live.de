@@ -37,7 +37,10 @@
         <% @jobs.each do |job| %>
           <%= link_to job_path(job.slug), class: "public-card job-table-row", data: { job_categories: job.category_slugs.join(" ") } do %>
             <span class="job-table-position">
-              <strong><%= job.title %></strong>
+              <strong><%= job.localized_title %></strong>
+              <% if job.localized_badge.present? %>
+                <span class="job-table-badge"><%= job.localized_badge %></span>
+              <% end %>
             </span>
             <span class="job-table-action">
               <span><%= t("jobs.list_action") %></span>
@@ -70,14 +73,10 @@
 
   <section class="public-section section job-quotes-band" aria-label="<%= t("pages.jobs.quotes.aria") %>">
     <div class="job-quotes">
-      <% t("pages.jobs.quotes.items").each_slice(2) do |quote_group| %>
-        <blockquote class="job-quote job-quote-rotator">
-          <% quote_group.each_with_index do |quote, quote_index| %>
-            <span class="job-quote-slide job-quote-slide-<%= quote_index + 1 %>">
-              <p><%= quote[:text] %></p>
-              <footer><%= quote[:footer] %></footer>
-            </span>
-          <% end %>
+      <% @job_quotes.each do |quote| %>
+        <blockquote class="job-quote">
+          <p><%= quote[:text] %></p>
+          <footer><%= quote[:footer] %></footer>
         </blockquote>
       <% end %>
     </div>

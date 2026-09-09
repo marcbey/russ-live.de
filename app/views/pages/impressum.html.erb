@@ -1,8 +1,13 @@
 <main id="main-content" class="page-main public-page legal-page" tabindex="-1">
       <section class="public-section section holding legal-section" aria-labelledby="legal-title">
-        <h1 id="legal-title"><%= t("pages.impressum.title") %></h1>
+        <h1 id="legal-title"><%= @editable_page.title %></h1>
+        <%= public_backend_link(
+              label: "Bearbeiten",
+              path: backend_pages_path(page_id: @editable_page.id),
+              aria_label: "Impressum bearbeiten"
+            ) %>
         <div class="rich-copy legal-copy">
-          <%= render "pages/legal/impressum_#{I18n.locale}" %>
+          <%= @editable_page.content_value("body_html").html_safe %>
         </div>
       </section>
     </main>

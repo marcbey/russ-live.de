@@ -136,6 +136,24 @@ JOIN-URL gepflegt ist. Job- und Ansprechpartnerbilder werden unter
 `storage/job_images` beziehungsweise `storage/contact_images` abgelegt und beim
 Upload ebenfalls als komprimierte WebP-Dateien gespeichert.
 
+Job-Inhalte sind zweisprachig pflegbar. Neben den deutschen Hauptfeldern gibt
+es im Job-Editor optionale englische Felder für Titel, Badge, Intro,
+optionalen Text, Tätigkeitsfeld und Anforderungen. Wenn ein englisches Feld leer
+bleibt, nutzt die englische öffentliche Seite automatisch den deutschen Inhalt
+als Fallback.
+
+## Seitenpflege
+
+Die redaktionellen Seiten `Kontakt`, `Impressum`, `Datenschutz`, `AGB` und
+`Jugendschutz` werden im Backend unter `/backend/pages` gepflegt. Jede Seite
+gibt es getrennt für Deutsch und Englisch. `Speichern` legt Änderungen als
+Entwurf ab; erst `Veröffentlichen` übernimmt sie auf die öffentliche Seite.
+Über `Vorschau anzeigen` kann der aktuelle Entwurf vor dem Veröffentlichen
+kontrolliert werden.
+
+Die Kontaktseite verwaltet zunächst nur Titel und einen Kontakttext als ein
+HTML-Feld. Das Kontaktformular selbst bleibt vorerst statisch.
+
 ## Mehrsprachigkeit
 
 Die öffentlichen Frontend-Seiten werden über Rails I18n auf Deutsch und

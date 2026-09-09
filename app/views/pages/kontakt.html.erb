@@ -29,6 +29,8 @@
   }
 ] %>
 
+<% contact_page = @editable_page %>
+
 <main id="main-content" class="page-main public-page contact-page" tabindex="-1">
       <section class="public-section section split" aria-labelledby="contact-title">
         <div class="contact-location-visual">
@@ -41,14 +43,15 @@
                         decoding: "async" %>
         </div>
         <div class="contact-details">
-          <h1 id="contact-title" class="contact-title"><%= t("pages.contact.title") %></h1>
+          <h1 id="contact-title" class="contact-title"><%= contact_page.title %></h1>
+          <%= public_backend_link(
+                label: "Bearbeiten",
+                path: backend_pages_path(page_id: contact_page.id),
+                aria_label: "Kontaktseite bearbeiten"
+              ) %>
 
           <address class="public-contact-card rich-copy">
-            <p><%= t("pages.contact.paragraphs.location") %></p>
-            <p><%= t("pages.contact.paragraphs.directions") %></p>
-            <p>Charlottenplatz 17<br>70173 Stuttgart</p>
-            <p>Fon: +49 (0) 711 16 353 11<br>Mail: info@russ-live.de</p>
-            <p>Tickethotline: +49 (0) 711 550 660 77</p>
+            <%= contact_page.content_value("body_html").html_safe %>
           </address>
 
           <form class="contact-mail-form"

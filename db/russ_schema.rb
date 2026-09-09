@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_24_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_09_123000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -39,6 +39,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_24_120000) do
     t.index ["position"], name: "index_contacts_on_position"
   end
 
+  create_table "editable_pages", force: :cascade do |t|
+    t.jsonb "content", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.string "key", null: false
+    t.string "locale", null: false
+    t.text "meta_description"
+    t.string "meta_title"
+    t.datetime "published_at"
+    t.jsonb "published_content", default: {}, null: false
+    t.text "published_meta_description"
+    t.string "published_meta_title"
+    t.string "published_title"
+    t.string "status", default: "published", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key", "locale"], name: "index_editable_pages_on_key_and_locale", unique: true
+    t.index ["status"], name: "index_editable_pages_on_status"
+  end
+
   create_table "job_images", force: :cascade do |t|
     t.string "alt_text"
     t.string "asset_path"
@@ -55,24 +74,32 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_24_120000) do
 
   create_table "jobs", force: :cascade do |t|
     t.string "badge"
+    t.string "badge_en"
     t.string "categories", default: [], null: false, array: true
     t.bigint "contact_id"
     t.datetime "created_at", null: false
     t.string "employment"
     t.string "highlight_label"
     t.text "highlight_text"
+    t.text "highlight_text_en"
     t.string "highlight_title"
     t.text "intro"
+    t.text "intro_en"
     t.string "join_recruiting_url"
     t.string "location", null: false
     t.text "meta_description"
+    t.text "meta_description_en"
     t.string "meta_title"
+    t.string "meta_title_en"
     t.integer "position", default: 0, null: false
     t.text "requirements", default: [], null: false, array: true
+    t.text "requirements_en", default: [], null: false, array: true
     t.text "responsibilities", default: [], null: false, array: true
+    t.text "responsibilities_en", default: [], null: false, array: true
     t.string "slug", null: false
     t.string "status", default: "draft", null: false
     t.string "title", null: false
+    t.string "title_en"
     t.datetime "updated_at", null: false
     t.index ["categories"], name: "index_jobs_on_categories", using: :gin
     t.index ["contact_id"], name: "index_jobs_on_contact_id"
