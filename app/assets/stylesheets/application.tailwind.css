@@ -3373,8 +3373,8 @@ h3 {
   align-items: start;
   color: #050505;
   display: grid;
-  gap: clamp(3rem, 6vw, 6.5rem);
-  grid-template-columns: minmax(24rem, 1.05fr) minmax(24rem, .95fr);
+  gap: clamp(2.25rem, 3.6vw, 4.25rem);
+  grid-template-columns: minmax(24rem, .94fr) minmax(28rem, 1.06fr);
   margin: 0;
   max-width: none;
   padding: 0 var(--brand-left);
@@ -3422,7 +3422,7 @@ h3 {
 .about-editorial-copy {
   display: grid;
   gap: var(--about-editorial-block-gap);
-  max-width: 46rem;
+  max-width: 54rem;
   padding-top: .25rem;
 }
 
@@ -3435,7 +3435,7 @@ h3 {
   font-size: clamp(1rem, 1.18vw, 1.18rem);
   line-height: 1.55;
   margin: 0;
-  max-width: 43rem;
+  max-width: 50rem;
 }
 
 .about-editorial-block p + p {
@@ -6954,6 +6954,7 @@ h3 {
   display: flex;
   gap: 32px;
   justify-content: space-between;
+  margin-top: clamp(3.5rem, 6vw, 6.5rem);
   padding: 52px clamp(20px, 4vw, 64px);
 }
 
