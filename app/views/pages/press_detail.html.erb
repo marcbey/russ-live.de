@@ -1,44 +1,24 @@
 <main id="main-content" class="page-main public-page press-detail-page" tabindex="-1">
-  <section class="public-hero public-hero-detail section press-detail-hero" aria-labelledby="press-detail-title">
-    <div class="press-detail-copy">
-      <h1 id="press-detail-title"><%= @press_artist.name %></h1>
-      <p><%= t("press.detail.intro", name: @press_artist.name) %></p>
-      <div class="press-detail-actions">
-        <%= link_to t("press.detail.back"), presse_path(anchor: "press-search"), class: "press-back-link" %>
-        <% if @press_artist.gallery_images.any? %>
-          <%= link_to t("press.detail.download_presskit"), press_artist_download_path(@press_artist.slug), class: "public-button public-button-outline press-outline-button", data: { turbo: false } %>
-        <% end %>
-      </div>
-    </div>
-    <figure class="press-detail-image">
-      <% hero_image = @press_artist.hero_image %>
-      <% if hero_image.is_a?(EventImage) %>
-        <picture>
-          <source media="(max-width: 700px)" srcset="<%= url_for hero_image.press_variant(:hero_mobile) %>">
-          <%= image_tag hero_image.press_variant(:hero_desktop),
-                        alt: hero_image.alt_text.presence || t("press.detail.press_photo_alt", name: @press_artist.name),
-                        decoding: "async",
-                        fetchpriority: "high" %>
-        </picture>
-        <% if (hero_credit = press_image_credit(hero_image)).present? %>
-          <figcaption><%= hero_credit %></figcaption>
-        <% end %>
-      <% else %>
-        <%= image_tag hero_image, alt: t("press.detail.press_photo_alt", name: @press_artist.name), decoding: "async", fetchpriority: "high" %>
-      <% end %>
-    </figure>
-  </section>
-
   <section class="public-section section press-detail-content" aria-label="<%= t("press.detail.info_aria") %>">
     <article class="press-text-panel">
+      <%= link_to t("press.detail.back_short"), presse_path(anchor: "press-search"), class: "press-detail-back-button" %>
       <p class="eyebrow"><%= t("press.detail.press_text.eyebrow") %></p>
-      <h2><%= @press_artist.name %></h2>
+      <h1 id="press-detail-title"><%= @press_artist.name %></h1>
       <% if @press_artist.press_body.present? %>
-        <%= @press_artist.press_body.respond_to?(:to_trix_html) ? @press_artist.press_body : simple_format(@press_artist.press_body) %>
+        <div class="press-text-collapsible">
+          <input class="press-text-toggle" id="press-text-toggle" type="checkbox" aria-label="<%= t("press.detail.press_text.show_more") %>">
+          <div class="press-text-body">
+            <%= @press_artist.press_body.respond_to?(:to_trix_html) ? @press_artist.press_body : simple_format(@press_artist.press_body) %>
+            <p><%= t("press.detail.press_text.usage") %></p>
+          </div>
+          <label class="public-button section-button press-text-more-button" for="press-text-toggle">
+            <span class="press-text-more-label"><%= t("press.detail.press_text.show_more") %></span>
+            <span class="press-text-less-label"><%= t("press.detail.press_text.show_less") %></span>
+          </label>
+        </div>
       <% else %>
         <p><%= t("press.detail.press_text.empty") %></p>
       <% end %>
-      <p><%= t("press.detail.press_text.usage") %></p>
     </article>
     <aside class="press-event-panel">
       <p class="eyebrow"><%= t("press.detail.event.eyebrow") %></p>
@@ -71,35 +51,47 @@
   <% if @press_artist.gallery_images.any? %>
     <section class="public-section section press-downloads" id="downloads" aria-labelledby="press-download-title" data-controller="press-lightbox" data-press-lightbox-fallback-alt-value="<%= t("press.detail.fallback_image_alt") %>">
       <div class="press-directory-head">
-        <div>
-          <p class="eyebrow"><%= t("press.detail.downloads.eyebrow") %></p>
-          <h2 id="press-download-title"><%= t("press.detail.downloads.title") %></h2>
-        </div>
+        <h2 id="press-download-title"><%= t("press.detail.downloads.title") %></h2>
       </div>
       <div class="public-media-grid press-gallery" data-press-gallery>
         <% @press_artist.gallery_images.each_with_index do |image, index| %>
           <% label = image.alt_text.presence || t("press.detail.gallery_image_label", name: @press_artist.name, index: index + 1) %>
           <% credit = press_image_credit(image) %>
           <% download_url = rails_blob_path(image.file, disposition: "attachment") %>
-          <figure>
+          <figure class="press-gallery-item">
             <button type="button" data-press-lightbox-target="trigger" data-lightbox-src="<%= url_for image.press_variant(:hero_desktop) %>" data-lightbox-download="<%= download_url %>" data-lightbox-alt="<%= label %>" data-lightbox-caption="<%= credit %>" data-action="press-lightbox#open">
               <picture>
                 <source media="(max-width: 700px)" srcset="<%= url_for image.press_variant(:gallery_mobile) %>">
                 <%= image_tag image.press_variant(:gallery_desktop), alt: label, loading: "lazy", decoding: "async" %>
               </picture>
             </button>
-            <figcaption>
-              <% if credit.present? %>
-                <span><%= credit %></span>
-              <% end %>
-              <%= link_to download_url, download: true, class: "press-gallery-download", aria: { label: t("press.detail.download_image") } do %>
-                <span class="sr-only"><%= t("press.detail.download_image") %></span>
-                <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
-                  <path d="M12 3v11m0 0 4-4m-4 4-4-4M5 17v3h14v-3" />
-                </svg>
-              <% end %>
-            </figcaption>
+            <%= link_to download_url, download: true, class: "press-gallery-download press-gallery-download-overlay", aria: { label: t("press.detail.download_image") } do %>
+              <span class="sr-only"><%= t("press.detail.download_image") %></span>
+              <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+                <path d="M12 3v11m0 0 4-4m-4 4-4-4M5 17v3h14v-3" />
+              </svg>
+            <% end %>
           </figure>
+        <% end %>
+
+        <% if @press_artist.press_body.present? %>
+          <article class="press-gallery-text-card">
+            <div class="press-gallery-document">
+              <h3><%= t("press.detail.download_text_tile") %></h3>
+              <div class="press-gallery-document-lines" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+            <%= link_to press_artist_text_download_path(@press_artist.slug), class: "press-gallery-download", data: { turbo: false }, aria: { label: t("press.detail.download_text") } do %>
+              <span class="sr-only"><%= t("press.detail.download_text") %></span>
+              <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+                <path d="M12 3v11m0 0 4-4m-4 4-4-4M5 17v3h14v-3" />
+              </svg>
+            <% end %>
+          </article>
         <% end %>
       </div>
       <div class="press-download-actions press-download-actions-footer">

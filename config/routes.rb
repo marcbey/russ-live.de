@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   get "events/homepage_lane", to: "pages#homepage_lane", as: :homepage_lane_events
   get "presse", to: "press#index"
   get "presse/beispiel", to: redirect("/presse")
+  get "presse/:slug/pressetext", to: "press#text_download", as: :press_artist_text_download
   get "presse/:slug/download", to: "press#download", as: :press_artist_download
   get "presse/:slug", to: "press#show", as: :press_artist
   get "kontakt", to: "pages#kontakt"

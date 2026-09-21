@@ -33,9 +33,20 @@ class PressController < ApplicationController
     @press_artist = find_press_artist!
     raise ActionController::RoutingError, "Not Found" if @press_artist.gallery_images.empty?
 
-    send_data press_images_zip(@press_artist),
-      filename: "#{@press_artist.slug}-pressebilder.zip",
+    send_data press_kit_zip(@press_artist),
+      filename: "#{@press_artist.slug}-pressekit.zip",
       type: "application/zip",
+      disposition: "attachment"
+  end
+
+  def text_download
+    @press_artist = find_press_artist!
+    raise ActionController::RoutingError, "Not Found" if press_text_plain(@press_artist).blank?
+
+    response.headers["Cache-Control"] = "no-store"
+    send_data press_text_pdf(@press_artist),
+      filename: "#{@press_artist.slug}-pressetext.pdf",
+      type: "application/pdf",
       disposition: "attachment"
   end
 
@@ -84,13 +95,36 @@ class PressController < ApplicationController
     false
   end
 
-  def press_images_zip(artist)
+  def press_kit_zip(artist)
     Zip::OutputStream.write_buffer do |zip|
       artist.gallery_images.each_with_index do |image, index|
         zip.put_next_entry(zip_entry_name(image, index))
         zip.write image.file.download
       end
+
+      if press_text_plain(artist).present?
+        zip.put_next_entry("#{artist.slug}-pressetext.pdf")
+        zip.write press_text_pdf(artist)
+      end
     end.string
+  end
+
+  def press_text_pdf(artist)
+    PressTextPdf.new(
+      title: artist.name,
+      text: press_text_plain(artist),
+      generated_label: t("press.detail.press_text.pdf_generated", date: Date.current.strftime("%d.%m.%Y")),
+      document_label: t("press.detail.press_text.eyebrow"),
+      logo_path: Rails.root.join("app/assets/images/russ_live/logos/russ-live-logo.png")
+    ).render
+  end
+
+  def press_text_plain(artist)
+    body = artist.press_body
+    return "" if body.blank?
+    return body.to_plain_text.strip if body.respond_to?(:to_plain_text)
+
+    body.to_s.strip
   end
 
   def zip_entry_name(image, index)
