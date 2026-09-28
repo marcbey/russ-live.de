@@ -5,13 +5,12 @@
       <p class="eyebrow"><%= t("press.detail.press_text.eyebrow") %></p>
       <h1 id="press-detail-title"><%= @press_artist.name %></h1>
       <% if @press_artist.press_body.present? %>
-        <div class="press-text-collapsible">
-          <input class="press-text-toggle" id="press-text-toggle" type="checkbox" aria-label="<%= t("press.detail.press_text.show_more") %>">
-          <div class="press-text-body">
+        <div class="press-text-collapsible" data-controller="press-text-collapse">
+          <input class="press-text-toggle" id="press-text-toggle" type="checkbox" aria-label="<%= t("press.detail.press_text.show_more") %>" data-press-text-collapse-target="toggle" data-action="change->press-text-collapse#toggle">
+          <div class="press-text-body" data-press-text-collapse-target="body">
             <%= @press_artist.press_body.respond_to?(:to_trix_html) ? @press_artist.press_body : simple_format(@press_artist.press_body) %>
-            <p><%= t("press.detail.press_text.usage") %></p>
           </div>
-          <label class="public-button section-button press-text-more-button" for="press-text-toggle">
+          <label class="public-button section-button press-text-more-button" for="press-text-toggle" data-press-text-collapse-target="button">
             <span class="press-text-more-label"><%= t("press.detail.press_text.show_more") %></span>
             <span class="press-text-less-label"><%= t("press.detail.press_text.show_less") %></span>
           </label>
@@ -43,7 +42,10 @@
         <% end %>
       </dl>
       <% if primary_event_current %>
-        <a class="public-button public-button-primary section-button press-event-ticket-button" href="<%= @press_artist.ticket_url %>" target="_blank" rel="noreferrer"><%= t("events.tickets") %></a>
+        <div class="press-event-actions">
+          <a class="public-button public-button-secondary section-button press-event-detail-button" href="<%= primary_event.public_detail_url %>" target="_blank" rel="noreferrer" title="<%= t("events.more_info_title", title: primary_event.artist_name) %>"><%= t("events.more_info") %></a>
+          <a class="public-button public-button-primary section-button press-event-ticket-button" href="<%= @press_artist.ticket_url %>" target="_blank" rel="noreferrer"><%= t("events.tickets") %></a>
+        </div>
       <% end %>
     </aside>
   </section>
@@ -53,6 +55,7 @@
       <div class="press-directory-head">
         <h2 id="press-download-title"><%= t("press.detail.downloads.title") %></h2>
       </div>
+      <p class="press-download-usage"><%= t("press.detail.press_text.usage") %></p>
       <div class="public-media-grid press-gallery" data-press-gallery>
         <% @press_artist.gallery_images.each_with_index do |image, index| %>
           <% label = image.alt_text.presence || t("press.detail.gallery_image_label", name: @press_artist.name, index: index + 1) %>

@@ -159,9 +159,14 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Liederhalle Stuttgart"
     assert_includes response.body, "Weitere Termine"
     assert_includes response.body, "https://tickets.example/abc"
+    assert_select ".press-event-actions .press-event-detail-button[href=?]", first_event.public_detail_url, text: "Mehr Infos"
+    assert_select ".press-event-actions .press-event-ticket-button[href='https://tickets.example/abc']", text: "Tickets"
+    assert_operator response.body.index("press-event-detail-button"), :<, response.body.index("press-event-ticket-button")
     assert_select ".press-detail-hero", 0
     assert_select ".press-detail-back-button[href=?]", "#{presse_path}#press-search", text: "Zurück"
-    assert_select ".press-text-toggle"
+    assert_select ".press-text-collapsible[data-controller='press-text-collapse']"
+    assert_select ".press-text-toggle[data-press-text-collapse-target='toggle']"
+    assert_select ".press-text-body[data-press-text-collapse-target='body']"
     assert_select ".press-text-more-button .press-text-more-label", "Mehr anzeigen"
   end
 
@@ -221,6 +226,8 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "#press-download-title", "Downloads"
     assert_select ".press-downloads .press-directory-head .eyebrow", 0
+    assert_select ".press-downloads .press-directory-head + .press-download-usage", I18n.t("press.detail.press_text.usage")
+    assert_select ".press-text-body p", text: I18n.t("press.detail.press_text.usage"), count: 0
     assert_includes response.body, 'data-lightbox-alt="Freigegebenes Pressefoto"'
     assert_includes response.body, "© Test Fotografin"
     assert_not_includes response.body, "<span>Freigegebenes Pressefoto</span>"

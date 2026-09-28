@@ -18,6 +18,7 @@ import LegalTabsController from "./legal_tabs_controller"
 import MobileMenuController from "./mobile_menu_controller"
 import PressLightboxController from "./press_lightbox_controller"
 import PressSearchController from "./press_search_controller"
+import PressTextCollapseController from "./press_text_collapse_controller"
 import ReferenceHeroSliderController from "./reference_hero_slider_controller"
 import ReferenceMarqueeController from "./reference_marquee_controller"
 import ReferenceMosaicController from "./reference_mosaic_controller"
@@ -43,6 +44,7 @@ application.register("legal-tabs", LegalTabsController)
 application.register("mobile-menu", MobileMenuController)
 application.register("press-lightbox", PressLightboxController)
 application.register("press-search", PressSearchController)
+application.register("press-text-collapse", PressTextCollapseController)
 application.register("reference-hero-slider", ReferenceHeroSliderController)
 application.register("reference-marquee", ReferenceMarqueeController)
 application.register("reference-mosaic", ReferenceMosaicController)
