@@ -109,6 +109,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_includes response.body, "Michael Wechselberger"
+    assert_includes response.body, "Team Lead Marketing"
     [ "Sebastian Kränzlein", "Elke Vierneisel", "Gabi Cremer", "Penny" ].each do |name|
       assert_not_includes response.body, name
     end

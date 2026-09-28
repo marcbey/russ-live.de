@@ -7,8 +7,8 @@ class PressTextPdf
   REGULAR_FONT = "F1".freeze
   BOLD_FONT = "F2".freeze
   LOGO_NAME = "Logo".freeze
-  LOGO_WIDTH = 150
-  LOGO_HEIGHT = 32
+  LOGO_WIDTH = 135
+  LOGO_HEIGHT = 29
   TITLE_SIZE = 26
   LABEL_SIZE = 12
   META_SIZE = 11

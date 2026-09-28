@@ -300,6 +300,7 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Ein eigener Pressetext"
     assert_includes response.body, "ABSCHLUSSMARKER"
     assert_includes response.body, "/Subtype /Image"
+    assert_includes response.body, "q 135 0 0 29 56 757 cm /Logo Do Q"
     assert_equal "no-store", response.headers["Cache-Control"]
   end
 
