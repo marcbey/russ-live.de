@@ -711,6 +711,10 @@ h3 {
   font-size: clamp(1rem, 1.1vw, 1.2rem);
 }
 
+.contact-page address.rich-copy {
+  font-style: normal;
+}
+
 .accordion {
   border-top: 1px solid var(--line);
 }
@@ -1054,6 +1058,19 @@ h3 {
   padding: clamp(22px, 2.5vw, 42px);
   position: absolute;
   right: var(--brand-left);
+  z-index: 2;
+}
+
+.reference-hero-slide-credit {
+  bottom: clamp(16px, 2vw, 32px);
+  color: rgba(255, 255, 255, .72);
+  font-size: clamp(.68rem, .72vw, .82rem);
+  left: var(--brand-left);
+  line-height: 1.2;
+  margin: 0;
+  max-width: min(28rem, calc(100vw - (var(--brand-left) * 2)));
+  position: absolute;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, .7);
   z-index: 2;
 }
 
@@ -1566,6 +1583,11 @@ h3 {
     max-width: calc(100vw - (var(--brand-left) * 2));
     padding: clamp(16px, 4.8vw, 24px);
     right: var(--brand-left);
+  }
+
+  .reference-hero-slide-credit {
+    bottom: auto;
+    top: calc(var(--mobile-header-height) + 18px);
   }
 
   .reference-hero-slide-copy h2 {
@@ -3402,21 +3424,11 @@ h3 {
 
 .about-editorial-image-founder {
   aspect-ratio: 857 / 785;
-  grid-column: 1 / span 11;
+  grid-column: 1 / -1;
   grid-row: 1;
   justify-self: start;
   width: 100%;
   z-index: 1;
-}
-
-.about-editorial-image-team {
-  aspect-ratio: 1122 / 879;
-  grid-column: 4 / -1;
-  grid-row: 1;
-  justify-self: end;
-  margin-top: clamp(21rem, 28vw, 31rem);
-  width: 100%;
-  z-index: 2;
 }
 
 .about-editorial-copy {
@@ -8083,14 +8095,6 @@ h3 {
     width: 100%;
   }
 
-  .about-editorial-image-team {
-    grid-column: 1;
-    grid-row: auto;
-    justify-self: end;
-    margin-top: clamp(-3rem, -6vw, -1.9rem);
-    width: 84%;
-  }
-
   .about-editorial-copy {
     gap: var(--about-editorial-block-gap);
     max-width: 100%;
@@ -8844,7 +8848,6 @@ h3 {
   .about-editorial-image-small,
   .about-editorial-image-large,
   .about-editorial-image-founder,
-  .about-editorial-image-team,
   .about-editorial-note {
     grid-column: 1;
     grid-row: auto;
@@ -8859,12 +8862,6 @@ h3 {
   .about-editorial-image-founder {
     justify-self: stretch;
     width: 100%;
-  }
-
-  .about-editorial-image-team {
-    justify-self: end;
-    margin-top: clamp(-3rem, -6vw, -1.9rem);
-    width: 84%;
   }
 
   .about-editorial-note {

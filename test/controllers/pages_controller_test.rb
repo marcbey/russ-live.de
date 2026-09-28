@@ -104,6 +104,43 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "team page omits former team members" do
+    get team_path
+
+    assert_response :success
+    assert_includes response.body, "Michael Wechselberger"
+    [ "Sebastian Kränzlein", "Elke Vierneisel", "Gabi Cremer", "Penny" ].each do |name|
+      assert_not_includes response.body, name
+    end
+  end
+
+  test "public pages omit paul woog" do
+    [ team_path, services_path, unternehmen_path, impressum_path, datenschutz_path ].each do |path|
+      get path
+
+      assert_response :success
+      assert_not_includes response.body, "Paul Woog"
+      assert_not_includes response.body, "paulwoog@russ-live.de"
+    end
+  end
+
+  test "about page omits former editorial portrait" do
+    get unternehmen_path
+
+    assert_response :success
+    assert_not_includes response.body, "russ_live/about/michaela-russ.jpg"
+    assert_includes response.body, "Michael Russ erweitert die traditionsreiche Arbeit"
+    assert_includes response.body, "Unsere Wurzeln liegen in Stuttgart"
+  end
+
+  test "contact page renders editable address without mail form" do
+    get kontakt_path
+
+    assert_response :success
+    assert_select "address.rich-copy", text: /Charlottenplatz 17/
+    assert_select ".contact-mail-form", count: 0
+  end
+
   test "renders published jobs in main navigation submenu" do
     get root_path
 
@@ -594,7 +631,8 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
       grid_variant: "2x2",
       slider_asset_path: "russ_live/references/03-neil-young.jpg",
       slider_mobile_asset_path: "russ_live/references/02-david-garrett.jpg",
-      slider_alt_text: "Hauptprojekt Slider"
+      slider_alt_text: "Hauptprojekt Slider",
+      slider_sub_text: "Slider Copyright"
     )
     featured_without_slider = create_reference_with_image!(title: "FEATURED OHNE SLIDER", position: 3, tag_list: "Theater", featured: true)
     regular = create_reference_with_image!(title: "NORMALE KACHEL", position: 1, tag_list: "Open Air")
@@ -611,6 +649,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select ".reference-hero-slider .reference-hero-slide-copy", text: /#{Regexp.escape(featured.display_date_text)}/
     assert_select ".reference-hero-slider .reference-hero-slide-copy", text: /Russ Live Produktion/
     assert_select ".reference-hero-slider .reference-hero-slide-copy", text: /Eine große Referenz mit Sliderbild/
+    assert_select ".reference-hero-slider .reference-hero-slide-credit", text: "© Slider Copyright"
     assert_select ".reference-hero-slider .reference-hero-slide-copy h2", text: "FEATURED OHNE SLIDER", count: 0
     assert_select ".reference-hero-slider .reference-hero-slider-controls", count: 0
     assert_select ".reference-featured-marquee", count: 0
@@ -675,6 +714,8 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "#marketing .service-focus-accordion .accordion-trigger", text: /Social Media & Performance Marketing/
     assert_select "#marketing .service-focus-accordion .accordion-panel", text: /messbaren Ergebnissen/
     assert_select "#staff .service-deployment-areas li", text: "Staplerfahrer*innen"
+    assert_select "#production .service-contact-card h3", text: "Johanna Backmund"
+    assert_select "#production a[href='mailto:johannabackmund@russ-live.de']"
   end
 
   test "renders public references with tag filters instead of year filters" do

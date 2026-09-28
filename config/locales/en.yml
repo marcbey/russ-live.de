@@ -158,8 +158,6 @@ en:
       members:
         michaela_russ:
           role: "Management"
-        paul_woog:
-          role: "Management"
         johanna_backmund:
           role: "Project Management / Accounting"
         arnulf_woock:
@@ -172,20 +170,12 @@ en:
           role: "Online Marketing / Social Media"
         tanja_ullenboom:
           role: "Production Management"
-        sebastian_kraenzlein:
-          role: "Staff Scheduling"
         michael_wechselberger:
           role: "Staff Scheduling"
         tim_wilka:
           role: "Ticketing"
-        elke_vierneisel:
-          role: "Accounting"
-        gabi_cremer:
-          role: "Accounting"
         jenny_hefner:
           role: "Accounting"
-        penny:
-          role: "Feel-good management"
     about:
       hero:
         eyebrow: "About us"
@@ -219,7 +209,7 @@ en:
         eyebrow: "Responsibility"
         title: "Tradition is not a look back for us, but trust in what comes next."
         image_alt: "Michael Russ Jr. with an award and partner at an awards ceremony"
-        first: "Michael Russ expands the long-standing work of Konzertdirektion Erwin Russ in the field of classical music to include pop, rock, shows and entertainment. In 2010, Paul Woog joins Michael Russ GmbH as managing director. Together, they continue to develop the company, bring artists to the stage, realize their own event concepts and create special experiences for their audience with concerts, shows and corporate events."
+        first: "Michael Russ expands the long-standing work of Konzertdirektion Erwin Russ in the field of classical music to include pop, rock, shows and entertainment. Together with his team, he continues to develop the company, bring artists to the stage, realize original event concepts and create special experiences for audiences through concerts, shows and corporate events."
         second: "Our roots are in Stuttgart, while at the same time we work with artists and partners from all over the world. Thanks to our many years of experience, short paths and a strong network, we can reliably realize even demanding projects – from the first idea through technology, safety, marketing and press relations to ticketing and staff planning."
         third: "Our spectrum ranges from small club concerts and major arena shows to spectacular open-air events. Different scales and formats are part of our everyday work, as is the challenge of creating the right setting for every project."
         fourth: "Since 2025, exhibitions have also expanded our portfolio. It began with the Titanic exhibition in Ludwigsburg. Today, alongside live events, we increasingly develop and realize exhibition concepts and open up new forms of cultural experience."
@@ -254,10 +244,6 @@ en:
       staff_jobs_button: "Job openings"
       contacts:
         aria: "Contacts"
-        paul:
-          name: "Paul Woog"
-          role: "Management"
-          email: "paulwoog@russ-live.de"
         johanna:
           name: "Johanna Backmund"
           role: "Project Management / Accounting"

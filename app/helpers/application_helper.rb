@@ -228,7 +228,15 @@ module ApplicationHelper
   end
 
   def press_image_credit(image)
-    credit = image&.sub_text.to_s.strip
+    formatted_image_credit(image&.sub_text)
+  end
+
+  def reference_slider_image_credit(reference_image)
+    formatted_image_credit(reference_image&.slider_sub_text)
+  end
+
+  def formatted_image_credit(value)
+    credit = value.to_s.strip
     return if credit.blank?
     return credit if credit.start_with?("©")
 

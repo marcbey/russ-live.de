@@ -9,6 +9,7 @@
       <% image_source = reference_slider_image_source(reference_image) %>
       <% mobile_image_source = reference_slider_mobile_image_source(reference_image) %>
       <% localized_description = reference.localized_description %>
+      <% slider_credit = reference_slider_image_credit(reference_image) %>
       <article class="reference-hero-slide <%= "is-active" if index.zero? %>"
                aria-hidden="<%= index.zero? ? "false" : "true" %>"
                data-reference-hero-slider-target="slide">
@@ -24,6 +25,9 @@
                         width: 1920,
                         height: 835 %>
         </picture>
+        <% if slider_credit.present? %>
+          <p class="reference-hero-slide-credit"><%= slider_credit %></p>
+        <% end %>
         <div class="reference-hero-slide-copy">
           <h2><%= format_stuttgart_live_brand(reference.title) %></h2>
           <div class="reference-hero-slide-meta">
