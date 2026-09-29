@@ -6567,6 +6567,16 @@ h3 {
   max-width: 100%;
 }
 
+@media (min-width: 1500px) {
+  .press-letter-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .press-letter-column {
+    display: contents;
+  }
+}
+
 .press-empty {
   border: 1px solid var(--line);
   color: var(--muted);
