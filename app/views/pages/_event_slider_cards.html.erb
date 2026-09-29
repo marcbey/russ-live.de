@@ -1,3 +1,3 @@
-<% events.each do |event| %>
-  <%= render "pages/event_slider_card", event: event %>
+<% events.each_with_index do |event, index| %>
+  <%= render "pages/event_slider_card", event: event, preload_image: index < 5, high_priority_image: index.zero? %>
 <% end %>

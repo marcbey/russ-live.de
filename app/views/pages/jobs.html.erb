@@ -82,16 +82,41 @@
     </div>
   </section>
 
-  <div class="job-overview-image-strip" aria-hidden="true">
-    <% [
+  <div class="job-overview-image-strip"
+       aria-hidden="true"
+       data-controller="reference-marquee"
+       data-reference-marquee-base-speed-value="5">
+    <% strip_images = [
       "russ_live/jobs/stage-before.jpg",
-      "russ_live/jobs/catering-team.jpg",
-      "russ_live/jobs/forklift-driver.jpg",
+      "russ_live/jobs/cook-with-salad-ringing-service-bell.jpg",
+      "russ_live/jobs/professional-female-driver-operating-forklift-vehicle.jpg",
       "russ_live/jobs/stagehand-crew.jpg",
+      "russ_live/jobs/handsome-man-work-office-using-computer.jpg",
+      "russ_live/jobs/chef-preparing-recipe.jpg",
+      "russ_live/jobs/warehouse-worker-operating-forklift.jpg",
+      "russ_live/jobs/catering-team.jpg",
+      "russ_live/jobs/stage-riggers.jpg",
+      "russ_live/jobs/young-cheerful-business-people-dressed-casual-clothing-are-having-fun-rowing-chairs-modern-office.jpg",
+      "russ_live/jobs/security-guard.jpg",
+      "russ_live/jobs/stage-worker-sets-up-lights.jpg",
       "russ_live/jobs/festival-leaflets.jpg",
-      "russ_live/jobs/security-guard.jpg"
-    ].each do |image| %>
-      <span class="job-overview-image-strip-tile" style="--job-strip-image: url('<%= image_path image %>')"></span>
-    <% end %>
+      "russ_live/jobs/professional-female-industrial-driver-operating-forklift-machine-factory-s-warehouse.jpg",
+      "russ_live/jobs/male-female-cheering-studio.jpg",
+      "russ_live/jobs/forklift-driver.jpg",
+      "russ_live/jobs/director-gesturing-actors-large-studio-lights-illuminating-background-crew-preparing.jpg",
+      "russ_live/jobs/it-team-play-video-games-console-while-relaxing-after-work.jpg",
+      "russ_live/jobs/fashionable-hipster-guy-dressed-stylish-black-hat-denim-shirt.jpg"
+    ] %>
+    <div class="job-overview-image-strip-track" data-reference-marquee-target="track">
+      <% 2.times do |group_index| %>
+        <div class="job-overview-image-strip-group"
+             data-reference-marquee-target="group"
+             <%= 'aria-hidden="true"'.html_safe if group_index.positive? %>>
+          <% strip_images.each do |image| %>
+            <span class="job-overview-image-strip-tile" style="--job-strip-image: url('<%= image_path image %>')"></span>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
   </div>
 </main>

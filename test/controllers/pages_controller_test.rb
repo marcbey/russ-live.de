@@ -946,7 +946,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Cateringhilfen"
   end
 
-  test "homepage renders sks highlights from STUTTGARTLIVE with lazy images" do
+  test "homepage renders sks highlights from STUTTGARTLIVE with prioritized images" do
     matching_event = create_event!(
       artist_name: "WILHELMINE",
       title: "magisch Tour 2026",
@@ -967,7 +967,8 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "WILHELMINE"
     assert_includes response.body, "magisch Tour 2026"
     assert_includes response.body, "https://img.example.test/wilhelmine.jpg"
-    assert_includes response.body, 'loading="lazy"'
+    assert_includes response.body, 'loading="eager"'
+    assert_includes response.body, 'fetchpriority="high"'
     assert_includes response.body, 'decoding="async"'
     assert_includes response.body, "Mehr Infos"
     assert_includes response.body, "WILHELMINE - magisch Tour 2026 auf STUTTGARTLIVE"

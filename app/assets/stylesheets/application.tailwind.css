@@ -2609,6 +2609,10 @@ h3 {
   text-wrap: normal;
 }
 
+.service-chapter > h2 {
+  text-transform: uppercase;
+}
+
 .service-chapter-copy {
   align-self: start;
   box-sizing: border-box;
@@ -5592,15 +5596,28 @@ h3 {
 }
 
 .job-overview-image-strip {
-  align-items: stretch;
-  display: grid;
-  gap: 0;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
   height: clamp(180px, 18vw, 280px);
   margin: 0 calc(50% - 50vw);
   max-width: none;
   overflow: hidden;
   width: 100vw;
+}
+
+.job-overview-image-strip-track {
+  align-items: stretch;
+  display: flex;
+  height: 100%;
+  width: max-content;
+}
+
+.job-overview-image-strip-group {
+  display: flex;
+  flex: 0 0 auto;
+  height: 100%;
+}
+
+.job-overview-image-strip-group + .job-overview-image-strip-group {
+  display: flex;
 }
 
 .job-overview-image-strip img {
@@ -5619,6 +5636,7 @@ h3 {
   background-position: center;
   background-size: cover;
   display: block;
+  flex: 0 0 calc(100vw / 6);
   min-height: 100%;
 }
 
@@ -5877,6 +5895,12 @@ h3 {
 
 .job-detail-actions .section-button {
   margin-top: 0;
+}
+
+.job-detail-actions .job-detail-back-button,
+.job-detail-actions .job-detail-apply-button {
+  margin-bottom: 0;
+  min-height: var(--public-button-min-height);
 }
 
 .job-detail-title {
@@ -6520,7 +6544,7 @@ h3 {
 .press-artist-card {
   display: block;
   font-size: clamp(1rem, 1.12vw, 1.18rem);
-  font-weight: 650;
+  font-weight: 400;
   line-height: 1.22;
   padding: 8px 0;
 }
@@ -7259,6 +7283,10 @@ h3 {
   margin-top: 0;
 }
 
+.job-page + .site-footer {
+  margin-top: 0;
+}
+
 .site-footer-brand {
   align-items: center;
   display: flex;
@@ -7400,6 +7428,14 @@ h3 {
 
   html {
     scroll-behavior: auto;
+  }
+
+  .job-overview-image-strip {
+    overflow-x: auto !important;
+  }
+
+  .job-overview-image-strip-track {
+    animation: none !important;
   }
 }
 
@@ -7587,6 +7623,34 @@ h3 {
     font-size: clamp(1rem, 4vw, 1.22rem);
   }
 
+  .job-overview-image-strip {
+    height: clamp(170px, 30vw, 230px);
+    overflow: hidden;
+  }
+
+  .job-overview-image-strip-track {
+    display: flex;
+    height: 100%;
+    width: max-content;
+  }
+
+  .job-overview-image-strip-group,
+  .job-overview-image-strip-group + .job-overview-image-strip-group {
+    display: flex;
+    flex: 0 0 auto;
+    height: 100%;
+  }
+
+  .job-overview-image-strip-tile {
+    display: block;
+    flex: 0 0 34vw;
+    min-height: 100%;
+  }
+
+  .job-overview-image-strip-group .job-overview-image-strip-tile:nth-child(n + 7) {
+    display: block;
+  }
+
   .site-footer {
     align-items: center;
     flex-direction: column;
@@ -7702,7 +7766,11 @@ h3 {
   }
 
   .site-header.is-menu-open .nav-item.is-submenu-open > a,
-  .site-header.is-menu-open .nav-item.is-submenu-open > .nav-submenu-toggle,
+  .site-header.is-menu-open .nav-item.is-submenu-open > .nav-submenu-toggle {
+    background: #ededed;
+    color: #000;
+  }
+
   .site-header.is-menu-open .nav-item:has(> a.is-active) > .nav-submenu-toggle {
     background: #000;
     color: #fff;
@@ -7714,12 +7782,16 @@ h3 {
 
   .site-header.is-menu-open .nav-item:hover > a,
   .site-header.is-menu-open .nav-item:focus-within > a {
-    background: #000;
-    color: #fff;
+    background: #ededed;
+    color: #000;
   }
 
   .site-header.is-menu-open .main-nav > a:hover,
-  .site-header.is-menu-open .main-nav > a:focus-visible,
+  .site-header.is-menu-open .main-nav > a:focus-visible {
+    background: #ededed;
+    color: #000;
+  }
+
   .site-header.is-menu-open .main-nav > a[aria-current="page"],
   .site-header.is-menu-open .nav-item > a.is-active {
     background: #000;
@@ -7729,19 +7801,26 @@ h3 {
   .site-header.is-menu-open .nav-submenu {
     background: #fafafa;
     box-shadow: none;
-    display: none;
+    display: grid;
     left: auto;
-    max-height: none;
+    max-height: 0;
     min-width: 0;
-    opacity: 1;
-    overflow: visible;
-    pointer-events: auto;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
     position: static;
-    transform: none;
+    transform: translateY(-8px);
+    transition: max-height .42s cubic-bezier(.22, 1, .36, 1), opacity .24s ease, transform .36s ease, visibility 0s linear .42s;
+    visibility: hidden;
   }
 
   .site-header.is-menu-open .nav-item.is-submenu-open .nav-submenu {
-    display: grid;
+    max-height: 720px;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    transition-delay: 0s;
+    visibility: visible;
   }
 
   .site-header.is-menu-open .nav-submenu a {
@@ -9357,17 +9436,20 @@ h3 {
   }
 
   .job-overview-image-strip {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    height: auto;
-    overflow: visible;
+    height: clamp(170px, 48vw, 230px);
+    overflow: hidden;
   }
 
-  .job-overview-image-strip img {
-    height: clamp(150px, 42vw, 220px);
+  .job-overview-image-strip-track {
+    display: flex;
+    height: 100%;
+    width: max-content;
   }
 
   .job-overview-image-strip-tile {
-    min-height: clamp(150px, 42vw, 220px);
+    display: block;
+    flex: 0 0 64vw;
+    min-height: 100%;
   }
 
   .job-table-row {
@@ -9602,16 +9684,19 @@ h3 {
 
 .service-chapter.service-chapter-ticketportal .services-events {
   align-self: stretch;
-  margin-top: clamp(20px, 2.5vw, 36px);
+  gap: clamp(14px, 2vw, 22px);
+  margin-top: 0;
   max-width: none;
-  padding: clamp(36px, 4vw, 64px) 0 0;
+  padding: clamp(8px, 1.5vw, 20px) 0 0;
   text-align: left;
   width: 100%;
 }
 
-.services-events-title {
-  font-size: clamp(1.05rem, 1.35vw, 1.4rem);
+.service-chapter.service-chapter-ticketportal .services-events-title {
+  font-size: clamp(1.35rem, 1.7vw, 1.8rem);
+  line-height: 1.2;
   margin: 0;
+  padding: 0;
   text-align: center;
 }
 
@@ -9620,6 +9705,51 @@ h3 {
   margin-top: 0;
   max-width: 100%;
   width: fit-content;
+}
+
+@media (max-width: 520px) {
+  .services-overview h2 {
+    font-size: clamp(1.85rem, 8vw, 2.2rem);
+    line-height: 1.08;
+  }
+
+  .service-chapter.service-chapter-ticketportal {
+    border-top: 2px solid var(--ink);
+    padding-top: 24px;
+  }
+
+  .service-chapter {
+    row-gap: 15px;
+  }
+
+  .service-chapter-copy > .service-chapter-text:first-child > p:first-child {
+    margin-top: 0;
+  }
+
+  .service-chapter > .service-chapter-visual {
+    margin-top: 19px;
+  }
+
+  .service-chapter h2,
+  .service-chapter-reverse h2 {
+    border-top: 2px solid var(--ink);
+    font-size: clamp(1.45rem, 6.5vw, 1.8rem);
+    line-height: 1.12;
+    padding-top: 18px;
+    text-transform: uppercase;
+  }
+
+  .service-chapter.service-chapter-ticketportal .services-events-title {
+    border-top: 0;
+    font-size: 1.35rem;
+    line-height: 1.2;
+    padding-top: 0;
+  }
+
+  .service-chapter.service-chapter-ticketportal > h2 {
+    border-top: 0;
+    padding-top: 0;
+  }
 }
 
 @media print {
