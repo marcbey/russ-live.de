@@ -95,31 +95,9 @@
         </section>
       <% end %>
 
-      <% if @home_events.any? %>
-      <section class="public-section section home-events" aria-labelledby="events-title" data-controller="events-slider" data-events-slider-url-value="<%= homepage_lane_events_path %>" data-events-slider-cursor-value="<%= @home_events_next_cursor %>">
-        <div class="section-head home-events-head">
-          <div>
-            <p class="eyebrow stuttgart-live-word"><%= sanitize(t("pages.home.events.eyebrow"), tags: %w[strong]) %></p>
-            <div class="home-events-title-row">
-              <h2 id="events-title"><%= t("pages.home.events.title") %></h2>
-              <a class="home-events-all-link" href="<%= @stuttgart_live_sks_highlights_url %>" target="_blank" rel="noreferrer">
-                <%= t("pages.home.events.show_all") %>
-                <span aria-hidden="true">›</span>
-              </a>
-            </div>
-            <p class="home-events-intro"><%= t("pages.home.events.intro") %></p>
-          </div>
-        </div>
-
-        <div class="home-events-viewport">
-          <div class="home-events-nav" aria-label="<%= t("pages.home.events.nav_aria") %>">
-            <button class="home-events-nav-button" type="button" data-action="events-slider#previous" aria-label="<%= t("pages.home.events.previous") %>">‹</button>
-            <button class="home-events-nav-button" type="button" data-action="events-slider#next" aria-label="<%= t("pages.home.events.next") %>">›</button>
-          </div>
-          <div class="home-events-slider" aria-label="<%= t("pages.home.events.title") %>" data-events-slider-target="viewport">
-            <%= render "pages/event_slider_cards", events: @home_events %>
-          </div>
-        </div>
-      </section>
-      <% end %>
+      <%= render "pages/events_slider",
+                 events: @home_events,
+                 next_cursor: @home_events_next_cursor,
+                 all_events_url: @stuttgart_live_sks_highlights_url,
+                 title_id: "events-title" %>
     </main>

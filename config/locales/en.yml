@@ -244,6 +244,9 @@ en:
         intro: "From the first site visit to final load-out: Russ Live brings together promoter expertise, production, marketing, staffing and ticketing for concerts, shows and cultural formats in the Stuttgart region."
       nav_aria: "Service areas"
       staff_jobs_button: "Job openings"
+      events:
+        title: "Our upcoming events"
+        show_all: "All events"
       contacts:
         aria: "Contacts"
         johanna:

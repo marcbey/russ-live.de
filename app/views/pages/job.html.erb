@@ -3,6 +3,7 @@
     <article class="job-content">
       <div class="job-detail-actions">
         <%= link_to t("jobs.detail.back_short"), jobs_path(anchor: "jobs-list"), class: "press-detail-back-button job-detail-back-button" %>
+        <%= link_to t("jobs.apply_now"), "#job-application", class: "public-button public-button-primary section-button job-detail-apply-button" %>
         <%= public_backend_link(
               label: t("public.actions.edit"),
               path: backend_jobs_path(job_id: @selected_job.id),

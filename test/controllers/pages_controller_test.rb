@@ -722,6 +722,27 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "#production a[href='mailto:johannabackmund@russ-live.de']"
   end
 
+  test "services renders upcoming events inside the ticket portal section" do
+    event = create_event!(
+      artist_name: "Services Artist",
+      title: "Services Event",
+      promoter_id: "10135",
+      start_at: 2.days.from_now
+    )
+    create_import_event_image!(event: event, image_url: "https://img.example.test/services-event.jpg")
+
+    get services_path
+
+    assert_response :success
+    assert_select "#ticketing .services-events" do
+      assert_select "#services-events-title.services-events-title", text: I18n.t("pages.services.events.title")
+      assert_select ".home-events-head", count: 0
+      assert_select ".event-slider-card", text: /Services Artist/
+      assert_select ".services-events-all-button[href=?]", PagesController::STUTTGART_LIVE_SKS_HIGHLIGHTS_URL,
+                    text: I18n.t("pages.services.events.show_all")
+    end
+  end
+
   test "renders public references with tag filters instead of year filters" do
     open_air = Reference.create!(
       title: "OPEN AIR SHOW",
@@ -874,6 +895,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Optionaler Text für die Detailseite"
     assert_select ".job-overview-hero", 0
     assert_select ".job-detail-back-button[href=?]", "#{jobs_path}#jobs-list", text: "Zurück"
+    assert_select ".job-detail-apply-button[href=?]", "#job-application", text: "Jetzt bewerben"
     assert_select ".job-detail-title", text: "Stagehands"
     assert_select ".job-apply .job-application-form[action^=?]", "mailto:"
     assert_select ".job-apply .job-application-submit", text: "E-Mail vorbereiten"
@@ -914,6 +936,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Setup and teardown"
     assert_includes response.body, "Teamwork"
     assert_includes response.body, "Stage crew | Jobs"
+    assert_select ".job-detail-apply-button[href=?]", "#job-application", text: "Apply now"
 
     Job.find_by!(slug: "cateringhilfen").update!(title_en: "")
 

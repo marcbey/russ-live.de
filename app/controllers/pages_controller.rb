@@ -49,7 +49,12 @@ class PagesController < ApplicationController
   def team
     @team_members = TeamMember.with_image.ordered.to_a
   end
-  def services; end
+  def services
+    @home_events_page = home_events_page
+    @home_events = @home_events_page.events
+    @home_events_next_cursor = @home_events_page.next_cursor
+    @stuttgart_live_sks_highlights_url = STUTTGART_LIVE_SKS_HIGHLIGHTS_URL
+  end
   def referenzen
     references = Reference.published.with_image.ordered.to_a
     @featured_references = prioritized_featured_references(

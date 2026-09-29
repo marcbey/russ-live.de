@@ -244,6 +244,9 @@ de:
         intro: "Vom ersten Ortstermin bis zum letzten Abbau: Russ Live bündelt Veranstalter-Know-how, Produktion, Marketing, Personal und Ticketing für Konzerte, Shows und Kulturformate in der Region Stuttgart."
       nav_aria: "Servicebereiche"
       staff_jobs_button: "Jobangebote"
+      events:
+        title: "Unsere nächsten Veranstaltungen"
+        show_all: "Alle Veranstaltungen"
       contacts:
         aria: "Ansprechpartner*in"
         johanna:

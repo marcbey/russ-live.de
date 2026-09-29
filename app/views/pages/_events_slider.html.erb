@@ -1,0 +1,38 @@
+<% if events.any? %>
+  <section class="public-section section home-events <%= local_assigns[:section_class] %>" aria-labelledby="<%= title_id %>" data-controller="events-slider" data-events-slider-url-value="<%= homepage_lane_events_path %>" data-events-slider-cursor-value="<%= next_cursor %>">
+    <% if local_assigns[:compact] %>
+      <h2 id="<%= title_id %>" class="services-events-title"><%= t("pages.services.events.title") %></h2>
+    <% elsif local_assigns.fetch(:show_header, true) %>
+      <div class="section-head home-events-head">
+        <div>
+          <p class="eyebrow stuttgart-live-word"><%= sanitize(t("pages.home.events.eyebrow"), tags: %w[strong]) %></p>
+          <div class="home-events-title-row">
+            <h2 id="<%= title_id %>"><%= t("pages.home.events.title") %></h2>
+            <a class="home-events-all-link" href="<%= all_events_url %>" target="_blank" rel="noreferrer">
+              <%= t("pages.home.events.show_all") %>
+              <span aria-hidden="true">›</span>
+            </a>
+          </div>
+          <p class="home-events-intro"><%= t("pages.home.events.intro") %></p>
+        </div>
+      </div>
+    <% else %>
+      <h2 id="<%= title_id %>" class="sr-only"><%= t("pages.home.events.title") %></h2>
+    <% end %>
+
+    <div class="home-events-viewport">
+      <div class="home-events-nav" aria-label="<%= t("pages.home.events.nav_aria") %>">
+        <button class="home-events-nav-button" type="button" data-action="events-slider#previous" aria-label="<%= t("pages.home.events.previous") %>">‹</button>
+        <button class="home-events-nav-button" type="button" data-action="events-slider#next" aria-label="<%= t("pages.home.events.next") %>">›</button>
+      </div>
+      <div class="home-events-slider" aria-label="<%= t("pages.home.events.title") %>" data-events-slider-target="viewport">
+        <%= render "pages/event_slider_cards", events: events %>
+      </div>
+    </div>
+    <% if local_assigns[:compact] %>
+      <a class="public-button public-button-primary section-button services-events-all-button" href="<%= all_events_url %>" target="_blank" rel="noreferrer">
+        <%= t("pages.services.events.show_all") %>
+      </a>
+    <% end %>
+  </section>
+<% end %>

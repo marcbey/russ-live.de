@@ -151,11 +151,13 @@
                 <% t("services.items.staff.deployment_areas").each do |deployment_area| %>
                   <li><%= deployment_area %></li>
                 <% end %>
+                <li class="service-deployment-action">
+                  <%= link_to t("pages.services.staff_jobs_button"),
+                              jobs_path,
+                              class: "public-button public-button-primary section-button service-staff-jobs-button" %>
+                </li>
               </ul>
             </div>
-            <%= link_to t("pages.services.staff_jobs_button"),
-                        jobs_path,
-                        class: "public-button public-button-primary section-button service-staff-jobs-button" %>
             <p class="service-contact-heading"><%= t("pages.services.contacts.aria") %></p>
             <div class="service-contact-grid" aria-label="<%= t("pages.services.contacts.aria") %>">
               <article class="service-contact-card">
@@ -185,6 +187,11 @@
 
 <article class="service-chapter service-chapter-ticketportal" id="ticketing">
           <h2><%= t("services.items.ticketing.title") %></h2>
+          <div class="service-chapter-copy">
+            <div class="service-chapter-text">
+              <p><%= sanitize(t("services.items.ticketing.paragraphs.first"), tags: %w[strong]) %></p>
+            </div>
+          </div>
           <figure class="public-card service-chapter-visual service-chapter-visual-filled service-chapter-visual-ticketportal">
             <div class="service-ticketportal-laptop">
               <%= image_tag "russ_live/keyvisuals/services-ticketportal.jpg",
@@ -203,17 +210,13 @@
                             decoding: "async" %>
             </div>
           </figure>
-          <div class="service-chapter-copy">
-            <div class="service-chapter-text">
-              <p><%= sanitize(t("services.items.ticketing.paragraphs.first"), tags: %w[strong]) %></p>
-            </div>
-            <%= link_to "https://www.stuttgart-live.de/",
-                        class: "public-button public-button-primary section-button",
-                        target: "_blank",
-                        rel: "noopener noreferrer" do %>
-              <%= t("services.items.ticketing.cta") %>
-            <% end %>
-          </div>
+          <%= render "pages/events_slider",
+                     events: @home_events,
+                     next_cursor: @home_events_next_cursor,
+                     all_events_url: @stuttgart_live_sks_highlights_url,
+                     title_id: "services-events-title",
+                     section_class: "services-events",
+                     compact: true %>
         </article>
       </section>
 
