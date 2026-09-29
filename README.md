@@ -117,10 +117,10 @@ Webgröße gebracht werden:
 mise exec -- bin/rails images:optimize_uploads
 ```
 
-Der Task verarbeitet Referenz-, Slider-, Job- und Ansprechpartnerbilder im
-Russ-Live-Storage.
+Der Task verarbeitet Referenz-, Slider-, Job-, Ansprechpartner- und Teambilder
+im Russ-Live-Storage.
 
-## Jobs und Ansprechpartner
+## Jobs, Ansprechpartner und Team
 
 Jobs und Ansprechpartner werden ebenfalls als Russ-eigene Domain-Daten in der
 `russ`-Datenbank gepflegt. Das Backend bietet dafür `/backend/jobs` und
@@ -141,6 +141,12 @@ es im Job-Editor optionale englische Felder für Titel, Badge, Intro,
 optionalen Text, Tätigkeitsfeld und Anforderungen. Wenn ein englisches Feld leer
 bleibt, nutzt die englische öffentliche Seite automatisch den deutschen Inhalt
 als Fallback.
+
+Das Team wird unter `/backend/team_members` gepflegt. Dort können Name,
+deutsche und englische Rolle sowie das Porträt bearbeitet werden. In der
+ungefilterten Liste lässt sich die Reihenfolge per Drag-and-drop ändern; sie
+wird direkt für die öffentliche Teamseite übernommen. Teamfotos liegen unter
+`storage/team_member_images`.
 
 ## Seitenpflege
 

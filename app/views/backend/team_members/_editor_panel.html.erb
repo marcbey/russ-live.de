@@ -1,0 +1,35 @@
+<% image = team_member.build_team_member_image_with_defaults %>
+<% form_url = team_member.persisted? ? backend_team_member_path(team_member) : backend_team_members_path %>
+<% form_method = team_member.persisted? ? :patch : :post %>
+<% form_id = dom_id(team_member, :editor_form) %>
+
+<div class="editor-panel" data-controller="reference-image-crop-preview">
+  <div class="editor-tabs">
+    <div class="editor-tab-list" role="tablist" aria-label="Teammitglied bearbeiten">
+      <% { "team_member" => "Teammitglied", "image" => "Bild" }.each do |tab, label| %>
+        <%= button_tag label, type: "button", class: "editor-tab #{'is-active' if active_editor_tab == tab}", role: "tab", aria: { selected: (active_editor_tab == tab).to_s }, data: { action: "reference-image-crop-preview#selectTab", reference_image_crop_preview_target: "tab", reference_image_crop_preview_tab_param: tab } %>
+      <% end %>
+    </div>
+    <div class="editor-actions editor-tabs-actions">
+      <button type="submit" form="<%= form_id %>" class="button button-compact">Speichern</button>
+      <% if team_member.persisted? %>
+        <%= button_to "Teammitglied löschen", backend_team_member_path(team_member, query: @query_filter), method: :delete, class: "button button-danger button-compact", form: { data: { turbo_confirm: "Dieses Teammitglied wirklich löschen?" } } %>
+        <%= link_to "Neues Teammitglied", new_backend_team_member_path(query: @query_filter), class: "button button-success button-compact" %>
+      <% end %>
+    </div>
+  </div>
+
+  <%= form_with model: team_member, url: form_url, method: form_method, class: "editor-form", html: { id: form_id, multipart: true }, data: { turbo: false } do |form| %>
+    <%= hidden_field_tag :query, @query_filter if @query_filter.present? %>
+    <%= hidden_field_tag :editor_tab, active_editor_tab, data: { reference_image_crop_preview_target: "editorTab" } %>
+    <% if team_member.errors.any? || image.errors.any? %>
+      <div class="form-errors"><p>Bitte prüfe die markierten Angaben.</p><ul><% (team_member.errors.full_messages + image.errors.full_messages).uniq.each do |message| %><li><%= message %></li><% end %></ul></div>
+    <% end %>
+    <div class="editor-tab-panel" data-reference-image-crop-preview-target="panel" data-reference-image-crop-preview-tab-param="team_member" <%= "hidden" unless active_editor_tab == "team_member" %>>
+      <%= render "team_member_fields", form: form %>
+    </div>
+    <div class="editor-tab-panel" data-reference-image-crop-preview-target="panel" data-reference-image-crop-preview-tab-param="image" <%= "hidden" unless active_editor_tab == "image" %>>
+      <%= render "backend/shared/simple_image_fields", image: image, image_source: team_member_image_source(image), param_key: "team_member_image", show_meta_fields: false %>
+    </div>
+  <% end %>
+</div>

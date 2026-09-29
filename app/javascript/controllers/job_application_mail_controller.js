@@ -49,7 +49,7 @@ export default class extends Controller {
   }
 
   get greeting() {
-    return this.greetingValue || "Hallo Sebastian,"
+    return this.greetingValue || "Hallo,"
   }
 
   get interestLine() {

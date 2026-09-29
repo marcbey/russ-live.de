@@ -45,6 +45,8 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_select ".press-search-suggestion .press-search-suggestion-image img"
     assert_select ".press-search-suggestion .press-search-suggestion-copy strong", "Ärztin Live"
     assert_select ".press-search-suggestion .press-search-suggestion-copy span", visible_event.title
+    assert_select ".press-sidebar-contact", 0
+    assert_not_includes response.body, "arnulfwoock@russ-live.de"
     assert_not_includes response.body, "Hidden Act"
     assert_select ".press-letter-grid" do |directory|
       assert_not_includes directory.to_html, visible_event.title
@@ -168,6 +170,12 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_select ".press-text-toggle[data-press-text-collapse-target='toggle']"
     assert_select ".press-text-body[data-press-text-collapse-target='body']"
     assert_select ".press-text-more-button .press-text-more-label", "Mehr anzeigen"
+    assert_select ".press-event-panel .press-sidebar-contact", 1
+    assert_select ".press-sidebar-contact .job-contact-heading", "Pressekontakt"
+    assert_select ".press-sidebar-contact .job-contact-name", "Arnulf Woock"
+    assert_select ".press-sidebar-contact a[href='mailto:arnulfwoock@russ-live.de']"
+    assert_select ".press-sidebar-contact a[href='tel:+497111635320']"
+    assert_select ".press-contact-strip", 0
   end
 
   test "show hides ticket button for past primary event" do

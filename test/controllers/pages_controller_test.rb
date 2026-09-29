@@ -11,11 +11,14 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     EditablePage.delete_all
     ContactImage.delete_all
     Contact.delete_all
+    TeamMemberImage.delete_all
+    TeamMember.delete_all
     ReferenceImage.delete_all
     Reference.delete_all
     clear_stuttgart_live_records
     seed_sks_promoter_ids!
     seed_jobs!
+    seed_team_members!
   end
 
   test "signed out visitors do not see backend navigation or edit buttons" do
@@ -88,7 +91,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
       services_path => "Live",
       referenzen_path => "Projekte auf die wir stolz sind",
       jobs_path => "Aktuelle Jobangebote",
-      job_path("stagehands") => "Jobdetails Stagehands",
+      job_path("stagehands") => "Stagehands",
       presse_path => "Presseinfos für",
       kontakt_path => "Charlottenplatz 17",
       impressum_path => "Impressum",
@@ -796,15 +799,18 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "renders job detail on its own page" do
+    Job.find_by!(slug: "stagehands").contact.update!(name: "Michael Wechselberger")
+
     get job_path("stagehands")
 
     assert_response :success
     assert_includes response.body, "Stagehands"
     assert_includes response.body, "Jobdetails Stagehands"
     assert_includes response.body, "Auf- und Abbau von Bühnen-, Licht- und Tontechnik"
-    assert_includes response.body, 'href="#job-application"'
+    assert_select ".job-overview-hero", 0
+    assert_select "#job-application .job-application-form"
     assert_includes response.body, 'data-controller="job-application-mail"'
-    assert_includes response.body, 'data-job-application-mail-greeting-value="Hallo Sebastian,"'
+    assert_includes response.body, 'data-job-application-mail-greeting-value="Hallo Michael,"'
     assert_includes response.body, 'data-job-application-mail-interest-line-value="Ich interessiere mich für die Stelle Stagehands."'
     assert_includes response.body, 'data-job-application-mail-personal-details-heading-value="Meine Daten:"'
     assert_includes response.body, 'id="job_application_salutation"'
@@ -866,6 +872,11 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, "Minijob"
     assert_includes response.body, "Optionaler Text für die Detailseite"
+    assert_select ".job-overview-hero", 0
+    assert_select ".job-detail-back-button[href=?]", "#{jobs_path}#jobs-list", text: "Zurück"
+    assert_select ".job-detail-title", text: "Stagehands"
+    assert_select ".job-apply .job-application-form[action^=?]", "mailto:"
+    assert_select ".job-apply .job-application-submit", text: "E-Mail vorbereiten"
     assert_not_includes response.body, "job-category-filter-nav"
     assert_not_includes response.body, "job-profile-nav"
     assert_includes response.body, "job-sidebar"
@@ -1002,6 +1013,16 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   private
+    def seed_team_members!
+      [
+        [ "Michaela Russ", "Geschäftsleitung", "Management" ],
+        [ "Sarah Sandner", "Team Lead Marketing", "Team Lead Marketing" ],
+        [ "Michael Wechselberger", "Personaldisposition", "Staff Scheduling" ]
+      ].each_with_index do |(name, role, role_en), index|
+        TeamMember.create!(name: name, role: role, role_en: role_en, position: index + 1)
+      end
+    end
+
 
   def clear_stuttgart_live_records
     ActiveStorage::Attachment.delete_all

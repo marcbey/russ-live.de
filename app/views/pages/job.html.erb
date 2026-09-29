@@ -1,35 +1,16 @@
-<main id="main-content" class="page-main public-page job-page" tabindex="-1">
-  <section class="public-hero public-hero-dark section public-page-hero job-overview-hero" aria-labelledby="job-title">
-    <div class="public-page-hero-media job-overview-hero-media">
-      <%= image_tag @job_overview_hero_image,
-                    alt: t("pages.jobs.hero.image_alt"),
-                    width: 2400,
-                    height: 998,
-                    decoding: "async",
-                    fetchpriority: "high" %>
-    </div>
-
-    <div class="public-page-hero-copy job-overview-hero-copy">
-      <% if @selected_job.localized_badge.present? %>
-        <p class="job-hero-badge"><%= @selected_job.localized_badge %></p>
-      <% end %>
-      <h1 id="job-title"><%= @selected_job.localized_title %></h1>
-      <p><%= @selected_job.localized_intro %></p>
-      <div class="job-overview-hero-actions">
-        <%= link_to t("jobs.back_to_overview"), jobs_path(anchor: "jobs-list"), class: "public-button public-button-outline section-button section-button-outline-light" %>
-        <%= link_to t("jobs.apply_now"), "#job-application", class: "public-button public-button-primary section-button", data: { anchor_position: "flush" } %>
+<main id="main-content" class="page-main public-page job-page job-detail-page" tabindex="-1">
+  <section class="public-section section job-detail" id="job-detail" aria-label="<%= @selected_job.detail_label %>">
+    <article class="job-content">
+      <div class="job-detail-actions">
+        <%= link_to t("jobs.detail.back_short"), jobs_path(anchor: "jobs-list"), class: "press-detail-back-button job-detail-back-button" %>
         <%= public_backend_link(
               label: t("public.actions.edit"),
               path: backend_jobs_path(job_id: @selected_job.id),
               aria_label: t("public.actions.edit_jobs"),
-              class_name: "public-button section-button section-button-outline-light public-admin-link"
+              class_name: "public-button section-button public-admin-link"
             ) %>
       </div>
-    </div>
-  </section>
 
-  <section class="public-section section job-detail" id="job-detail" aria-label="<%= @selected_job.detail_label %>">
-    <article class="job-content">
       <% if @job_preview %>
         <div class="job-preview-note">
           <strong>Vorschau</strong>
@@ -40,6 +21,12 @@
           <% end %>
         </div>
       <% end %>
+
+      <% if @selected_job.localized_badge.present? %>
+        <p class="eyebrow job-detail-badge"><%= @selected_job.localized_badge %></p>
+      <% end %>
+      <h1 id="job-title" class="job-detail-title"><%= @selected_job.localized_title %></h1>
+      <p class="job-detail-intro"><%= @selected_job.localized_intro %></p>
 
       <% if @selected_job.localized_optional_text.present? %>
         <div class="job-section job-optional-text">
@@ -68,6 +55,7 @@
       <div class="job-apply" id="job-application">
         <h2><%= t("jobs.detail.apply_title") %></h2>
         <% application_recipient = @selected_job.contact&.email.presence || "info@russ-live.de" %>
+        <% application_contact_name = @selected_job.contact&.name.to_s.split.first.presence || t("jobs.detail.form.email_contact_fallback") %>
         <form class="job-application-form"
               action="mailto:<%= application_recipient %>"
               method="post"
@@ -76,7 +64,7 @@
               data-action="submit->job-application-mail#prepare"
               data-job-application-mail-recipient-value="<%= application_recipient %>"
               data-job-application-mail-subject-value="<%= @selected_job.application_email_subject %>"
-              data-job-application-mail-greeting-value="<%= t("jobs.detail.form.email_greeting") %>"
+              data-job-application-mail-greeting-value="<%= t("jobs.detail.form.email_greeting", name: application_contact_name) %>"
               data-job-application-mail-interest-line-value="<%= t("jobs.detail.form.email_interest_line", title: @selected_job.localized_title) %>"
               data-job-application-mail-personal-details-heading-value="<%= t("jobs.detail.form.email_personal_details_heading") %>"
               data-job-application-mail-salutation-label-value="<%= t("jobs.detail.form.salutation") %>"

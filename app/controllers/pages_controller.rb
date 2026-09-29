@@ -46,7 +46,9 @@ class PagesController < ApplicationController
     head :bad_request
   end
   def unternehmen; end
-  def team; end
+  def team
+    @team_members = TeamMember.with_image.ordered.to_a
+  end
   def services; end
   def referenzen
     references = Reference.published.with_image.ordered.to_a
@@ -66,7 +68,6 @@ class PagesController < ApplicationController
   def job
     @jobs = Job.published.with_contact_and_image.ordered.to_a
     @selected_job = find_job!(params[:slug])
-    @job_overview_hero_image = "russ_live/jobs/overview-hero.jpg"
     @page_meta = PAGE_META.fetch(:job).merge(
       title: @selected_job.localized_meta_title.presence || t("pages.job.meta.dynamic_title", title: @selected_job.localized_title),
       description: @selected_job.localized_meta_description.presence || t("pages.job.meta.description")

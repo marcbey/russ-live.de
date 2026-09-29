@@ -408,6 +408,7 @@ en:
     detail:
       aria_label: "Job details %{title}"
       application_email_subject: "Application %{title}"
+      back_short: "Back"
       responsibilities: "Responsibilities"
       requirements: "Requirements"
       apply_title: "We look forward to your application!"
@@ -428,7 +429,8 @@ en:
         position: "Position"
         message: "Tell us something about yourself"
         email_hint: "An email will be prepared. Please attach your application documents there, such as your cover letter, certificates, and CV."
-        email_greeting: "Hello Sebastian,"
+        email_contact_fallback: "Russ Live team"
+        email_greeting: "Hello %{name},"
         email_interest_line: "I am interested in the position %{title}."
         email_personal_details_heading: "My details:"
         submit: "Prepare email"
@@ -458,6 +460,7 @@ en:
         title: "Press contact"
         text: "For interview, accreditation and material requests, the press area is directly prepared."
         role: "Press & Public Relations"
+        phone: "Phone"
     detail:
       meta:
         title: "%{name} | Press | Russ Live"

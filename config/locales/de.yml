@@ -408,6 +408,7 @@ de:
     detail:
       aria_label: "Jobdetails %{title}"
       application_email_subject: "Bewerbung %{title}"
+      back_short: "Zurück"
       responsibilities: "Tätigkeitsfeld"
       requirements: "Anforderungen"
       apply_title: "Wir freuen uns auf Deine Bewerbung!"
@@ -428,7 +429,8 @@ de:
         position: "Stelle"
         message: "Erzähle uns etwas von dir"
         email_hint: "Es wird eine E-Mail vorbereitet. Bitte hänge dort Deine Bewerbungs-Unterlagen wie Anschreiben, Zeugnisse und Lebenslauf an."
-        email_greeting: "Hallo Sebastian,"
+        email_contact_fallback: "Russ Live Team"
+        email_greeting: "Hallo %{name},"
         email_interest_line: "Ich interessiere mich für die Stelle %{title}."
         email_personal_details_heading: "Meine Daten:"
         submit: "E-Mail vorbereiten"
@@ -458,6 +460,7 @@ de:
         title: "Pressekontakt"
         text: "Für Interview-, Akkreditierungs- und Materialanfragen ist der Pressebereich direkt vorbereitet."
         role: "Presse- & Öffentlichkeitsarbeit"
+        phone: "Telefon"
     detail:
       meta:
         title: "%{name} | Presse | Russ Live"

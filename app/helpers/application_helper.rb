@@ -213,6 +213,10 @@ module ApplicationHelper
     stored_image_source(contact_image, route_helper: :contact_image_path)
   end
 
+  def team_member_image_source(team_member_image)
+    stored_image_source(team_member_image, route_helper: :team_member_image_path)
+  end
+
   def stored_image_file_metadata(stored_image)
     return [] if stored_image.blank? || !stored_image.image?
 

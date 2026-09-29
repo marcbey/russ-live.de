@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_21_161000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_29_103000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -182,8 +182,33 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_21_161000) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "team_member_images", force: :cascade do |t|
+    t.string "alt_text"
+    t.string "asset_path"
+    t.bigint "byte_size"
+    t.string "content_type"
+    t.datetime "created_at", null: false
+    t.string "file_path"
+    t.string "filename"
+    t.string "sub_text"
+    t.bigint "team_member_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["team_member_id"], name: "index_team_member_images_on_team_member_id", unique: true
+  end
+
+  create_table "team_members", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.string "role"
+    t.string "role_en"
+    t.datetime "updated_at", null: false
+    t.index ["position"], name: "index_team_members_on_position"
+  end
+
   add_foreign_key "contact_images", "contacts"
   add_foreign_key "job_images", "jobs"
   add_foreign_key "jobs", "contacts"
   add_foreign_key "reference_images", "references"
+  add_foreign_key "team_member_images", "team_members"
 end

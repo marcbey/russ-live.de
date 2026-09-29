@@ -20,35 +20,37 @@
       <% end %>
     </article>
     <aside class="press-event-panel">
-      <p class="eyebrow"><%= t("press.detail.event.eyebrow") %></p>
-      <dl>
-        <% primary_event = @press_artist.primary_event %>
-        <% primary_event_current = primary_event.start_at.future? %>
-        <div><dt><%= t("press.detail.event.date") %></dt><dd><%= l(primary_event.start_at.to_date, format: "%d. %B %Y") %></dd></div>
-        <div><dt><%= t("press.detail.event.time") %></dt><dd><%= l(primary_event.start_at, format: t("time.formats.event_time")) %></dd></div>
-        <% if primary_event.venue.present? %>
-          <div><dt><%= t("press.detail.event.location") %></dt><dd><%= primary_event.venue %></dd></div>
-        <% end %>
-        <div><dt><%= t("press.detail.event.status") %></dt><dd><%= primary_event_current ? t("press.detail.event.current") : t("press.detail.event.past") %></dd></div>
-        <% if @press_artist.additional_events.any? %>
-          <div>
-            <dt><%= t("press.detail.event.more_dates") %></dt>
-            <dd>
-              <% @press_artist.additional_events.each do |event| %>
-                <span><%= l(event.start_at.to_date, format: "%d.%m.%Y") %><%= " · #{event.venue}" if event.venue.present? %></span><br>
-              <% end %>
-            </dd>
+      <div class="press-event-details">
+        <p class="eyebrow"><%= t("press.detail.event.eyebrow") %></p>
+        <dl>
+          <% primary_event = @press_artist.primary_event %>
+          <% primary_event_current = primary_event.start_at.future? %>
+          <div><dt><%= t("press.detail.event.date") %></dt><dd><%= l(primary_event.start_at.to_date, format: "%d. %B %Y") %></dd></div>
+          <div><dt><%= t("press.detail.event.time") %></dt><dd><%= l(primary_event.start_at, format: t("time.formats.event_time")) %></dd></div>
+          <% if primary_event.venue.present? %>
+            <div><dt><%= t("press.detail.event.location") %></dt><dd><%= primary_event.venue %></dd></div>
+          <% end %>
+          <div><dt><%= t("press.detail.event.status") %></dt><dd><%= primary_event_current ? t("press.detail.event.current") : t("press.detail.event.past") %></dd></div>
+          <% if @press_artist.additional_events.any? %>
+            <div>
+              <dt><%= t("press.detail.event.more_dates") %></dt>
+              <dd>
+                <% @press_artist.additional_events.each do |event| %>
+                  <span><%= l(event.start_at.to_date, format: "%d.%m.%Y") %><%= " · #{event.venue}" if event.venue.present? %></span><br>
+                <% end %>
+              </dd>
+            </div>
+          <% end %>
+        </dl>
+        <% if primary_event_current %>
+          <div class="press-event-actions">
+            <a class="public-button public-button-secondary section-button press-event-detail-button" href="<%= primary_event.public_detail_url %>" target="_blank" rel="noreferrer" title="<%= t("events.more_info_title", title: primary_event.artist_name) %>"><%= t("events.more_info") %></a>
+            <a class="public-button public-button-primary section-button press-event-ticket-button" href="<%= @press_artist.ticket_url %>" target="_blank" rel="noreferrer"><%= t("events.tickets") %></a>
           </div>
         <% end %>
-      </dl>
-      <% if primary_event_current %>
-        <div class="press-event-actions">
-          <a class="public-button public-button-secondary section-button press-event-detail-button" href="<%= primary_event.public_detail_url %>" target="_blank" rel="noreferrer" title="<%= t("events.more_info_title", title: primary_event.artist_name) %>"><%= t("events.more_info") %></a>
-          <a class="public-button public-button-primary section-button press-event-ticket-button" href="<%= @press_artist.ticket_url %>" target="_blank" rel="noreferrer"><%= t("events.tickets") %></a>
-        </div>
-      <% end %>
+      </div>
+      <%= render "pages/press_contact" %>
     </aside>
-  </section>
 
   <% if @press_artist.gallery_images.any? %>
     <section class="public-section section press-downloads" id="downloads" aria-labelledby="press-download-title" data-controller="press-lightbox" data-press-lightbox-fallback-alt-value="<%= t("press.detail.fallback_image_alt") %>">
@@ -123,6 +125,5 @@
       </div>
     </section>
   <% end %>
-
-  <%= render "pages/press_contact", title_id: "press-detail-contact-title" %>
+  </section>
 </main>
