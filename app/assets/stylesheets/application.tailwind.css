@@ -2524,11 +2524,11 @@ h3 {
   max-width: none;
   padding: clamp(72px, 8vw, 128px) var(--brand-left) clamp(48px, 6vw, 96px);
   scroll-margin-top: 116px;
-  text-align: center;
+  text-align: left;
 }
 
 .services-overview-inner {
-  margin: 0 auto;
+  margin: 0;
   max-width: 76rem;
 }
 
@@ -2536,13 +2536,13 @@ h3 {
   font-size: clamp(2.1rem, 3.7vw, 4.15rem);
   font-weight: 600;
   line-height: .92;
-  margin: 0 auto;
+  margin: 0;
   max-width: 24ch;
   text-wrap: balance;
 }
 
 .services-overview-copy {
-  margin: clamp(24px, 3vw, 42px) auto 0;
+  margin: clamp(24px, 3vw, 42px) 0 0;
   max-width: min(64rem, 100%);
 }
 
@@ -2555,14 +2555,14 @@ h3 {
 
 .services-overview .service-contact-heading {
   margin-top: clamp(30px, 4vw, 56px);
-  text-align: center;
+  text-align: left;
 }
 
 .services-overview-contact-grid {
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .services-overview .service-contact-card {
@@ -2573,7 +2573,7 @@ h3 {
   margin-inline: 0;
   max-width: none;
   overflow: hidden;
-  padding: 0 0 clamp(72px, 9vw, 138px);
+  padding: 0;
 }
 
 .service-chapter {
@@ -2750,7 +2750,7 @@ h3 {
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .service-contact-card {
@@ -7240,6 +7240,10 @@ h3 {
   margin-top: 0;
 }
 
+.services-page + .site-footer {
+  margin-top: 0;
+}
+
 .site-footer-brand {
   align-items: center;
   display: flex;
@@ -8954,7 +8958,7 @@ h3 {
   .services-overview-contact-grid {
     align-items: center;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   .services-overview .service-contact-card {
@@ -9478,6 +9482,8 @@ h3 {
 
 .service-chapter.service-chapter-ticketportal {
   align-items: center;
+  background: #f3f3f1;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -9485,6 +9491,7 @@ h3 {
   padding: clamp(70px, 8vw, 132px) var(--brand-left) clamp(82px, 9vw, 148px);
   row-gap: clamp(24px, 3vw, 44px);
   text-align: center;
+  width: 100%;
 }
 
 .service-chapter.service-chapter-ticketportal h2 {
