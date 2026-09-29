@@ -150,7 +150,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select ".nav-submenu-jobs[aria-label=?]", "Jobangebote Untermenü" do
-      assert_select "a[href=?]", jobs_path(anchor: "jobs-list"), text: "Alle Jobangebote"
+      assert_select "a[href=?]", jobs_path(anchor: "jobs-list"), count: 0
       assert_select "a[href=?]", job_path("cateringhilfen"), text: "Cateringhilfen"
       assert_select "a[href=?]", job_path("stagehands"), text: "Stagehands"
     end

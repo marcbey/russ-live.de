@@ -45,6 +45,8 @@ de:
       language_switch: "Zur Sprache %{language} wechseln"
       menu_open: "Menü öffnen"
       menu_close: "Menü schließen"
+      submenu_open: "%{menu} Untermenü öffnen"
+      submenu_close: "%{menu} Untermenü schließen"
     actions:
       edit: "Bearbeiten"
       edit_references: "Referenzen im Backend bearbeiten"

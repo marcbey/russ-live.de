@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 const DESKTOP_BREAKPOINT = "(min-width: 1071px)"
 
 export default class extends Controller {
-  static targets = ["button", "nav"]
+  static targets = ["button", "nav", "submenuToggle"]
   static values = {
     closeLabel: String,
     openLabel: String,
@@ -38,11 +38,27 @@ export default class extends Controller {
     this.setOpen(!this.element.classList.contains("is-menu-open"))
   }
 
+  toggleSubmenu(event) {
+    const button = event.currentTarget
+    const shouldOpen = button.getAttribute("aria-expanded") !== "true"
+
+    this.submenuToggleTargets.forEach((toggle) => {
+      this.setSubmenuOpen(toggle, toggle === button && shouldOpen)
+    })
+  }
+
   setOpen(open) {
     this.element.classList.toggle("is-menu-open", open)
     this.buttonTarget.classList.toggle("is-active", open)
     this.buttonTarget.setAttribute("aria-expanded", String(open))
     this.buttonTarget.setAttribute("aria-label", open ? this.closeLabel : this.openLabel)
+    if (!open) this.submenuToggleTargets.forEach((button) => this.setSubmenuOpen(button, false))
+  }
+
+  setSubmenuOpen(button, open) {
+    button.closest(".nav-item")?.classList.toggle("is-submenu-open", open)
+    button.setAttribute("aria-expanded", String(open))
+    button.setAttribute("aria-label", open ? button.dataset.closeLabel : button.dataset.openLabel)
   }
 
   get closeLabel() {

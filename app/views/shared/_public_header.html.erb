@@ -9,7 +9,10 @@
     <% end %>
     <div class="nav-item has-submenu">
       <%= link_to t("public.header.company"), unternehmen_path, class: public_nav_class(%i[unternehmen team referenzen]) %>
-      <div class="nav-submenu" aria-label="<%= t("public.header.company_submenu_aria") %>">
+      <button class="nav-submenu-toggle" type="button" aria-controls="company-submenu" aria-expanded="false" aria-label="<%= t("public.header.submenu_open", menu: t("public.header.company")) %>" data-action="mobile-menu#toggleSubmenu" data-mobile-menu-target="submenuToggle" data-open-label="<%= t("public.header.submenu_open", menu: t("public.header.company")) %>" data-close-label="<%= t("public.header.submenu_close", menu: t("public.header.company")) %>">
+        <span aria-hidden="true"></span>
+      </button>
+      <div class="nav-submenu" id="company-submenu" aria-label="<%= t("public.header.company_submenu_aria") %>">
         <%= link_to t("public.header.about"), unternehmen_path, public_nav_aria(:unternehmen) || {} %>
         <%= link_to t("public.header.team"), team_path, public_nav_aria(:team) || {} %>
         <%= link_to t("public.header.references"), referenzen_path, public_nav_aria(:referenzen) || {} %>
@@ -20,8 +23,10 @@
     <% if public_header_jobs.any? %>
       <div class="nav-item has-submenu">
         <%= link_to t("public.header.jobs"), jobs_path, class: public_nav_class(%i[jobs job]) %>
-        <div class="nav-submenu nav-submenu-jobs" aria-label="<%= t("public.header.jobs_submenu_aria") %>">
-          <%= link_to t("public.header.all_jobs"), jobs_path(anchor: "jobs-list"), public_nav_aria(:jobs) || {} %>
+        <button class="nav-submenu-toggle" type="button" aria-controls="jobs-submenu" aria-expanded="false" aria-label="<%= t("public.header.submenu_open", menu: t("public.header.jobs")) %>" data-action="mobile-menu#toggleSubmenu" data-mobile-menu-target="submenuToggle" data-open-label="<%= t("public.header.submenu_open", menu: t("public.header.jobs")) %>" data-close-label="<%= t("public.header.submenu_close", menu: t("public.header.jobs")) %>">
+          <span aria-hidden="true"></span>
+        </button>
+        <div class="nav-submenu nav-submenu-jobs" id="jobs-submenu" aria-label="<%= t("public.header.jobs_submenu_aria") %>">
           <% public_header_jobs.each do |job| %>
             <%= link_to job.title,
                         job_path(job.slug),
