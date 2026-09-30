@@ -29,6 +29,7 @@ import ScrollTopController from "./scroll_top_controller"
 import ServicesJumpNavController from "./services_jump_nav_controller"
 import SliderController from "./slider_controller"
 import SmoothAnchorController from "./smooth_anchor_controller"
+import TeamCarouselController from "./team_carousel_controller"
 
 application.register("accordion", AccordionController)
 application.register("backend-list-focus", BackendListFocusController)
@@ -55,3 +56,4 @@ application.register("scroll-top", ScrollTopController)
 application.register("services-jump-nav", ServicesJumpNavController)
 application.register("slider", SliderController)
 application.register("smooth-anchor", SmoothAnchorController)
+application.register("team-carousel", TeamCarouselController)

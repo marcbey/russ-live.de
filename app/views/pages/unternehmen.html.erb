@@ -124,4 +124,48 @@
       </article>
     </div>
   </section>
+
+  <% if @team_members.any? %>
+    <section class="public-section about-team-section"
+             aria-labelledby="about-team-title"
+             data-controller="team-carousel">
+      <div class="about-team-head">
+        <div class="about-team-heading">
+          <h2 id="about-team-title"><%= t("pages.about.team.title") %></h2>
+          <p><%= t("pages.about.team.intro") %></p>
+        </div>
+        <div class="about-team-controls">
+          <button class="about-team-arrow"
+                  type="button"
+                  aria-label="<%= t("pages.about.team.previous") %>"
+                  data-team-carousel-target="previous"
+                  data-action="team-carousel#previous">‹</button>
+          <button class="about-team-arrow"
+                  type="button"
+                  aria-label="<%= t("pages.about.team.next") %>"
+                  data-team-carousel-target="next"
+                  data-action="team-carousel#next">›</button>
+        </div>
+      </div>
+
+      <div class="about-team-viewport" data-team-carousel-target="viewport">
+        <% @team_members.each do |member| %>
+          <article class="about-team-card" data-team-carousel-target="card">
+            <figure>
+              <% if (image_source = team_member_image_source(member.team_member_image)) %>
+                <%= image_tag image_source,
+                              alt: member.team_member_image.display_alt_text || member.name,
+                              loading: "lazy",
+                              decoding: "async",
+                              width: 600,
+                              height: 600 %>
+              <% end %>
+            </figure>
+            <h3><%= member.name %></h3>
+            <p><%= member.localized_role %></p>
+          </article>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
 </main>
