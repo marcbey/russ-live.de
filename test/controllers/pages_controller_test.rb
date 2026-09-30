@@ -107,15 +107,12 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "renders the managed team as a carousel on the about page" do
+  test "about page omits the managed team carousel" do
     get unternehmen_path
 
     assert_response :success
-    assert_select "[data-controller='team-carousel']" do
-      assert_select ".about-team-card", TeamMember.count
-      assert_select "[data-action='team-carousel#previous']", 1
-      assert_select "[data-action='team-carousel#next']", 1
-    end
+    assert_select "[data-controller='team-carousel']", count: 0
+    assert_select ".about-team-card", count: 0
   end
 
   test "team page omits former team members" do
@@ -130,7 +127,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "public pages omit paul woog" do
-    [ team_path, services_path, impressum_path, datenschutz_path ].each do |path|
+    [ unternehmen_path, team_path, services_path, impressum_path, datenschutz_path ].each do |path|
       get path
 
       assert_response :success
@@ -145,7 +142,8 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_not_includes response.body, "russ_live/about/michaela-russ.jpg"
     assert_includes response.body, "Michael erweitert die traditionsreiche Arbeit"
-    assert_includes response.body, "Paul Woog über 16 Jahre hinweg"
+    assert_includes response.body, "Michaela Russ führt diesen Weg in der dritten Generation weiter"
+    assert_includes response.body, "Daraus ist ein Team entstanden"
     assert_includes response.body, "Unsere Wurzeln liegen in Stuttgart"
   end
 

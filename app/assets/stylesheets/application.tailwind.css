@@ -3361,6 +3361,19 @@ h3 {
   }
 }
 
+@media (min-width: 1800px) {
+  .about-hero {
+    column-gap: clamp(5rem, 6vw, 7.5rem);
+    grid-template-columns: minmax(0, 30rem) minmax(0, 48rem);
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 106rem;
+    padding-left: clamp(3rem, 4vw, 5rem);
+    padding-right: clamp(3rem, 4vw, 5rem);
+  }
+}
+
 .about-history-image-award {
   aspect-ratio: 1.18 / 1;
 }
@@ -3753,6 +3766,9 @@ h3 {
   display: grid;
   gap: clamp(2rem, 3vw, 3rem) clamp(1rem, 1.8vw, 1.75rem);
   grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 0 auto;
+  max-width: var(--content-wide);
+  width: 100%;
 }
 
 .team-card {
@@ -6021,6 +6037,14 @@ h3 {
   padding-right: 0;
   padding-top: clamp(300px, 20vw, 360px);
   scroll-margin-top: var(--header-nav-height);
+}
+
+@media (min-width: 1071px) {
+  .page-header + .job-detail-page > .job-detail:first-child {
+    max-width: min(var(--max), calc(100vw - (var(--brand-left) * 2)));
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 .job-detail-page {

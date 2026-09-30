@@ -46,7 +46,6 @@ class PagesController < ApplicationController
     head :bad_request
   end
   def unternehmen
-    @team_members = TeamMember.with_image.ordered.to_a
   end
   def team
     @team_members = TeamMember.with_image.ordered.to_a
