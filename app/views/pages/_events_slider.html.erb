@@ -5,7 +5,11 @@
     <% elsif local_assigns.fetch(:show_header, true) %>
       <div class="section-head home-events-head">
         <div>
-          <p class="eyebrow stuttgart-live-word"><%= sanitize(t("pages.home.events.eyebrow"), tags: %w[strong]) %></p>
+          <%= image_tag "russ_live/logos/stuttgart-live-logo.png",
+                        alt: "STUTTGART LIVE",
+                        class: "home-events-brand-logo",
+                        width: 200,
+                        height: 89 %>
           <div class="home-events-title-row">
             <h2 id="<%= title_id %>"><%= t("pages.home.events.title") %></h2>
             <a class="home-events-all-link" href="<%= all_events_url %>" target="_blank" rel="noreferrer">
@@ -29,6 +33,12 @@
         <%= render "pages/event_slider_cards", events: events %>
       </div>
     </div>
+    <% if !local_assigns[:compact] && local_assigns.fetch(:show_header, true) %>
+      <a class="home-events-all-link home-events-all-link-mobile" href="<%= all_events_url %>" target="_blank" rel="noreferrer">
+        <%= t("pages.home.events.show_all") %>
+        <span aria-hidden="true">›</span>
+      </a>
+    <% end %>
     <% if local_assigns[:compact] %>
       <a class="public-button public-button-primary section-button services-events-all-button" href="<%= all_events_url %>" target="_blank" rel="noreferrer">
         <%= t("pages.services.events.show_all") %>

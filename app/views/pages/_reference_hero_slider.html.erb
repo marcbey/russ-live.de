@@ -25,20 +25,22 @@
                         width: 1920,
                         height: 835 %>
         </picture>
-        <% if slider_credit.present? %>
-          <p class="reference-hero-slide-credit"><%= slider_credit %></p>
-        <% end %>
-        <div class="reference-hero-slide-copy">
-          <h2><%= format_stuttgart_live_brand(reference.title) %></h2>
-          <div class="reference-hero-slide-meta">
-            <span><%= reference_date_label(reference) %></span>
-            <span><%= reference.location %></span>
-            <% if reference.production.present? %>
-              <span><%= reference.production %></span>
+        <div class="reference-hero-slide-panel">
+          <div class="reference-hero-slide-copy">
+            <h2><%= format_stuttgart_live_brand(reference.title) %></h2>
+            <div class="reference-hero-slide-meta">
+              <span><%= reference_date_label(reference) %></span>
+              <span><%= reference.location %></span>
+              <% if reference.production.present? %>
+                <span><%= reference.production %></span>
+              <% end %>
+            </div>
+            <% if localized_description.present? %>
+              <p><%= localized_description %></p>
             <% end %>
           </div>
-          <% if localized_description.present? %>
-            <p><%= localized_description %></p>
+          <% if slider_credit.present? %>
+            <p class="reference-hero-slide-credit"><%= slider_credit %></p>
           <% end %>
         </div>
       </article>
