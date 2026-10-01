@@ -136,12 +136,15 @@ class PressControllerTest < ActionDispatch::IntegrationTest
   test "show renders primary event, fallback press text, venue and further events" do
     venue_id = create_venue!(name: "Liederhalle Stuttgart")
     primary_start_at = 2.weeks.from_now.change(hour: 20, min: 0, sec: 0)
+    fallback_press_text = Array.new(9) do |index|
+      "Fallback Pressetext Absatz #{index + 1}: Dieser Dummy-Text ist absichtlich lang, damit der mobile Pressetext einklappt und der Mehr-Weniger-Schalter realistisch getestet wird."
+    end.join("\n\n")
     first_event = create_event!(
       artist_name: "Future Artist",
       normalized_artist_name: "future artist",
       publish_on_russ_live: true,
       start_at: primary_start_at,
-      event_info: "Fallback Pressetext",
+      event_info: fallback_press_text,
       venue_id:
     )
     create_event_offer!(event_id: first_event.id, ticket_url: "https://tickets.example/%{event_id}", source_event_id: "abc")
@@ -157,7 +160,8 @@ class PressControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_includes response.body, "Future Artist"
-    assert_includes response.body, "Fallback Pressetext"
+    assert_includes response.body, "Fallback Pressetext Absatz 1"
+    assert_includes response.body, "Fallback Pressetext Absatz 9"
     assert_includes response.body, "Liederhalle Stuttgart"
     assert_includes response.body, "Weitere Termine"
     assert_includes response.body, "https://tickets.example/abc"
@@ -167,9 +171,10 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_select ".press-detail-hero", 0
     assert_select ".press-detail-back-button[href=?]", "#{presse_path}#press-search", text: "Zurück"
     assert_select ".press-text-collapsible[data-controller='press-text-collapse']"
-    assert_select ".press-text-toggle[data-press-text-collapse-target='toggle']"
-    assert_select ".press-text-body[data-press-text-collapse-target='body']"
+    assert_select "#press-text-body.press-text-body[data-press-text-collapse-target='body']"
+    assert_select ".press-text-more-button[type='button'][aria-controls='press-text-body'][aria-expanded='false'][data-press-text-collapse-target='button']"
     assert_select ".press-text-more-button .press-text-more-label", "Mehr anzeigen"
+    assert_select ".press-text-more-button .press-text-less-label", "Weniger anzeigen"
     assert_select ".press-event-panel .press-sidebar-contact", 1
     assert_select ".press-sidebar-contact .job-contact-heading", "Pressekontakt"
     assert_select ".press-sidebar-contact .job-contact-name", "Arnulf Woock"

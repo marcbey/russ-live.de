@@ -6,14 +6,13 @@
       <h1 id="press-detail-title"><%= @press_artist.name %></h1>
       <% if @press_artist.press_body.present? %>
         <div class="press-text-collapsible" data-controller="press-text-collapse">
-          <input class="press-text-toggle" id="press-text-toggle" type="checkbox" aria-label="<%= t("press.detail.press_text.show_more") %>" data-press-text-collapse-target="toggle" data-action="change->press-text-collapse#toggle">
-          <div class="press-text-body" data-press-text-collapse-target="body">
+          <div class="press-text-body" id="press-text-body" data-press-text-collapse-target="body">
             <%= @press_artist.press_body.respond_to?(:to_trix_html) ? @press_artist.press_body : simple_format(@press_artist.press_body) %>
           </div>
-          <label class="public-button section-button press-text-more-button" for="press-text-toggle" data-press-text-collapse-target="button">
+          <button class="press-text-more-button" type="button" aria-controls="press-text-body" aria-expanded="false" data-press-text-collapse-target="button" data-action="press-text-collapse#toggle">
             <span class="press-text-more-label"><%= t("press.detail.press_text.show_more") %></span>
             <span class="press-text-less-label"><%= t("press.detail.press_text.show_less") %></span>
-          </label>
+          </button>
         </div>
       <% else %>
         <p><%= t("press.detail.press_text.empty") %></p>
