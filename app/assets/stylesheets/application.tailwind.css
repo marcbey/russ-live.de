@@ -956,6 +956,7 @@ h3 {
 }
 
 .references-page {
+  --references-page-grid-max: 1520px;
   background: #fff;
   color: var(--ink);
 }
@@ -1200,9 +1201,9 @@ h3 {
 }
 
 .references-intro h1 {
-  font-size: clamp(2.45rem, 4.1vw, 4.9rem);
+  font-size: clamp(2.1rem, 3.25vw, 3.9rem);
   font-weight: 600;
-  line-height: .9;
+  line-height: .94;
   max-width: 1240px;
 }
 
@@ -1342,6 +1343,16 @@ h3 {
   margin-inline: 0;
   max-width: none;
   padding-top: clamp(22px, 3vw, 48px);
+}
+
+.references-page > .references-band {
+  padding-left: var(--brand-left);
+  padding-right: var(--brand-left);
+}
+
+.references-page .reference-highlight-grid,
+.references-page .reference-mosaic {
+  max-width: min(var(--references-page-grid-max), 100%);
 }
 
 .references-band .eyebrow {
@@ -10087,10 +10098,10 @@ h3 {
 }
 
 .service-chapter.service-chapter-ticketportal .services-events {
-  align-self: stretch;
+  align-self: center;
   gap: clamp(14px, 2vw, 22px);
   margin-top: 0;
-  max-width: none;
+  max-width: min(96rem, 100%);
   padding: clamp(8px, 1.5vw, 20px) 0 0;
   text-align: left;
   width: 100%;
