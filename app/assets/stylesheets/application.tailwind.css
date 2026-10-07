@@ -653,6 +653,18 @@ h3 {
   scroll-margin-top: 108px;
 }
 
+@media (min-width: 1280px) {
+  .home-page > .services-preview,
+  .home-page > .home-events {
+    max-width: min(96rem, 100%);
+  }
+
+  .home-page > .services-preview {
+    gap: clamp(36px, 4vw, 64px);
+    grid-template-columns: minmax(260px, .72fr) minmax(0, 1.35fr);
+  }
+}
+
 .contact-location-image {
   aspect-ratio: 4 / 5;
   display: block;
@@ -2553,16 +2565,16 @@ h3 {
 }
 
 .services-overview-inner {
-  margin: 0;
-  max-width: 76rem;
+  margin-inline: auto;
+  max-width: min(76rem, 100%);
 }
 
 .services-overview h2 {
-  font-size: clamp(2.1rem, 3.7vw, 4.15rem);
+  font-size: clamp(1.95rem, 2.65vw, 3.15rem);
   font-weight: 600;
-  line-height: .92;
+  line-height: 1;
   margin: 0;
-  max-width: 24ch;
+  max-width: 34ch;
   text-wrap: balance;
 }
 
