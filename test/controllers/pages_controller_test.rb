@@ -187,6 +187,9 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get root_path
 
     assert_response :success
+    assert_select "#services-title", text: /Full-Service für\s+Veranstaltungen/ do
+      assert_select "br", count: 1
+    end
     assert_select "#services-accordion a[href=?]", services_path(anchor: "production"), text: I18n.t("pages.home.services.more_info")
     assert_select "#services-accordion a[href=?]", services_path(anchor: "marketing"), text: I18n.t("pages.home.services.more_info")
     assert_select "#services-accordion a[href=?]", services_path(anchor: "staff"), text: I18n.t("pages.home.services.more_info")

@@ -10,7 +10,7 @@
                         fetchpriority: "high" %>
         </picture>
         <div class="home-hero-copy">
-          <h1 id="hero-title"><span>Events</span><span>Erleben</span><span class="home-hero-title-live">Live</span></h1>
+          <h1 id="hero-title"><span>Events</span><span>erleben</span><span class="home-hero-title-live">Live.</span></h1>
           <p id="hero-intro"><%= t("pages.home.hero.intro_html") %></p>
           <a class="public-button public-button-primary hero-button home-hero-button" href="#services" data-anchor-position="flush"><%= t("public.header.services") %></a>
         </div>
@@ -19,7 +19,7 @@
       <section class="public-section section services-preview" id="services" aria-labelledby="services-title">
         <div class="section-aside">
           <p class="eyebrow"><%= t("pages.home.services.eyebrow") %></p>
-          <h2 id="services-title"><%= t("pages.home.services.title") %></h2>
+          <h2 id="services-title"><%= sanitize(t("pages.home.services.title_html"), tags: %w[br]) %></h2>
           <p><%= t("pages.home.services.intro") %></p>
         </div>
         <div class="services-accordion-wrap">
