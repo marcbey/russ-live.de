@@ -731,8 +731,9 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "#marketing .service-focus-accordion .accordion-trigger", text: /Social Media & Performance Marketing/
     assert_select "#marketing .service-focus-accordion .accordion-panel", text: /messbaren Ergebnissen/
     assert_select "#staff .service-deployment-areas li", text: "Staplerfahrer*innen"
-    assert_select "#production .service-contact-card h3", text: "Johanna Backmund"
-    assert_select "#production a[href='mailto:johannabackmund@russ-live.de']"
+    assert_select "#production .service-contact-card h3", text: "Michaela Russ"
+    assert_select "#local .service-contact-card h3", text: "Michaela Russ"
+    assert_select "#production .service-contact-meta p", text: "Geschäftsführung"
   end
 
   test "services renders upcoming events inside the ticket portal section" do
@@ -987,7 +988,9 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "WILHELMINE - magisch Tour 2026 auf STUTTGARTLIVE"
     assert_includes response.body, "https://www.stuttgart-live.de/events/wilhelmine-magisch-tour-2026"
     assert_not_includes response.body, "https://tickets.example.test/evt-1"
-    assert_operator response.body.index("home-events-all-link"), :<, response.body.index("home-events-viewport")
+    assert_select ".home-events-all-button[href=?]", PagesController::STUTTGART_LIVE_SKS_HIGHLIGHTS_URL,
+                  text: I18n.t("pages.home.events.show_all")
+    assert_operator response.body.index("home-events-all-button"), :>, response.body.index("home-events-viewport")
     assert_not_includes response.body, "Alle Veranstaltungen auf Stuttgart-live.de"
     assert_not_includes response.body, "Nicht SKS"
     assert_not_includes response.body, "Highlight ohne SKS"

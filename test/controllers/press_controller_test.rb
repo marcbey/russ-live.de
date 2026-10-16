@@ -46,7 +46,10 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_select ".press-search-suggestion .press-search-suggestion-copy strong", "Ärztin Live"
     assert_select ".press-search-suggestion .press-search-suggestion-copy span", visible_event.title
     assert_select ".press-sidebar-contact", 0
-    assert_not_includes response.body, "arnulfwoock@russ-live.de"
+    assert_select ".press-page > section:last-child.press-contact-strip" do
+      assert_select "#press-contact-title", "Pressekontakt"
+      assert_select "a[href=?]", "mailto:arnulfwoock@russ-live.de"
+    end
     assert_not_includes response.body, "Hidden Act"
     assert_select ".press-letter-grid" do |directory|
       assert_not_includes directory.to_html, visible_event.title

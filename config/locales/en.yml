@@ -143,7 +143,7 @@ en:
         nav_aria: "Browse events"
         previous: "Previous events"
         next: "Next events"
-        show_all: "Show all"
+        show_all: "All events"
     unternehmen:
       meta:
         title: "About us | Russ Live"
@@ -254,10 +254,9 @@ en:
         show_all: "All events"
       contacts:
         aria: "Contacts"
-        johanna:
-          name: "Johanna Backmund"
-          role: "Project Management / Accounting"
-          email: "johannabackmund@russ-live.de"
+        michaela:
+          name: "Michaela Russ"
+          role: "Management"
         sarah:
           name: "Sarah Sandner"
           role: "Marketing"

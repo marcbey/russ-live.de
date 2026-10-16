@@ -12,10 +12,6 @@
                         height: 89 %>
           <div class="home-events-title-row">
             <h2 id="<%= title_id %>"><%= t("pages.home.events.title") %></h2>
-            <a class="home-events-all-link" href="<%= all_events_url %>" target="_blank" rel="noreferrer">
-              <%= t("pages.home.events.show_all") %>
-              <span aria-hidden="true">›</span>
-            </a>
           </div>
           <p class="home-events-intro"><%= t("pages.home.events.intro") %></p>
         </div>
@@ -34,9 +30,8 @@
       </div>
     </div>
     <% if !local_assigns[:compact] && local_assigns.fetch(:show_header, true) %>
-      <a class="home-events-all-link home-events-all-link-mobile" href="<%= all_events_url %>" target="_blank" rel="noreferrer">
+      <a class="public-button public-button-primary section-button home-events-all-button" href="<%= all_events_url %>" target="_blank" rel="noreferrer">
         <%= t("pages.home.events.show_all") %>
-        <span aria-hidden="true">›</span>
       </a>
     <% end %>
     <% if local_assigns[:compact] %>
