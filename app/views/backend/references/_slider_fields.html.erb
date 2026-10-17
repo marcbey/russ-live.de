@@ -44,11 +44,20 @@
 
           <div class="event-image-meta-inline-form">
             <label class="form-label" for="reference_slider_image_file">Slider-Bild</label>
-            <%= file_field_tag "reference_slider_image[file]",
-                               accept: "image/*",
-                               id: "reference_slider_image_file",
-                               class: "form-input",
-                               data: { reference_image_crop_preview_target: "sliderFileInput" } %>
+            <div class="file-upload-control">
+              <%= file_field_tag "reference_slider_image[file]",
+                                 accept: "image/*",
+                                 id: "reference_slider_image_file",
+                                 class: "file-upload-input",
+                                 data: { reference_image_crop_preview_target: "sliderFileInput" } %>
+              <label class="file-upload-button" for="reference_slider_image_file">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M12 15V3m0 0 4 4m-4-4-4 4" />
+                  <path d="M5 15v3a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-3" />
+                </svg>
+                <span>Datei hochladen</span>
+              </label>
+            </div>
             <p class="event-image-crop-hint">Hier das breite Bild für den Startseiten-Slider hochladen, damit kein Zuschnitt nötig ist.</p>
             <dl class="event-image-file-meta"
                 aria-label="Aktuelle Slider-Bilddatei"
@@ -67,10 +76,19 @@
 
           <div class="event-image-meta-inline-form">
             <label class="form-label" for="reference_slider_image_mobile_file">Mobiles Slider-Bild</label>
-            <%= file_field_tag "reference_slider_image[mobile_file]",
-                               accept: "image/*",
-                               id: "reference_slider_image_mobile_file",
-                               class: "form-input" %>
+            <div class="file-upload-control">
+              <%= file_field_tag "reference_slider_image[mobile_file]",
+                                 accept: "image/*",
+                                 id: "reference_slider_image_mobile_file",
+                                 class: "file-upload-input" %>
+              <label class="file-upload-button" for="reference_slider_image_mobile_file">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M12 15V3m0 0 4 4m-4-4-4 4" />
+                  <path d="M5 15v3a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-3" />
+                </svg>
+                <span>Datei hochladen</span>
+              </label>
+            </div>
             <p class="event-image-crop-hint">Optionales Hochformat-Bild für die mobile Referenzseite. Wenn leer, wird das normale Slider-Bild verwendet.</p>
             <dl class="event-image-file-meta"
                 aria-label="Aktuelle mobile Slider-Bilddatei"

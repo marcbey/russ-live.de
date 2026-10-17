@@ -32,8 +32,20 @@ class Backend::JobsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Ansprechpartner"
     assert_includes response.body, "Logout"
     assert_includes response.body, "Stagehands"
+    assert_includes response.body, "Titel (Header)"
+    assert_includes response.body, "Titel EN"
+    assert_includes response.body, "Englisch"
+    assert_includes response.body, "Optionales Textfeld"
+    assert_includes response.body, "Veröffentlichung"
+    assert_includes response.body, "Im Backend sichtbar, aber nicht auf der Website veröffentlicht."
+    assert_includes response.body, "data-controller=\"backend-sortable-list\""
+    assert_includes response.body, "draggable=\"true\""
+    assert_select ".editor-tabs-actions .button-publish", "Veröffentlichen"
+    assert_select ".editor-tabs-actions .button-secondary", "Vorschau anzeigen"
     assert_select ".editor-tabs-actions .button-danger", "Job löschen"
     assert_select ".editor-tabs-actions .button-success", "Neuer Job"
+    assert_operator response.body.index("Speichern"), :<, response.body.index("Veröffentlichen")
+    assert_operator response.body.index("Veröffentlichen"), :<, response.body.index("Vorschau anzeigen")
     assert_operator response.body.index("Job löschen"), :<, response.body.index("Neuer Job")
   end
 
@@ -47,6 +59,7 @@ class Backend::JobsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, "Cateringhilfen"
     assert_not_includes response.body, 'backend-reference-list-title">Logistik'
+    assert_not_includes response.body, "data-controller=\"backend-sortable-list\""
 
     get backend_jobs_path(query: "cater")
 
@@ -68,8 +81,104 @@ class Backend::JobsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "published", job.status
     assert_equal [ "Catering", "Logistik" ], job.categories
     assert_equal [ "Aufbau", "Abbau" ], job.responsibilities
+    assert_equal [ "Setup", "Teardown" ], job.responsibilities_en
+    assert_equal "Text", job.optional_text
+    assert_equal "English text", job.optional_text_en
     assert_equal "Neue Stelle", job.job_image.alt_text
-    assert_redirected_to backend_jobs_path(job_id: job.id, status: "published")
+    assert_redirected_to backend_jobs_path(job_id: job.id)
+  end
+
+  test "creates draft job by default and keeps it selected in all jobs" do
+    sign_in_as(@admin)
+
+    post backend_jobs_path, params: {
+      job: {
+        contact_id: @contact.id,
+        title: "Neue Stelle",
+        badge: "Minijob",
+        intro: "Intro",
+        optional_text: "Optionaler Text",
+        responsibilities_text: "Aufbau\nAbbau",
+        requirements_text: "Teamfähigkeit"
+      },
+      job_image: {
+        alt_text: "Neue Stelle"
+      }
+    }
+
+    job = Job.last
+    assert_equal "draft", job.status
+    assert_equal "neue-stelle", job.slug
+    assert_equal "Stuttgart", job.location
+    assert_equal "Optionaler Text", job.optional_text
+    assert_redirected_to backend_jobs_path(job_id: job.id)
+
+    follow_redirect!
+
+    assert_response :success
+    assert_select ".status-chip-active", "Alle"
+    assert_select ".backend-reference-list-item.is-active .backend-reference-list-title", "Neue Stelle"
+  end
+
+  test "previews draft job through backend" do
+    sign_in_as(@admin)
+    job = create_job!(title: "Entwurf Stelle", slug: "entwurf-stelle", status: "draft")
+    job.update!(badge: "Minijob", intro: "Intro", optional_text: "Optionaler Text")
+
+    get preview_backend_job_path(job)
+
+    assert_response :success
+    assert_includes response.body, "Entwurf Stelle"
+    assert_includes response.body, "Minijob"
+    assert_includes response.body, "Optionaler Text"
+    assert_includes response.body, "Dieser Job ist noch ein Entwurf"
+  end
+
+  test "keeps job selected after publishing from a filtered list" do
+    sign_in_as(@admin)
+    job = create_job!(title: "Entwurf Stelle", slug: "entwurf-stelle", status: "draft")
+
+    patch backend_job_path(job), params: {
+      status: "draft",
+      job: job_payload(title: "Entwurf Stelle", slug: "entwurf-stelle", status: "published").fetch(:job)
+    }
+
+    assert_redirected_to backend_jobs_path(job_id: job.id)
+
+    follow_redirect!
+
+    assert_select ".status-chip-active", "Alle"
+    assert_select ".backend-reference-list-item.is-active .status-badge", "Veröffentlicht"
+  end
+
+  test "publish toolbar button saves changes and publishes job" do
+    sign_in_as(@admin)
+    job = create_job!(title: "Entwurf Stelle", slug: "entwurf-stelle", status: "draft")
+
+    patch backend_job_path(job), params: {
+      publish_job: "1",
+      job: job_payload(title: "Veröffentlichte Stelle", slug: "entwurf-stelle", status: "draft").fetch(:job)
+    }
+
+    assert_redirected_to backend_jobs_path(job_id: job.id)
+
+    job.reload
+    assert_equal "Veröffentlichte Stelle", job.title
+    assert_equal "published", job.status
+  end
+
+  test "reorders jobs from dragged backend list" do
+    sign_in_as(@admin)
+    catering = create_job!(title: "Catering", slug: "catering", category_list: "Catering")
+    stagehands = create_job!(title: "Stagehands", slug: "stagehands", category_list: "Stage")
+    marketing = create_job!(title: "Marketing", slug: "marketing", category_list: "Marketing")
+
+    patch reorder_backend_jobs_path, params: {
+      job_ids: [ marketing.id, catering.id, stagehands.id ]
+    }
+
+    assert_response :success
+    assert_equal [ marketing, catering, stagehands ], Job.ordered.to_a
   end
 
   test "updates image tab without job params" do
@@ -116,15 +225,21 @@ class Backend::JobsControllerTest < ActionDispatch::IntegrationTest
           employment: "Flexible Einsätze",
           location: "Stuttgart",
           intro: "Intro",
+          intro_en: "Intro EN",
           highlight_label: "Label",
           highlight_title: "Titel",
           highlight_text: "Text",
+          highlight_text_en: "English text",
           category_list: "Catering, Logistik",
           responsibilities_text: "Aufbau\nAbbau",
+          responsibilities_en_text: "Setup\nTeardown",
           requirements_text: "Teamfähigkeit\nPünktlichkeit",
+          requirements_en_text: "Teamwork\nReliability",
           join_recruiting_url: "",
           meta_title: "#{title} | Jobs",
+          meta_title_en: "#{title} | Jobs EN",
           meta_description: "Beschreibung",
+          meta_description_en: "Description",
           status: status,
           position: "1"
         },

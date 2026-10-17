@@ -92,6 +92,10 @@ class Event < SharedStuttgartRecord
     public_ticket_offer&.resolved_ticket_url.presence || "#{STUTTGART_LIVE_EVENT_BASE_URL}#{slug}"
   end
 
+  def public_detail_url
+    "#{STUTTGART_LIVE_EVENT_BASE_URL}#{slug}"
+  end
+
   def self.russ_live_publish_flag_available?
     columns_hash.key?("publish_on_russ_live")
   end
