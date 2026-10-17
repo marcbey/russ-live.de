@@ -15,10 +15,12 @@ export default class extends Controller {
     this.slides.forEach((slide, index) => {
       slide.addEventListener("click", () => this.handleSlideClick(slide, index), { signal: this.abortController.signal })
       slide.addEventListener("keydown", (event) => {
-        if (event.key !== "Enter" && event.key !== " ") return
+        if (event.target !== slide || (event.key !== "Enter" && event.key !== " ")) return
 
         event.preventDefault()
-        this.handleSlideClick(slide, index)
+        const flipButton = slide.querySelector(".klassik-slide-flip-button")
+        if (index === this.activeIndex && flipButton) flipButton.click()
+        else this.handleSlideClick(slide, index)
       }, { signal: this.abortController.signal })
       this.bindFlip(slide, index)
     })
@@ -112,10 +114,7 @@ export default class extends Controller {
         return
       }
 
-      if (this.usesHover() || lastPointerType !== "touch") {
-        button.blur()
-        return
-      }
+      if (event.detail > 0 && this.usesHover() && lastPointerType !== "touch") return
 
       this.setFlipped(slide, button, !slide.classList.contains("is-flipped"))
     }, { signal: this.abortController.signal })

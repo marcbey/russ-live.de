@@ -2,7 +2,7 @@
 
 Dieses Dokument beschreibt das aktuelle UI- und UX-System für den Backend-Bereich von Russ Live. Es ist als Arbeitsgrundlage für Agenten gedacht, die Backend- oder Auth-Oberflächen erweitern, refaktorieren oder prüfen.
 
-Die Regeln basieren auf der bestehenden Implementierung in `app/views/backend`, `app/views/sessions`, `app/views/layouts/_flash_messages.html.erb` und `app/assets/stylesheets/application.tailwind.css`.
+Die Regeln basieren auf der bestehenden Implementierung in `app/views/backend`, `app/views/sessions`, `app/views/layouts/_flash_messages.html.erb` und `app/assets/stylesheets/backend.tailwind.css`. Gemeinsame Grundelemente liegen in `app/assets/stylesheets/shared.css`.
 
 ## Grundprinzipien
 

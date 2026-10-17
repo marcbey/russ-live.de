@@ -103,12 +103,14 @@
         <%= link_to t("press.detail.back"), presse_path(anchor: "press-search"), class: "public-button section-button press-download-back-button" %>
       </div>
 
+      <% initial_image = @press_artist.gallery_images.first %>
+      <% initial_image_alt = initial_image.alt_text.presence || t("press.detail.gallery_image_label", name: @press_artist.name, index: 1) %>
       <div class="press-lightbox" data-press-lightbox-target="lightbox" hidden>
         <div class="press-lightbox-dialog" role="dialog" aria-modal="true" aria-label="<%= t("press.detail.lightbox_aria") %>">
           <button class="press-lightbox-close" type="button" data-press-lightbox-target="close" data-action="press-lightbox#close" aria-label="<%= t("press.detail.close_lightbox") %>">×</button>
           <button class="press-lightbox-arrow press-lightbox-prev" type="button" data-action="press-lightbox#previous" aria-label="<%= t("press.detail.previous_image") %>">‹</button>
           <figure>
-            <img src="" alt="" data-press-lightbox-target="image">
+            <%= image_tag initial_image.press_variant(:hero_desktop), alt: initial_image_alt, loading: "lazy", decoding: "async", data: { press_lightbox_target: "image" } %>
             <figcaption>
               <span data-press-lightbox-target="caption"></span>
               <a href="#" download data-press-lightbox-target="download" class="press-gallery-download" aria-label="<%= t("press.detail.download_image") %>">

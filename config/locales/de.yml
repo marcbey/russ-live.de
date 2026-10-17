@@ -109,7 +109,6 @@ de:
         cta: "Jetzt entdecken!"
         paragraphs:
           first: "<strong>STUTTGART</strong>LIVE ist unser Ticketportal mit allen wichtigen Veranstaltungen in der Region Stuttgart: online buchen, schnell, unkompliziert und mit perfektem Service."
-          second: "Die Eventdaten bleiben perspektivisch read-only angebunden. Diese Russ-live-Seite greift später nur auf freigegebene Veranstaltungsdaten zu."
   pages:
     home:
       meta:
@@ -232,11 +231,6 @@ de:
         eyebrow: "Heute"
         title: "Tradition ist für uns kein Rückblick, sondern Vertrauen in das, was als Nächstes kommt."
         text: "Russ Live steht für Erfahrung ohne Stillstand, für Qualität ohne Attitüde und für Produktionen, die Kultur als gemeinsame Aufgabe begreifen."
-        placeholder_paragraphs:
-          - "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae justo sed nibh facilisis luctus. Donec posuere, sem in cursus gravida, mi nunc luctus velit, sed fermentum ligula lorem at nibh."
-          - "Praesent non magna vitae arcu pretium dictum. Morbi consequat, nibh in tempor facilisis, lorem massa dignissim risus, at tincidunt sem nibh id purus. Suspendisse potenti."
-          - "Aliquam erat volutpat. Curabitur sed mi at lacus commodo finibus. Vivamus euismod, lorem vel porta viverra, lectus ipsum luctus neque, in volutpat augue ipsum non erat."
-          - "Maecenas luctus, arcu a malesuada fermentum, libero neque accumsan urna, vitae suscipit justo sapien at elit. Cras vulputate nibh sed lectus posuere, sit amet congue mauris feugiat."
     services:
       meta:
         title: "Services | Russ Live"
@@ -340,6 +334,10 @@ de:
         description: "Kontakt zur SKS Michael Russ GmbH am Charlottenplatz in Stuttgart."
     contact:
       title: "Kontakt"
+      image_alt: "Gebäude am Charlottenplatz 17"
+      quick_actions:
+        phone: "Telefon"
+        timetable: "VVS-Fahrplanauskunft"
       paragraphs:
         location: "Die Konzertdirektion Russ befindet sich im Herzen der Stuttgarter Innenstadt am Charlottenplatz 17. In direkter Nachbarschaft liegen das Neue Schloss und das Landesmuseum Württemberg."
         directions: "Vom Hauptbahnhof kommend, nehmen Sie die Stadtbahn bis zur Haltestelle Charlottenplatz und gehen zum Ausgang Holzstraße oder Planie. Hier geht es zum Fahrplan."

@@ -20,12 +20,13 @@
     <link rel="icon" href="/favicon-russ-live.png" type="image/png">
     <link rel="apple-touch-icon" href="/favicon-russ-live.png">
 
-    <%= render "shared/public_fonts" if @page_key.present? %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <% asset_bundle = @page_key.present? ? "frontend" : "backend" %>
+    <%= render "shared/public_fonts" %>
+    <%= stylesheet_link_tag asset_bundle, "data-turbo-track": "reload" %>
+    <%= javascript_include_tag asset_bundle, "data-turbo-track": "reload", type: "module" %>
   </head>
 
-  <body class="<%= content_for(:body_class) || @page_meta&.fetch(:body_class, nil) %>" data-controller="smooth-anchor">
+  <body class="<%= content_for(:body_class) || @page_meta&.fetch(:body_class, nil) %>"<% if @page_key.present? %> data-controller="smooth-anchor"<% end %>>
     <%= link_to t("public.skip_link"), "#main-content", class: "skip-link" if @page_key.present? %>
     <%= render "shared/public_header" if @page_key.present? %>
     <%= render "layouts/flash_messages" %>

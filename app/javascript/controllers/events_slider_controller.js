@@ -68,7 +68,7 @@ export default class extends Controller {
     const visibleCards = window.matchMedia("(max-width: 900px)").matches ? 1 : 5
     const distance = (card.getBoundingClientRect().width + gap) * visibleCards * direction
 
-    this.viewportTarget.scrollBy({ left: distance, behavior: "smooth" })
+    this.viewportTarget.scrollBy({ left: distance, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" })
   }
 
   handleScroll() {
@@ -148,7 +148,7 @@ export default class extends Controller {
     if (!firstElement) return
 
     window.requestAnimationFrame(() => {
-      this.viewportTarget.scrollTo({ left: firstElement.offsetLeft, behavior: "smooth" })
+      this.viewportTarget.scrollTo({ left: firstElement.offsetLeft, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" })
     })
   }
 
