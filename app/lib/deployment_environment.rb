@@ -17,7 +17,9 @@ module DeploymentEnvironment
     end
 
     def asset_build?(env: ENV, argv: ARGV)
-      env["SECRET_KEY_BASE_DUMMY"] == "1" && argv.include?("assets:precompile")
+      tasks = argv
+      tasks = Rake.application.top_level_tasks if tasks.empty? && defined?(Rake)
+      env["SECRET_KEY_BASE_DUMMY"] == "1" && tasks == [ "assets:precompile" ]
     end
 
     def credentials_paths(root:, environment:)
@@ -45,6 +47,7 @@ module DeploymentEnvironment
 
       operational = "#{project}_staging"
       profile = {
+        "SOLID_QUEUE_SKIP_RECURRING" => "true",
         "APP_HOST" => (project == "stuttgart_live_de" ? "staging.stuttgart-live.de" : "staging.russ-live.de"),
         "DB_HOST" => "172.18.0.1", "DB_PORT" => "5432",
         "DB_NAME" => "stuttgart_live_de_staging",
@@ -58,6 +61,10 @@ module DeploymentEnvironment
           "RUSS_DB_NAME" => operational)
       end
       profile.freeze
+    end
+
+    def staging_smtp_settings
+      { address: "stuttgart_live_de-staging-mailpit", port: 1025, enable_starttls_auto: false }
     end
 
     def validate_runtime!(env: ENV, project:)

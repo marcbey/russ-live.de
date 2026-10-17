@@ -49,7 +49,6 @@ env:
     SENTRY_ENVIRONMENT: staging
     SENTRY_RELEASE: <%= ENV.fetch("SENTRY_RELEASE") { `git rev-parse HEAD`.strip } %>
     STAGING_NOINDEX: "true"
-    SOLID_QUEUE_SKIP_RECURRING: "true"
 <% DeploymentEnvironment.staging_profile(project: "russ_live_de").each do |key, value| %>
     <%= key %>: <%= value.inspect %>
 <% end %>

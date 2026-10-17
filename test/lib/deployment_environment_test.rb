@@ -1,5 +1,6 @@
 require "test_helper"
 require "open3"
+require "rake"
 require "support/deploy_config_helper"
 
 class DeploymentEnvironmentTest < ActiveSupport::TestCase
@@ -23,6 +24,14 @@ class DeploymentEnvironmentTest < ActiveSupport::TestCase
     assert_equal "staging", DeploymentEnvironment.name(env: dummy.merge("APP_ENVIRONMENT" => "staging"), rails_env: "production")
     assert DeploymentEnvironment.asset_build?(env: dummy, argv: [ "assets:precompile" ])
     refute DeploymentEnvironment.asset_build?(env: dummy, argv: [ "server" ])
+    Rake.with_application do |rake|
+      rake.init("rails", [ "assets:precompile" ])
+      assert DeploymentEnvironment.asset_build?(env: dummy, argv: [])
+    end
+    Rake.with_application do |rake|
+      rake.init("rails", [ "assets:precompile", "db:migrate" ])
+      refute DeploymentEnvironment.asset_build?(env: dummy, argv: [])
+    end
     assert_raises(DeploymentEnvironment::ConfigurationError) do
       DeploymentEnvironment.validate_runtime!(env: stage_env.merge(dummy), project: project)
     end
@@ -49,6 +58,9 @@ class DeploymentEnvironmentTest < ActiveSupport::TestCase
 
   test "staging rejects every production database role volume and URL override without revealing values" do
     assert DeploymentEnvironment.validate_runtime!(env: stage_env, project: project)
+    assert_raises(DeploymentEnvironment::ConfigurationError) do
+      DeploymentEnvironment.validate_runtime!(env: stage_env.merge("SOLID_QUEUE_SKIP_RECURRING" => "false"), project: project)
+    end
     DeploymentEnvironment.staging_profile(project:).each_key do |key|
       error = assert_raises(DeploymentEnvironment::ConfigurationError, key) do
         DeploymentEnvironment.validate_runtime!(env: stage_env.merge(key => "unsafe-secret-value"), project: project)

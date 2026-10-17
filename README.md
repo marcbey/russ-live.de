@@ -350,3 +350,14 @@ keine Produktions-`.env` und lehnt `.kamal/secrets-common` für Staging ab. Der 
 Die Staging-Profile sind erst nach Einrichtung der Datenbanken, bereinigten Daten,
 Zugriffsschutz und Deployment-Prüfungen betriebsbereit. Der vollständige Ablauf
 steht im freigegebenen Umzugsplan; vor Abschluss dieser Vorbereitung nicht deployen.
+
+Staging versendet E-Mails ausschließlich an das gemeinsame interne Mailpit-Postfach.
+Die Oberfläche ist auf Hetzner nur über `127.0.0.1:8025` erreichbar. Für den lokalen
+Zugriff: `ssh -N -L 8025:127.0.0.1:8025 deploy@46.225.224.194`, danach
+`http://localhost:8025` öffnen. Mailpit hält höchstens 1.000 Nachrichten und hat
+keinen externen SMTP-Relay. Das Image ist auf einen Digest festgelegt (siehe
+[offizielle Docker-Dokumentation](https://mailpit.axllent.org/docs/install/docker/)).
+Automatische wiederkehrende Jobs sind in Staging ausgeschaltet; lokale manuelle
+Jobs bleiben möglich. Mailjet-, Meta-, externe Import- und kostenpflichtige
+KI-Aufrufe werden an den echten Client-Grenzen blockiert, auch bei versehentlich
+vorhandenen API-Zugangsdaten. Öffentliche Tracking-Pixel bleiben in Staging aus.
