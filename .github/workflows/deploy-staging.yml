@@ -1,0 +1,95 @@
+name: Deploy Staging
+on:
+  workflow_run:
+    workflows: ['CI']
+    types: [completed]
+    branches: [main]
+permissions:
+  contents: read
+  actions: read
+  packages: write
+concurrency:
+  group: live-deploy-${{ github.repository }}
+  cancel-in-progress: false
+jobs:
+  deploy:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    environment: staging
+    timeout-minutes: 60
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RELEASE_IMAGE: ghcr.io/marcbey/russ-live-de
+    steps:
+      - name: Checkout trusted workflow helpers
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: jdx/mise-action@v5
+      - name: Validate source CI through GitHub API
+        id: source
+        run: mise exec -- ruby script/ops/ci_source.rb
+      - name: Checkout the exact successful main commit
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Install source runtime and dependencies
+        run: |
+          mise install
+          mise exec -- bundle install
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4.5.2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      - name: Build the image once with its commit tag
+        id: build
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64
+          tags: ghcr.io/marcbey/russ-live-de:${{ steps.source.outputs.commit }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ steps.source.outputs.commit }}
+      - name: Mandatory HTTP runtime checks before staging secrets
+        env:
+          RELEASE_DIGEST: ${{ steps.build.outputs.digest }}
+        run: |
+          docker pull "${RELEASE_IMAGE}@${RELEASE_DIGEST}"
+          APP_IMAGE="${RELEASE_IMAGE}@${RELEASE_DIGEST}" mise exec -- ruby test/ops/nginx_runtime_check.rb
+      - name: Deploy verify pair and prove production peer compatibility
+        env:
+          RELEASE_COMMIT: ${{ steps.source.outputs.commit }}
+          RELEASE_CI_RUN_ID: ${{ steps.source.outputs.ci_run_id }}
+          RELEASE_DIGEST: ${{ steps.build.outputs.digest }}
+          STAGING_RAILS_MASTER_KEY: ${{ secrets.STAGING_RAILS_MASTER_KEY }}
+          STAGING_PEER_RAILS_MASTER_KEY: ${{ secrets.STAGING_PEER_RAILS_MASTER_KEY }}
+          STAGING_MEDIA_PROXY_SECRET: ${{ secrets.STAGING_MEDIA_PROXY_SECRET }}
+          STAGING_BASIC_AUTH_HTPASSWD: ${{ secrets.STAGING_BASIC_AUTH_HTPASSWD }}
+          STAGING_HTTP_AUTH: ${{ secrets.STAGING_HTTP_AUTH }}
+          STAGING_SSH_PRIVATE_KEY: ${{ secrets.STAGING_SSH_PRIVATE_KEY }}
+          STAGING_KAMAL_REGISTRY_PULL_PASSWORD: ${{ secrets.STAGING_KAMAL_REGISTRY_PULL_PASSWORD }}
+          STAGING_RUSS_LIVE_PRIMARY_DB_PASSWORD: ${{ secrets.STAGING_RUSS_LIVE_PRIMARY_DB_PASSWORD }}
+          STAGING_RUSS_LIVE_OPERATIONAL_DB_PASSWORD: ${{ secrets.STAGING_RUSS_LIVE_OPERATIONAL_DB_PASSWORD }}
+          STAGING_SENTRY_AUTH_TOKEN: ${{ secrets.STAGING_SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+        run: mise exec -- ruby script/ops/stage_release.rb
+      - name: Publish proof only after every check
+        uses: actions/upload-artifact@v7
+        with:
+          name: staging-release
+          path: ${{ runner.temp }}/staging-release.json
+          if-no-files-found: error
+          retention-days: 14
+          overwrite: true

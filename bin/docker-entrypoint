@@ -2,6 +2,7 @@
 
 # If running the Rails server then create or migrate existing databases.
 if { [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; } || [ "${1:-}" == "./bin/production-server" ]; then
+  ./bin/staging-ready
   ./bin/rails db:prepare
 fi
 

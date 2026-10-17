@@ -1,0 +1,3 @@
+#!/bin/bash
+set -euo pipefail
+exec mise exec -- ruby script/ops/verify_deploy_image.rb

@@ -49,3 +49,9 @@
 # Ignore Docker-related files
 /.dockerignore
 /Dockerfile*
+
+# Agent workspaces and local session data are never runtime inputs.
+/.superpowers
+/.entire
+/.codex
+/.agents

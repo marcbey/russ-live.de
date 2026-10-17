@@ -17,6 +17,16 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href='https://www.stuttgart-live.de/passwords/new']", text: "Passwort vergessen"
   end
 
+  test "stage password reset remains in the staging pair" do
+    previous = Rails.configuration.x.deployment_environment
+    Rails.configuration.x.deployment_environment = "staging"
+    get new_session_path
+    assert_response :success
+    assert_select "a[href='https://staging.stuttgart-live.de/passwords/new']", text: "Passwort vergessen"
+  ensure
+    Rails.configuration.x.deployment_environment = previous
+  end
+
   test "nested references login path redirects to canonical login" do
     get "/referenzen/login"
 

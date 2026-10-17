@@ -1,4 +1,8 @@
 #!/usr/bin/env ruby
+if %w[server s].include?(ARGV.first)
+  require_relative "../app/lib/staging_readiness"
+  StagingReadiness.verify!(project: "russ_live_de")
+end
 APP_PATH = File.expand_path("../config/application", __dir__)
 require_relative "../config/boot"
 require "rails/commands"

@@ -1,0 +1,70 @@
+#!/bin/bash
+set -euo pipefail
+umask 077
+
+fail() { printf 'Ungültige nginx-Konfiguration: %s\n' "$1" >&2; exit 1; }
+valid_host() {
+  local host="$1" label
+  [[ "$host" == *.* && "$host" != *..* && ${#host} -le 253 && "$host" =~ ^[a-z0-9.-]+$ ]] || return 1
+  local labels
+  IFS='.' read -ra labels <<< "$host"
+  for label in "${labels[@]}"; do
+    [[ ${#label} -le 63 && "$label" =~ ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$ ]] || return 1
+  done
+}
+
+case "${APP_ENVIRONMENT:-}" in
+  production|staging) ;;
+  *) fail APP_ENVIRONMENT ;;
+esac
+valid_host "${APP_HOST:-}" || fail APP_HOST
+[[ "${MEDIA_PROXY_SECRET:-}" =~ ^[A-Za-z0-9_+/=-]+$ ]] || fail MEDIA_PROXY_SECRET
+export CANONICAL_HOST="$APP_HOST"
+
+hosts_value="${APP_ALLOWED_HOSTS:-$APP_HOST}"
+[[ "$hosts_value" =~ ^[a-z0-9.,\ -]+$ ]] || fail APP_ALLOWED_HOSTS
+IFS=', ' read -ra allowed_hosts <<< "$hosts_value"
+export APP_ALLOWED_HOST_MAP=''
+export CANONICAL_REDIRECT_MAP=''
+canonical_present=false
+redirects="${CANONICAL_REDIRECT_ENABLED:-false}"
+[[ "$redirects" == true || "$redirects" == false ]] || fail CANONICAL_REDIRECT_ENABLED
+[[ "$APP_ENVIRONMENT" != staging || "$redirects" == false ]] || fail CANONICAL_REDIRECT_ENABLED
+for host in "${allowed_hosts[@]}"; do
+  valid_host "$host" || fail APP_ALLOWED_HOSTS
+  APP_ALLOWED_HOST_MAP+="    $host 1;"$'\n'
+  redirect=0
+  if [[ "$host" == "$APP_HOST" ]]; then
+    canonical_present=true
+  elif [[ "$redirects" == true ]]; then
+    redirect=1
+  fi
+  CANONICAL_REDIRECT_MAP+="    $host $redirect;"$'\n'
+done
+[[ "$canonical_present" == true ]] || fail APP_ALLOWED_HOSTS
+
+export STAGING_AUTH_CONFIG=''
+export STAGING_NOINDEX_HEADER=''
+export STAGING_PRIVATE_CACHE_HEADER=''
+export STATIC_EXPIRES=1y
+export STATIC_CACHE_CONTROL_HEADER='add_header Cache-Control "public, max-age=31536000, immutable";'
+case "${STAGING_NOINDEX:-}" in
+  1|true|TRUE|yes|YES|on|ON) export STAGING_NOINDEX_HEADER='add_header X-Robots-Tag "noindex, nofollow" always;' ;;
+esac
+if [[ "$APP_ENVIRONMENT" == staging ]]; then
+  auth_pattern='^[a-zA-Z0-9_.-]+:[a-zA-Z0-9$./]+$'
+  [[ "${STAGING_BASIC_AUTH_HTPASSWD:-}" =~ $auth_pattern ]] || fail STAGING_BASIC_AUTH_HTPASSWD
+  printf '%s\n' "$STAGING_BASIC_AUTH_HTPASSWD" > /tmp/staging.htpasswd
+  chmod 600 /tmp/staging.htpasswd
+  export STAGING_AUTH_CONFIG='auth_basic $staging_auth_realm; auth_basic_user_file /tmp/staging.htpasswd;'
+  export STAGING_NOINDEX_HEADER='add_header X-Robots-Tag "noindex, nofollow" always;'
+  export STAGING_PRIVATE_CACHE_HEADER='add_header Cache-Control "private, no-store" always;'
+  export STATIC_CACHE_CONTROL_HEADER="$STAGING_PRIVATE_CACHE_HEADER"
+  export STATIC_EXPIRES=off
+fi
+
+mkdir -p /tmp/nginx/{client_body,proxy,fastcgi,uwsgi,scgi,denied-media}
+app_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+envsubst '${MEDIA_PROXY_SECRET} ${STAGING_NOINDEX_HEADER} ${STAGING_AUTH_CONFIG} ${STAGING_PRIVATE_CACHE_HEADER} ${STATIC_EXPIRES} ${STATIC_CACHE_CONTROL_HEADER} ${CANONICAL_HOST} ${APP_ALLOWED_HOST_MAP} ${CANONICAL_REDIRECT_MAP}' \
+  < "$app_root/config/nginx.conf.template" > /tmp/nginx.conf
+chmod 600 /tmp/nginx.conf

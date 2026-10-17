@@ -27,6 +27,43 @@ http {
     "" close;
   }
 
+  map $request_uri $healthcheck {
+    default 0;
+    /up 1;
+    ~^/up[?] 1;
+  }
+
+  map $host $allowed_app_host {
+    default 0;
+${APP_ALLOWED_HOST_MAP}
+  }
+
+  map $host $canonical_redirect {
+    default 0;
+${CANONICAL_REDIRECT_MAP}
+  }
+
+  map "$healthcheck:$allowed_app_host" $reject_app_host {
+    default 0;
+    "0:0" 1;
+  }
+
+  map "$healthcheck:$canonical_redirect" $perform_canonical_redirect {
+    default 0;
+    "0:1" 1;
+  }
+
+  map $healthcheck $staging_auth_realm {
+    default Staging;
+    1 off;
+  }
+
+  # try_files runs after auth_basic; invalid media must not return before auth.
+  map $secure_link $media_root {
+    default /tmp/nginx/denied-media;
+    "1" /rails/storage;
+  }
+
   gzip on;
   gzip_vary on;
   gzip_min_length 1024;
@@ -48,25 +85,30 @@ http {
 
     root /rails/public;
     ${STAGING_NOINDEX_HEADER}
+    ${STAGING_PRIVATE_CACHE_HEADER}
+    ${STAGING_AUTH_CONFIG}
+
+    if ($reject_app_host = 1) { return 421; }
+    if ($perform_canonical_redirect = 1) { return 308 https://${CANONICAL_HOST}$request_uri; }
+
+    location = /up {
+      proxy_pass http://127.0.0.1:3000/up;
+      proxy_set_header Host ${CANONICAL_HOST};
+      proxy_set_header Content-Length "";
+      proxy_pass_request_body off;
+      proxy_method GET;
+    }
 
     location ~ ^/media/(?<media_expires>\d+)/(?<media_signature>[-_A-Za-z0-9]+)/(?<media_path>.+)--[^/]+\.svg$ {
       secure_link $media_signature,$media_expires;
       secure_link_md5 "$secure_link_expires/${media_path}${MEDIA_PROXY_SECRET}";
 
-      if ($secure_link = "") {
-        return 403;
-      }
-
-      if ($secure_link = "0") {
-        return 403;
-      }
-
-      root /rails/storage;
-      try_files /$media_path =404;
+      root $media_root;
+      try_files /$media_path @media_unavailable;
 
       default_type image/svg+xml;
-      expires 1y;
-      add_header Cache-Control "public, max-age=31536000, immutable";
+      expires ${STATIC_EXPIRES};
+      ${STATIC_CACHE_CONTROL_HEADER}
       ${STAGING_NOINDEX_HEADER}
     }
 
@@ -74,20 +116,12 @@ http {
       secure_link $media_signature,$media_expires;
       secure_link_md5 "$secure_link_expires/${media_path}${MEDIA_PROXY_SECRET}";
 
-      if ($secure_link = "") {
-        return 403;
-      }
-
-      if ($secure_link = "0") {
-        return 403;
-      }
-
-      root /rails/storage;
-      try_files /$media_path =404;
+      root $media_root;
+      try_files /$media_path @media_unavailable;
 
       default_type image/jpeg;
-      expires 1y;
-      add_header Cache-Control "public, max-age=31536000, immutable";
+      expires ${STATIC_EXPIRES};
+      ${STATIC_CACHE_CONTROL_HEADER}
       ${STAGING_NOINDEX_HEADER}
     }
 
@@ -95,20 +129,12 @@ http {
       secure_link $media_signature,$media_expires;
       secure_link_md5 "$secure_link_expires/${media_path}${MEDIA_PROXY_SECRET}";
 
-      if ($secure_link = "") {
-        return 403;
-      }
-
-      if ($secure_link = "0") {
-        return 403;
-      }
-
-      root /rails/storage;
-      try_files /$media_path =404;
+      root $media_root;
+      try_files /$media_path @media_unavailable;
 
       default_type image/png;
-      expires 1y;
-      add_header Cache-Control "public, max-age=31536000, immutable";
+      expires ${STATIC_EXPIRES};
+      ${STATIC_CACHE_CONTROL_HEADER}
       ${STAGING_NOINDEX_HEADER}
     }
 
@@ -116,20 +142,12 @@ http {
       secure_link $media_signature,$media_expires;
       secure_link_md5 "$secure_link_expires/${media_path}${MEDIA_PROXY_SECRET}";
 
-      if ($secure_link = "") {
-        return 403;
-      }
-
-      if ($secure_link = "0") {
-        return 403;
-      }
-
-      root /rails/storage;
-      try_files /$media_path =404;
+      root $media_root;
+      try_files /$media_path @media_unavailable;
 
       default_type image/webp;
-      expires 1y;
-      add_header Cache-Control "public, max-age=31536000, immutable";
+      expires ${STATIC_EXPIRES};
+      ${STATIC_CACHE_CONTROL_HEADER}
       ${STAGING_NOINDEX_HEADER}
     }
 
@@ -137,31 +155,93 @@ http {
       secure_link $media_signature,$media_expires;
       secure_link_md5 "$secure_link_expires/${media_path}${MEDIA_PROXY_SECRET}";
 
-      if ($secure_link = "") {
-        return 403;
-      }
+      root $media_root;
+      try_files /$media_path @media_unavailable;
 
-      if ($secure_link = "0") {
-        return 403;
-      }
+      expires ${STATIC_EXPIRES};
+      ${STATIC_CACHE_CONTROL_HEADER}
+      ${STAGING_NOINDEX_HEADER}
+    }
 
-      root /rails/storage;
-      try_files /$media_path =404;
+    location ~ ^/media/(?<media_signature>[-_A-Za-z0-9]+)/(?<media_path>.+)/[^/]+\.svg$ {
+      secure_link $media_signature;
+      secure_link_md5 "${media_path}${MEDIA_PROXY_SECRET}";
 
-      expires 1y;
-      add_header Cache-Control "public, max-age=31536000, immutable";
+      root $media_root;
+      try_files /$media_path @media_unavailable;
+
+      default_type image/svg+xml;
+      expires ${STATIC_EXPIRES};
+      ${STATIC_CACHE_CONTROL_HEADER}
+      ${STAGING_NOINDEX_HEADER}
+    }
+
+    location ~ ^/media/(?<media_signature>[-_A-Za-z0-9]+)/(?<media_path>.+)/[^/]+\.(?:jpg|jpeg)$ {
+      secure_link $media_signature;
+      secure_link_md5 "${media_path}${MEDIA_PROXY_SECRET}";
+
+      root $media_root;
+      try_files /$media_path @media_unavailable;
+
+      default_type image/jpeg;
+      expires ${STATIC_EXPIRES};
+      ${STATIC_CACHE_CONTROL_HEADER}
+      ${STAGING_NOINDEX_HEADER}
+    }
+
+    location ~ ^/media/(?<media_signature>[-_A-Za-z0-9]+)/(?<media_path>.+)/[^/]+\.png$ {
+      secure_link $media_signature;
+      secure_link_md5 "${media_path}${MEDIA_PROXY_SECRET}";
+
+      root $media_root;
+      try_files /$media_path @media_unavailable;
+
+      default_type image/png;
+      expires ${STATIC_EXPIRES};
+      ${STATIC_CACHE_CONTROL_HEADER}
+      ${STAGING_NOINDEX_HEADER}
+    }
+
+    location ~ ^/media/(?<media_signature>[-_A-Za-z0-9]+)/(?<media_path>.+)/[^/]+\.webp$ {
+      secure_link $media_signature;
+      secure_link_md5 "${media_path}${MEDIA_PROXY_SECRET}";
+
+      root $media_root;
+      try_files /$media_path @media_unavailable;
+
+      default_type image/webp;
+      expires ${STATIC_EXPIRES};
+      ${STATIC_CACHE_CONTROL_HEADER}
+      ${STAGING_NOINDEX_HEADER}
+    }
+
+    location ~ ^/media/(?<media_signature>[-_A-Za-z0-9]+)/(?<media_path>.+)/[^/]+$ {
+      secure_link $media_signature;
+      secure_link_md5 "${media_path}${MEDIA_PROXY_SECRET}";
+
+      root $media_root;
+      try_files /$media_path @media_unavailable;
+
+      expires ${STATIC_EXPIRES};
+      ${STATIC_CACHE_CONTROL_HEADER}
       ${STAGING_NOINDEX_HEADER}
     }
 
     location ~ ^/assets/.+\.(css|js|woff2|svg|png|jpg|jpeg|webp)$ {
-      expires 1y;
-      add_header Cache-Control "public, max-age=31536000, immutable";
+      expires ${STATIC_EXPIRES};
+      ${STATIC_CACHE_CONTROL_HEADER}
       ${STAGING_NOINDEX_HEADER}
       try_files $uri @puma;
     }
 
     location / {
       try_files $uri @puma;
+    }
+
+    location @media_unavailable {
+      if ($secure_link = "") { return 403; }
+      if ($secure_link = "0") { return 403; }
+      return 404;
     }
 
     location @puma {

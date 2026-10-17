@@ -8,7 +8,6 @@ class Event < SharedStuttgartRecord
   has_one_attached :promotion_banner_image
   has_rich_text :press_text
 
-  STUTTGART_LIVE_EVENT_BASE_URL = "https://www.stuttgart-live.de/events/".freeze
 
   scope :chronological, -> { order(start_at: :asc, id: :asc) }
   scope :published_live, lambda {
@@ -89,11 +88,11 @@ class Event < SharedStuttgartRecord
   end
 
   def public_ticket_url
-    public_ticket_offer&.resolved_ticket_url.presence || "#{STUTTGART_LIVE_EVENT_BASE_URL}#{slug}"
+    public_ticket_offer&.resolved_ticket_url.presence || public_detail_url
   end
 
   def public_detail_url
-    "#{STUTTGART_LIVE_EVENT_BASE_URL}#{slug}"
+    "#{StuttgartLiveUrls.base_url}/events/#{slug}"
   end
 
   def self.russ_live_publish_flag_available?
