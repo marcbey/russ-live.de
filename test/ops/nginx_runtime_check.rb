@@ -13,7 +13,7 @@ require "timeout"
 class NginxRuntimeCheck < Minitest::Test
   IMAGE = ENV.fetch("APP_IMAGE")
   SECRET = "runtime-secret-1234567890"
-  HTPASSWD = "tester:$apr1$runtime$SyZ6AmIL3E5qfbWvbHxM40"
+  HTPASSWD = "tester:$6$runtime$ASgV/R6hSX6s0tdGMPY6lm1PZxWWgZM.qY6NKsxIRUmDjc6urwYTl.ptNuMCS5oUwvVLmAqoS2E7FtzGxh8Et."
   ENCODED_PATH = "/a%2Fb?q=%E2%82%AC&x=1+2"
 
   def setup
