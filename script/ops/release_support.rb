@@ -6,6 +6,14 @@ require_relative "release_manifest"
 
 module Ops
   module ImageFingerprint
+    # Docker28 classic inspect adds these empty defaults; Docker29 omits them.
+    # Keep every unknown field and every non-default value in the fingerprint.
+    LEGACY_EMPTY_CONFIG = {
+      "Hostname" => "", "Domainname" => "", "AttachStdin" => false, "AttachStdout" => false,
+      "AttachStderr" => false, "Tty" => false, "OpenStdin" => false, "StdinOnce" => false,
+      "Image" => "", "Volumes" => nil, "OnBuild" => nil
+    }.freeze
+
     def self.call(metadata)
       valid = metadata["Os"] == "linux" && %w[amd64 arm64].include?(metadata["Architecture"]) &&
         metadata["Config"].is_a?(Hash) && metadata.dig("RootFS", "Type") == "layers" &&
@@ -13,6 +21,9 @@ module Ops
         metadata.dig("RootFS", "Layers").all? { |value| value.match?(/\Asha256:[a-f0-9]{64}\z/) }
       raise ReleaseSupport::Error, "Unvollständige Image-Laufzeitidentität" unless valid
       value = metadata.slice("Os", "Architecture", "Config", "RootFS")
+      value["Config"] = value.fetch("Config").reject do |key, item|
+        LEGACY_EMPTY_CONFIG.key?(key) && item == LEGACY_EMPTY_CONFIG.fetch(key)
+      end
       Digest::SHA256.hexdigest(JSON.generate(canonical(value)))
     end
 
