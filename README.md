@@ -1,7 +1,7 @@
 # Russ Live
 
-Rails-Anwendung für den Relaunch von `russ-live.de`. Das Projekt wurde mit Ruby
-`4.0.2` über `mise` und Rails `8.1.3` initialisiert.
+Rails-Anwendung für den Relaunch von `russ-live.de`. Die Anwendung verwendet Ruby
+`4.0.2` über `mise` und Rails `8.1.3.1`.
 
 ## Wichtig
 
