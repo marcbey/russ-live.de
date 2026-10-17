@@ -394,3 +394,21 @@ Die tatsächlichen Staging-Rechte werden nach Einrichtung und Datenübernahme mi
 `bin/rails runner script/ops/check_staging_acl.rb` im jeweiligen Staging-Container
 geprüft. Schreibprüfungen verwenden ausschließlich `WHERE FALSE` und Rollback;
 Produktionsdatenbanken werden nur auf die erwartete Verbindungsverweigerung geprüft.
+
+### Staging-Daten erneuern
+
+Den gemeinsamen manuellen Refresh aus dem Stuttgart-Projekt ausführen
+(`mise exec -- bin/staging-refresh --snapshot MANIFEST`, zunächst ohne `--execute`).
+Der dort dokumentierte Ablauf hält beide Staging-Apps bis zur vollständigen
+Bereinigung und Medien-/Rechteprüfung gesperrt. Russ bereinigt ausschließlich seine
+eigene `russ_live_de_staging`; die gemeinsame Nutzerquelle wird in Stuttgart
+bereinigt und bleibt für Russ schreibgeschützt. Die IDs und Medienzuordnungen
+bleiben erhalten, Kontakt- und Teamangaben werden synthetisch. Alte Sessions und
+Login-Versuche verschwinden. Der neue eigene Staging-Admin aus Stuttgart kann sich
+anschließend auch hier anmelden.
+
+Web und Worker prüfen die gemeinsame Readiness-Datei bereits vor dem Rails-Start.
+Offline-Runner und Migrationen benötigen diese Datei nicht. Bei fehlgeschlagenem
+Refresh erfolgt kein automatischer Neustart alter Worker. Die Sanitizer-Tests
+verwenden vollständige Schemata in isolierten PostgreSQL-16.15-Containern; `bin/ci`
+benötigt deshalb eine laufende Docker-Engine.

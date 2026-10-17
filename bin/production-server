@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+./bin/staging-ready
+
 export PORT=3000
 export PIDFILE="${PIDFILE:-/tmp/pids/puma.pid}"
 

@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+require_relative "../app/lib/staging_readiness"
+
+begin
+  StagingReadiness.verify!(project: "russ_live_de")
+rescue StagingReadiness::Error, DeploymentEnvironment::ConfigurationError => error
+  warn error.message
+  exit 1
+end

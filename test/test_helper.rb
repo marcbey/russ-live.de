@@ -10,8 +10,16 @@ RussLiveSchema.ensure!
 
 module ActiveSupport
   class TestCase
-    # Run tests in parallel with specified workers
-    parallelize(workers: :number_of_processors, threshold: 200)
+    # macOS libpq can abort in Objective-C initialization after fork on TCP connect.
+    # Linux CI keeps parallel workers; macOS follows Stuttgart's serial default.
+    parallelize(workers: RUBY_PLATFORM.include?("darwin") ? 1 : :number_of_processors, threshold: 200)
+
+    # Rails reconstructs each worker from the versioned (empty primary) schema.
+    # Build shared-source fixtures before transactional tests open separate pools.
+    parallelize_setup do
+      StuttgartLiveSchema.ensure!
+      RussLiveSchema.ensure!
+    end
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
