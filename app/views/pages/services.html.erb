@@ -28,29 +28,15 @@
           <p class="service-contact-heading"><%= t("pages.services.contacts.aria") %></p>
           <div class="service-contact-grid services-overview-contact-grid" aria-label="<%= t("pages.services.contacts.aria") %>">
             <article class="service-contact-card">
-              <%= image_tag "russ_live/team/paul-woog.jpg",
-                            alt: t("pages.services.contacts.paul.name"),
+              <%= image_tag "russ_live/team/michaela-russ.jpg",
+                            alt: t("pages.services.contacts.michaela.name"),
                             loading: "lazy",
                             decoding: "async",
                             width: 1024,
                             height: 1024 %>
               <div class="service-contact-meta">
-                <h3><%= t("pages.services.contacts.paul.name") %></h3>
-                <p><%= t("pages.services.contacts.paul.role") %></p>
-                <p><%= mail_to t("pages.services.contacts.paul.email"), t("pages.services.contacts.paul.email") %></p>
-              </div>
-            </article>
-            <article class="service-contact-card">
-              <%= image_tag "russ_live/team/johanna-backmund.jpg",
-                            alt: t("pages.services.contacts.johanna.name"),
-                            loading: "lazy",
-                            decoding: "async",
-                            width: 1024,
-                            height: 1024 %>
-              <div class="service-contact-meta">
-                <h3><%= t("pages.services.contacts.johanna.name") %></h3>
-                <p><%= t("pages.services.contacts.johanna.role") %></p>
-                <p><%= mail_to t("pages.services.contacts.johanna.email"), t("pages.services.contacts.johanna.email") %></p>
+                <h3><%= t("pages.services.contacts.michaela.name") %></h3>
+                <p><%= t("pages.services.contacts.michaela.role") %></p>
               </div>
             </article>
           </div>
@@ -65,20 +51,20 @@
             <div class="service-chapter-text service-chapter-text-columns">
               <p><%= t("services.items.production.paragraphs.first") %></p>
               <p><%= t("services.items.production.paragraphs.second") %></p>
+              <p><%= t("services.items.production.paragraphs.third") %></p>
             </div>
             <p class="service-contact-heading"><%= t("pages.services.contacts.aria") %></p>
             <div class="service-contact-grid" aria-label="<%= t("pages.services.contacts.aria") %>">
               <article class="service-contact-card">
-                <%= image_tag "russ_live/team/paul-woog.jpg",
-                              alt: t("pages.services.contacts.paul.name"),
+                <%= image_tag "russ_live/team/michaela-russ.jpg",
+                              alt: t("pages.services.contacts.michaela.name"),
                               loading: "lazy",
                               decoding: "async",
                               width: 1024,
                               height: 1024 %>
                 <div class="service-contact-meta">
-                  <h3><%= t("pages.services.contacts.paul.name") %></h3>
-                  <p><%= t("pages.services.contacts.paul.role") %></p>
-                  <p><%= mail_to t("pages.services.contacts.paul.email"), t("pages.services.contacts.paul.email") %></p>
+                  <h3><%= t("pages.services.contacts.michaela.name") %></h3>
+                  <p><%= t("pages.services.contacts.michaela.role") %></p>
                 </div>
               </article>
             </div>
@@ -98,6 +84,27 @@
           <div class="service-chapter-copy">
             <div class="service-chapter-text">
               <p><%= t("services.items.marketing.paragraphs.first") %></p>
+            </div>
+            <div class="service-focus" aria-labelledby="marketing-focus-title">
+              <h3 id="marketing-focus-title"><%= t("services.items.marketing.focus_title") %></h3>
+              <div class="accordion service-focus-accordion" data-controller="accordion">
+                <% t("services.items.marketing.focus_areas").each do |focus_area| %>
+                  <article class="accordion-item">
+                    <button class="accordion-trigger" type="button" aria-expanded="false">
+                      <span><%= focus_area[:title] %></span>
+                      <span class="accordion-icon" aria-hidden="true">+</span>
+                    </button>
+                    <div class="accordion-panel">
+                      <div class="accordion-panel-inner">
+                        <p><%= focus_area[:text] %></p>
+                      </div>
+                    </div>
+                  </article>
+                <% end %>
+              </div>
+            </div>
+            <div class="service-chapter-text">
+              <p><%= t("services.items.marketing.paragraphs.conclusion") %></p>
             </div>
             <p class="service-contact-heading"><%= t("pages.services.contacts.aria") %></p>
             <div class="service-contact-grid" aria-label="<%= t("pages.services.contacts.aria") %>">
@@ -132,14 +139,27 @@
             <div class="service-chapter-text service-chapter-text-columns">
               <p><%= t("services.items.staff.paragraphs.first") %></p>
               <p><%= t("services.items.staff.paragraphs.second") %></p>
+              <p><%= t("services.items.staff.paragraphs.third") %></p>
+              <p><%= t("services.items.staff.paragraphs.fourth") %></p>
+              <p><%= t("services.items.staff.paragraphs.fifth") %></p>
             </div>
-            <%= link_to t("pages.services.staff_jobs_button"),
-                        jobs_path,
-                        class: "public-button public-button-primary section-button service-staff-jobs-button" %>
+            <div class="service-deployment-areas">
+              <h3><%= t("services.items.staff.deployment_title") %></h3>
+              <ul>
+                <% t("services.items.staff.deployment_areas").each do |deployment_area| %>
+                  <li><%= deployment_area %></li>
+                <% end %>
+                <li class="service-deployment-action">
+                  <%= link_to t("pages.services.staff_jobs_button"),
+                              jobs_path,
+                              class: "public-button public-button-primary section-button service-staff-jobs-button" %>
+                </li>
+              </ul>
+            </div>
             <p class="service-contact-heading"><%= t("pages.services.contacts.aria") %></p>
             <div class="service-contact-grid" aria-label="<%= t("pages.services.contacts.aria") %>">
               <article class="service-contact-card">
-                <%= image_tag "russ_live/team/sebastian-kraenzlein.jpg",
+                <%= image_tag "russ_live/team/michael-wechselberger.jpg",
                               alt: t("pages.services.contacts.sebastian.name"),
                               loading: "lazy",
                               decoding: "async",
@@ -156,8 +176,8 @@
           <figure class="public-card service-chapter-visual service-chapter-visual-filled">
             <%= image_tag "russ_live/jobs/overview-hero.jpg",
                           alt: "",
-                          width: 2565,
-                          height: 1067,
+                          width: 2400,
+                          height: 998,
                           loading: "lazy",
                           decoding: "async" %>
           </figure>
@@ -165,13 +185,18 @@
 
 <article class="service-chapter service-chapter-ticketportal" id="ticketing">
           <h2><%= t("services.items.ticketing.title") %></h2>
+          <div class="service-chapter-copy">
+            <div class="service-chapter-text">
+              <p><%= sanitize(t("services.items.ticketing.paragraphs.first"), tags: %w[strong]) %></p>
+            </div>
+          </div>
           <figure class="public-card service-chapter-visual service-chapter-visual-filled service-chapter-visual-ticketportal">
             <div class="service-ticketportal-laptop">
-              <%= image_tag "russ_live/keyvisuals/services-ticketportal.png",
+              <%= image_tag "russ_live/keyvisuals/services-ticketportal.jpg",
                             alt: "",
                             class: "service-ticketportal-screen",
-                            width: 1719,
-                            height: 1276,
+                            width: 2016,
+                            height: 1378,
                             loading: "lazy",
                             decoding: "async" %>
               <%= image_tag "russ_live/keyvisuals/laptop_realistic.svg",
@@ -183,16 +208,13 @@
                             decoding: "async" %>
             </div>
           </figure>
-          <div class="service-chapter-copy">
-            <div class="service-chapter-text">
-              <p><%= t("services.items.ticketing.paragraphs.first") %></p>
-            </div>
-            <%= link_to "Stuttgart-Live",
-                        "https://www.stuttgart-live.de/",
-                        class: "public-button public-button-primary section-button",
-                        target: "_blank",
-                        rel: "noopener noreferrer" %>
-          </div>
+          <%= render "pages/events_slider",
+                     events: @home_events,
+                     next_cursor: @home_events_next_cursor,
+                     all_events_url: @stuttgart_live_sks_highlights_url,
+                     title_id: "services-events-title",
+                     section_class: "services-events",
+                     compact: true %>
         </article>
       </section>
 

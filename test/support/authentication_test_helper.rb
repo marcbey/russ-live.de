@@ -10,7 +10,7 @@ module AuthenticationTestHelper
     User.delete_all
   end
 
-  def create_stuttgart_user!(email_address: "admin@example.com", password: STRONG_PASSWORD, role: "admin", name: "Admin")
+  def create_stuttgart_user!(email_address: "admin@russ-live.de", password: STRONG_PASSWORD, role: "admin", name: "Admin")
     id = User.insert_all!([
       {
         email_address: email_address,

@@ -19,6 +19,7 @@ en:
       event_time: "%H:%M"
   public:
     skip_link: "Skip to content"
+    scroll_top: "Back to top"
     filters:
       all: "All"
     languages:
@@ -44,6 +45,8 @@ en:
       language_switch: "Switch to %{language}"
       menu_open: "Open menu"
       menu_close: "Close menu"
+      submenu_open: "Open %{menu} submenu"
+      submenu_close: "Close %{menu} submenu"
     actions:
       edit: "Edit"
       edit_references: "Edit references in the backend"
@@ -65,21 +68,47 @@ en:
       production:
         title: "Production & Technology"
         paragraphs:
-          first: "As one of the largest concert promoters in southern Germany, we look back on many years of event concept, planning and delivery. We gladly make this expertise and our broad industry network available for your events, whether as a full-service partner or for selected areas."
-          second: "We produce events of every type and scale. Art and culture are in our blood, and when audience numbers grow, our work truly comes alive."
+          first: "We know events from more than the perspective of a service provider. We stage them ourselves. Every year we deliver concerts, tours, festivals and corporate events, so we know exactly what matters in every phase of a project."
+          second: "We bring this experience into the production of your event. Whether as a full-service partner or by taking over individual project areas, we work with our trusted network of technical and production partners to ensure professional, efficient and smooth delivery."
+          third: "From the first planning meeting and technical concept through to show day, we support projects of every scale. We keep stage, lighting and sound in view, but above all the collaboration between everyone involved. A good production is one the audience barely notices."
       marketing:
         title: "Marketing"
         paragraphs:
-          first: "Who is my target audience, how and through which channels can I reach them, and which advertising materials are needed? There are many questions to answer. With our know-how and broad partner network, we find tailored, competent answers for every requirement."
+          first: "Every event deserves the attention of its audience. Successful event marketing starts with the right strategy. Together we define your target audience, develop the right communication strategy and make sure your event reaches exactly the people you want to reach. From the first idea to a sold-out show, we support the entire marketing process with creativity, focus and many years of event experience."
+          conclusion: "With our know-how, creative ideas and a strong regional network, we develop tailored marketing concepts that build reach, create attention and help events succeed sustainably."
+        focus_title: "Our focus areas"
+        focus_areas:
+          - title: "Social Media & Performance Marketing"
+            text: "We develop targeted campaigns for the relevant social media channels and use performance marketing on platforms such as Meta and Google, reaching your audience efficiently with measurable results."
+          - title: "Poster and Print Campaigns"
+            text: "From large-format posters, city-light posters, flyers and ads to other classic advertising formats, we plan, coordinate and support measures that make your event visible throughout the city."
+          - title: "Press and Public Relations"
+            text: "We maintain contact with regional media, create press information and help your event receive the attention it deserves. Our customers also receive regular event information through our newsletter."
+          - title: "Local Cooperations & Partnerships"
+            text: "With our strong network in Stuttgart and the region, we create valuable cooperations with companies, institutions and multipliers to increase your event's reach."
+          - title: "Own Sales Channels & Ticket Platforms"
+            text: "Alongside established ticket platforms, we also use our own sales channels to position your event effectively and generate additional reach."
+          - title: "Content Production"
+            text: "Professional content is the foundation of every successful campaign. Our in-house graphic designer creates artwork, social media graphics, ads, banners and other advertising materials quickly, flexibly and from a single source. On request, we also produce photo and video content for your event with our cooperation partners."
       staff:
         title: "Staffing"
         paragraphs:
-          first: "We are only as good as each member of our team. Every person matters to us, whether cleaning specialist or managing director. We are one team, and outstanding events are created together."
-          second: "Some of the most important work is done by our production staff behind the scenes. Without them, nothing would work. We are fortunate to employ more than 300 stagehands, forklift drivers, catering assistants and security specialists directly, whether permanent, part-time, occasional or short-term. We pay clearly above minimum wage, even for straightforward tasks."
+          first: "Successful events are created by people. That is why our employees are at the center of everything we do. Whether setup and dismantling, logistics, catering, security or organization, every task contributes to a successful event."
+          second: "With almost 500 of our own stagehands, forklift drivers, catering assistants and security staff, we have one of the largest event staffing pools in the region. Our team knows our workflows, works smoothly together and keeps event operations running reliably."
+          third: "Fair working conditions and respectful interaction are a given for us. We pay our employees clearly above the statutory minimum wage and create a working environment shaped by appreciation, equal opportunity and mutual respect. Qualification, commitment and team spirit are what count for us."
+          fourth: "Another focus is the continuous training and development of our team. Regular training on current safety and hygiene standards ensures a high level of quality and safe deployment at every event. Even on projects delivered together with external staffing providers, our customers benefit from the established workflows and experience of our own staff."
+          fifth: "We are happy to support your event with qualified staff or take over the complete staff planning and coordination."
+        deployment_title: "Our areas of deployment"
+        deployment_areas:
+          - "Catering assistants"
+          - "Stagehands"
+          - "Forklift drivers"
+          - "Security staff"
       ticketing:
         title: "Ticket portal"
+        cta: "Discover now!"
         paragraphs:
-          first: "Stuttgart-live is the ticket portal for all major events in the Stuttgart region: online booking, quick, straightforward and with excellent service."
+          first: "<strong>STUTTGART</strong>LIVE is our ticket portal for all major events in the Stuttgart region: online booking, quick, straightforward and with excellent service."
           second: "Event data will remain connected read-only in the long term. This Russ Live site will only use approved event data."
   pages:
     home:
@@ -88,12 +117,18 @@ en:
         description: "Russ Live is a local promoter, production partner and full-service provider for live entertainment in Stuttgart and the region."
       hero:
         image_alt: "Golden guitar as the Russ Live key visual"
-        intro: "Your local promoter for Stuttgart. We always keep both artists and audiences in view, creating unique emotional moments for up to 1 million visitors every year."
+        intro_html: "We are your local promoter for Stuttgart. We always keep both artists and audiences in view. That is how we create unique emotional moments for up to 1 million visitors – every year."
       services:
         eyebrow: "Live Entertainment"
-        title: "Full service for events"
+        title_html: "Full-Service for <br>events"
         intro: "From local delivery to production, marketing, staffing and ticketing: Russ Live combines experience, network and execution."
         local_partners: "Including Live Nation, Karsten Jahnke Konzertdirektion, Wizard Live"
+        more_info: "More info"
+        summaries:
+          production: "We bring our experience from our own concerts, tours, open-air formats and corporate events into every production. Together with our network, we ensure professional, efficient and smooth delivery."
+          marketing: "We develop the right communication strategy and make sure your event reaches the right people. From social media and press relations to content production, we support the entire marketing process."
+          staff: "With almost 500 of our own stagehands, forklift drivers, catering assistants and security staff, we have a strong staffing pool in the region. We can support individual deployments or handle complete staff planning."
+          ticketing: "<strong>STUTTGART</strong>LIVE is our ticket portal for key events in the Stuttgart region: online booking, fast, straightforward and with excellent service."
         production_contact_html: "Management<br>Phone +49.711.16 353 27"
         marketing_contact_html: "Marketing<br>Phone +49.711.16 353 16<br>/ sarahsandner@russ-live.de"
         legal_links_html: "© SKS Michael Russ GmbH <br>Imprint<br>Privacy<br>Terms<br>Youth protection"
@@ -102,13 +137,13 @@ en:
         title: "Projects we are proud of"
         show_all: "All references"
       events:
-        eyebrow: "Stuttgart-live"
+        eyebrow: "<strong>STUTTGART</strong>LIVE"
         title: "Upcoming events"
         intro: "Our ticket portal for all key events in Stuttgart: book online, fast, simple, affordable - with excellent service."
         nav_aria: "Browse events"
         previous: "Previous events"
         next: "Next events"
-        show_all: "Show all"
+        show_all: "All events"
     unternehmen:
       meta:
         title: "About us | Russ Live"
@@ -125,35 +160,30 @@ en:
       members:
         michaela_russ:
           role: "Management"
-        paul_woog:
-          role: "Management"
         johanna_backmund:
           role: "Project Management / Accounting"
         arnulf_woock:
           role: "Press & Public Relations"
         sarah_sandner:
-          role: "Marketing"
+          role: "Team Lead Marketing"
         katharina_schopper:
           role: "Graphic Design / Layout"
         chantal_erler:
           role: "Online Marketing / Social Media"
         tanja_ullenboom:
           role: "Production Management"
-        sebastian_kraenzlein:
-          role: "Staff Scheduling"
         michael_wechselberger:
           role: "Staff Scheduling"
         tim_wilka:
           role: "Ticketing"
-        elke_vierneisel:
-          role: "Accounting"
-        gabi_cremer:
-          role: "Accounting"
         jenny_hefner:
           role: "Accounting"
-        penny:
-          role: "Feel-good management"
     about:
+      team:
+        title: "Our team"
+        intro: "Behind every event are people who bring together planning, communication, technology, staffing and finances."
+        previous: "Previous team members"
+        next: "Next team members"
       hero:
         eyebrow: "About us"
         title_lines:
@@ -163,8 +193,8 @@ en:
         intro: "From Stuttgart. For the world. For three generations, we have created concerts that connect people."
       profile_title: "Company profile"
       story:
-        first_html: "<strong>Michael Russ Jr.</strong> grew into the world of Russ Live with calm closeness, heart and genuine entrepreneurial spirit. Over the years, this became responsibility, experience and a clear sense of how to make culture last."
-        second_html: "<strong>Michaela Russ</strong> continues this path in the third generation. Together, the family stands for productions that are professionally organized while remaining human. This has created a team that delivers culture with attitude, reliability and passion."
+        first_html: "What began with a vision in 1945 is now one of Europe's leading concert agencies. From Stuttgart, Russ has helped shape concert history for decades while preserving its closeness to the region."
+        second_html: "This combination of local roots and international ambition still shapes our view today: we think big, work in partnership and always keep the people behind every production in focus."
       company:
         eyebrow: "Konzertdirektion Russ"
         title_html: "Konzertdirektion Russ: a whole world of concerts, artists and events."
@@ -180,14 +210,17 @@ en:
         eyebrow: "History"
         title: "Our history. Three generations. One attitude."
         image_alt: "Michaela Russ, Michael Russ and a historic family portrait"
-        first: "What began with a vision in 1945 is now one of Europe's leading concert agencies. From Stuttgart, Russ has helped shape concert history for decades while preserving its closeness to the region."
-        second: "This combination of local roots and international ambition still shapes our view today: we think big, work in partnership and always keep the people behind every production in focus."
+        first: "Michael Russ grew into the world of Russ Klassik with calm closeness, heart and genuine entrepreneurial spirit. Over the years, this became responsibility, experience and a clear sense of how to make culture last."
+        second: "Michael expands the long-standing work of Konzertdirektion Erwin Russ in classical music to include pop, rock, shows and entertainment. Together with his team, he continues to develop the company, brings artists to the stage, creates original event concepts and gives audiences special experiences through concerts, shows and corporate events."
       award:
         eyebrow: "Responsibility"
-        title: "Experience that never stands still."
+        title: "Tradition is not a look back for us, but trust in what comes next."
         image_alt: "Michael Russ Jr. with an award and partner at an awards ceremony"
-        first: "Whether tour, one-off show, cultural format or major event: we combine deep industry knowledge with the ambition to keep evolving. This creates the mix of precision, calm and curiosity that defines our work."
-        second: "Awards make us happy. More important to us, however, is that artists, audiences, partners and teams can rely on us."
+        first: "Michaela Russ continues this path in the third generation. Together, the family stands for productions that are professionally organized while remaining human. From this, a team has emerged that delivers culture with attitude, reliability and passion."
+        second: "Our roots are in Stuttgart, while at the same time we work with artists and partners from all over the world. Thanks to our many years of experience, short paths and a strong network, we can reliably realize even demanding projects – from the first idea through technology, safety, marketing and press relations to ticketing and staff planning."
+        third: "Our spectrum ranges from small club concerts and major arena shows to spectacular open-air events. Different scales and formats are part of our everyday work, as is the challenge of creating the right setting for every project."
+        fourth: "Since 2025, exhibitions have also expanded our portfolio. It began with the Titanic exhibition in Ludwigsburg. Today, alongside live events, we increasingly develop and realize exhibition concepts and open up new forms of cultural experience."
+        fifth: "For us, it is not only about successful events. We want to strengthen art and culture in the long term and place great value on fair and respectful relationships with artists, service providers and partners. Sustainability, diversity, equal opportunity and trusting collaboration are a natural part of how we work."
       city:
         eyebrow: "Perspective"
         title: "From Stuttgart to the world."
@@ -216,24 +249,22 @@ en:
         intro: "From the first site visit to final load-out: Russ Live brings together promoter expertise, production, marketing, staffing and ticketing for concerts, shows and cultural formats in the Stuttgart region."
       nav_aria: "Service areas"
       staff_jobs_button: "Job openings"
+      events:
+        title: "Our upcoming events"
+        show_all: "All events"
       contacts:
         aria: "Contacts"
-        paul:
-          name: "Paul Woog"
+        michaela:
+          name: "Michaela Russ"
           role: "Management"
-          email: "paulwoog@michaelrussgmbh.de"
-        johanna:
-          name: "Johanna Backmund"
-          role: "Project Management / Accounting"
-          email: "johannabackmund@michaelrussgmbh.de"
         sarah:
           name: "Sarah Sandner"
           role: "Marketing"
-          email: "sarahsandner@michaelrussgmbh.de"
+          email: "sarahsandner@russ-live.de"
         sebastian:
-          name: "Sebastian Kraenzlein"
+          name: "Michael Wechselberger"
           role: "Personnel Scheduling"
-          email: "sebastiankraenzlein@russ-live.de"
+          email: "michaelwechselberger@russ-live.de"
       intro:
         eyebrow: "Full Service"
         title: "Everything a live moment needs"
@@ -346,7 +377,7 @@ en:
         description: "Youth protection information of SKS Michael Russ GmbH."
       title: "Youth Protection"
       paragraphs:
-        - "Many people, high volumes, show times late into the evening: is this event suitable for my child? Please consider this carefully; nobody knows your child as well as you do. You can call us at any time on 0711-55066077 or email info@stuttgart-live.de. We will be happy to advise you, because sometimes investing in childcare is more relaxed for everyone."
+        - "Many people, high volumes, show times late into the evening: is this event suitable for my child? Please consider this carefully; nobody knows your child as well as you do. You can call us at any time on 0711-55066077 or email info@russ-live.de. We will be happy to advise you, because sometimes investing in childcare is more relaxed for everyone."
         - "Age recommendations and age restrictions are regulated in detail for every event. They are legally binding and form part of our general terms and conditions. You can find the age restrictions in the respective event description on this website."
         - "In general, age restrictions follow these rules: children under 8 are usually not allowed to attend evening events and concerts. Children under 14 may usually only attend events when accompanied by an authorized guardian. Young people aged 14 to under 16 may usually attend concerts until 10 p.m.; young people over 16 may attend until midnight, after which they must be accompanied by a parent or authorized guardian."
         - "Parents or legal guardians are the mother and/or father or the legal guardian. An authorized guardian may be any adult over 18 if they actually assume parental duties with the parents' consent. They must be able to fulfill supervisory duties within the assigned task, meaning they must be able to guide and supervise the young people entrusted to them. A parental authorization form signed by the parents must be presented. A copy of the relevant parent's ID must also be enclosed. The responsible person named above must supervise the child during the event and needs an admission ticket. Each accompanying person may supervise no more than two children. All children and young people under 18 should be able to identify themselves with a child ID or personal ID."
@@ -360,7 +391,7 @@ en:
   references:
     featured_aria: "Featured projects"
     featured_title: "Highlights"
-    overview_link: "Open reference page"
+    overview_link: "References"
     overview_aria: "Open reference page"
     filters:
       aria: "Filter references by tags"
@@ -386,6 +417,7 @@ en:
     detail:
       aria_label: "Job details %{title}"
       application_email_subject: "Application %{title}"
+      back_short: "Back"
       responsibilities: "Responsibilities"
       requirements: "Requirements"
       apply_title: "We look forward to your application!"
@@ -406,7 +438,8 @@ en:
         position: "Position"
         message: "Tell us something about yourself"
         email_hint: "An email will be prepared. Please attach your application documents there, such as your cover letter, certificates, and CV."
-        email_greeting: "Hello Sebastian,"
+        email_contact_fallback: "Russ Live team"
+        email_greeting: "Hello %{name},"
         email_interest_line: "I am interested in the position %{title}."
         email_personal_details_heading: "My details:"
         submit: "Prepare email"
@@ -436,11 +469,13 @@ en:
         title: "Press contact"
         text: "For interview, accreditation and material requests, the press area is directly prepared."
         role: "Press & Public Relations"
+        phone: "Phone"
     detail:
       meta:
         title: "%{name} | Press | Russ Live"
         description: "Press kit for %{name}: press text, image material and event data from Russ Live."
       back: "Back to press overview"
+      back_short: "Back"
       eyebrow: "Press kit"
       intro: "Press text, image material and event data for %{name}."
       download_presskit: "Download press kit"
@@ -458,10 +493,15 @@ en:
       press_text:
         eyebrow: "Press text"
         empty: "There is currently no press text for this artist."
+        show_more: "Show more"
+        show_less: "Show less"
         usage: "The image and text material may be used free of charge for editorial purposes. For press photos, please observe the credit stored in the file name or metadata."
+        pdf_generated: "Generated on %{date}"
       downloads:
         eyebrow: "Downloads"
-        title: "Press photos"
+        title: "Downloads"
+      download_text_tile: "Press text"
+      download_text: "Download press text"
       gallery_image_label: "Press photo %{name} %{index}"
       fallback_image_alt: "Press image"
       download_image: "Download image"
@@ -471,6 +511,8 @@ en:
       next_image: "Next image"
   events:
     tickets: "Tickets"
+    more_info: "More info"
+    more_info_title: "%{title} on STUTTGARTLIVE"
     price_from: "from %{price}"
     status:
       canceled: "Canceled"

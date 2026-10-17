@@ -1,0 +1,50 @@
+<% content_for :title, "Team" %>
+
+<main class="backend-shell backend-inbox-shell">
+  <%= render "backend/shared/navigation" %>
+  <header class="backend-topbar backend-topbar-sticky backend-inbox-topbar">
+    <div class="backend-topbar-title"><p class="eyebrow">Russ Live</p><h1>Team</h1></div>
+  </header>
+
+  <div class="backend-split backend-inbox-split">
+    <aside class="backend-list-column">
+      <div class="backend-list-toolbar">
+        <%= form_with url: backend_team_members_path, method: :get, class: "filter-form", data: { turbo: false, controller: "filter-clear" } do |form| %>
+          <div class="filter-search-field filter-search-field-full">
+            <%= form.label :query, "Suche", class: "form-label" %>
+            <div class="filter-control">
+              <%= form.text_field :query, value: @query_filter, placeholder: "Name oder Rolle", class: "form-input filter-input-with-clear", data: { filter_clear_target: "input", action: "input->filter-clear#toggle" } %>
+              <%= button_tag "×", type: "button", class: "filter-clear filter-input-clear #{'is-visible' if @query_filter.present?}", aria: { label: "Suche löschen" }, data: { filter_clear_target: "clear", action: "filter-clear#clear" } %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="backend-reference-list-scroll">
+        <% reorderable = @query_filter.blank? %>
+        <% list_data = reorderable ? { controller: "backend-sortable-list", backend_sortable_list_url_value: reorder_backend_team_members_path, backend_sortable_list_param_value: "team_member_ids" } : {} %>
+        <%= tag.div class: "backend-reference-list #{'is-sortable' if reorderable}", data: list_data do %>
+          <% @team_members.each do |member| %>
+            <% item_data = reorderable ? { backend_sortable_list_target: "item", backend_sortable_list_item_id: member.id, action: "dragstart->backend-sortable-list#dragStart dragover->backend-sortable-list#dragOver drop->backend-sortable-list#drop dragend->backend-sortable-list#dragEnd" } : {} %>
+            <%= link_to backend_team_members_path(query: @query_filter, team_member_id: member.id), class: "backend-reference-list-item #{'is-active' if @selected_team_member&.id == member.id}", draggable: reorderable, data: item_data do %>
+              <% if reorderable %><span class="backend-sort-handle" aria-hidden="true">::</span><span class="sr-only">Reihenfolge ziehen</span><% end %>
+              <span class="backend-reference-list-title"><%= member.name %></span>
+              <span class="backend-reference-list-meta"><%= [member.role, member.role_en].compact_blank.join(" · ") %></span>
+            <% end %>
+          <% end %>
+          <% if @team_members.empty? %>
+            <p class="empty-state">Keine Teammitglieder zur aktuellen Filterung.</p>
+          <% end %>
+        <% end %>
+      </div>
+    </aside>
+
+    <section class="backend-editor-column backend-inbox-editor-column">
+      <% if @selected_team_member.present? %>
+        <%= render "editor_panel", team_member: @selected_team_member, active_editor_tab: @active_editor_tab %>
+      <% else %>
+        <div class="empty-state"><p>Wähle ein Teammitglied aus oder lege ein neues an.</p><%= link_to "Neues Teammitglied", new_backend_team_member_path(query: @query_filter), class: "button button-success button-compact" %></div>
+      <% end %>
+    </section>
+  </div>
+</main>

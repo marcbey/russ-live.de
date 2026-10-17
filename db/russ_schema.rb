@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_24_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_29_103000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -25,7 +25,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_24_120000) do
     t.string "filename"
     t.string "sub_text"
     t.datetime "updated_at", null: false
-    t.index ["contact_id"], name: "index_contact_images_on_contact_id", unique: true
+    t.index [ "contact_id" ], name: "index_contact_images_on_contact_id", unique: true
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -36,7 +36,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_24_120000) do
     t.integer "position", default: 0, null: false
     t.string "role"
     t.datetime "updated_at", null: false
-    t.index ["position"], name: "index_contacts_on_position"
+    t.index [ "position" ], name: "index_contacts_on_position"
+  end
+
+  create_table "editable_pages", force: :cascade do |t|
+    t.jsonb "content", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.string "key", null: false
+    t.string "locale", null: false
+    t.text "meta_description"
+    t.string "meta_title"
+    t.datetime "published_at"
+    t.jsonb "published_content", default: {}, null: false
+    t.text "published_meta_description"
+    t.string "published_meta_title"
+    t.string "published_title"
+    t.string "status", default: "published", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index [ "key", "locale" ], name: "index_editable_pages_on_key_and_locale", unique: true
+    t.index [ "status" ], name: "index_editable_pages_on_status"
   end
 
   create_table "job_images", force: :cascade do |t|
@@ -50,35 +69,43 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_24_120000) do
     t.bigint "job_id", null: false
     t.string "sub_text"
     t.datetime "updated_at", null: false
-    t.index ["job_id"], name: "index_job_images_on_job_id", unique: true
+    t.index [ "job_id" ], name: "index_job_images_on_job_id", unique: true
   end
 
   create_table "jobs", force: :cascade do |t|
     t.string "badge"
+    t.string "badge_en"
     t.string "categories", default: [], null: false, array: true
     t.bigint "contact_id"
     t.datetime "created_at", null: false
     t.string "employment"
     t.string "highlight_label"
     t.text "highlight_text"
+    t.text "highlight_text_en"
     t.string "highlight_title"
     t.text "intro"
+    t.text "intro_en"
     t.string "join_recruiting_url"
     t.string "location", null: false
     t.text "meta_description"
+    t.text "meta_description_en"
     t.string "meta_title"
+    t.string "meta_title_en"
     t.integer "position", default: 0, null: false
     t.text "requirements", default: [], null: false, array: true
+    t.text "requirements_en", default: [], null: false, array: true
     t.text "responsibilities", default: [], null: false, array: true
+    t.text "responsibilities_en", default: [], null: false, array: true
     t.string "slug", null: false
     t.string "status", default: "draft", null: false
     t.string "title", null: false
+    t.string "title_en"
     t.datetime "updated_at", null: false
-    t.index ["categories"], name: "index_jobs_on_categories", using: :gin
-    t.index ["contact_id"], name: "index_jobs_on_contact_id"
-    t.index ["position"], name: "index_jobs_on_position"
-    t.index ["slug"], name: "index_jobs_on_slug", unique: true
-    t.index ["status"], name: "index_jobs_on_status"
+    t.index [ "categories" ], name: "index_jobs_on_categories", using: :gin
+    t.index [ "contact_id" ], name: "index_jobs_on_contact_id"
+    t.index [ "position" ], name: "index_jobs_on_position"
+    t.index [ "slug" ], name: "index_jobs_on_slug", unique: true
+    t.index [ "status" ], name: "index_jobs_on_status"
   end
 
   create_table "login_attempts", force: :cascade do |t|
@@ -89,10 +116,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_24_120000) do
     t.datetime "updated_at", null: false
     t.string "user_agent"
     t.bigint "user_id"
-    t.index ["created_at"], name: "index_login_attempts_on_created_at"
-    t.index ["email_address", "created_at"], name: "index_login_attempts_on_email_address_and_created_at"
-    t.index ["outcome", "created_at"], name: "index_login_attempts_on_outcome_and_created_at"
-    t.index ["user_id"], name: "index_login_attempts_on_user_id"
+    t.index [ "created_at" ], name: "index_login_attempts_on_created_at"
+    t.index [ "email_address", "created_at" ], name: "index_login_attempts_on_email_address_and_created_at"
+    t.index [ "outcome", "created_at" ], name: "index_login_attempts_on_outcome_and_created_at"
+    t.index [ "user_id" ], name: "index_login_attempts_on_user_id"
   end
 
   create_table "reference_images", force: :cascade do |t|
@@ -123,7 +150,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_24_120000) do
     t.string "slider_sub_text"
     t.string "sub_text"
     t.datetime "updated_at", null: false
-    t.index ["reference_id"], name: "index_reference_images_on_reference_id", unique: true
+    t.index [ "reference_id" ], name: "index_reference_images_on_reference_id", unique: true
   end
 
   create_table "references", force: :cascade do |t|
@@ -140,10 +167,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_24_120000) do
     t.string "tags", default: [], null: false, array: true
     t.string "title", null: false
     t.datetime "updated_at", null: false
-    t.index ["featured"], name: "index_references_on_featured"
-    t.index ["position", "starts_on"], name: "index_references_on_position_and_starts_on"
-    t.index ["status"], name: "index_references_on_status"
-    t.index ["tags"], name: "index_references_on_tags", using: :gin
+    t.index [ "featured" ], name: "index_references_on_featured"
+    t.index [ "position", "starts_on" ], name: "index_references_on_position_and_starts_on"
+    t.index [ "status" ], name: "index_references_on_status"
+    t.index [ "tags" ], name: "index_references_on_tags", using: :gin
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -152,11 +179,36 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_24_120000) do
     t.datetime "updated_at", null: false
     t.string "user_agent"
     t.bigint "user_id", null: false
-    t.index ["user_id"], name: "index_sessions_on_user_id"
+    t.index [ "user_id" ], name: "index_sessions_on_user_id"
+  end
+
+  create_table "team_member_images", force: :cascade do |t|
+    t.string "alt_text"
+    t.string "asset_path"
+    t.bigint "byte_size"
+    t.string "content_type"
+    t.datetime "created_at", null: false
+    t.string "file_path"
+    t.string "filename"
+    t.string "sub_text"
+    t.bigint "team_member_id", null: false
+    t.datetime "updated_at", null: false
+    t.index [ "team_member_id" ], name: "index_team_member_images_on_team_member_id", unique: true
+  end
+
+  create_table "team_members", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.string "role"
+    t.string "role_en"
+    t.datetime "updated_at", null: false
+    t.index [ "position" ], name: "index_team_members_on_position"
   end
 
   add_foreign_key "contact_images", "contacts"
   add_foreign_key "job_images", "jobs"
   add_foreign_key "jobs", "contacts"
   add_foreign_key "reference_images", "references"
+  add_foreign_key "team_member_images", "team_members"
 end
