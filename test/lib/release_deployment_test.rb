@@ -53,4 +53,46 @@ class ReleaseDeploymentTest < ActiveSupport::TestCase
       assert status.success?, out + err
     end
   end
+
+  test "post-deploy verification loads actual destination roles through Kamal" do
+    Dir.mktmpdir do |root|
+      FileUtils.mkdir_p(File.join(root, "config"))
+      File.write(File.join(root, "config/deploy.yml"), <<~YAML)
+        service: russ_live_de
+        image: synthetic/app
+        builder:
+          arch: amd64
+        servers:
+          web: [46.225.224.194]
+        registry:
+          username: synthetic
+          password: synthetic
+      YAML
+      File.write(File.join(root, "config/deploy.staging.yml"), <<~YAML)
+        servers:
+          job:
+            hosts: [46.225.224.194]
+            cmd: bin/jobs
+      YAML
+      code = <<~'RUBY'
+        require ARGV.shift
+        Dir.chdir(ARGV.shift)
+        Ops::ReleaseSupport.define_singleton_method(:capture) { |*args, **| args.first == 'git' ? 'a' * 40 : '' }
+        Ops::ManagedCommand.define_singleton_method(:run) { |*| Struct.new(:success?).new(true) }
+        Ops::DeploymentSmoke.define_singleton_method(:call) { |**| true }
+        remote = Object.new
+        remote.define_singleton_method(:capture) { |*, **| '' }
+        remote.define_singleton_method(:verify_running!) do |**identity|
+          abort 'Destination roles were not verified' unless identity.fetch(:roles).sort == %w[job web]
+        end
+        deployment = Ops::ReleaseDeployment.new(destination: 'staging')
+        deployment.instance_variable_set(:@remote, remote)
+        deployment.deploy!(commit: 'a' * 40, digest: 'sha256:' + 'b' * 64)
+      RUBY
+      env = { "GITHUB_REPOSITORY" => "marcbey/russ-live.de", "KAMAL_REGISTRY_PULL_PASSWORD" => "synthetic", "STAGING_HTTP_AUTH" => "stage:synthetic" }
+      out, err, status = Open3.capture3(env, "mise", "exec", "--", "bundle", "exec", "ruby", "-e", code, Rails.root.join("script/ops/deploy_release.rb").to_s, root)
+      assert status.success?, out + err
+      assert_includes out, "Image läuft geprüft: staging"
+    end
+  end
 end

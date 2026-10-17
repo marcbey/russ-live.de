@@ -1,5 +1,6 @@
 require "bundler/setup"
 require "kamal"
+require "pathname"
 require_relative "release_support"
 require_relative "deployment_remote"
 require_relative "deployment_smoke"
@@ -76,7 +77,7 @@ module Ops
       @remote.capture("docker login ghcr.io -u marcbey --password-stdin", input: ENV.fetch("KAMAL_REGISTRY_PULL_PASSWORD"))
       status = ManagedCommand.run([ "mise", "exec", "--", "bin/kamal", "deploy", "-d", destination, "--skip-push", "--version", commit ])
       raise ReleaseSupport::Error, "Kamal-Deploy fehlgeschlagen; kein Proxy-Reboot und keine andere Version" unless status.success?
-      config = Kamal::Configuration.create_from(config_file: "config/deploy.yml", destination:, version: commit)
+      config = Kamal::Configuration.create_from(config_file: Pathname.new("config/deploy.yml"), destination:, version: commit)
       @remote.verify_running!(project:, destination:, commit:, digest:, roles: config.roles.map(&:name))
       connect_ip = HetznerDeployConfig.production_smoke_ip if destination == "hetzner"
       DeploymentSmoke.call(host: HetznerDeployConfig.app_host(destination:), staging: destination == "staging", auth: destination == "staging" ? required("STAGING_HTTP_AUTH") : nil, connect_ip:)
