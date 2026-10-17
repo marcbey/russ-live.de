@@ -33,7 +33,7 @@ module Ops
         apps.fetch(peer)["schema_path"] = schema_path
         apps.fetch(peer)["reference"] = "#{production_peer.fetch('image')}@#{production_peer.fetch('digest')}"
         new.run_sandbox(directory:, apps:)
-        { "paired_app_commit" => stages.fetch(peer).fetch("commit"), "peer_production_commit" => production_peer.fetch("commit") }
+        { "paired_app" => ReleaseManifest.image_identity(stages.fetch(peer)), "production_peer" => ReleaseManifest.image_identity(production_peer) }
       end
     end
 

@@ -24,14 +24,12 @@ module Ops
       manifest
     end
 
-    def self.validate(repository:, manifest:, stage: nil, peer_production_commit: nil)
+    def self.validate(repository:, manifest:, stage: nil, peer_production: nil)
       ReleaseManifest.validate_contents!(manifest:, expected_repository: repository)
       unless stage
         current = resolve(repository:, staging_run_id: manifest.fetch("staging_run_id"))
         raise ReleaseSupport::Error, "Freigabeartefakt wurde seit der Auswahl ersetzt" unless current == manifest
-        if peer_production_commit && !manifest.fetch("compatible_peer_commits").include?(peer_production_commit)
-          raise ReleaseSupport::Error, "Aktueller produktiver Peer ist nicht geprüft"
-        end
+        ReleaseManifest.validate_peer!(manifest:, peer: peer_production) if peer_production
         return true
       end
       stage ||= ReleaseSupport.run(repository, manifest.fetch("staging_run_id"))
@@ -44,8 +42,8 @@ module Ops
       ci_run = ReleaseSupport.run(repository, manifest.fetch("ci_run_id"))
       registry_digest = ReleaseSupport.registry_digest(image: manifest.fetch("image"), commit: manifest.fetch("commit"))
       args = { manifest:, expected_repository: repository, ci_run:, staging_run: stage, registry_digest: }
-      if peer_production_commit
-        ReleaseManifest.validate!(**args, peer_production_commit:)
+      if peer_production
+        ReleaseManifest.validate!(**args, peer_production:)
       else
         ReleaseManifest.validate_provenance!(**args)
       end

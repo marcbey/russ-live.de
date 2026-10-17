@@ -5,11 +5,11 @@ module Ops
   module ReleaseManifest
     Error = Class.new(StandardError)
     IMAGES = { "marcbey/stuttgart-live.de" => "ghcr.io/marcbey/stuttgart-live-de", "marcbey/russ-live.de" => "ghcr.io/marcbey/russ-live-de" }.freeze
-    FIELDS = %w[schema_version repository commit image digest ci_run_id staging_run_id deployment_config_sha256 paired_app_commit compatible_peer_commits].freeze
+    FIELDS = %w[schema_version repository commit image digest ci_run_id staging_run_id deployment_config_sha256 paired_app compatible_peers].freeze
 
-    def self.validate!(manifest:, expected_repository:, ci_run:, staging_run:, registry_digest:, peer_production_commit:)
+    def self.validate!(manifest:, expected_repository:, ci_run:, staging_run:, registry_digest:, peer_production:)
       validate_provenance!(manifest:, expected_repository:, ci_run:, staging_run:, registry_digest:)
-      raise Error, "Produktiver Peer wurde mit dieser Version nicht geprüft" unless manifest["compatible_peer_commits"].include?(peer_production_commit)
+      validate_peer!(manifest:, peer: peer_production)
       true
     end
 
@@ -38,17 +38,34 @@ module Ops
 
     def self.validate_contents!(manifest:, expected_repository:)
       image = IMAGES[expected_repository]
+      peer_image = (IMAGES.values - [ image ]).first
       valid = image && manifest.is_a?(Hash) && manifest.keys.sort == FIELDS.sort &&
-        manifest["schema_version"] == 1 && manifest["repository"] == expected_repository && manifest["image"] == image &&
-        sha?(manifest["commit"]) && sha?(manifest["paired_app_commit"]) &&
+        manifest["schema_version"] == 2 && manifest["repository"] == expected_repository && manifest["image"] == image &&
+        sha?(manifest["commit"]) && valid_identity?(manifest["paired_app"], expected_image: peer_image) &&
         manifest["digest"].to_s.match?(/\Asha256:[a-f0-9]{64}\z/) &&
         manifest["deployment_config_sha256"].to_s.match?(/\A[a-f0-9]{64}\z/) &&
         %w[ci_run_id staging_run_id].all? { |key| manifest[key].is_a?(Integer) && manifest[key].positive? } &&
-        manifest["compatible_peer_commits"].is_a?(Array) && !manifest["compatible_peer_commits"].empty? &&
-        manifest["compatible_peer_commits"].uniq == manifest["compatible_peer_commits"] &&
-        manifest["compatible_peer_commits"].all? { |commit| sha?(commit) } &&
-        manifest["compatible_peer_commits"].include?(manifest["paired_app_commit"])
+        manifest["compatible_peers"].is_a?(Array) && !manifest["compatible_peers"].empty? &&
+        manifest["compatible_peers"].uniq == manifest["compatible_peers"] &&
+        manifest["compatible_peers"].all? { |peer| valid_identity?(peer, expected_image: peer_image) } &&
+        manifest["compatible_peers"].include?(manifest["paired_app"])
       raise Error, "Release-Manifest enthält ungültige oder zusätzliche Felder" unless valid
+      true
+    end
+
+    def self.image_identity(metadata)
+      raise Error, "Peer-Identität fehlt" unless metadata.is_a?(Hash)
+      metadata.slice("image", "commit", "digest")
+    end
+
+    def self.valid_identity?(identity, expected_image:)
+      identity.is_a?(Hash) && identity.keys.sort == %w[commit digest image] && identity["image"] == expected_image &&
+        sha?(identity["commit"]) && identity["digest"].to_s.match?(/\Asha256:[a-f0-9]{64}\z/)
+    end
+
+    def self.validate_peer!(manifest:, peer:)
+      identity = image_identity(peer)
+      raise Error, "Produktives Peer-Image wurde mit dieser Version nicht geprüft" unless manifest.fetch("compatible_peers").include?(identity)
       true
     end
 

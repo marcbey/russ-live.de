@@ -18,10 +18,10 @@ begin
     # Read-only metadata/schema queries use existing app connections. No stage role is granted production access.
     proof = Ops::CompatibilityProbe.call(project: deployment.project, candidate: { "commit" => commit, "digest" => digest }, remote: deployment.remote,
       master_keys: { deployment.project => ENV.fetch("RAILS_MASTER_KEY"), deployment.peer => ENV.fetch("STAGING_PEER_RAILS_MASTER_KEY") })
-    manifest = { "schema_version" => 1, "repository" => deployment.repository, "commit" => commit, "image" => image, "digest" => digest,
+    manifest = { "schema_version" => 2, "repository" => deployment.repository, "commit" => commit, "image" => image, "digest" => digest,
       "ci_run_id" => ci_run_id, "staging_run_id" => Ops::ReleaseSupport.run_id(ENV.fetch("GITHUB_RUN_ID")),
       "deployment_config_sha256" => Ops::ReleaseManifest.deployment_config_sha256(root: Dir.pwd),
-      "paired_app_commit" => proof.fetch("paired_app_commit"), "compatible_peer_commits" => [ proof.fetch("paired_app_commit"), proof.fetch("peer_production_commit") ].uniq }
+      "paired_app" => proof.fetch("paired_app"), "compatible_peers" => [ proof.fetch("paired_app"), proof.fetch("production_peer") ].uniq }
     Ops::ReleaseManifest.validate_contents!(manifest:, expected_repository: deployment.repository)
     deployment.notify_sentry!
     path = ENV.fetch("RELEASE_MANIFEST_PATH") { File.join(ENV.fetch("RUNNER_TEMP"), "staging-release.json") }

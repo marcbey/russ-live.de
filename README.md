@@ -482,3 +482,12 @@ des Proxy-Ziels. Staging behält unabhängig davon sein festes, geschütztes Pro
 
 Der gemeinsame [Betriebsablauf für Domainwechsel, DNS-Abgleich und Staging](https://github.com/marcbey/stuttgart-live.de/blob/main/docs/operations/domainumzug-und-staging.md)
 beschreibt die Bereitstellung, Microsoft-365-Abnahme und den gezielten Rückweg.
+
+
+Freigabemanifeste verwenden Schema-Version 2: `paired_app` und
+`compatible_peers` enthalten jeweils Image-Name, Commit und Digest. Ein neu
+gebautes Peer-Image mit unverändertem Commit benötigt einen neuen Nachweis.
+Nach einem Deploy-/Refresh-Abbruch bleibt die Operationsmarkierung
+`/var/lock/live-deploy/active-operation` bestehen und sperrt weitere Eingriffe.
+Erst nach bestätigtem Ende aller bisherigen Host-Mutationen administrativ gemäß
+gemeinsamem Runbook freigeben; es gibt keine automatische Ablaufzeit.

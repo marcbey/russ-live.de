@@ -30,11 +30,12 @@ class DeployLockTest < ActiveSupport::TestCase
                   if time.monotonic() >= deadline:
                       sys.exit(73)
                   time.sleep(0.01)
-          print("LOCKED", flush=True)
+          script = args[-1].replace('/var/lock/live-deploy/active-operation', os.environ['LOCK_TEST_FILE'] + '.fence')
           if os.environ.get("LOCK_TEST_DROP") == "1":
-              time.sleep(0.1)
-              sys.exit(0)
-          sys.stdin.buffer.read()
+              script = script.replace('cat >/dev/null', 'sleep 0.1; exit 0')
+              script = script.replace('IFS= read -r', 'sleep 0.1; exit 0; IFS= read -r')
+          os.set_inheritable(lock.fileno(), True)
+          os.execvp('sh', ['sh', '-c', script])
     PYTHON
     FileUtils.chmod(0o700, File.join(@dir, "ssh"))
     @env = { "PATH" => "#{@dir}:#{ENV.fetch('PATH')}", "LOCK_TEST_FILE" => File.join(@dir, "host.lock"), "LOCK_TEST_DROP" => nil }
@@ -67,7 +68,7 @@ class DeployLockTest < ActiveSupport::TestCase
     assert_equal events[2].split(":").last, events[3].split(":").last
   end
 
-  test "timeout never executes a block and exceptions release the lock" do
+  test "timeout never executes a block and failed operations require explicit recovery" do
     with_lock_env do
       Ops::DeployLock.with_lock(host: "test.invalid", key_path: @key) do
         entered = false
@@ -79,27 +80,44 @@ class DeployLockTest < ActiveSupport::TestCase
       assert_raises(RuntimeError) do
         Ops::DeployLock.with_lock(host: "test.invalid", key_path: @key) { raise "synthetic failure" }
       end
+      assert_raises(Ops::DeployLock::Error) do
+        Ops::DeployLock.with_lock(host: "test.invalid", key_path: @key, timeout: 0) { flunk "Unfinished operation was not fenced" }
+      end
+      recover_fixture
       error = assert_raises(Timeout::Error) do
         Ops::DeployLock.with_lock(host: "test.invalid", key_path: @key) { raise Timeout::Error, "managed command timeout" }
       end
       assert_equal "managed command timeout", error.message
+      recover_fixture
       assert_equal :released, Ops::DeployLock.with_lock(host: "test.invalid", key_path: @key, timeout: 0) { :released }
     end
   end
 
-  test "lost SSH lock interrupts work and does not leave a lock behind" do
+  test "lost lock transport fences other controllers while an independent remote mutation continues" do
     with_lock_env do
       ENV["LOCK_TEST_DROP"] = "1"
+      remote_marker = File.join(@dir, "remote-mutation-finished")
+      mutator_pid = nil
       continued_after_drop = false
       assert_raises(Ops::DeployLock::ConnectionLost) do
         Ops::DeployLock.with_lock(host: "test.invalid", key_path: @key) do
+          mutator_pid = Process.spawn("sh", "-c", 'sleep 0.7; printf finished > "$1"', "sh", remote_marker, pgroup: true)
           sleep 0.5
           continued_after_drop = true
         end
       end
       refute continued_after_drop
       ENV.delete("LOCK_TEST_DROP")
+      refute File.exist?(remote_marker)
+      assert_raises(Ops::DeployLock::Error) do
+        Ops::DeployLock.with_lock(host: "test.invalid", key_path: @key, timeout: 0) { flunk "Another controller entered during remote mutation" }
+      end
+      Process.wait(mutator_pid)
+      assert File.exist?(remote_marker)
+      recover_fixture
       assert_equal :released, Ops::DeployLock.with_lock(host: "test.invalid", key_path: @key, timeout: 0) { :released }
+    ensure
+      Process.wait(mutator_pid) rescue nil if mutator_pid
     end
   end
 
@@ -107,6 +125,7 @@ class DeployLockTest < ActiveSupport::TestCase
     output, status = Open3.capture2e(@env, "mise", "exec", "--", "script/ops/deploy_with_lock",
       "--host", "test.invalid", "--key", @key, "--", "sh", "-c", "exit 37", chdir: Rails.root)
     assert_equal 37, status.exitstatus, output
+    assert File.directory?("#{@env.fetch('LOCK_TEST_FILE')}.fence")
   end
 
   test "lost SSH terminates the managed command process group" do
@@ -122,6 +141,12 @@ class DeployLockTest < ActiveSupport::TestCase
 
   def lock_path
     Rails.root.join("script/ops/deploy_lock.rb").to_s
+  end
+
+  def recover_fixture
+    path = "#{@env.fetch('LOCK_TEST_FILE')}.fence"
+    File.unlink(File.join(path, "owner"))
+    Dir.rmdir(path)
   end
 
   def with_lock_env

@@ -11,7 +11,7 @@ begin
   deployment.prepare!
   deployment.with_lock do
     peer = deployment.remote.running(project: deployment.peer, destination: "hetzner")
-    Ops::ReleaseEvidence.validate(repository: deployment.repository, manifest:, peer_production_commit: peer.fetch("commit"))
+    Ops::ReleaseEvidence.validate(repository: deployment.repository, manifest:, peer_production: peer)
     deployment.deploy!(commit: manifest.fetch("commit"), digest: manifest.fetch("digest"))
     deployment.notify_sentry!
   end

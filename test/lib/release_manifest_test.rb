@@ -4,19 +4,21 @@ require_relative "../../script/ops/release_manifest"
 
 class ReleaseManifestTest < ActiveSupport::TestCase
   def evidence
-    repository = "marcbey/russ-live.de"
+    repository = "marcbey/stuttgart-live.de"
     commit = "a" * 40
     digest = "sha256:#{'b' * 64}"
-    manifest = { "schema_version" => 1, "repository" => repository, "commit" => commit, "image" => "ghcr.io/marcbey/russ-live-de",
+    paired_app = { "image" => "ghcr.io/marcbey/russ-live-de", "commit" => "d" * 40, "digest" => "sha256:#{'1' * 64}" }
+    production_peer = paired_app.merge("commit" => "e" * 40, "digest" => "sha256:#{'2' * 64}")
+    manifest = { "schema_version" => 2, "repository" => repository, "commit" => commit, "image" => "ghcr.io/marcbey/stuttgart-live-de",
       "digest" => digest, "ci_run_id" => 11, "staging_run_id" => 22, "deployment_config_sha256" => "c" * 64,
-      "paired_app_commit" => "d" * 40, "compatible_peer_commits" => [ "d" * 40, "e" * 40 ] }
+      "paired_app" => paired_app, "compatible_peers" => [ paired_app, production_peer ] }
     base = { "status" => "completed", "conclusion" => "success", "head_branch" => "main", "head_sha" => commit,
       "repository" => { "full_name" => repository, "id" => 1 }, "head_repository" => { "full_name" => repository, "id" => 1 } }
     ci = base.merge("id" => 11, "event" => "push", "path" => ".github/workflows/ci.yml")
     stage = base.merge("id" => 22, "event" => "workflow_run", "path" => ".github/workflows/deploy-staging.yml",
       "artifact" => { "id" => 33, "name" => "staging-release", "expired" => false, "expires_at" => (Time.now.utc + 3600).iso8601,
         "workflow_run" => { "id" => 22, "head_branch" => "main", "head_repository_id" => 1, "repository_id" => 1 } })
-    { manifest:, expected_repository: repository, ci_run: ci, staging_run: stage, registry_digest: digest, peer_production_commit: "e" * 40 }
+    { manifest:, expected_repository: repository, ci_run: ci, staging_run: stage, registry_digest: digest, peer_production: production_peer.dup }
   end
 
   test "an older specifically tested commit and compatible production peer are valid" do
@@ -43,8 +45,8 @@ class ReleaseManifestTest < ActiveSupport::TestCase
       ->(d) { d[:staging_run]["artifact"]["expires_at"] = (Time.now.utc - 1).iso8601 },
       ->(d) { d[:staging_run]["artifact"]["workflow_run"]["id"] = 23 },
       ->(d) { d[:staging_run]["artifact"]["workflow_run"]["head_repository_id"] = 2 },
-      ->(d) { d[:peer_production_commit] = "f" * 40 },
-      ->(d) { d[:manifest]["compatible_peer_commits"] = [] },
+      ->(d) { d[:peer_production]["commit"] = "f" * 40 },
+      ->(d) { d[:manifest]["compatible_peers"] = [] },
       ->(d) { d[:manifest]["image"] = "ghcr.io/other/project" },
       ->(d) { d[:manifest]["commit"] = "main; echo unsafe" }
     ]
@@ -52,6 +54,26 @@ class ReleaseManifestTest < ActiveSupport::TestCase
       data = evidence
       mutate.call(data)
       assert_raises(Ops::ReleaseManifest::Error, "mutation #{index}") { Ops::ReleaseManifest.validate!(**data) }
+    end
+  end
+
+  test "same peer commit with a different digest or image never authorizes production" do
+    [ { "digest" => "sha256:#{'f' * 64}" }, { "image" => "ghcr.io/other/russ-live-de" } ].each do |change|
+      data = evidence
+      data[:peer_production].merge!(change)
+      assert_raises(Ops::ReleaseManifest::Error) { Ops::ReleaseManifest.validate!(**data) }
+    end
+    data = evidence
+    data[:manifest]["paired_app"]["digest"] = "invalid"
+    assert_raises(Ops::ReleaseManifest::Error) { Ops::ReleaseManifest.validate!(**data) }
+  end
+
+  test "both tested staging and production peer images retain their full identities" do
+    data = evidence
+    data[:manifest].fetch("compatible_peers").each do |identity|
+      assert Ops::ReleaseManifest.validate!(**data.merge(peer_production: identity.merge("container" => "metadata-only")))
+      changed = identity.merge("digest" => "sha256:#{'9' * 64}")
+      assert_raises(Ops::ReleaseManifest::Error) { Ops::ReleaseManifest.validate!(**data.merge(peer_production: changed)) }
     end
   end
 
