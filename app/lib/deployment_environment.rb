@@ -49,6 +49,8 @@ module DeploymentEnvironment
       profile = {
         "SOLID_QUEUE_SKIP_RECURRING" => "true",
         "APP_HOST" => (project == "stuttgart_live_de" ? "staging.stuttgart-live.de" : "staging.russ-live.de"),
+        "APP_ALLOWED_HOSTS" => (project == "stuttgart_live_de" ? "staging.stuttgart-live.de" : "staging.russ-live.de"),
+        "CANONICAL_REDIRECT_ENABLED" => "false", "STAGING_NOINDEX" => "true",
         "DB_HOST" => "172.18.0.1", "DB_PORT" => "5432",
         "DB_NAME" => "stuttgart_live_de_staging",
         "DB_USER" => "stuttgart_live_de_staging",

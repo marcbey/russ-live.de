@@ -42,13 +42,13 @@ env:
   secret:
     - RAILS_MASTER_KEY
     - MEDIA_PROXY_SECRET
+    - STAGING_BASIC_AUTH_HTPASSWD
     - RUSS_LIVE_PRIMARY_DB_PASSWORD
     - RUSS_LIVE_OPERATIONAL_DB_PASSWORD
   clear:
     APP_ENVIRONMENT: staging
     SENTRY_ENVIRONMENT: staging
     SENTRY_RELEASE: <%= ENV.fetch("SENTRY_RELEASE") { `git rev-parse HEAD`.strip } %>
-    STAGING_NOINDEX: "true"
 <% DeploymentEnvironment.staging_profile(project: "russ_live_de").each do |key, value| %>
     <%= key %>: <%= value.inspect %>
 <% end %>

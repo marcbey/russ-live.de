@@ -47,6 +47,8 @@ env:
     - MEDIA_PROXY_SECRET
   clear:
     APP_ENVIRONMENT: production
+    APP_ALLOWED_HOSTS: <%= HetznerDeployConfig.app_host %>
+    CANONICAL_REDIRECT_ENABLED: "false"
     STORAGE_VOLUME: stuttgart_live_de_storage
     APP_HOST: <%= HetznerDeployConfig.app_host %>
     DB_HOST: 172.18.0.1

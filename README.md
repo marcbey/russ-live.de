@@ -361,3 +361,24 @@ Automatische wiederkehrende Jobs sind in Staging ausgeschaltet; lokale manuelle
 Jobs bleiben möglich. Mailjet-, Meta-, externe Import- und kostenpflichtige
 KI-Aufrufe werden an den echten Client-Grenzen blockiert, auch bei versehentlich
 vorhandenen API-Zugangsdaten. Öffentliche Tracking-Pixel bleiben in Staging aus.
+
+Das Staging-Ziel benötigt zusätzlich `STAGING_BASIC_AUTH_HTPASSWD` als vollständige
+htpasswd-Zeile (`Benutzer:Hash`), beispielsweise mit einem Bcrypt-Hash. Der Hash
+wird als Secret behandelt; das Startskript schreibt ihn mit Dateirechten `0600`.
+Fehlt er, startet nginx nicht. In Staging gelten Basic Auth und `noindex, nofollow`
+auch für Assets, Medien und Fehlerantworten. Antworten werden dort nicht öffentlich
+zwischengespeichert. Ausschließlich der exakte Healthcheck `/up` bleibt öffentlich
+und enthält keine Anwendungsdaten. nginx prüft dabei den Rails-Healthcheck von
+Puma, damit ein noch nicht gestarteter oder defekter App-Prozess nicht als bereit gilt.
+
+`APP_ALLOWED_HOSTS` enthält die erlaubten Hostnamen als kommagetrennte Liste.
+`CANONICAL_REDIRECT_ENABLED=false` hält die Weiterleitung bis zum Umschaltfenster
+ausgeschaltet. Bei aktivierter Weiterleitung führen erlaubte Alias-Hosts mit
+HTTP 308 auf den festen HTTPS-Host aus `APP_HOST`; Pfad und Suchparameter bleiben
+erhalten. Fremde Hosts werden abgewiesen. Die bisherige Produktionsdomain und ihre
+Medien-Signierschlüssel bleiben bis zur geplanten Umschaltung erhalten.
+
+Nach jedem Image-Build ist der HTTP-Test verpflichtend:
+`APP_IMAGE=<gebautes-image> mise exec -- ruby test/ops/nginx_runtime_check.rb`.
+Er startet ausschließlich isolierte Testcontainer mit synthetischen Dateien und
+prüft Weiterleitungen, Zugriffsschutz sowie beide Medien-Signaturverfahren.

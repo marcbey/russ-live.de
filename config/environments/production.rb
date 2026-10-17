@@ -6,6 +6,9 @@ Rails.application.configure do
   # at runtime from the shared Hetzner deploy config.
   app_host = ENV["APP_HOST"].presence || HetznerDeployConfig.app_host_if_present(destination: (config.x.deployment_environment == "staging" ? "staging" : "hetzner"))
 
+  config.hosts = ENV.fetch("APP_ALLOWED_HOSTS", app_host.to_s).split(",").map(&:strip).reject(&:empty?)
+  config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
