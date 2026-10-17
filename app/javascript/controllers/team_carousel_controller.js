@@ -35,7 +35,7 @@ export default class extends Controller {
 
     this.viewportTarget.scrollBy({
       left: direction * (cardWidth + gap) * visibleCards,
-      behavior: "smooth",
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
     })
   }
 

@@ -11,10 +11,13 @@ export default class extends Controller {
         const targetId = link.getAttribute("href")
         if (!targetId || targetId === "#") return
 
-        const target = document.querySelector(targetId)
+        const target = document.getElementById(decodeURIComponent(targetId.slice(1)))
         if (!target) return
 
         event.preventDefault()
+        history.pushState(null, "", targetId)
+        if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1")
+        target.focus({ preventScroll: true })
         this.scrollToTarget(target, { flush: link.dataset.anchorPosition === "flush" })
       }, { signal: this.abortController.signal })
     })
@@ -29,7 +32,7 @@ export default class extends Controller {
   alignInitialHash() {
     if (!window.location.hash) return
 
-    const target = document.querySelector(window.location.hash)
+    const target = document.getElementById(decodeURIComponent(window.location.hash.slice(1)))
     if (!target) return
 
     const align = () => {
@@ -50,7 +53,7 @@ export default class extends Controller {
 
     window.scrollTo({
       top: Math.max(targetTop - offset, 0),
-      behavior: smooth ? "smooth" : "auto",
+      behavior: smooth && !window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "smooth" : "auto",
     })
   }
 

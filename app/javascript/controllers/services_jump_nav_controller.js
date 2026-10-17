@@ -73,7 +73,7 @@ export default class extends Controller {
   scrollToSection(target, smooth = true) {
     window.scrollTo({
       top: target.getBoundingClientRect().top + window.scrollY - this.stickyOffset(),
-      behavior: smooth ? "smooth" : "auto",
+      behavior: smooth && !window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "smooth" : "auto",
     })
   }
 
@@ -98,7 +98,7 @@ export default class extends Controller {
         if (!wasActive) {
           this.element.scrollTo({
             left: link.offsetLeft - (this.element.clientWidth - link.clientWidth) / 2,
-            behavior: "smooth",
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
           })
         }
       } else {

@@ -55,11 +55,8 @@ export default class extends Controller {
         lastPointerType = "touch"
       }, { passive: true, signal: this.abortController.signal })
 
-      button.addEventListener("click", () => {
-        if (this.usesHover() || lastPointerType !== "touch") {
-          button.blur()
-          return
-        }
+      button.addEventListener("click", (event) => {
+        if (event.detail > 0 && this.usesHover() && lastPointerType !== "touch") return
 
         this.setCardFlipped(card, button, !card.classList.contains("is-flipped"))
       }, { signal: this.abortController.signal })
@@ -195,12 +192,7 @@ export default class extends Controller {
   setCardFlipped(card, button, flipped) {
     card.classList.toggle("is-flipped", flipped)
     button.setAttribute("aria-pressed", String(flipped))
-    button.setAttribute("aria-label", flipped ? `Bild zu ${this.cardName(card)} anzeigen` : `Details zu ${this.cardName(card)} anzeigen`)
     this.layout()
-  }
-
-  cardName(card) {
-    return card.querySelector(".reference-card-name")?.textContent || "dieser Referenz"
   }
 
   usesHover() {

@@ -32,7 +32,7 @@
                        aria: { hidden: index.zero? ? "false" : "true", label: reference_data[:title] } do %>
           <% if flip_enabled %>
             <button class="klassik-slide-flip-button" type="button" aria-pressed="false" aria-label="<%= t("references.card.details_aria", title: reference.title) %>">
-              <span class="klassik-slide-face klassik-slide-front" aria-hidden="true" data-reference-image-render-target="frame">
+              <span class="klassik-slide-face klassik-slide-image-face klassik-slide-front" aria-hidden="true" data-reference-image-render-target="frame">
                 <%= tag.img src: reference_data[:image],
                             alt: reference_data[:alt],
                             loading: index.zero? ? "eager" : "lazy",
@@ -42,7 +42,7 @@
                             style: reference_data[:image_style].presence,
                             data: { reference_image_render_target: "image" } %>
               </span>
-              <span class="klassik-slide-face klassik-slide-back" style="background: #000;">
+              <span class="klassik-slide-face klassik-slide-copy-face klassik-slide-back">
                 <span class="reference-card-name"><%= format_stuttgart_live_brand(reference.title) %></span>
                 <span class="reference-card-back-content">
                   <span class="reference-card-meta-group">

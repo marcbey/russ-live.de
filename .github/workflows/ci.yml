@@ -81,6 +81,19 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24.13.0
+          package-manager-cache: false
+
+      - name: Build browser assets
+        run: |
+          npm install --global yarn@1.22.22
+          yarn install --frozen-lockfile
+          yarn build
+          yarn build:css
+
       - name: Run tests
         env:
           RAILS_ENV: test
@@ -122,6 +135,19 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24.13.0
+          package-manager-cache: false
+
+      - name: Build browser assets
+        run: |
+          npm install --global yarn@1.22.22
+          yarn install --frozen-lockfile
+          yarn build
+          yarn build:css
 
       - name: Run System Tests
         env:

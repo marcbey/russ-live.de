@@ -2,7 +2,7 @@
 
 Dieses Dokument beschreibt das aktuelle Public-Frontend-System von Russ Live und definiert das Zielsystem für künftige UI-, UX-, Performance-, Accessibility-, Best-Practices- und SEO-Arbeiten. Es ist als Arbeitsgrundlage für Agenten gedacht, die öffentliche Seiten erweitern, vereinheitlichen, modularisieren oder gegen Lighthouse prüfen.
 
-Die Regeln basieren auf der bestehenden Implementierung in `app/views/pages`, `app/views/shared/_public_header.html.erb`, `app/views/shared/_public_footer.html.erb`, den Public-Stimulus-Controllern und `app/assets/stylesheets/application.tailwind.css`.
+Die Regeln basieren auf der bestehenden Implementierung in `app/views/pages`, `app/views/shared/_public_header.html.erb`, `app/views/shared/_public_footer.html.erb`, den Public-Stimulus-Controllern und `app/assets/stylesheets/frontend.tailwind.css`. Gemeinsame Grundelemente liegen in `app/assets/stylesheets/shared.css`.
 
 Backend- und Auth-Oberflächen bleiben getrennt und werden in `docs/backend-design-system.md` beschrieben.
 

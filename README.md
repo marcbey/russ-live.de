@@ -157,8 +157,9 @@ Entwurf ab; erst `Veröffentlichen` übernimmt sie auf die öffentliche Seite.
 Über `Vorschau anzeigen` kann der aktuelle Entwurf vor dem Veröffentlichen
 kontrolliert werden.
 
-Die Kontaktseite verwaltet zunächst nur Titel und einen Kontakttext als ein
-HTML-Feld. Das Kontaktformular selbst bleibt vorerst statisch.
+Die Kontaktseite verwaltet Titel und Kontakttext als ein HTML-Feld.
+Direkte Aktionen für Telefon, E-Mail und die VVS-Fahrplanauskunft stehen
+vor dem längeren Text und dem Standortfoto.
 
 ## Mehrsprachigkeit
 
@@ -194,6 +195,15 @@ mise exec -- bin/dev
 
 Die Anwendung läuft danach standardmäßig unter `http://127.0.0.1:3001`.
 
+Öffentliche Seiten laden die `frontend`-Bundles, Login und Backoffice die
+`backend`-Bundles. Die Einstiegspunkte liegen unter `app/javascript` und
+`app/assets/stylesheets`; nur Tokens, Grundelemente, Formularfelder und
+Meldungen werden über `shared.css` gemeinsam verwendet. Neue
+Stimulus-Controller werden im passenden Manifest unter
+`app/javascript/controllers/frontend.js` oder `backend.js` registriert.
+`bin/dev` überwacht beide JavaScript-Einstiege und beide CSS-Builds.
+Die lokalen Schriftdateien werden auf beiden Oberflächen ausgeliefert.
+
 ## Checks
 
 ```bash
@@ -201,6 +211,36 @@ mise exec -- bin/ci
 ```
 
 `bin/ci` bündelt die relevanten Tests, Security-Checks und Linter.
+
+Für die Tastatur-, Dialog- und mobilen Layoutregressionen zusätzlich mit
+installiertem Chrome ausführen:
+
+```bash
+yarn build && yarn build:css
+mise exec -- bin/rails test:system
+```
+
+Der GitHub-Systemtest baut diese Assets ebenfalls vor dem Browserlauf.
+
+### Frontend mit Impeccable prüfen
+
+`PRODUCT.md` hält Zielgruppen und Markenbedingungen fest. Der native
+Impeccable-Detektor lässt sich mit Node.js/npm direkt ausführen; die
+Projektkonfiguration erkennt Rails-Templates mit `.html.erb` als HTML.
+
+```bash
+npx --yes impeccable@4.6.0 detect app/views/pages app/views/shared app/assets/stylesheets/frontend.tailwind.css app/assets/stylesheets/shared.css
+npx --yes impeccable@4.6.0 detect http://127.0.0.1:3001/ --viewport 1440x1000
+npx --yes impeccable@4.6.0 detect http://127.0.0.1:3001/services --viewport 320x900
+```
+
+Quelltext- und Browserprüfung ergänzen sich. Browserläufe benötigen die
+gestartete App; über die Sprachumschaltung beide Sprachen prüfen.
+Exit-Code `0` bedeutet keine primären Befunde, `2` gemeldete Befunde und
+`1` einen unvollständigen oder fehlgeschlagenen Scan. Interaktive Zustände
+wie Referenzdetails zusätzlich per Tastatur und Touch kontrollieren.
+Der [Prüfbericht](docs/frontend-audit.md) dokumentiert die Korrekturen und die
+verbleibende Detektorheuristik bei geschlossenen Referenzkarten.
 
 ## Deployment und Betrieb
 
