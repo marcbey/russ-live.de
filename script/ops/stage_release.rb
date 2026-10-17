@@ -28,6 +28,7 @@ begin
     path = ENV.fetch("RELEASE_MANIFEST_PATH") { File.join(ENV.fetch("RUNNER_TEMP"), "staging-release.json") }
     Ops::ReleaseSupport.write_json(path, manifest)
   end
-rescue KeyError, JSON::ParserError, Ops::ReleaseSupport::Error, Ops::ReleaseManifest::Error, Ops::DeployImageProof::Error, Ops::DeployLock::Error, Timeout::Error
+rescue KeyError, JSON::ParserError, Ops::ReleaseSupport::Error, Ops::ReleaseManifest::Error, Ops::DeployImageProof::Error, Ops::DeployLock::Error, Timeout::Error => error
+  warn "Staging-Prüfung abgebrochen (#{error.class.name})"
   abort "Staging-Nachweis nicht erstellt: Quelle, Deploy, Smoke oder Kompatibilität fehlgeschlagen. Produktion bleibt unverändert."
 end

@@ -246,8 +246,10 @@ verbleibende Detektorheuristik bei geschlossenen Referenzkarten.
 
 Production läuft auf demselben Hetzner-Host wie `stuttgart-live.de` und wird
 ebenfalls mit Kamal ausgerollt. Die öffentliche Domain
-`russ-live.schopp3r.de` zeigt auf `46.225.224.194`; `kamal-proxy` routet anhand
-des Hostnamens zum Kamal-Service `russ_live_de`.
+`https://russ-live.de` zeigt auf `46.225.224.194`; `kamal-proxy` routet anhand
+des Hostnamens zum Kamal-Service `russ_live_de`. `www.russ-live.de` leitet mit
+HTTP 308 und erhaltenem Pfad und Querystring zum Apex weiter. Das GitHub-Environment
+`production` verwendet `PRODUCTION_DOMAIN_MODE=live` mit automatischem HTTPS.
 
 Die Runtime entspricht Stuttgart: Der Container startet `nginx` auf Port `80`
 und Puma intern auf Port `3000`. `nginx` liefert Assets und signierte
@@ -350,8 +352,9 @@ Medienvolume sind von Produktion getrennt. Beide Staging-Apps teilen sich nur
 Stuttgart-Staging-Datenbank. Produktionswerte in geerbten Datenbank-URLs werden
 beim Start abgelehnt.
 
-Produktion bleibt zunächst unter der bisherigen `schopp3r.de`-Adresse und dem
-Kamal-Ziel `hetzner`. Diese Konfiguration allein schaltet keine Domain um.
+Das Produktionsziel bleibt `hetzner`; sein Hostprofil wird über
+`PRODUCTION_DOMAIN_MODE` gewählt. Das Staging-Ziel schaltet selbst keine
+Produktionsdomain um.
 Für Staging müssen eigene `config/credentials/staging.yml.enc` sowie ein eigener
 Schlüssel bereitgestellt werden; der Produktionsschlüssel ist kein Ersatz.
 Das Beispiel `.kamal/secrets.staging.example` liest ausschließlich ausdrücklich
@@ -455,6 +458,11 @@ Staging-Umgebung geprüft. Der Image-Vergleich berücksichtigt die leeren
 Standardfelder, die ältere Docker-Versionen ergänzen; geänderte Laufzeitwerte,
 unbekannte Zusatzfelder und Dateischichten führen weiterhin zum Abbruch. Der Lauf nennt
 die jeweilige Prüfphase, ohne Daten oder Schlüssel auszugeben.
+
+Die HTTPS-Prüfung erlaubt Staging pro Leseversuch bis zu 60 Sekunden, damit auch
+eine kalte Seite auf den bewusst kleinen Ressourcen fertig rendern kann.
+Produktion behält 15 Sekunden. Ein hängender Staging-Aufruf führt weiterhin zum
+Abbruch; der Prüfclient protokolliert die Phase und die Fehlerklasse ohne Nutzdaten.
 
 Der 14 Tage aufbewahrte Nachweis `staging-release` nennt den gemeinsam getesteten
 Staging-Peer und die kompatiblen Produktions-Commits. Diese müssen nicht identisch
