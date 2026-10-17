@@ -2,6 +2,10 @@
 
 ## Agent Rules
 
+- Der Deployment-Ablauf steht in der README unter „CI, Staging und Produktionsfreigabe über GitHub“ und ist für Agenten verbindlich: Änderungen laufen über PR, Main-CI und `Deploy Staging`; Produktion verwendet ausschließlich das dabei geprüfte Image und den gültigen Freigabenachweis.
+- Reguläre Produktionsfreigaben werden nach erfolgreichem Staging automatisch vorbereitet. Vor der Freigabe müssen Commit, Änderungen seit dem Produktionsstand und die zugehörige Staging-Seite geprüft werden. Freigaben erfolgen über das GitHub-Environment `production` durch `marcbey` oder Katharina Schopper (`kasch0`); bestehende Freigaberegeln dürfen nicht umgangen werden.
+- Ein manueller Rollback startet `Deploy Production` auf `main` mit `mode=rollback` und der `staging_run_id` des gewünschten erfolgreichen Staging-Laufs. Er benötigt ebenfalls die Produktionsfreigabe und gültige Image-/Kompatibilitätsnachweise. Die Aufbewahrung beträgt derzeit 14 Tage; Datenbankmigrationen und Inhalte werden nicht zurückgesetzt.
+- Direkte Kamal-Deploys, ein Image-Neubau oder `latest` sind kein Ersatz für die GitHub-Freigabe. Bei ungültigem Nachweis, abweichender Partner-Version oder fehlgeschlagener Prüfung muss der Agent abbrechen und den konkreten Grund melden.
 - Before every `git push`, all relevant linters and tests must complete successfully.
 - By default, `bin/ci` must be run, as this project uses it to bundle linting, security checks, and tests.
 - Ruby commands for this project must always be run through `mise` so that the version pinned in `mise.toml` is used; currently that is Ruby `4.0.2` (for example `mise exec -- bin/rails test` or `mise exec -- ruby -v`).
