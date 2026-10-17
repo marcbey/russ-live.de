@@ -8,7 +8,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     @admin = create_stuttgart_user!(email_address: "admin@russ-live.de", role: "admin")
   end
 
-  test "new renders login with Stuttgart Live password reset link" do
+  test "new renders login with STUTTGARTLIVE password reset link" do
     get new_session_path
 
     assert_response :success
@@ -67,7 +67,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     delete session_path
 
-    assert_redirected_to new_session_url
+    assert_redirected_to root_url
     assert_not Session.exists?(session_id)
   end
 end

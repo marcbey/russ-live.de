@@ -1,0 +1,44 @@
+<% content_for :title, "Seiten" %>
+
+<main class="backend-shell backend-inbox-shell">
+  <%= render "backend/shared/navigation" %>
+
+  <header class="backend-topbar backend-topbar-sticky backend-inbox-topbar">
+    <div class="backend-topbar-title">
+      <p class="eyebrow">Russ Live</p>
+      <h1>Seiten</h1>
+    </div>
+  </header>
+
+  <div class="backend-split backend-inbox-split">
+    <aside class="backend-list-column">
+      <div class="backend-list-toolbar">
+        <div class="backend-page-help">
+          <strong>Bearbeitbare Seiten</strong>
+          <span>Speichern legt einen Entwurf ab. Veröffentlichen macht ihn live.</span>
+        </div>
+      </div>
+
+      <div class="backend-reference-list-scroll">
+        <div class="backend-reference-list">
+          <% @editable_pages.each do |page| %>
+            <%= link_to backend_pages_path(page_id: page.id),
+                        class: "backend-reference-list-item #{'is-active' if @selected_page&.id == page.id}" do %>
+              <span class="backend-reference-list-title"><%= page.label %></span>
+              <span class="backend-reference-list-meta"><%= page.locale.upcase %> · <%= page.public_path %></span>
+              <span class="status-badge"><%= page.display_status %></span>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </aside>
+
+    <section class="backend-editor-column backend-inbox-editor-column">
+      <% if @selected_page.present? %>
+        <%= render "editor_panel", page: @selected_page %>
+      <% else %>
+        <p class="empty-state">Keine Seite gefunden.</p>
+      <% end %>
+    </section>
+  </div>
+</main>
