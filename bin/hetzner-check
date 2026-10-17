@@ -4,7 +4,20 @@ set -euo pipefail
 APP_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$APP_ROOT"
 
-if [[ -f .env ]]; then
+destination=hetzner
+if [[ "${1:-}" == "--destination" && $# -eq 2 ]]; then
+  destination="$2"
+elif [[ $# -ne 0 ]]; then
+  printf 'Aufruf: bin/hetzner-check [--destination hetzner|staging]\n' >&2
+  exit 1
+fi
+case "$destination" in
+  hetzner|staging) ;;
+  *) printf 'Unbekanntes Deployment-Ziel\n' >&2; exit 1 ;;
+esac
+export KAMAL_DESTINATION="$destination"
+
+if [[ "$destination" == hetzner && -f .env ]]; then
   set -a
   # shellcheck disable=SC1091
   source .env
@@ -24,7 +37,7 @@ require_file() {
 read_deploy_config_value() {
   local key="$1"
 
-  ruby - "$key" <<'RUBY'
+  mise exec -- ruby - "$key" <<'RUBY'
 require File.expand_path("app/lib/hetzner_deploy_config.rb", Dir.pwd)
 
 puts HetznerDeployConfig.fetch(ARGV.fetch(0))
@@ -32,11 +45,11 @@ RUBY
 }
 
 extract_secret_names() {
-  ruby <<'RUBY'
+  mise exec -- ruby <<'RUBY'
 require "yaml"
 require "erb"
 
-config_path = File.expand_path("config/deploy.hetzner.yml", Dir.pwd)
+config_path = File.expand_path("config/deploy.#{ENV.fetch("KAMAL_DESTINATION")}.yml", Dir.pwd)
 raw = ERB.new(File.read(config_path)).result
 config = YAML.safe_load(raw, aliases: true)
 Array(config.dig("registry", "password")).each { |name| puts name }
@@ -46,20 +59,36 @@ RUBY
 
 printf 'Prüfe lokale Hetzner-Voraussetzungen in %s\n' "$APP_ROOT"
 
-require_file "config/master.key"
-require_file "config/deploy.hetzner.shared.yml"
-require_file ".kamal/secrets.hetzner"
+if [[ "$destination" == staging ]]; then
+  [[ ! -f .kamal/secrets-common ]] || fail "Staging darf .kamal/secrets-common nicht verwenden"
+  require_file "config/credentials/staging.yml.enc"
+  [[ -n "${RAILS_MASTER_KEY:-}" || -f config/credentials/staging.key ]] || fail "Staging-Schlüssel fehlt"
+else
+  require_file "config/master.key"
+fi
+require_file "config/deploy.$destination.shared.yml"
+require_file ".kamal/secrets.$destination"
 require_file "$HOME/.ssh/stgt-live-hetzner-github"
 
 app_host="$(read_deploy_config_value "app_host")"
 web_host="$(read_deploy_config_value "web_host")"
 
+secret_names="$(extract_secret_names)"
 while IFS= read -r secret_name; do
   [[ -n "$secret_name" ]] || continue
-  if ! grep -Eq "^${secret_name}=" ".kamal/secrets.hetzner"; then
-    fail "Secret fehlt in .kamal/secrets.hetzner: ${secret_name}"
+  if ! grep -Eq "^${secret_name}=" ".kamal/secrets.$destination"; then
+    fail "Secret fehlt in .kamal/secrets.$destination: ${secret_name}"
   fi
-done < <(extract_secret_names)
+done <<< "$secret_names"
+
+mise exec -- ruby - "$destination" "$secret_names" <<'RUBY'
+require "kamal"
+require "active_support/core_ext/object/blank"
+
+values = Kamal::Secrets.new(destination: ARGV.fetch(0), secrets_path: ".kamal/secrets").to_h
+missing = ARGV.fetch(1).lines.map(&:strip).reject { |key| values[key].present? }
+abort "Secrets nicht gesetzt: #{missing.join(', ')}" unless missing.empty?
+RUBY
 
 printf 'APP_HOST: %s\n' "$app_host"
 printf 'KAMAL_WEB_HOST: %s\n' "$web_host"

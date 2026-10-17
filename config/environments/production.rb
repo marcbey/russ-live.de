@@ -4,7 +4,7 @@ require Rails.root.join("app/lib/hetzner_deploy_config").to_s
 Rails.application.configure do
   # The Docker image build excludes deploy config files. Kamal injects APP_HOST
   # at runtime from the shared Hetzner deploy config.
-  app_host = ENV["APP_HOST"].presence || HetznerDeployConfig.app_host_if_present
+  app_host = ENV["APP_HOST"].presence || HetznerDeployConfig.app_host_if_present(destination: (config.x.deployment_environment == "staging" ? "staging" : "hetzner"))
 
   # Settings specified here will take precedence over those in config/application.rb.
 

@@ -329,3 +329,24 @@ Das Docker-Volume für Active Storage ist bewusst gemeinsam:
 
 - `app/assets/images/russ_live`: in Rails übernommene Logos, Keyvisuals, Team-, Job- und Referenzbilder
 - `app/assets/fonts/russ_live`: lokal ausgelieferte Neue-Rational-Webfonts
+
+## Getrennte Umgebungen vorbereiten
+
+Das neue Kamal-Ziel `staging` verwendet weiterhin `RAILS_ENV=production`, aber
+`APP_ENVIRONMENT=staging`. Datenbanken, PostgreSQL-Rollen, Credentials und das
+Medienvolume sind von Produktion getrennt. Beide Staging-Apps teilen sich nur
+`stuttgart_live_de_staging_storage`; Russ liest ausschließlich die
+Stuttgart-Staging-Datenbank. Produktionswerte in geerbten Datenbank-URLs werden
+beim Start abgelehnt.
+
+Produktion bleibt zunächst unter der bisherigen `schopp3r.de`-Adresse und dem
+Kamal-Ziel `hetzner`. Diese Konfiguration allein schaltet keine Domain um.
+Für Staging müssen eigene `config/credentials/staging.yml.enc` sowie ein eigener
+Schlüssel bereitgestellt werden; der Produktionsschlüssel ist kein Ersatz.
+Das Beispiel `.kamal/secrets.staging.example` liest ausschließlich ausdrücklich
+bereitgestellte Staging-Werte. `bin/hetzner-check --destination staging` lädt
+keine Produktions-`.env` und lehnt `.kamal/secrets-common` für Staging ab. Der bisherige Check verwendet `--destination hetzner`.
+
+Die Staging-Profile sind erst nach Einrichtung der Datenbanken, bereinigten Daten,
+Zugriffsschutz und Deployment-Prüfungen betriebsbereit. Der vollständige Ablauf
+steht im freigegebenen Umzugsplan; vor Abschluss dieser Vorbereitung nicht deployen.

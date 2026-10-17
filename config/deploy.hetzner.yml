@@ -46,6 +46,8 @@ env:
     - RUSS_LIVE_OPERATIONAL_DB_PASSWORD
     - MEDIA_PROXY_SECRET
   clear:
+    APP_ENVIRONMENT: production
+    STORAGE_VOLUME: stuttgart_live_de_storage
     APP_HOST: <%= HetznerDeployConfig.app_host %>
     DB_HOST: 172.18.0.1
     DB_PORT: 5432
@@ -64,3 +66,6 @@ ssh:
   user: deploy
   keys:
     - <%= ENV.fetch("KAMAL_SSH_KEY_PATH", File.expand_path("~/.ssh/stgt-live-hetzner-github")) %>
+
+volumes:
+  - "stuttgart_live_de_storage:/rails/storage"
