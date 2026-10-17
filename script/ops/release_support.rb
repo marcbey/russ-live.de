@@ -11,7 +11,7 @@ module Ops
     LEGACY_EMPTY_CONFIG = {
       "Hostname" => "", "Domainname" => "", "AttachStdin" => false, "AttachStdout" => false,
       "AttachStderr" => false, "Tty" => false, "OpenStdin" => false, "StdinOnce" => false,
-      "Image" => "", "Volumes" => nil, "OnBuild" => nil
+      "Image" => "", "User" => "", "WorkingDir" => "", "Labels" => nil, "Volumes" => nil, "OnBuild" => nil
     }.freeze
 
     def self.call(metadata)

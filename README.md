@@ -453,7 +453,8 @@ Produktionsschlüssel werden nicht in die Probe übertragen; Staging-Rollen
 erhalten keinen Produktionszugriff. Medien und HTTPS werden auf der vollständigen
 Staging-Umgebung geprüft. Der Image-Vergleich berücksichtigt die leeren
 Standardfelder, die ältere Docker-Versionen ergänzen; geänderte Laufzeitwerte,
-unbekannte Zusatzfelder und Dateischichten führen weiterhin zum Abbruch.
+unbekannte Zusatzfelder und Dateischichten führen weiterhin zum Abbruch. Der Lauf nennt
+die jeweilige Prüfphase, ohne Daten oder Schlüssel auszugeben.
 
 Der 14 Tage aufbewahrte Nachweis `staging-release` nennt den gemeinsam getesteten
 Staging-Peer und die kompatiblen Produktions-Commits. Diese müssen nicht identisch
