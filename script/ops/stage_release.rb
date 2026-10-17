@@ -14,6 +14,7 @@ begin
   deployment.prepare!
   deployment.with_lock do
     deployment.deploy!(commit:, digest:)
+    puts "Staging: HTTPS des Partnerprojekts prüfen"
     deployment.smoke_peer!
     # Read-only metadata/schema queries use existing app connections. No stage role is granted production access.
     proof = Ops::CompatibilityProbe.call(project: deployment.project, candidate: { "commit" => commit, "digest" => digest }, remote: deployment.remote,

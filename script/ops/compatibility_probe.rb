@@ -20,8 +20,10 @@ module Ops
         stages = {}
         PROJECTS.each do |name|
           data_path = File.join(directory, "#{name}.jsonl")
+          puts "Kompatibilität: bereinigter Staging-Export #{name}"
           stages[name] = remote.export(project: name, destination: "staging", mode: "data", path: data_path)
           encrypted = File.join(directory, "#{name}.enc")
+          puts "Kompatibilität: verschlüsselte Staging-Konfiguration #{name}"
           remote.copy_from(container: stages.fetch(name).fetch("container"), source: "/rails/config/credentials/staging.yml.enc", target: encrypted)
           File.chmod(0o644, encrypted) # encrypted, mounted alone; keys stay in private env files
           apps[name] = { "data_path" => data_path, "schema_path" => data_path, "credentials_path" => encrypted,
@@ -29,6 +31,7 @@ module Ops
         end
         raise ReleaseSupport::Error, "Candidate läuft nicht in Staging" unless stages.fetch(project).fetch("commit") == candidate.fetch("commit") && stages.fetch(project).fetch("digest") == candidate.fetch("digest")
         schema_path = File.join(directory, "#{peer}-production-schema.jsonl")
+        puts "Kompatibilität: schreibgeschütztes Produktionsschema #{peer}"
         production_peer = remote.export(project: peer, destination: "hetzner", mode: "schema", path: schema_path)
         apps.fetch(peer)["schema_path"] = schema_path
         apps.fetch(peer)["reference"] = "#{production_peer.fetch('image')}@#{production_peer.fetch('digest')}"
@@ -41,16 +44,19 @@ module Ops
       raise ReleaseSupport::Error, "Beide Probe-Apps erforderlich" unless apps.keys.sort == PROJECTS.sort
       @daemon = "live-compatibility-#{SecureRandom.hex(8)}"
       @aliases = []
+      puts "Kompatibilität: isolierten Docker-Prüfserver starten"
       pull(DIND)
       ReleaseSupport.capture("docker", "run", "--detach", "--rm", "--privileged", "--network", "none", "--name", @daemon,
         "--memory", "3g", "--cpus", "2", "--env", "DOCKER_TLS_CERTDIR=", DIND, "--storage-driver=overlay2", "--iptables=false")
       wait_for_daemon
+      puts "Kompatibilität: isolierter Docker-Prüfserver bereit"
       disconnected = JSON.parse(ReleaseSupport.capture("docker", "inspect", "--format", "{{json .HostConfig.NetworkMode}}", @daemon))
       raise ReleaseSupport::Error, "Prüfserver besitzt externes Netzwerk" unless disconnected == "none"
       image_aliases = apps.to_h { |project, settings| [ project, load_image(settings.fetch("reference"), project) ] }
       postgres_alias = load_image(POSTGRES, "postgres")
       inner("network", "create", "--internal", "--subnet", "172.18.0.0/16", "kamal")
       inner("volume", "create", "stuttgart_live_de_staging_storage")
+      puts "Kompatibilität: isolierte Eingaben und PostgreSQL vorbereiten"
       input = prepare_files(directory, apps, image_aliases)
       inner("run", "--detach", "--name", "postgres", "--network", "host", "--memory", "512m",
         "--env-file", "/probe/postgres.env", postgres_alias, "-c", "live.compatibility_sandbox=on")
@@ -111,6 +117,7 @@ module Ops
     end
 
     def load_image(reference, role)
+      puts "Kompatibilität: Registry-Image #{role} laden"
       pull(reference)
       name = "#{@daemon}-#{role}:input"
       source = JSON.parse(ReleaseSupport.capture("docker", "image", "inspect", reference)).first
@@ -118,9 +125,11 @@ module Ops
       ReleaseSupport.capture("docker", "tag", reference, name)
       @aliases << name
       # Load only locally verified image bytes: the nested daemon has no registry access.
+      puts "Kompatibilität: Image #{role} isoliert übertragen"
       Open3.pipeline([ "docker", "save", name ], [ "docker", "exec", "--interactive", @daemon, "docker", "load" ], out: File::NULL, err: File::NULL).each do |status|
         raise ReleaseSupport::Error, "Prüfimage konnte nicht isoliert geladen werden" unless status.success?
       end
+      puts "Kompatibilität: Laufzeitidentität #{role} prüfen"
       loaded = JSON.parse(inner("image", "inspect", name)).first
       raise ReleaseSupport::Error, "Image-Identität beim Laden verändert" unless ImageFingerprint.call(loaded) == fingerprint
       name

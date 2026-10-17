@@ -28,4 +28,16 @@ class ImageFingerprintTest < ActiveSupport::TestCase
       assert_not_equal Ops::ImageFingerprint.call(modern), Ops::ImageFingerprint.call(changed), field
     end
   end
+
+  test "PostgreSQL image accepts omitted empty user working directory and labels across API versions" do
+    modern = { "Architecture" => "amd64", "Os" => "linux", "Config" => { "Cmd" => [ "postgres" ], "Volumes" => { "/var/lib/postgresql/data" => {} } }, "RootFS" => { "Type" => "layers", "Layers" => [ "sha256:#{'b' * 64}" ] } }
+    legacy = Marshal.load(Marshal.dump(modern))
+    legacy["Config"].merge!("User" => "", "WorkingDir" => "", "Labels" => nil)
+    assert_equal Ops::ImageFingerprint.call(modern), Ops::ImageFingerprint.call(legacy)
+    { "User" => "postgres", "WorkingDir" => "/different", "Labels" => { "changed" => "true" } }.each do |field, value|
+      changed = Marshal.load(Marshal.dump(legacy))
+      changed["Config"][field] = value
+      assert_not_equal Ops::ImageFingerprint.call(modern), Ops::ImageFingerprint.call(changed), field
+    end
+  end
 end
