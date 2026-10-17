@@ -4,6 +4,7 @@
     <%= link_to "Seiten", backend_pages_path, class: ("is-active" if controller_path == "backend/pages") %>
     <%= link_to "Jobs", backend_jobs_path, class: ("is-active" if controller_path == "backend/jobs") %>
     <%= link_to "Ansprechpartner", backend_contacts_path, class: ("is-active" if controller_path == "backend/contacts") %>
+    <%= link_to "Team", backend_team_members_path, class: ("is-active" if controller_path == "backend/team_members") %>
   </div>
   <div class="backend-global-nav-actions">
     <%= link_to "Zur Website", root_path, class: "button button-secondary button-compact" %>

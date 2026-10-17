@@ -47,13 +47,13 @@
 
       <div class="backend-reference-list-scroll">
         <% reorderable_jobs = @status_filter == "all" && @query_filter.blank? %>
-        <% list_data = reorderable_jobs ? { controller: "backend-sortable-list", backend_sortable_list_url_value: reorder_backend_jobs_path } : {} %>
+        <% list_data = reorderable_jobs ? { controller: "backend-sortable-list", backend_sortable_list_url_value: reorder_backend_jobs_path, backend_sortable_list_param_value: "job_ids" } : {} %>
         <%= tag.div class: "backend-reference-list #{'is-sortable' if reorderable_jobs}", data: list_data do %>
           <% if @jobs.any? %>
             <% @jobs.each do |job| %>
               <% item_data = reorderable_jobs ? {
                 backend_sortable_list_target: "item",
-                backend_sortable_list_job_id: job.id,
+                backend_sortable_list_item_id: job.id,
                 action: "dragstart->backend-sortable-list#dragStart dragover->backend-sortable-list#dragOver drop->backend-sortable-list#drop dragend->backend-sortable-list#dragEnd"
               } : {} %>
               <%= link_to backend_jobs_path(status: (@status_filter unless @status_filter == "all"), query: @query_filter, job_id: job.id),

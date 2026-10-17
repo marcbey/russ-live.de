@@ -11,11 +11,14 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     EditablePage.delete_all
     ContactImage.delete_all
     Contact.delete_all
+    TeamMemberImage.delete_all
+    TeamMember.delete_all
     ReferenceImage.delete_all
     Reference.delete_all
     clear_stuttgart_live_records
     seed_sks_promoter_ids!
     seed_jobs!
+    seed_team_members!
   end
 
   test "signed out visitors do not see backend navigation or edit buttons" do
@@ -88,7 +91,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
       services_path => "Live",
       referenzen_path => "Projekte auf die wir stolz sind",
       jobs_path => "Aktuelle Jobangebote",
-      job_path("stagehands") => "Jobdetails Stagehands",
+      job_path("stagehands") => "Stagehands",
       presse_path => "Presseinfos für",
       kontakt_path => "Charlottenplatz 17",
       impressum_path => "Impressum",
@@ -104,12 +107,60 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "about page omits the managed team carousel" do
+    get unternehmen_path
+
+    assert_response :success
+    assert_select "[data-controller='team-carousel']", count: 0
+    assert_select ".about-team-card", count: 0
+  end
+
+  test "team page omits former team members" do
+    get team_path
+
+    assert_response :success
+    assert_includes response.body, "Michael Wechselberger"
+    assert_includes response.body, "Team Lead Marketing"
+    [ "Sebastian Kränzlein", "Elke Vierneisel", "Gabi Cremer", "Penny" ].each do |name|
+      assert_not_includes response.body, name
+    end
+  end
+
+  test "public pages omit paul woog" do
+    [ unternehmen_path, team_path, services_path, impressum_path, datenschutz_path ].each do |path|
+      get path
+
+      assert_response :success
+      assert_not_includes response.body, "Paul Woog"
+      assert_not_includes response.body, "paulwoog@russ-live.de"
+    end
+  end
+
+  test "about page omits former editorial portrait" do
+    get unternehmen_path
+
+    assert_response :success
+    assert_not_includes response.body, "russ_live/about/michaela-russ.jpg"
+    assert_includes response.body, "Michael erweitert die traditionsreiche Arbeit"
+    assert_includes response.body, "Michaela Russ führt diesen Weg in der dritten Generation weiter"
+    assert_includes response.body, "Daraus ist ein Team entstanden"
+    assert_includes response.body, "Unsere Wurzeln liegen in Stuttgart"
+  end
+
+  test "contact page renders editable address without mail form" do
+    get kontakt_path
+
+    assert_response :success
+    assert_select "address.rich-copy", text: /Charlottenplatz 17/
+    assert_select ".contact-mail-form", count: 0
+  end
+
   test "renders published jobs in main navigation submenu" do
     get root_path
 
     assert_response :success
     assert_select ".nav-submenu-jobs[aria-label=?]", "Jobangebote Untermenü" do
-      assert_select "a[href=?]", jobs_path(anchor: "jobs-list"), text: "Alle Jobangebote"
+      assert_select "a[href=?]", jobs_path(anchor: "jobs-list"), count: 0
       assert_select "a[href=?]", job_path("cateringhilfen"), text: "Cateringhilfen"
       assert_select "a[href=?]", job_path("stagehands"), text: "Stagehands"
     end
@@ -136,6 +187,9 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get root_path
 
     assert_response :success
+    assert_select "#services-title", text: /Full-Service für\s+Veranstaltungen/ do
+      assert_select "br", count: 1
+    end
     assert_select "#services-accordion a[href=?]", services_path(anchor: "production"), text: I18n.t("pages.home.services.more_info")
     assert_select "#services-accordion a[href=?]", services_path(anchor: "marketing"), text: I18n.t("pages.home.services.more_info")
     assert_select "#services-accordion a[href=?]", services_path(anchor: "staff"), text: I18n.t("pages.home.services.more_info")
@@ -415,8 +469,30 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select ".home-references-band .reference-marquee-card .reference-marquee-front[data-reference-image-render-target=?]", "frame"
     assert_select ".home-references-band .reference-marquee-card .reference-marquee-back .reference-card-name", "NEIL YOUNG"
     assert_select ".home-references-band .reference-marquee-card .reference-marquee-detail-button", count: 0
-    assert_select ".home-references-band .reference-marquee-cta .reference-marquee-detail-button", "Zur Referenzseite"
+    assert_select ".home-references-band .reference-marquee-cta .reference-marquee-detail-button", "Referenzen"
     assert_select ".home-references-band .klassik-slider-meta", count: 0
+  end
+
+  test "homepage formats stuttgartlive brand in reference titles" do
+    Reference.create!(
+      title: "STUTTGARTLIVE Festival",
+      starts_on: Date.new(2024, 6, 29),
+      location: "Hanns-Martin-Schleyer-Halle",
+      production: "Wizart Promotion",
+      status: "published",
+      featured: true,
+      position: 1
+    ).tap do |reference|
+      reference.create_reference_image!(
+        asset_path: "russ_live/references/01-disgusting-food-museum.jpg",
+        alt_text: "Festival"
+      )
+    end
+
+    get root_path
+
+    assert_response :success
+    assert_includes response.body, '<span class="stuttgart-live-word"><strong>STUTTGART</strong>LIVE</span> Festival'
   end
 
   test "homepage skips references with slider image only" do
@@ -455,7 +531,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select ".home-references-band .reference-marquee-card[href]", count: 0
     assert_select ".home-references-band .reference-marquee-card .reference-marquee-detail-button", count: 0
     assert_select ".home-references-band .reference-marquee-cta .reference-marquee-detail-button[href=?]", referenzen_path, count: 1
-    assert_select ".home-references-band .reference-marquee-cta .reference-marquee-detail-button", "Zur Referenzseite"
+    assert_select ".home-references-band .reference-marquee-cta .reference-marquee-detail-button", "Referenzen"
     assert_select ".home-references-band .klassik-slide-badge", count: 0
     assert_not_includes response.body, "Festival"
     assert_not_includes response.body, "Open Air"
@@ -572,7 +648,8 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
       grid_variant: "2x2",
       slider_asset_path: "russ_live/references/03-neil-young.jpg",
       slider_mobile_asset_path: "russ_live/references/02-david-garrett.jpg",
-      slider_alt_text: "Hauptprojekt Slider"
+      slider_alt_text: "Hauptprojekt Slider",
+      slider_sub_text: "Slider Copyright"
     )
     featured_without_slider = create_reference_with_image!(title: "FEATURED OHNE SLIDER", position: 3, tag_list: "Theater", featured: true)
     regular = create_reference_with_image!(title: "NORMALE KACHEL", position: 1, tag_list: "Open Air")
@@ -589,6 +666,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select ".reference-hero-slider .reference-hero-slide-copy", text: /#{Regexp.escape(featured.display_date_text)}/
     assert_select ".reference-hero-slider .reference-hero-slide-copy", text: /Russ Live Produktion/
     assert_select ".reference-hero-slider .reference-hero-slide-copy", text: /Eine große Referenz mit Sliderbild/
+    assert_select ".reference-hero-slider .reference-hero-slide-credit", text: "© Slider Copyright"
     assert_select ".reference-hero-slider .reference-hero-slide-copy h2", text: "FEATURED OHNE SLIDER", count: 0
     assert_select ".reference-hero-slider .reference-hero-slider-controls", count: 0
     assert_select ".reference-featured-marquee", count: 0
@@ -631,7 +709,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   test "services omits reference slider even with published concert references" do
     concert = create_reference_with_image!(title: "CONCERT", position: 1, tag_list: "concert")
     create_reference_with_image!(title: "KONZERT", position: 2, tag_list: "Konzert")
-    create_reference_with_image!(title: "LIVE", position: 3, tag_list: "Live")
+    create_reference_with_image!(title: "EXTRA SHOW", position: 3, tag_list: "Live")
 
     get services_path
 
@@ -640,7 +718,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "services-reference-slider"
     assert_not_includes response.body, concert.title
     assert_not_includes response.body, "KONZERT"
-    assert_not_includes response.body, "LIVE"
+    assert_not_includes response.body, "EXTRA SHOW"
     assert_not_includes response.body, "/assets/russ_live/references/01-disgusting-food-museum"
   end
 
@@ -653,6 +731,30 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "#marketing .service-focus-accordion .accordion-trigger", text: /Social Media & Performance Marketing/
     assert_select "#marketing .service-focus-accordion .accordion-panel", text: /messbaren Ergebnissen/
     assert_select "#staff .service-deployment-areas li", text: "Staplerfahrer*innen"
+    assert_select "#production .service-contact-card h3", text: "Michaela Russ"
+    assert_select "#local .service-contact-card h3", text: "Michaela Russ"
+    assert_select "#production .service-contact-meta p", text: "Geschäftsführung"
+  end
+
+  test "services renders upcoming events inside the ticket portal section" do
+    event = create_event!(
+      artist_name: "Services Artist",
+      title: "Services Event",
+      promoter_id: "10135",
+      start_at: 2.days.from_now
+    )
+    create_import_event_image!(event: event, image_url: "https://img.example.test/services-event.jpg")
+
+    get services_path
+
+    assert_response :success
+    assert_select "#ticketing .services-events" do
+      assert_select "#services-events-title.services-events-title", text: I18n.t("pages.services.events.title")
+      assert_select ".home-events-head", count: 0
+      assert_select ".event-slider-card", text: /Services Artist/
+      assert_select ".services-events-all-button[href=?]", PagesController::STUTTGART_LIVE_SKS_HIGHLIGHTS_URL,
+                    text: I18n.t("pages.services.events.show_all")
+    end
   end
 
   test "renders public references with tag filters instead of year filters" do
@@ -732,15 +834,18 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "renders job detail on its own page" do
+    Job.find_by!(slug: "stagehands").contact.update!(name: "Michael Wechselberger")
+
     get job_path("stagehands")
 
     assert_response :success
     assert_includes response.body, "Stagehands"
     assert_includes response.body, "Jobdetails Stagehands"
     assert_includes response.body, "Auf- und Abbau von Bühnen-, Licht- und Tontechnik"
-    assert_includes response.body, 'href="#job-application"'
+    assert_select ".job-overview-hero", 0
+    assert_select "#job-application .job-application-form"
     assert_includes response.body, 'data-controller="job-application-mail"'
-    assert_includes response.body, 'data-job-application-mail-greeting-value="Hallo Sebastian,"'
+    assert_includes response.body, 'data-job-application-mail-greeting-value="Hallo Michael,"'
     assert_includes response.body, 'data-job-application-mail-interest-line-value="Ich interessiere mich für die Stelle Stagehands."'
     assert_includes response.body, 'data-job-application-mail-personal-details-heading-value="Meine Daten:"'
     assert_includes response.body, 'id="job_application_salutation"'
@@ -802,6 +907,12 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, "Minijob"
     assert_includes response.body, "Optionaler Text für die Detailseite"
+    assert_select ".job-overview-hero", 0
+    assert_select ".job-detail-back-button[href=?]", "#{jobs_path}#jobs-list", text: "Zurück"
+    assert_select ".job-detail-apply-button[href=?]", "#job-application", text: "Jetzt bewerben"
+    assert_select ".job-detail-title", text: "Stagehands"
+    assert_select ".job-apply .job-application-form[action^=?]", "mailto:"
+    assert_select ".job-apply .job-application-submit", text: "E-Mail vorbereiten"
     assert_not_includes response.body, "job-category-filter-nav"
     assert_not_includes response.body, "job-profile-nav"
     assert_includes response.body, "job-sidebar"
@@ -839,6 +950,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Setup and teardown"
     assert_includes response.body, "Teamwork"
     assert_includes response.body, "Stage crew | Jobs"
+    assert_select ".job-detail-apply-button[href=?]", "#job-application", text: "Apply now"
 
     Job.find_by!(slug: "cateringhilfen").update!(title_en: "")
 
@@ -848,7 +960,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Cateringhilfen"
   end
 
-  test "homepage renders sks highlights from Stuttgart Live with lazy images" do
+  test "homepage renders sks highlights from STUTTGARTLIVE with prioritized images" do
     matching_event = create_event!(
       artist_name: "WILHELMINE",
       title: "magisch Tour 2026",
@@ -869,13 +981,16 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "WILHELMINE"
     assert_includes response.body, "magisch Tour 2026"
     assert_includes response.body, "https://img.example.test/wilhelmine.jpg"
-    assert_includes response.body, 'loading="lazy"'
+    assert_includes response.body, 'loading="eager"'
+    assert_includes response.body, 'fetchpriority="high"'
     assert_includes response.body, 'decoding="async"'
     assert_includes response.body, "Mehr Infos"
-    assert_includes response.body, "WILHELMINE - magisch Tour 2026 auf Stuttgart Live"
+    assert_includes response.body, "WILHELMINE - magisch Tour 2026 auf STUTTGARTLIVE"
     assert_includes response.body, "https://www.stuttgart-live.de/events/wilhelmine-magisch-tour-2026"
     assert_not_includes response.body, "https://tickets.example.test/evt-1"
-    assert_operator response.body.index("home-events-all-link"), :<, response.body.index("home-events-viewport")
+    assert_select ".home-events-all-button[href=?]", PagesController::STUTTGART_LIVE_SKS_HIGHLIGHTS_URL,
+                  text: I18n.t("pages.home.events.show_all")
+    assert_operator response.body.index("home-events-all-button"), :>, response.body.index("home-events-viewport")
     assert_not_includes response.body, "Alle Veranstaltungen auf Stuttgart-live.de"
     assert_not_includes response.body, "Nicht SKS"
     assert_not_includes response.body, "Highlight ohne SKS"
@@ -938,6 +1053,16 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   private
+    def seed_team_members!
+      [
+        [ "Michaela Russ", "Geschäftsleitung", "Management" ],
+        [ "Sarah Sandner", "Team Lead Marketing", "Team Lead Marketing" ],
+        [ "Michael Wechselberger", "Personaldisposition", "Staff Scheduling" ]
+      ].each_with_index do |(name, role, role_en), index|
+        TeamMember.create!(name: name, role: role, role_en: role_en, position: index + 1)
+      end
+    end
+
 
   def clear_stuttgart_live_records
     ActiveStorage::Attachment.delete_all

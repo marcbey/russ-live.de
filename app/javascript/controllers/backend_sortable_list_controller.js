@@ -2,13 +2,13 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["item"]
-  static values = { url: String }
+  static values = { url: String, param: String }
 
   dragStart(event) {
     this.draggedItem = event.currentTarget
     this.draggedItem.classList.add("is-dragging")
     event.dataTransfer.effectAllowed = "move"
-    event.dataTransfer.setData("text/plain", this.draggedItem.dataset.backendSortableListJobId)
+    event.dataTransfer.setData("text/plain", this.draggedItem.dataset.backendSortableListItemId)
   }
 
   dragOver(event) {
@@ -42,7 +42,7 @@ export default class extends Controller {
       const response = await fetch(this.urlValue, {
         method: "PATCH",
         headers: this.headers(),
-        body: JSON.stringify({ job_ids: this.orderedJobIds() })
+        body: JSON.stringify({ [this.paramValue]: this.orderedItemIds() })
       })
 
       if (!response.ok) throw new Error("Reihenfolge konnte nicht gespeichert werden.")
@@ -53,8 +53,8 @@ export default class extends Controller {
     }
   }
 
-  orderedJobIds() {
-    return this.itemTargets.map((item) => item.dataset.backendSortableListJobId)
+  orderedItemIds() {
+    return this.itemTargets.map((item) => item.dataset.backendSortableListItemId)
   }
 
   headers() {

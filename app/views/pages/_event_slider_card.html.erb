@@ -15,7 +15,13 @@
 <article class="public-card event-slider-card" data-events-slider-target="card">
   <figure class="event-slider-image">
     <% if image_source.present? %>
-      <img src="<%= image_source %>" alt="<%= image_alt %>" loading="lazy" decoding="async" width="500" height="515">
+      <img src="<%= image_source %>"
+           alt="<%= image_alt %>"
+           loading="<%= local_assigns[:preload_image] ? "eager" : "lazy" %>"
+           decoding="async"
+           fetchpriority="<%= local_assigns[:high_priority_image] ? "high" : "auto" %>"
+           width="500"
+           height="515">
     <% else %>
       <div class="event-slider-image-placeholder" aria-hidden="true"></div>
     <% end %>

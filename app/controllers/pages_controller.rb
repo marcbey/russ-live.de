@@ -45,9 +45,17 @@ class PagesController < ApplicationController
   rescue HomeEventsLanePager::InvalidCursor
     head :bad_request
   end
-  def unternehmen; end
-  def team; end
-  def services; end
+  def unternehmen
+  end
+  def team
+    @team_members = TeamMember.with_image.ordered.to_a
+  end
+  def services
+    @home_events_page = home_events_page
+    @home_events = @home_events_page.events
+    @home_events_next_cursor = @home_events_page.next_cursor
+    @stuttgart_live_sks_highlights_url = STUTTGART_LIVE_SKS_HIGHLIGHTS_URL
+  end
   def referenzen
     references = Reference.published.with_image.ordered.to_a
     @featured_references = prioritized_featured_references(
@@ -66,7 +74,6 @@ class PagesController < ApplicationController
   def job
     @jobs = Job.published.with_contact_and_image.ordered.to_a
     @selected_job = find_job!(params[:slug])
-    @job_overview_hero_image = "russ_live/jobs/overview-hero.jpg"
     @page_meta = PAGE_META.fetch(:job).merge(
       title: @selected_job.localized_meta_title.presence || t("pages.job.meta.dynamic_title", title: @selected_job.localized_title),
       description: @selected_job.localized_meta_description.presence || t("pages.job.meta.description")

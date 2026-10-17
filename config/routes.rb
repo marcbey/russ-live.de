@@ -6,6 +6,9 @@ Rails.application.routes.draw do
 
   namespace :backend do
     resources :contacts, except: :show
+    resources :team_members, except: :show do
+      patch :reorder, on: :collection
+    end
     resources :pages, only: [ :index, :update ] do
       get :preview, on: :member
     end
@@ -36,11 +39,13 @@ Rails.application.routes.draw do
   get "referenzbilder/:id", to: "reference_images#show", as: :reference_image
   get "jobbilder/:id", to: "job_images#show", as: :job_image
   get "ansprechpartnerbilder/:id", to: "contact_images#show", as: :contact_image
+  get "teammitgliederbilder/:id", to: "team_member_images#show", as: :team_member_image
   get "jobs", to: "pages#jobs"
   get "jobs/:slug", to: "pages#job", as: :job
   get "events/homepage_lane", to: "pages#homepage_lane", as: :homepage_lane_events
   get "presse", to: "press#index"
   get "presse/beispiel", to: redirect("/presse")
+  get "presse/:slug/pressetext", to: "press#text_download", as: :press_artist_text_download
   get "presse/:slug/download", to: "press#download", as: :press_artist_download
   get "presse/:slug", to: "press#show", as: :press_artist
   get "kontakt", to: "pages#kontakt"

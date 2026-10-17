@@ -23,6 +23,7 @@ class Backend::DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Seiten verwalten"
     assert_includes response.body, "Jobs verwalten"
     assert_includes response.body, "Ansprechpartner verwalten"
+    assert_includes response.body, "Team verwalten"
     assert_includes response.body, "Logout"
   end
 end
