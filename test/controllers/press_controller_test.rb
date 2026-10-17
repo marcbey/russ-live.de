@@ -45,6 +45,11 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_select ".press-search-suggestion .press-search-suggestion-image img"
     assert_select ".press-search-suggestion .press-search-suggestion-copy strong", "Ärztin Live"
     assert_select ".press-search-suggestion .press-search-suggestion-copy span", visible_event.title
+    assert_select ".press-sidebar-contact", 0
+    assert_select ".press-page > section:last-child.press-contact-strip" do
+      assert_select "#press-contact-title", "Pressekontakt"
+      assert_select "a[href=?]", "mailto:arnulfwoock@russ-live.de"
+    end
     assert_not_includes response.body, "Hidden Act"
     assert_select ".press-letter-grid" do |directory|
       assert_not_includes directory.to_html, visible_event.title
@@ -133,12 +138,16 @@ class PressControllerTest < ActionDispatch::IntegrationTest
 
   test "show renders primary event, fallback press text, venue and further events" do
     venue_id = create_venue!(name: "Liederhalle Stuttgart")
+    primary_start_at = 2.weeks.from_now.change(hour: 20, min: 0, sec: 0)
+    fallback_press_text = Array.new(9) do |index|
+      "Fallback Pressetext Absatz #{index + 1}: Dieser Dummy-Text ist absichtlich lang, damit der mobile Pressetext einklappt und der Mehr-Weniger-Schalter realistisch getestet wird."
+    end.join("\n\n")
     first_event = create_event!(
       artist_name: "Future Artist",
       normalized_artist_name: "future artist",
       publish_on_russ_live: true,
-      start_at: Time.zone.local(2026, 8, 1, 20),
-      event_info: "Fallback Pressetext",
+      start_at: primary_start_at,
+      event_info: fallback_press_text,
       venue_id:
     )
     create_event_offer!(event_id: first_event.id, ticket_url: "https://tickets.example/%{event_id}", source_event_id: "abc")
@@ -146,7 +155,7 @@ class PressControllerTest < ActionDispatch::IntegrationTest
       artist_name: "Future Artist",
       normalized_artist_name: "future artist",
       publish_on_russ_live: true,
-      start_at: Time.zone.local(2026, 9, 1, 20),
+      start_at: primary_start_at + 1.month,
       venue_id:
     )
 
@@ -154,11 +163,27 @@ class PressControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_includes response.body, "Future Artist"
-    assert_includes response.body, "Fallback Pressetext"
+    assert_includes response.body, "Fallback Pressetext Absatz 1"
+    assert_includes response.body, "Fallback Pressetext Absatz 9"
     assert_includes response.body, "Liederhalle Stuttgart"
     assert_includes response.body, "Weitere Termine"
     assert_includes response.body, "https://tickets.example/abc"
-    assert_includes response.body, "#{presse_path}#press-search"
+    assert_select ".press-event-actions .press-event-detail-button[href=?]", first_event.public_detail_url, text: "Mehr Infos"
+    assert_select ".press-event-actions .press-event-ticket-button[href='https://tickets.example/abc']", text: "Tickets"
+    assert_operator response.body.index("press-event-detail-button"), :<, response.body.index("press-event-ticket-button")
+    assert_select ".press-detail-hero", 0
+    assert_select ".press-detail-back-button[href=?]", "#{presse_path}#press-search", text: "Zurück"
+    assert_select ".press-text-collapsible[data-controller='press-text-collapse']"
+    assert_select "#press-text-body.press-text-body[data-press-text-collapse-target='body']"
+    assert_select ".press-text-more-button[type='button'][aria-controls='press-text-body'][aria-expanded='false'][data-press-text-collapse-target='button']"
+    assert_select ".press-text-more-button .press-text-more-label", "Mehr anzeigen"
+    assert_select ".press-text-more-button .press-text-less-label", "Weniger anzeigen"
+    assert_select ".press-event-panel .press-sidebar-contact", 1
+    assert_select ".press-sidebar-contact .job-contact-heading", "Pressekontakt"
+    assert_select ".press-sidebar-contact .job-contact-name", "Arnulf Woock"
+    assert_select ".press-sidebar-contact a[href='mailto:arnulfwoock@russ-live.de']"
+    assert_select ".press-sidebar-contact a[href='tel:+497111635320']"
+    assert_select ".press-contact-strip", 0
   end
 
   test "show hides ticket button for past primary event" do
@@ -200,7 +225,8 @@ class PressControllerTest < ActionDispatch::IntegrationTest
       artist_name: "Image Artist",
       normalized_artist_name: "image artist",
       publish_on_russ_live: true,
-      start_at: Time.zone.local(2026, 8, 1, 20)
+      start_at: Time.zone.local(2026, 8, 1, 20),
+      event_info: "Pressetext für die PDF-Kachel."
     )
     create_event_image!(event:, purpose: EventImage::PURPOSE_DETAIL_HERO, alt_text: "Eventbild", filename: "event-image.jpg")
     create_event_image!(
@@ -214,11 +240,20 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     get press_artist_path("image-artist")
 
     assert_response :success
-    assert_includes response.body, "Pressefotos"
+    assert_select "#press-download-title", "Downloads"
+    assert_select ".press-downloads .press-directory-head .eyebrow", 0
+    assert_select ".press-downloads .press-directory-head + .press-download-usage", I18n.t("press.detail.press_text.usage")
+    assert_select ".press-text-body p", text: I18n.t("press.detail.press_text.usage"), count: 0
     assert_includes response.body, 'data-lightbox-alt="Freigegebenes Pressefoto"'
     assert_includes response.body, "© Test Fotografin"
     assert_not_includes response.body, "<span>Freigegebenes Pressefoto</span>"
-    assert_equal 2, response.body.scan("Pressemappe downloaden").size
+    assert_select ".press-gallery-item .press-gallery-download-overlay"
+    assert_select ".press-gallery-item figcaption", 0
+    assert_select ".press-gallery-text-card"
+    assert_select ".press-gallery-text-card h3", "Pressetext"
+    assert_select ".press-gallery-text-card p", 0
+    assert_includes response.body, press_artist_text_download_path("image-artist")
+    assert_equal 1, response.body.scan("Pressemappe downloaden").size
     assert_equal 2, response.body.scan('data-turbo="false"').size
     assert_includes response.body, press_artist_download_path("image-artist")
     assert_includes response.body, "/rails/active_storage/representations/"
@@ -241,7 +276,7 @@ class PressControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_equal "application/zip", response.media_type
-    assert_match(/attachment; filename="zip-artist-pressebilder.zip"/, response.headers["Content-Disposition"])
+    assert_match(/attachment; filename="zip-artist-pressekit.zip"/, response.headers["Content-Disposition"])
 
     entries = []
     Zip::File.open_buffer(StringIO.new(response.body)) do |zip|
@@ -262,11 +297,58 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     get press_artist_path("only-event-image")
 
     assert_response :success
-    assert_includes response.body, "Pressefotos"
+    assert_select "#press-download-title", "Downloads"
     assert_includes response.body, "Nur Eventbild"
-    assert_equal 2, response.body.scan("Pressemappe downloaden").size
+    assert_equal 1, response.body.scan("Pressemappe downloaden").size
     assert_includes response.body, press_artist_download_path("only-event-image")
     assert_includes response.body, "Bild downloaden"
+  end
+
+  test "text download sends press text pdf" do
+    create_event!(
+      artist_name: "Text Artist",
+      normalized_artist_name: "text artist",
+      publish_on_russ_live: true,
+      start_at: Time.zone.local(2026, 8, 1, 20),
+      event_info: "Ein eigener Pressetext für Medien. ABSCHLUSSMARKER"
+    )
+
+    get press_artist_text_download_path("text-artist")
+
+    assert_response :success
+    assert_equal "application/pdf", response.media_type
+    assert_match(/attachment; filename="text-artist-pressetext.pdf"/, response.headers["Content-Disposition"])
+    assert response.body.start_with?("%PDF-1.4")
+    assert_includes response.body, "Pressetext"
+    assert_includes response.body, "Ein eigener Pressetext"
+    assert_includes response.body, "ABSCHLUSSMARKER"
+    assert_includes response.body, "/Subtype /Image"
+    assert_includes response.body, "q 135 0 0 29 56 757 cm /Logo Do Q"
+    assert_equal "no-store", response.headers["Cache-Control"]
+  end
+
+  test "download includes press text pdf in press kit" do
+    event = create_event!(
+      artist_name: "Kit Text Artist",
+      normalized_artist_name: "kit text artist",
+      publish_on_russ_live: true,
+      start_at: Time.zone.local(2026, 8, 1, 20),
+      event_info: "Pressetext im Pressekit."
+    )
+    create_event_image!(event:, purpose: EventImage::PURPOSE_SLIDER, alt_text: "ZIP Pressefoto", filename: "press-image.jpg", content: "press image")
+
+    get press_artist_download_path("kit-text-artist")
+
+    assert_response :success
+
+    entries = []
+    Zip::File.open_buffer(StringIO.new(response.body)) do |zip|
+      entries = zip.map { |entry| [ entry.name, entry.get_input_stream.read ] }
+    end
+    assert_equal "1-press-image.jpg", entries.first.first
+    assert_equal "press image", entries.first.second
+    assert_equal "kit-text-artist-pressetext.pdf", entries.second.first
+    assert entries.second.second.start_with?("%PDF-1.4")
   end
 
   test "download sends a zip with fallback event image when no slider images exist" do
@@ -288,7 +370,7 @@ class PressControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_equal "application/zip", response.media_type
-    assert_match(/attachment; filename="only-event-image-pressebilder.zip"/, response.headers["Content-Disposition"])
+    assert_match(/attachment; filename="only-event-image-pressekit.zip"/, response.headers["Content-Disposition"])
 
     entries = []
     Zip::File.open_buffer(StringIO.new(response.body)) do |zip|

@@ -45,6 +45,8 @@ de:
       language_switch: "Zur Sprache %{language} wechseln"
       menu_open: "Menü öffnen"
       menu_close: "Menü schließen"
+      submenu_open: "%{menu} Untermenü öffnen"
+      submenu_close: "%{menu} Untermenü schließen"
     actions:
       edit: "Bearbeiten"
       edit_references: "Referenzen im Backend bearbeiten"
@@ -104,8 +106,9 @@ de:
           - "Sicherheitskräfte"
       ticketing:
         title: "Ticketportal"
+        cta: "Jetzt entdecken!"
         paragraphs:
-          first: "Stuttgart-live ist das Ticketportal mit allen wichtigen Veranstaltungen in der Region Stuttgart: online buchen, schnell, unkompliziert und mit perfektem Service."
+          first: "<strong>STUTTGART</strong>LIVE ist unser Ticketportal mit allen wichtigen Veranstaltungen in der Region Stuttgart: online buchen, schnell, unkompliziert und mit perfektem Service."
           second: "Die Eventdaten bleiben perspektivisch read-only angebunden. Diese Russ-live-Seite greift später nur auf freigegebene Veranstaltungsdaten zu."
   pages:
     home:
@@ -114,10 +117,10 @@ de:
         description: "Russ Live ist örtlicher Veranstalter, Produktionspartner und Full-Service-Dienstleister für Live Entertainment in Stuttgart und der Region."
       hero:
         image_alt: "Goldene Gitarre als Russ Live Keyvisual"
-        intro: "Ihr örtlicher Veranstalter für Stuttgart. Im Blick haben wir dabei immer die Künstler und das Publikum zugleich – so schaffen wir einzigartige emotionale Momente für bis zu 1 Million Besucher – jedes Jahr."
+        intro_html: "Wir sind Ihr örtlicher Veranstalter für Stuttgart. Im Blick haben wir dabei immer die Künstler und das Publikum zugleich. So schaffen wir einzigartige emotionale Momente für bis zu 1 Million Besucher – jedes Jahr."
       services:
         eyebrow: "Live Entertainment"
-        title: "Full service für Veranstaltungen"
+        title_html: "Full-Service für <br>Veranstaltungen"
         intro: "Von örtlicher Durchführung über Produktion, Marketing, Personal und Ticketing: Russ Live bündelt Erfahrung, Netzwerk und Umsetzungskraft."
         local_partners: "u.a. Live Nation, Karsten Jahnke Konzertdirektion, Wizard Live"
         more_info: "Mehr Infos"
@@ -125,7 +128,7 @@ de:
           production: "Wir bringen unsere Erfahrung aus eigenen Konzerten, Tourneen, Open-Air-Formaten und Firmenevents in jede Produktion ein. Gemeinsam mit unserem Netzwerk sorgen wir für eine professionelle, wirtschaftliche und reibungslose Umsetzung."
           marketing: "Wir entwickeln die passende Kommunikationsstrategie und sorgen dafür, dass Ihre Veranstaltung die richtigen Menschen erreicht. Von Social Media über Pressearbeit bis zu Content-Produktion begleiten wir den gesamten Marketingprozess."
           staff: "Mit knapp 500 eigenen Stagehands, Staplerfahrer*innen, Cateringhilfen und Sicherheitskräften verfügen wir über einen starken Personalpool in der Region. Wir übernehmen einzelne Einsätze oder die komplette Personalplanung."
-          ticketing: "Stuttgart-live ist unser Ticketportal für wichtige Veranstaltungen in der Region Stuttgart: online buchen, schnell, unkompliziert und mit perfektem Service."
+          ticketing: "<strong>STUTTGART</strong>LIVE ist unser Ticketportal für wichtige Veranstaltungen in der Region Stuttgart: online buchen, schnell, unkompliziert und mit perfektem Service."
         production_contact_html: "Geschäftsleitung<br>Telefon +49.711.16 353 27"
         marketing_contact_html: "Marketing<br>Telefon +49.711.16 353 16<br>/ sarahsandner@russ-live.de"
         legal_links_html: "© SKS Michael Russ GmbH <br>Impressum<br>Datenschutz<br>AGB<br>Jugendschutz"
@@ -134,13 +137,13 @@ de:
         title: "Projekte auf die wir stolz sind"
         show_all: "Alle Referenzen"
       events:
-        eyebrow: "Stuttgart-live"
+        eyebrow: "<strong>STUTTGART</strong>LIVE"
         title: "Nächste Veranstaltungen"
         intro: "Unser Ticketportal mit allen wichtigen Veranstaltungen in Stuttgart: Online buchen, schnell, unkompliziert, preisgünstig - bei perfektem Service."
         nav_aria: "Veranstaltungen blättern"
         previous: "Vorherige Veranstaltungen"
         next: "Nächste Veranstaltungen"
-        show_all: "Alle anzeigen"
+        show_all: "Alle Veranstaltungen"
     unternehmen:
       meta:
         title: "Über uns | Russ Live"
@@ -157,35 +160,30 @@ de:
       members:
         michaela_russ:
           role: "Geschäftsleitung"
-        paul_woog:
-          role: "Geschäftsleitung"
         johanna_backmund:
           role: "Projektmanagement / Accounting"
         arnulf_woock:
           role: "Presse- & Öffentlichkeitsarbeit"
         sarah_sandner:
-          role: "Marketing"
+          role: "Team Lead Marketing"
         katharina_schopper:
           role: "Grafik / Layout"
         chantal_erler:
           role: "Marketing Online / Social Media"
         tanja_ullenboom:
           role: "Produktionsleitung"
-        sebastian_kraenzlein:
-          role: "Personaldisposition"
         michael_wechselberger:
           role: "Personaldisposition"
         tim_wilka:
           role: "Ticketing"
-        elke_vierneisel:
-          role: "Buchhaltung"
-        gabi_cremer:
-          role: "Buchhaltung"
         jenny_hefner:
           role: "Buchhaltung"
-        penny:
-          role: "Feel-Good-Management"
     about:
+      team:
+        title: "Unser Team"
+        intro: "Hinter jeder Veranstaltung stehen Menschen, die Planung, Kommunikation, Technik, Personal und Zahlen zusammenbringen."
+        previous: "Vorherige Teammitglieder"
+        next: "Nächste Teammitglieder"
       hero:
         eyebrow: "Über uns"
         title_lines:
@@ -195,8 +193,8 @@ de:
         intro: "Aus Stuttgart. Für die Welt. Seit drei Generationen gestalten wir Konzerte, die verbinden."
       profile_title: "Unternehmensprofil"
       story:
-        first_html: "<strong>Michael Russ Jr.</strong> ist mit einer ruhigen Nähe, viel Herz und echtem Unternehmergeist auf die Welt von Russ Live gewachsen. Im Laufe der Jahre wurde daraus Verantwortung, Erfahrung und ein klarer Blick dafür, wie man Kultur dauerhaft möglich macht."
-        second_html: "<strong>Michaela Russ</strong> führt diesen Weg in der dritten Generation weiter. Gemeinsam steht die Familie für Produktionen, die professionell organisiert sind und trotzdem menschlich bleiben. Daraus ist ein Team entstanden, das Kultur mit Haltung, Verlässlichkeit und Leidenschaft umsetzt."
+        first_html: "Was 1945 mit einer Vision begann, ist heute eine der führenden Konzertdirektionen Europas. Von Stuttgart aus hat Russ über Jahrzehnte Konzertgeschichte mitgeprägt und sich gleichzeitig die Nähe zur Region bewahrt."
+        second_html: "Diese Verbindung aus lokaler Verwurzelung und internationalem Anspruch prägt unseren Blick bis heute: Wir denken groß, arbeiten partnerschaftlich und behalten immer die Menschen hinter jeder Produktion im Fokus."
       company:
         eyebrow: "Konzertdirektion Russ"
         title_html: "Konzertdirektion Russ: Eine ganze Welt aus Konzerten, Künstlern und Events."
@@ -212,14 +210,17 @@ de:
         eyebrow: "Geschichte"
         title: "Unsere Geschichte. Drei Generationen. Eine Haltung."
         image_alt: "Michaela Russ, Michael Russ und ein historisches Familienportrait"
-        first: "Was 1945 mit einer Vision begann, ist heute eine der führenden Konzertdirektionen Europas. Von Stuttgart aus hat Russ über Jahrzehnte Konzertgeschichte mitgeprägt und sich gleichzeitig die Nähe zur Region bewahrt."
-        second: "Diese Verbindung aus lokaler Verwurzelung und internationalem Anspruch prägt unseren Blick bis heute: Wir denken groß, arbeiten partnerschaftlich und behalten immer die Menschen hinter jeder Produktion im Fokus."
+        first: "Michael Russ ist mit einer ruhigen Nähe, viel Herz und echtem Unternehmergeist in die Welt von Russ Klassik gewachsen. Im Laufe der Jahre wurde daraus Verantwortung, Erfahrung und ein klarer Blick dafür, wie man Kultur dauerhaft möglich macht."
+        second: "Michael erweitert die traditionsreiche Arbeit der Konzertdirektion Erwin Russ im Bereich Klassik um Pop, Rock, Shows und Entertainment. Gemeinsam mit seinem Team entwickelt er das Unternehmen weiter, bringt Künstlerinnen und Künstler auf die Bühne, realisiert eigene Veranstaltungskonzepte und schafft mit Konzerten, Shows und Firmenevents besondere Erlebnisse für das Publikum."
       award:
         eyebrow: "Verantwortung"
-        title: "Erfahrung, die nicht stillsteht."
+        title: "Tradition ist für uns kein Rückblick, sondern Vertrauen in das, was als Nächstes kommt."
         image_alt: "Michael Russ Jr. mit Auszeichnung und Partner bei einer Preisverleihung"
-        first: "Ob Tournee, Einzelshow, Kulturformat oder Großereignis: Wir verbinden gewachsene Branchenkenntnis mit dem Anspruch, uns immer weiterzuentwickeln. Genau daraus entsteht die Mischung aus Präzision, Ruhe und Neugier, die unsere Arbeit auszeichnet."
-        second: "Auszeichnungen freuen uns. Wichtiger ist uns aber, dass Künstler, Publikum, Partner und Teams sich auf uns verlassen können."
+        first: "Michaela Russ führt diesen Weg in der dritten Generation weiter. Gemeinsam steht die Familie für Produktionen, die professionell organisiert sind und trotzdem menschlich bleiben. Daraus ist ein Team entstanden, das Kultur mit Haltung, Verlässlichkeit und Leidenschaft umsetzt."
+        second: "Unsere Wurzeln liegen in Stuttgart, gleichzeitig arbeiten wir mit Künstlern und Partnern aus aller Welt zusammen. Durch unsere langjährige Erfahrung, kurze Wege und ein starkes Netzwerk können wir auch anspruchsvolle Projekte zuverlässig umsetzen – von der ersten Idee über Technik, Sicherheit, Marketing und Pressearbeit bis hin zu Ticketing und Personalplanung."
+        third: "Unser Spektrum reicht dabei vom kleinen Clubkonzert über große Hallenshows bis hin zu spektakulären Open-Air-Veranstaltungen. Unterschiedliche Größenordnungen und Formate gehören für uns genauso zum Alltag wie die Herausforderung, für jedes Projekt den passenden Rahmen zu schaffen."
+        fourth: "Seit 2025 erweitern auch Ausstellungen unser Portfolio. Den Anfang machte die Titanic-Ausstellung in Ludwigsburg. Damit entwickeln und realisieren wir neben Live-Veranstaltungen zunehmend auch Ausstellungskonzepte und erschließen neue Formen des kulturellen Erlebnisses."
+        fifth: "Dabei geht es uns nicht nur um erfolgreiche Veranstaltungen. Wir möchten Kunst und Kultur langfristig stärken und legen großen Wert auf einen fairen und respektvollen Umgang mit Künstlern, Dienstleistern und Partnern. Nachhaltigkeit, Diversität, Gleichberechtigung und eine vertrauensvolle Zusammenarbeit gehören für uns selbstverständlich dazu."
       city:
         eyebrow: "Perspektive"
         title: "Von Stuttgart in die Welt."
@@ -248,24 +249,22 @@ de:
         intro: "Vom ersten Ortstermin bis zum letzten Abbau: Russ Live bündelt Veranstalter-Know-how, Produktion, Marketing, Personal und Ticketing für Konzerte, Shows und Kulturformate in der Region Stuttgart."
       nav_aria: "Servicebereiche"
       staff_jobs_button: "Jobangebote"
+      events:
+        title: "Unsere nächsten Veranstaltungen"
+        show_all: "Alle Veranstaltungen"
       contacts:
-        aria: "Ansprechpartner"
-        paul:
-          name: "Paul Woog"
-          role: "Geschäftsleitung"
-          email: "paulwoog@russ-live.de"
-        johanna:
-          name: "Johanna Backmund"
-          role: "Projektmanagement / Accounting"
-          email: "johannabackmund@russ-live.de"
+        aria: "Ansprechpartner*in"
+        michaela:
+          name: "Michaela Russ"
+          role: "Geschäftsführung"
         sarah:
           name: "Sarah Sandner"
           role: "Marketing"
           email: "sarahsandner@russ-live.de"
         sebastian:
-          name: "Sebastian Kränzlein"
+          name: "Michael Wechselberger"
           role: "Personaldisposition"
-          email: "sebastiankraenzlein@russ-live.de"
+          email: "michaelwechselberger@russ-live.de"
       intro:
         eyebrow: "Full Service"
         title: "Alles, was ein Live-Moment braucht"
@@ -392,7 +391,7 @@ de:
   references:
     featured_aria: "Hauptprojekte"
     featured_title: "Highlights"
-    overview_link: "Zur Referenzseite"
+    overview_link: "Referenzen"
     overview_aria: "Referenzseite öffnen"
     filters:
       aria: "Referenzen nach Tags filtern"
@@ -418,10 +417,11 @@ de:
     detail:
       aria_label: "Jobdetails %{title}"
       application_email_subject: "Bewerbung %{title}"
+      back_short: "Zurück"
       responsibilities: "Tätigkeitsfeld"
       requirements: "Anforderungen"
       apply_title: "Wir freuen uns auf Deine Bewerbung!"
-      contact: "Ansprechpartner"
+      contact: "Ansprechpartner*in"
       form:
         salutation: "Anrede"
         salutations:
@@ -438,7 +438,8 @@ de:
         position: "Stelle"
         message: "Erzähle uns etwas von dir"
         email_hint: "Es wird eine E-Mail vorbereitet. Bitte hänge dort Deine Bewerbungs-Unterlagen wie Anschreiben, Zeugnisse und Lebenslauf an."
-        email_greeting: "Hallo Sebastian,"
+        email_contact_fallback: "Russ Live Team"
+        email_greeting: "Hallo %{name},"
         email_interest_line: "Ich interessiere mich für die Stelle %{title}."
         email_personal_details_heading: "Meine Daten:"
         submit: "E-Mail vorbereiten"
@@ -468,11 +469,13 @@ de:
         title: "Pressekontakt"
         text: "Für Interview-, Akkreditierungs- und Materialanfragen ist der Pressebereich direkt vorbereitet."
         role: "Presse- & Öffentlichkeitsarbeit"
+        phone: "Telefon"
     detail:
       meta:
         title: "%{name} | Presse | Russ Live"
         description: "Pressemappe zu %{name}: Pressetext, Bildmaterial und Veranstaltungsdaten von Russ Live."
       back: "Zur Presseübersicht"
+      back_short: "Zurück"
       eyebrow: "Pressemappe"
       intro: "Pressetext, Bildmaterial und Veranstaltungsdaten zu %{name}."
       download_presskit: "Pressemappe downloaden"
@@ -490,10 +493,15 @@ de:
       press_text:
         eyebrow: "Pressetext"
         empty: "Für diesen Künstler ist aktuell kein Pressetext hinterlegt."
+        show_more: "Mehr anzeigen"
+        show_less: "Weniger anzeigen"
         usage: "Die Verwendung des Bild- und Textmaterials ist für redaktionelle Zwecke kostenfrei. Bei Pressefotos ist der im Dateinamen oder in den Metadaten hinterlegte Credit zu beachten."
+        pdf_generated: "Erstellt am %{date}"
       downloads:
         eyebrow: "Downloads"
-        title: "Pressefotos"
+        title: "Downloads"
+      download_text_tile: "Pressetext"
+      download_text: "Pressetext herunterladen"
       gallery_image_label: "Pressefoto %{name} %{index}"
       fallback_image_alt: "Pressebild"
       download_image: "Bild downloaden"
@@ -503,6 +511,8 @@ de:
       next_image: "Nächstes Bild"
   events:
     tickets: "Tickets"
+    more_info: "Mehr Infos"
+    more_info_title: "%{title} auf STUTTGARTLIVE"
     price_from: "ab %{price}"
     status:
       canceled: "Abgesagt"
