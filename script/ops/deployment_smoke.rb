@@ -41,7 +41,7 @@ module Ops
       http.ipaddr = connect_ip if connect_ip
       http.use_ssl = true
       http.open_timeout = 10
-      http.read_timeout = 15
+      http.read_timeout = STAGING_HOSTS.include?(uri.host) ? 60 : 15
       type = method == :head ? Net::HTTP::Head : Net::HTTP::Get
       request = type.new(uri.request_uri.empty? ? "/" : uri.request_uri)
       request.basic_auth(*auth.split(":", 2)) if auth
