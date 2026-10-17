@@ -13,4 +13,19 @@ class ImageFingerprintTest < ActiveSupport::TestCase
     transferred["Config"]["Env"] = [ "APP=production" ]
     assert_not_equal Ops::ImageFingerprint.call(original), Ops::ImageFingerprint.call(transferred)
   end
+
+  test "same Linux image accepts empty legacy Docker inspect fields without hiding changed settings" do
+    modern = { "Architecture" => "amd64", "Os" => "linux", "Config" => { "User" => "1000:1000", "Env" => [ "APP=staging" ], "Cmd" => [ "bin/server" ], "ArgsEscaped" => true }, "RootFS" => { "Type" => "layers", "Layers" => [ "sha256:#{'b' * 64}" ] } }
+    legacy = Marshal.load(Marshal.dump(modern))
+    # Observed after saving the same image from Docker29 and loading it in Docker28.0.4.
+    legacy["Config"].merge!("Hostname" => "", "Domainname" => "", "AttachStdin" => false, "AttachStdout" => false,
+      "AttachStderr" => false, "Tty" => false, "OpenStdin" => false, "StdinOnce" => false, "Image" => "", "Volumes" => nil, "OnBuild" => nil)
+    assert_equal Ops::ImageFingerprint.call(modern), Ops::ImageFingerprint.call(legacy)
+
+    { "Hostname" => "other", "AttachStdin" => true, "Volumes" => { "/extra" => {} }, "OnBuild" => [ "RUN changed" ], "UnknownRuntimeField" => true }.each do |field, value|
+      changed = Marshal.load(Marshal.dump(legacy))
+      changed["Config"][field] = value
+      assert_not_equal Ops::ImageFingerprint.call(modern), Ops::ImageFingerprint.call(changed), field
+    end
+  end
 end
