@@ -393,6 +393,8 @@ Nach jedem Image-Build ist der HTTP-Test verpflichtend:
 `APP_IMAGE=<gebautes-image> mise exec -- ruby test/ops/nginx_runtime_check.rb`.
 Er startet ausschließlich isolierte Testcontainer mit synthetischen Dateien und
 prüft Weiterleitungen, Zugriffsschutz sowie beide Medien-Signaturverfahren.
+Außerdem prüft er das von Kamal benötigte `service`-Label, das der Dockerfile
+auch für direkte Docker- und GitHub-Action-Builds im fertigen Image setzt.
 
 Alle Deployments beider Projekte und Umgebungen müssen dieselbe Sperre auf dem
 Hetzner-Host halten. Der Wrapper `mise exec -- script/ops/deploy_with_lock --host

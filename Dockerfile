@@ -73,6 +73,7 @@ RUN rm -rf node_modules
 
 # Final stage for app image
 FROM base
+LABEL service="russ_live_de"
 
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid 1000 rails && \

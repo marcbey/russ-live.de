@@ -50,6 +50,12 @@ class NginxRuntimeCheck < Minitest::Test
     FileUtils.remove_entry(@fixture)
   end
 
+  def test_image_is_labeled_for_the_kamal_service
+    expected = File.read(File.expand_path("../../config/deploy.yml", __dir__))[/^service:\s+(\w+)$/, 1]
+    refute_nil expected
+    assert_equal expected, docker!("image", "inspect", "--format", '{{ index .Config.Labels "service" }}', IMAGE).strip
+  end
+
   def test_canonical_redirects_precede_assets_and_media_and_preserve_encoding
     start_nginx({ "CANONICAL_REDIRECT_ENABLED" => "true" })
     [ "www.app.example.invalid", "legacy.example.invalid" ].each do |host|
