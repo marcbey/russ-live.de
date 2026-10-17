@@ -475,7 +475,10 @@ werden ausschließlich dem Proxy übergeben. Schlüssel, Laufzeit und beide SANs
 werden vor dem Deploy geprüft. Jeder Lauf protokolliert Modus, Hosts,
 Weiterleitung, Indexierung und TLS-Art. Derselbe geprüfte Commit/Digest kann
 zur Änderung dieser Laufzeitwerte erneut freigegeben werden; Kamal ersetzt dabei
-auch Container derselben Version. `prepared` prüft HTTPS direkt gegen die feste
+auch Container derselben Version. Die beiden Modi mit Vorabzertifikat prüfen HTTPS direkt gegen die feste
 Hetzner-IP mit unverändertem TLS-Hostnamen. Die öffentliche DNS-Prüfung folgt
 separat beim Livegang. Ab `prepared` sind die schopp3r-Adressen nicht mehr Teil
 des Proxy-Ziels. Staging behält unabhängig davon sein festes, geschütztes Profil.
+
+Der gemeinsame [Betriebsablauf für Domainwechsel, DNS-Abgleich und Staging](https://github.com/marcbey/stuttgart-live.de/blob/main/docs/operations/domainumzug-und-staging.md)
+beschreibt die Bereitstellung, Microsoft-365-Abnahme und den gezielten Rückweg.
