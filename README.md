@@ -22,6 +22,19 @@ Rails-Anwendung für den Relaunch von `russ-live.de`. Das Projekt wurde mit Ruby
 Ruby-Befehle müssen über `mise` laufen, damit die in `mise.toml` festgelegte
 Version verwendet wird.
 
+## Skills für Coding-Agenten
+
+Die neun Projekt-Skills liegen als versionierte Dateien unter
+[`.agents/skills`](.agents/skills) und werden mit dem Repository ausgecheckt.
+Quellen, geprüfte Upstream-Commits und notwendige Projektanpassungen stehen in
+[`.agents/skills-sources.json`](.agents/skills-sources.json).
+
+Bei Updates die vollständigen Skill-Verzeichnisse einschließlich Skripten,
+Referenzen und Assets mit der jeweiligen Quelle abgleichen. Anschließend die
+vermerkten Projektanpassungen erneut anwenden und die Commit-Stände aktualisieren.
+Der Playwright-Skill verwendet den Wrapper aus diesem Repository; seine
+Einrichtungsbefehle werden vom Repository-Stamm aus ausgeführt.
+
 ## Setup
 
 ```bash

@@ -25,7 +25,7 @@ node --version
 npm --version
 
 # If missing, install Node.js/npm, then:
-npm install -g @playwright/mcp@latest
+npm install -g @playwright/cli@latest
 playwright-cli --help
 ```
 
@@ -34,11 +34,11 @@ Once `npx` is present, proceed with the wrapper script. A global install of `pla
 ## Skill path (set once)
 
 ```bash
-export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
-export PWCLI="$CODEX_HOME/skills/playwright/scripts/playwright_cli.sh"
+export PWCLI="$PWD/.agents/skills/playwright/scripts/playwright_cli.sh"
 ```
 
-User-scoped skills install under `$CODEX_HOME/skills` (default: `~/.codex/skills`).
+Run this setup from the repository root to use this project's bundled wrapper.
+When working elsewhere, resolve `PWCLI` from this skill's own directory.
 
 ## Quick start
 
@@ -56,7 +56,7 @@ Use the wrapper script:
 If the user prefers a global install, this is also valid:
 
 ```bash
-npm install -g @playwright/mcp@latest
+npm install -g @playwright/cli@latest
 playwright-cli --help
 ```
 
@@ -121,7 +121,7 @@ Refs can go stale. When a command fails due to a missing ref, snapshot again.
 
 ## Wrapper script
 
-The wrapper script uses `npx --package @playwright/mcp playwright-cli` so the CLI can run without a global install:
+The wrapper script uses `npx --package @playwright/cli playwright-cli` so the CLI can run without a global install:
 
 ```bash
 "$PWCLI" --help

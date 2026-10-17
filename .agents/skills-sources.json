@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "checkedOn": "2026-10-17",
+  "skills": {
+    "gh-address-comments": {
+      "repository": "https://github.com/openai/skills",
+      "path": "skills/.curated/gh-address-comments",
+      "commit": "49f948faa9258a0c61caceaf225e179651397431",
+      "localChanges": [
+        "Remove a stray quote from interface.short_description in agents/openai.yaml."
+      ]
+    },
+    "git-commit": {
+      "repository": "https://github.com/github/awesome-copilot",
+      "path": "skills/git-commit",
+      "commit": "cb64ad12e32737ae764becd6885462e9b4c7cb00"
+    },
+    "playwright": {
+      "repository": "https://github.com/openai/skills",
+      "path": "skills/.curated/playwright",
+      "commit": "49f948faa9258a0c61caceaf225e179651397431",
+      "localChanges": [
+        "Resolve the bundled wrapper from .agents/skills/playwright instead of the global skills directory in SKILL.md and references/cli.md."
+      ]
+    },
+    "rails-conventions-patterns": {
+      "repository": "https://github.com/kaakati/rails-enterprise-dev",
+      "path": "plugins/rails-enterprise-dev/skills/rails-conventions",
+      "commit": "bd0b7c1cc37baf06cc6acaa7e21ddc5c488d103f",
+      "localChanges": [
+        "Use the directory name as the valid hyphen-case skill name in SKILL.md."
+      ]
+    },
+    "ruby-oop-patterns": {
+      "repository": "https://github.com/kaakati/rails-enterprise-dev",
+      "path": "plugins/rails-enterprise-dev/skills/ruby-oop-patterns",
+      "commit": "bd0b7c1cc37baf06cc6acaa7e21ddc5c488d103f",
+      "localChanges": [
+        "Use the directory name as the valid hyphen-case skill name in SKILL.md.",
+        "Keep the upstream version under metadata.version instead of an unsupported top-level version field."
+      ]
+    },
+    "screenshot": {
+      "repository": "https://github.com/openai/skills",
+      "path": "skills/.curated/screenshot",
+      "commit": "49f948faa9258a0c61caceaf225e179651397431"
+    },
+    "sentry-fix-issues": {
+      "repository": "https://github.com/getsentry/sentry-agent-skills",
+      "path": "skills/sentry-fix-issues",
+      "commit": "9f54eb021916a7cff2c04a9f4e4c1f9439f3202c"
+    },
+    "turbo-hotwire-patterns": {
+      "repository": "https://github.com/kaakati/rails-enterprise-dev",
+      "path": "plugins/rails-enterprise-dev/skills/hotwire-patterns",
+      "commit": "bd0b7c1cc37baf06cc6acaa7e21ddc5c488d103f",
+      "localChanges": [
+        "Use the directory name as the valid hyphen-case skill name in SKILL.md."
+      ]
+    },
+    "web-design-guidelines": {
+      "repository": "https://github.com/vercel-labs/agent-skills",
+      "path": "skills/web-design-guidelines",
+      "commit": "063bee94c3f4df8453406c830b0a7df0f2860278"
+    }
+  }
+}

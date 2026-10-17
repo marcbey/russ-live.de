@@ -1,5 +1,5 @@
 ---
-name: "Rails Conventions & Patterns"
+name: rails-conventions-patterns
 description: "Comprehensive Ruby on Rails conventions, design patterns, and idiomatic code standards. Use this skill when writing any Rails code including controllers, models, services, or when making architectural decisions about code organization, naming conventions, and Rails best practices."
 ---
 

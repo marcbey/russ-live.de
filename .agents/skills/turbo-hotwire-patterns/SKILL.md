@@ -1,5 +1,5 @@
 ---
-name: "Turbo & Hotwire Patterns"
+name: turbo-hotwire-patterns
 description: "Complete guide to Hotwire implementation including Turbo Drive, Turbo Frames, Turbo Streams, and Stimulus controllers in Rails applications. Use this skill when implementing real-time updates, partial page rendering, or JavaScript behaviors in Rails views."
 ---
 

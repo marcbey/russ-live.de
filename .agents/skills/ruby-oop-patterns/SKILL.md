@@ -1,7 +1,8 @@
 ---
-name: Ruby OOP Patterns
+name: ruby-oop-patterns
 description: Comprehensive guide to Object-Oriented Programming in Ruby and Rails covering classes, modules, design patterns, SOLID principles, and modern Ruby 3.x features
-version: 1.0.0
+metadata:
+  version: "1.0.0"
 ---
 
 # Ruby OOP Patterns
