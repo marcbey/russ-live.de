@@ -254,8 +254,9 @@ und Puma intern auf Port `3000`. `nginx` liefert Assets und signierte
 `/media/...`-Dateien direkt aus `/rails/public` beziehungsweise
 `/rails/storage` aus.
 
-Die Staging-Domain `https://russ-live.schopp3r.de/` wird in der
-Hetzner-Deployment-Konfiguration mit `STAGING_NOINDEX=true` ausgeliefert.
+Das bisherige Hetzner-Produktionsziel `https://russ-live.schopp3r.de/` behält bis
+zur Domainumschaltung `STAGING_NOINDEX=true`. Die getrennte Staging-Umgebung heißt
+`https://staging.russ-live.de/` und erzwingt zusätzlich Basic Auth.
 `nginx` setzt dadurch global den Header `X-Robots-Tag: noindex, nofollow`,
 auch für Assets, Media-Dateien und den Healthcheck `/up`. `robots.txt` wird
 dafür bewusst nicht gesperrt, damit Suchmaschinen das `noindex` crawlen können.
@@ -276,12 +277,15 @@ Vor manuellen Kamal-Eingriffen sollte immer dieser Check laufen:
 mise exec -- bin/hetzner-check
 ```
 
-Deployment von lokal:
+Reguläre Produktionsfreigabe nach Staging-Abnahme:
 
 ```bash
-mise exec -- bin/hetzner-check
-mise exec -- bin/kamal deploy -d hetzner
+gh workflow run deploy-production.yml -f staging_run_id=RUN_ID
 ```
+
+Direkte lokale Deploys ersetzen den Freigabenachweis nicht. Das initiale
+Staging-Bootstrap wird gesondert mit festem Image-Digest und gemeinsamer
+Serversperre durchgeführt.
 
 Status und Logs:
 
@@ -292,9 +296,16 @@ mise exec -- bin/kamal app logs -f -d hetzner -r web
 mise exec -- bin/kamal app logs -f -d hetzner -r job
 ```
 
-GitHub Actions baut bei Pushes auf `main` ein Image nach
-`ghcr.io/marcbey/russ-live-de` und deployt danach mit Kamal. Im GitHub
-Environment `production` müssen diese Secrets gepflegt sein:
+Pull Requests und `main` durchlaufen die vollständige CI mit `mise exec -- bin/ci`.
+Ein erfolgreicher Main-Push startet `Deploy Staging`: derselbe geprüfte Commit wird
+einmal gebaut, per Digest mit realen HTTP-Tests geprüft und auf Staging ausgerollt.
+Produktion wird anschließend ausschließlich manuell über `Deploy Production` mit
+der `staging_run_id` freigegeben. Das geprüfte Image wird ohne Neubau übernommen;
+Registry-Digest, laufende Container und der tatsächlich produktive Stuttgart-Peer
+müssen zum Nachweis passen. Bei Fehlern gibt es keinen `latest`-Fallback und keinen
+automatischen Neustart des gemeinsamen Proxys.
+
+Im GitHub-Environment `production` bleiben diese Secrets erforderlich:
 
 - `KAMAL_REGISTRY_PULL_PASSWORD`
 - `KAMAL_SSH_PRIVATE_KEY`
@@ -412,3 +423,59 @@ Offline-Runner und Migrationen benötigen diese Datei nicht. Bei fehlgeschlagene
 Refresh erfolgt kein automatischer Neustart alter Worker. Die Sanitizer-Tests
 verwenden vollständige Schemata in isolierten PostgreSQL-16.15-Containern; `bin/ci`
 benötigt deshalb eine laufende Docker-Engine.
+
+
+### Nachweis und gekoppelte Freigabe
+
+Das GitHub-Environment `staging` verwendet eigene Anwendungsschlüssel und
+Datenbankpasswörter. Es gibt keinen Rückfall auf unpräfixierte Production-Secrets:
+
+- `STAGING_RAILS_MASTER_KEY` und `STAGING_PEER_RAILS_MASTER_KEY`
+- `STAGING_RUSS_LIVE_PRIMARY_DB_PASSWORD` und `STAGING_RUSS_LIVE_OPERATIONAL_DB_PASSWORD`
+- `STAGING_MEDIA_PROXY_SECRET`, gemeinsam mit Stuttgart-Staging
+- `STAGING_BASIC_AUTH_HTPASSWD` und `STAGING_HTTP_AUTH` (`benutzer:passwort`)
+- `STAGING_SSH_PRIVATE_KEY` und `STAGING_KAMAL_REGISTRY_PULL_PASSWORD`
+- optional `STAGING_SENTRY_AUTH_TOKEN`
+
+Sentry-Meldungen sind optional und verwenden bei Konfiguration `SENTRY_ORG` und
+`SENTRY_PROJECT` sowie das tatsächlich ausgerollte Ziel. Alle regulären Deploys
+halten dieselbe Sperre wie Stuttgart. Nach dem Kamal-Pull wird das Image vor dem
+Start geprüft, anschließend werden alle laufenden Rollen und HTTP-Antworten geprüft.
+
+Für die zusätzliche Kompatibilitätsprobe werden ausschließlich Schemadaten des
+produktiven Peers schreibgeschützt gelesen. Testdaten stammen aus Staging und
+werden erneut maskiert. Die konkreten Images laufen in einer kurzlebigen
+Docker-Umgebung ohne externes Netzwerk mit passenden PostgreSQL-16-Schemata.
+Die gemeinsame Anmeldung wird dabei tatsächlich ausgeführt. Produktionsdaten und
+Produktionsschlüssel werden nicht in die Probe übertragen; Staging-Rollen
+erhalten keinen Produktionszugriff. Medien und HTTPS werden auf der vollständigen
+Staging-Umgebung geprüft.
+
+Der 14 Tage aufbewahrte Nachweis `staging-release` nennt den gemeinsam getesteten
+Staging-Peer und die kompatiblen Produktions-Commits. Diese müssen nicht identisch
+sein; so bleiben aufeinanderfolgende Freigaben beider Projekte möglich. Andere
+Peer-Versionen, abgelaufene oder ersetzte Artefakte benötigen einen neuen Nachweis.
+Schemamigrationen benötigen weiterhin eine Prüfung auf Verträglichkeit mit
+laufenden Prozessen. Eine Code-Rückkehr setzt keine Datenbank oder Medien zurück.
+
+Interne Stuttgart-Verweise, darunter Passwort-Reset, Veranstaltungsdetails und
+Highlights, bleiben aus Russ-Staging innerhalb des Staging-Paars. Produktive
+Ticketanbieter-Links bleiben als öffentliche Veranstaltungsdaten erhalten.
+
+
+Der Domainwechsel verwendet ausschließlich die Production-Environment-Variable
+`PRODUCTION_DOMAIN_MODE`: `legacy` (Standard) erhält den bisherigen schopp3r-Host;
+`prepared` bedient Hauptdomain und `www` mit vorab ausgestelltem Zertifikat,
+ohne kanonische Weiterleitung und mit noindex; `live_preissued` aktiviert
+308-Weiterleitungen und Indexierung mit demselben Zertifikat; `live` wechselt
+nach bestätigter DNS-Propagation zur automatischen Zertifikatsverwaltung.
+Für die beiden Zwischenmodi müssen `SSL_CERTIFICATE_PEM` (vollständige Kette) und
+`SSL_PRIVATE_KEY_PEM` als Production-Environment-Secrets vorhanden sein; sie
+werden ausschließlich dem Proxy übergeben. Schlüssel, Laufzeit und beide SANs
+werden vor dem Deploy geprüft. Jeder Lauf protokolliert Modus, Hosts,
+Weiterleitung, Indexierung und TLS-Art. Derselbe geprüfte Commit/Digest kann
+zur Änderung dieser Laufzeitwerte erneut freigegeben werden; Kamal ersetzt dabei
+auch Container derselben Version. `prepared` prüft HTTPS direkt gegen die feste
+Hetzner-IP mit unverändertem TLS-Hostnamen. Die öffentliche DNS-Prüfung folgt
+separat beim Livegang. Ab `prepared` sind die schopp3r-Adressen nicht mehr Teil
+des Proxy-Ziels. Staging behält unabhängig davon sein festes, geschütztes Profil.

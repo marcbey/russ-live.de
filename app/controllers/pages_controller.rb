@@ -20,7 +20,6 @@ class PagesController < ApplicationController
 
   HOME_EVENTS_PER_PAGE = 10
   JOB_QUOTES_PER_PAGE = 3
-  STUTTGART_LIVE_SKS_HIGHLIGHTS_URL = "https://www.stuttgart-live.de/highlights?filter=sks".freeze
 
   before_action :set_page_meta, except: :homepage_lane
   before_action :set_public_header_jobs, except: :homepage_lane
@@ -32,7 +31,7 @@ class PagesController < ApplicationController
     @home_events_page = home_events_page
     @home_events = @home_events_page.events
     @home_events_next_cursor = @home_events_page.next_cursor
-    @stuttgart_live_sks_highlights_url = STUTTGART_LIVE_SKS_HIGHLIGHTS_URL
+    @stuttgart_live_sks_highlights_url = "#{StuttgartLiveUrls.base_url}/highlights?filter=sks"
   end
 
   def homepage_lane
@@ -54,7 +53,7 @@ class PagesController < ApplicationController
     @home_events_page = home_events_page
     @home_events = @home_events_page.events
     @home_events_next_cursor = @home_events_page.next_cursor
-    @stuttgart_live_sks_highlights_url = STUTTGART_LIVE_SKS_HIGHLIGHTS_URL
+    @stuttgart_live_sks_highlights_url = "#{StuttgartLiveUrls.base_url}/highlights?filter=sks"
   end
   def referenzen
     references = Reference.published.with_image.ordered.to_a

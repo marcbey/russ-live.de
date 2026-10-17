@@ -7,11 +7,32 @@ module HetznerDeployConfig
 
   class << self
     def app_host(destination: ENV.fetch("KAMAL_DESTINATION", "hetzner"))
-      fetch("app_host", destination:)
+      key = destination == "hetzner" && production_domain_mode != "legacy" ? "canonical_app_host" : "app_host"
+      fetch(key, destination:)
     end
 
     def app_host_if_present(destination: ENV.fetch("KAMAL_DESTINATION", "hetzner"))
-      fetch("app_host", destination:, required: false)
+      key = destination == "hetzner" && production_domain_mode != "legacy" ? "canonical_app_host" : "app_host"
+      fetch(key, destination:, required: false)
+    end
+
+    def production_domain_mode
+      mode = ENV.fetch("PRODUCTION_DOMAIN_MODE", "legacy")
+      raise MissingConfigError, "Unknown production domain mode" unless %w[legacy prepared live_preissued live].include?(mode)
+      mode
+    end
+
+    def production_hosts
+      host = app_host(destination: "hetzner")
+      production_domain_mode == "legacy" ? [ host ] : [ host, "www.#{host}" ]
+    end
+
+    def production_redirect?
+      %w[live_preissued live].include?(production_domain_mode)
+    end
+
+    def production_preissued_tls?
+      %w[prepared live_preissued].include?(production_domain_mode)
     end
 
     def web_host(destination: ENV.fetch("KAMAL_DESTINATION", "hetzner"))

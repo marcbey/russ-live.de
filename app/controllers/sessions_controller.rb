@@ -1,6 +1,4 @@
 class SessionsController < ApplicationController
-  STUTTGART_LIVE_PASSWORD_RESET_URL = "https://www.stuttgart-live.de/passwords/new".freeze
-
   allow_unauthenticated_access only: %i[new create]
   rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to new_session_path, alert: "Bitte später erneut versuchen." }
 
@@ -9,7 +7,7 @@ class SessionsController < ApplicationController
       title: "Login | Russ Live",
       body_class: "auth-body"
     }
-    @password_reset_url = STUTTGART_LIVE_PASSWORD_RESET_URL
+    @password_reset_url = "#{StuttgartLiveUrls.base_url}/passwords/new"
   end
 
   def create

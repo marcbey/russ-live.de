@@ -1,6 +1,5 @@
 class PressArtist
   FALLBACK_HERO_IMAGE = "russ_live/keyvisuals/Keyvisual_RussLive.jpg".freeze
-  STUTTGART_LIVE_EVENT_BASE_URL = "https://www.stuttgart-live.de/events/".freeze
 
   attr_reader :events, :name, :normalized_name, :slug
 
@@ -68,7 +67,7 @@ class PressArtist
 
   def ticket_url
     primary_event.public_ticket_offer&.resolved_ticket_url.presence ||
-      "#{STUTTGART_LIVE_EVENT_BASE_URL}#{primary_event.slug}"
+      "#{StuttgartLiveUrls.base_url}/events/#{primary_event.slug}"
   end
 
   def self.assign_slugs(artists)

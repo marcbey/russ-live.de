@@ -29,8 +29,18 @@ servers:
         QUEUE_DB_POOL: 5
 
 proxy:
-  ssl: <%= ENV.fetch("APP_SSL", "true") == "true" %>
+<% if HetznerDeployConfig.production_preissued_tls? %>
+  ssl:
+    certificate_pem: SSL_CERTIFICATE_PEM
+    private_key_pem: SSL_PRIVATE_KEY_PEM
+<% else %>
+  ssl: true
+<% end %>
+<% if HetznerDeployConfig.production_domain_mode == "legacy" %>
   host: <%= HetznerDeployConfig.app_host %>
+<% else %>
+  hosts: <%= HetznerDeployConfig.production_hosts.to_json %>
+<% end %>
   app_port: 80
 
 registry:
@@ -47,8 +57,8 @@ env:
     - MEDIA_PROXY_SECRET
   clear:
     APP_ENVIRONMENT: production
-    APP_ALLOWED_HOSTS: <%= HetznerDeployConfig.app_host %>
-    CANONICAL_REDIRECT_ENABLED: "false"
+    APP_ALLOWED_HOSTS: <%= HetznerDeployConfig.production_hosts.join(",") %>
+    CANONICAL_REDIRECT_ENABLED: "<%= HetznerDeployConfig.production_redirect? %>"
     STORAGE_VOLUME: stuttgart_live_de_storage
     APP_HOST: <%= HetznerDeployConfig.app_host %>
     DB_HOST: 172.18.0.1
@@ -62,7 +72,7 @@ env:
     CABLE_DB_NAME: <%= ENV.fetch("CABLE_DB_NAME", "russ_live_de_production_cable") %>
     ACTIVE_STORAGE_SERVICE: <%= ENV.fetch("ACTIVE_STORAGE_SERVICE", "local") %>
     ACTIVE_STORAGE_ROOT: <%= ENV.fetch("ACTIVE_STORAGE_ROOT", "/rails/storage") %>
-    STAGING_NOINDEX: "true"
+    STAGING_NOINDEX: "<%= !HetznerDeployConfig.production_redirect? %>"
 
 ssh:
   user: deploy
