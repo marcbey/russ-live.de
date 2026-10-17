@@ -35,6 +35,10 @@ module HetznerDeployConfig
       %w[prepared live_preissued].include?(production_domain_mode)
     end
 
+    def production_smoke_ip
+      web_host(destination: "hetzner") if production_preissued_tls?
+    end
+
     def web_host(destination: ENV.fetch("KAMAL_DESTINATION", "hetzner"))
       fetch("web_host", destination:)
     end

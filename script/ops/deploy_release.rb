@@ -78,7 +78,7 @@ module Ops
       raise ReleaseSupport::Error, "Kamal-Deploy fehlgeschlagen; kein Proxy-Reboot und keine andere Version" unless status.success?
       config = Kamal::Configuration.create_from(config_file: "config/deploy.yml", destination:, version: commit)
       @remote.verify_running!(project:, destination:, commit:, digest:, roles: config.roles.map(&:name))
-      connect_ip = "46.225.224.194" if destination == "hetzner" && HetznerDeployConfig.production_domain_mode == "prepared"
+      connect_ip = HetznerDeployConfig.production_smoke_ip if destination == "hetzner"
       DeploymentSmoke.call(host: HetznerDeployConfig.app_host(destination:), staging: destination == "staging", auth: destination == "staging" ? required("STAGING_HTTP_AUTH") : nil, connect_ip:)
       puts "Image läuft geprüft: #{destination} #{commit} #{digest}"
     end

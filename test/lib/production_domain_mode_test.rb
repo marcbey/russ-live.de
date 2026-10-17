@@ -24,4 +24,15 @@ class ProductionDomainModeTest < ActiveSupport::TestCase
     end
     assert_equal render_deploy_config(destination: "staging"), render_deploy_config(destination: "staging", env: { "PRODUCTION_DOMAIN_MODE" => "live" })
   end
+
+  test "both preissued modes can be verified before the public DNS cutover" do
+    original = ENV["PRODUCTION_DOMAIN_MODE"]
+    %w[legacy prepared live_preissued live].each do |mode|
+      ENV["PRODUCTION_DOMAIN_MODE"] = mode
+      expected = %w[prepared live_preissued].include?(mode) ? "46.225.224.194" : nil
+      expected ? assert_equal(expected, HetznerDeployConfig.production_smoke_ip) : assert_nil(HetznerDeployConfig.production_smoke_ip)
+    end
+  ensure
+    ENV["PRODUCTION_DOMAIN_MODE"] = original
+  end
 end
