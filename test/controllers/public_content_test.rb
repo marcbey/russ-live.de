@@ -27,7 +27,7 @@ class PublicContentTest < ActionDispatch::IntegrationTest
       assert_select ".contact-quick-actions" do
         assert_select "a[href='tel:+497111635311']", text: /\+49/
         assert_select "a[href='mailto:info@russ-live.de']", text: "info@russ-live.de"
-        assert_select "a[href='https://www.vvs.de/fahrplanauskunft']", text: /VVS/
+        assert_select "a[href='https://www.vvs.de/verbindungen-und-mobilitaet/fahrplanauskunft']", text: /VVS/
       end
       assert_select "address.rich-copy p", text: "Authored contact information."
       assert_operator response.body.index("contact-quick-actions"), :<, response.body.index("Authored contact information.")
@@ -43,7 +43,7 @@ class PublicContentTest < ActionDispatch::IntegrationTest
       assert_response :success
       assert_select ".contact-quick-actions a[href='tel:+497111635311']"
       assert_select ".contact-quick-actions a[href='mailto:info@russ-live.de']"
-      assert_select ".contact-quick-actions a[href='https://www.vvs.de/fahrplanauskunft']"
+      assert_select ".contact-quick-actions a[href='https://www.vvs.de/verbindungen-und-mobilitaet/fahrplanauskunft']"
       assert_select "address.rich-copy", text: /Charlottenplatz 17/
       assert_equal 0, EditablePage.count
     end
