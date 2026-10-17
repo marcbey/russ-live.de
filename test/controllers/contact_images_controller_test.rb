@@ -8,7 +8,7 @@ class ContactImagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "redirects asset backed contact image to asset path" do
-    contact = Contact.create!(name: "Sebastian Kränzlein", phone_number: "+49", email: "personal@example.com")
+    contact = Contact.create!(name: "Sebastian Kränzlein", phone_number: "+49", email: "personal@russ-live.de")
     image = contact.create_contact_image!(asset_path: "russ_live/team/sebastian-kraenzlein.jpg")
 
     get contact_image_path(image)

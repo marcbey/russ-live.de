@@ -50,6 +50,20 @@ module ApplicationHelper
     end
   end
 
+  def stuttgart_live_brand
+    content_tag(:span, class: "stuttgart-live-word") do
+      safe_join([ tag.strong("STUTTGART"), "LIVE" ])
+    end
+  end
+
+  def format_stuttgart_live_brand(text)
+    safe_join(
+      text.to_s.split(/(stuttgart[- ]?live)/i).map do |chunk|
+        chunk.match?(/\Astuttgart[- ]?live\z/i) ? stuttgart_live_brand : h(chunk)
+      end
+    )
+  end
+
   def reference_date_label(reference)
     reference.display_date_text
   end
@@ -199,6 +213,10 @@ module ApplicationHelper
     stored_image_source(contact_image, route_helper: :contact_image_path)
   end
 
+  def team_member_image_source(team_member_image)
+    stored_image_source(team_member_image, route_helper: :team_member_image_path)
+  end
+
   def stored_image_file_metadata(stored_image)
     return [] if stored_image.blank? || !stored_image.image?
 
@@ -214,7 +232,15 @@ module ApplicationHelper
   end
 
   def press_image_credit(image)
-    credit = image&.sub_text.to_s.strip
+    formatted_image_credit(image&.sub_text)
+  end
+
+  def reference_slider_image_credit(reference_image)
+    formatted_image_credit(reference_image&.slider_sub_text)
+  end
+
+  def formatted_image_credit(value)
+    credit = value.to_s.strip
     return if credit.blank?
     return credit if credit.start_with?("©")
 

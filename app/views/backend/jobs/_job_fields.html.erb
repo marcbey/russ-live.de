@@ -1,79 +1,140 @@
-<section class="backend-section">
+<%= form.hidden_field :slug %>
+<%= form.hidden_field :employment %>
+<%= form.hidden_field :location, value: job.location.presence || "Stuttgart" %>
+<%= form.hidden_field :highlight_label %>
+<%= form.hidden_field :highlight_title %>
+<%= form.hidden_field :category_list %>
+<%= form.hidden_field :join_recruiting_url %>
+<%= form.hidden_field :meta_title %>
+<%= form.hidden_field :meta_title_en %>
+<%= form.hidden_field :meta_description %>
+<%= form.hidden_field :meta_description_en %>
+<%= form.hidden_field :position, value: job.position.presence || 0 %>
+
+<section class="backend-section job-editor-section">
+  <div class="backend-section-header">
+    <h2>Deutsch</h2>
+  </div>
+
   <div class="backend-section-body editor-grid">
-    <div>
-      <%= form.label :title, "Titel", class: "form-label" %>
-      <%= form.text_field :title, class: "form-input" %>
+    <div class="editor-grid-span-full">
+      <%= form.label :title, "Titel (Header)", class: "form-label" %>
+      <%= form.text_field :title, class: "form-input", required: true, placeholder: "z. B. Cateringhilfen" %>
     </div>
-    <div>
-      <%= form.label :slug, "Slug", class: "form-label" %>
-      <%= form.text_field :slug, class: "form-input" %>
-    </div>
-    <div>
+
+    <div class="editor-grid-span-full">
       <%= form.label :badge, "Badge", class: "form-label" %>
-      <%= form.text_field :badge, class: "form-input", placeholder: "Minijob" %>
+      <%= form.text_field :badge, class: "form-input", placeholder: "z. B. Minijob" %>
+      <p class="form-hint">Kleine Zusatzwolke auf der Übersicht und neben dem Titel.</p>
     </div>
-    <div>
-      <%= form.label :employment, "Beschäftigung", class: "form-label" %>
-      <%= form.text_field :employment, class: "form-input" %>
+
+    <div class="editor-grid-span-full">
+      <%= form.label :intro, "Intro (Header)", class: "form-label" %>
+      <%= form.text_area :intro, rows: 4, class: "form-textarea", placeholder: "Kurzer Einstiegstext für den Header." %>
     </div>
-    <div>
-      <%= form.label :location, "Einsatzort", class: "form-label" %>
-      <%= form.text_field :location, class: "form-input" %>
+  </div>
+</section>
+
+<section class="backend-section job-editor-section">
+  <div class="backend-section-header">
+    <h2>Deutsch Inhalt</h2>
+  </div>
+
+  <div class="backend-section-body editor-grid">
+    <div class="editor-grid-span-full">
+      <%= form.label :optional_text, "Optionales Textfeld", class: "form-label" %>
+      <%= form.text_area :optional_text, rows: 4, class: "form-textarea", placeholder: "Optionaler kurzer Text zwischen Header und Listen." %>
     </div>
-    <div>
+
+    <div class="editor-grid-span-full">
+      <%= form.label :responsibilities_text, "Tätigkeitsfeld", class: "form-label" %>
+      <%= form.text_area :responsibilities_text, rows: 7, class: "form-textarea", placeholder: "Eine Aufgabe pro Zeile" %>
+      <p class="form-hint">Eine Aufgabe pro Zeile. Daraus wird automatisch eine Liste.</p>
+    </div>
+
+    <div class="editor-grid-span-full">
+      <%= form.label :requirements_text, "Anforderungen", class: "form-label" %>
+      <%= form.text_area :requirements_text, rows: 7, class: "form-textarea", placeholder: "Eine Anforderung pro Zeile" %>
+      <p class="form-hint">Eine Anforderung pro Zeile. Daraus wird automatisch eine Liste.</p>
+    </div>
+  </div>
+</section>
+
+<section class="backend-section job-editor-section">
+  <div class="backend-section-header">
+    <h2>Englisch</h2>
+  </div>
+
+  <div class="backend-section-body editor-grid">
+    <div class="editor-grid-span-full">
+      <%= form.label :title_en, "Titel EN", class: "form-label" %>
+      <%= form.text_field :title_en, class: "form-input", placeholder: "Leer lassen = deutscher Titel" %>
+    </div>
+
+    <div class="editor-grid-span-full">
+      <%= form.label :badge_en, "Badge EN", class: "form-label" %>
+      <%= form.text_field :badge_en, class: "form-input", placeholder: "z. B. Part-time job" %>
+    </div>
+
+    <div class="editor-grid-span-full">
+      <%= form.label :intro_en, "Intro EN", class: "form-label" %>
+      <%= form.text_area :intro_en, rows: 4, class: "form-textarea", placeholder: "Englischer Header-Introtext." %>
+    </div>
+
+    <div class="editor-grid-span-full">
+      <%= form.label :optional_text_en, "Optionales Textfeld EN", class: "form-label" %>
+      <%= form.text_area :optional_text_en, rows: 4, class: "form-textarea", placeholder: "Englischer Zusatztext." %>
+    </div>
+
+    <div class="editor-grid-span-full">
+      <%= form.label :responsibilities_en_text, "Tätigkeitsfeld EN", class: "form-label" %>
+      <%= form.text_area :responsibilities_en_text, rows: 7, class: "form-textarea", placeholder: "Eine Aufgabe pro Zeile" %>
+      <p class="form-hint">Leer lassen = deutsche Liste.</p>
+    </div>
+
+    <div class="editor-grid-span-full">
+      <%= form.label :requirements_en_text, "Anforderungen EN", class: "form-label" %>
+      <%= form.text_area :requirements_en_text, rows: 7, class: "form-textarea", placeholder: "Eine Anforderung pro Zeile" %>
+      <p class="form-hint">Leer lassen = deutsche Liste.</p>
+    </div>
+  </div>
+</section>
+
+<section class="backend-section job-editor-section">
+  <div class="backend-section-header">
+    <h2>Ansprechpartner</h2>
+  </div>
+
+  <div class="backend-section-body editor-grid">
+    <div class="editor-grid-span-full">
       <%= form.label :contact_id, "Ansprechpartner", class: "form-label" %>
       <%= form.collection_select :contact_id, contacts, :id, :name, { include_blank: "Kein Ansprechpartner" }, class: "form-input" %>
     </div>
-    <div class="editor-grid-span-full">
-      <%= form.label :category_list, "Bereiche", class: "form-label" %>
-      <%= form.text_field :category_list, class: "form-input", placeholder: "Catering, Logistik" %>
-      <p class="form-hint">Komma- oder zeilengetrennt.</p>
-    </div>
-    <div>
-      <%= form.label :status, "Status", class: "form-label" %>
-      <%= form.select :status, [["Entwurf", "draft"], ["Veröffentlicht", "published"]], {}, class: "form-input" %>
-    </div>
-    <div>
-      <%= form.label :position, "Sortierung", class: "form-label" %>
-      <%= form.number_field :position, class: "form-input", min: 0, step: 1 %>
-    </div>
-    <div class="editor-grid-span-full">
-      <%= form.label :intro, "Intro", class: "form-label" %>
-      <%= form.text_area :intro, rows: 3, class: "form-textarea" %>
-    </div>
-    <div>
-      <%= form.label :highlight_label, "Highlight Label", class: "form-label" %>
-      <%= form.text_field :highlight_label, class: "form-input" %>
-    </div>
-    <div>
-      <%= form.label :highlight_title, "Highlight Titel", class: "form-label" %>
-      <%= form.text_field :highlight_title, class: "form-input" %>
-    </div>
-    <div class="editor-grid-span-full">
-      <%= form.label :highlight_text, "Highlight Text", class: "form-label" %>
-      <%= form.text_area :highlight_text, rows: 3, class: "form-textarea" %>
-    </div>
-    <div class="editor-grid-span-full">
-      <%= form.label :responsibilities_text, "Tätigkeitsfeld", class: "form-label" %>
-      <%= form.text_area :responsibilities_text, rows: 5, class: "form-textarea" %>
-      <p class="form-hint">Eine Aufgabe pro Zeile.</p>
-    </div>
-    <div class="editor-grid-span-full">
-      <%= form.label :requirements_text, "Anforderungen", class: "form-label" %>
-      <%= form.text_area :requirements_text, rows: 6, class: "form-textarea" %>
-      <p class="form-hint">Eine Anforderung pro Zeile.</p>
-    </div>
-    <div class="editor-grid-span-full">
-      <%= form.label :join_recruiting_url, "JOIN Recruiting URL", class: "form-label" %>
-      <%= form.url_field :join_recruiting_url, class: "form-input", placeholder: "https://join.com/..." %>
-    </div>
-    <div>
-      <%= form.label :meta_title, "Meta Title", class: "form-label" %>
-      <%= form.text_field :meta_title, class: "form-input" %>
-    </div>
-    <div>
-      <%= form.label :meta_description, "Meta Description", class: "form-label" %>
-      <%= form.text_area :meta_description, rows: 3, class: "form-textarea" %>
-    </div>
+  </div>
+</section>
+
+<section class="backend-section job-editor-section job-publication-section">
+  <div class="backend-section-header">
+    <h2>Veröffentlichung</h2>
+  </div>
+
+  <div class="backend-section-body">
+    <fieldset class="job-status-fieldset">
+      <legend class="form-label">Status</legend>
+
+      <div class="job-status-options">
+        <%= form.radio_button :status, "draft", class: "job-status-radio" %>
+        <%= form.label :status_draft, class: "job-status-option" do %>
+          <span class="job-status-option-title">Entwurf</span>
+          <span class="job-status-option-text">Im Backend sichtbar, aber nicht auf der Website veröffentlicht.</span>
+        <% end %>
+
+        <%= form.radio_button :status, "published", class: "job-status-radio" %>
+        <%= form.label :status_published, class: "job-status-option" do %>
+          <span class="job-status-option-title">Veröffentlicht</span>
+          <span class="job-status-option-text">Erscheint auf der Job-Übersicht und ist öffentlich aufrufbar.</span>
+        <% end %>
+      </div>
+    </fieldset>
   </div>
 </section>

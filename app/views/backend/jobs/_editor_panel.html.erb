@@ -22,7 +22,13 @@
 
     <div class="editor-actions editor-tabs-actions">
       <button type="submit" form="<%= form_id %>" class="button button-compact">Speichern</button>
+      <button type="submit" form="<%= form_id %>" name="publish_job" value="1" class="button button-publish button-compact">Veröffentlichen</button>
       <% if job.persisted? %>
+        <%= link_to "Vorschau anzeigen",
+                    preview_backend_job_path(job),
+                    class: "button button-secondary button-compact",
+                    target: "_blank",
+                    rel: "noopener" %>
         <%= button_to "Job löschen",
                       backend_job_path(job, status: (@status_filter unless @status_filter == "all"), query: @query_filter),
                       method: :delete,
