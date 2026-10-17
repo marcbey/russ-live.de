@@ -377,8 +377,15 @@ KI-Aufrufe werden an den echten Client-Grenzen blockiert, auch bei versehentlich
 vorhandenen API-Zugangsdaten. Öffentliche Tracking-Pixel bleiben in Staging aus.
 
 Das Staging-Ziel benötigt zusätzlich `STAGING_BASIC_AUTH_HTPASSWD` als vollständige
-htpasswd-Zeile (`Benutzer:Hash`), beispielsweise mit einem Bcrypt-Hash. Der Hash
-wird als Secret behandelt; das Startskript schreibt ihn mit Dateirechten `0600`.
+htpasswd-Zeile (`Benutzer:Hash`). Für das kryptografisch zufällige Staging-Passwort
+(mindestens 32 Zeichen) SHA-512-crypt verwenden. Den Hash auf dem Linux-Host mit
+`openssl passwd -6 -stdin` erzeugen; das System-OpenSSL von macOS unterstützt
+diese Option nicht.
+Den Benutzernamen vor den erzeugten Hash setzen. nginx prüft diesen Hash bei jedem
+Bild, Skript und Stylesheet erneut; ein teurer Bcrypt-Hash bremst deshalb die gesamte
+Seite. `STAGING_HTTP_AUTH` muss weiterhin denselben Benutzer und dasselbe Passwort
+enthalten. Der Hash wird als Secret behandelt; das Startskript schreibt ihn mit
+Dateirechten `0600`.
 Fehlt er, startet nginx nicht. In Staging gelten Basic Auth und `noindex, nofollow`
 auch für Assets, Medien und Fehlerantworten. Antworten werden dort nicht öffentlich
 zwischengespeichert. Ausschließlich der exakte Healthcheck `/up` bleibt öffentlich
