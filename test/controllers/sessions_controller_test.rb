@@ -5,10 +5,10 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     StuttgartLiveSchema.ensure!
     clear_auth_records
     clear_stuttgart_users
-    @admin = create_stuttgart_user!(email_address: "admin@example.com", role: "admin")
+    @admin = create_stuttgart_user!(email_address: "admin@russ-live.de", role: "admin")
   end
 
-  test "new renders login with Stuttgart Live password reset link" do
+  test "new renders login with STUTTGARTLIVE password reset link" do
     get new_session_path
 
     assert_response :success
@@ -49,7 +49,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "login rejects Stuttgart users without Russ backend role" do
-    blogger = create_stuttgart_user!(email_address: "blogger@example.com", role: "blogger")
+    blogger = create_stuttgart_user!(email_address: "blogger@russ-live.de", role: "blogger")
 
     assert_no_difference -> { Session.count } do
       post session_path, params: {
@@ -67,7 +67,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     delete session_path
 
-    assert_redirected_to new_session_url
+    assert_redirected_to root_url
     assert_not Session.exists?(session_id)
   end
 end

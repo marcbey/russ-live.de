@@ -10,7 +10,7 @@ class Backend::ContactsControllerTest < ActionDispatch::IntegrationTest
     Job.delete_all
     ContactImage.delete_all
     Contact.delete_all
-    @admin = create_stuttgart_user!(email_address: "admin@example.com", role: "admin")
+    @admin = create_stuttgart_user!(email_address: "admin@russ-live.de", role: "admin")
   end
 
   test "requires authentication" do
@@ -50,8 +50,8 @@ class Backend::ContactsControllerTest < ActionDispatch::IntegrationTest
 
   test "searches contacts by phone and email" do
     sign_in_as(@admin)
-    create_contact!(name: "Sebastian Kränzlein", phone_number: "+49.711.16 353 42", email: "sebastian@example.com")
-    create_contact!(name: "Andere Person", phone_number: "+49.711.10", email: "andere@example.com")
+    create_contact!(name: "Sebastian Kränzlein", phone_number: "+49.711.16 353 42", email: "sebastian@russ-live.de")
+    create_contact!(name: "Andere Person", phone_number: "+49.711.10", email: "andere@russ-live.de")
 
     get backend_contacts_path(query: "353")
 
@@ -91,7 +91,7 @@ class Backend::ContactsControllerTest < ActionDispatch::IntegrationTest
   end
 
   private
-    def create_contact!(name:, phone_number: "+49.711.16 353 42", email: "personal@example.com")
+    def create_contact!(name:, phone_number: "+49.711.16 353 42", email: "personal@russ-live.de")
       Contact.create!(name: name, role: "Personal", phone_number: phone_number, email: email, position: 1).tap do |contact|
         contact.create_contact_image!(asset_path: "russ_live/team/sebastian-kraenzlein.jpg", alt_text: name)
       end
@@ -103,7 +103,7 @@ class Backend::ContactsControllerTest < ActionDispatch::IntegrationTest
           name: name,
           role: "Personal",
           phone_number: "+49 711 1",
-          email: "neu@example.com",
+          email: "neu@russ-live.de",
           position: "1"
         },
         contact_image: {}

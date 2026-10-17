@@ -4,6 +4,7 @@ export default class extends Controller {
   static targets = ["track", "group"]
   static values = {
     baseSpeed: { type: Number, default: 15 },
+    maxWidth: { type: Number, default: 0 },
     slideDuration: { type: Number, default: 650 },
     speedScale: { type: Number, default: 4 },
   }
@@ -11,6 +12,9 @@ export default class extends Controller {
   connect() {
     this.abortController = new AbortController()
     this.mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
+    this.viewportQuery = this.maxWidthValue > 0
+      ? window.matchMedia(`(max-width: ${this.maxWidthValue}px)`)
+      : null
     this.position = 0
     this.paused = false
     this.dragging = false
@@ -29,6 +33,7 @@ export default class extends Controller {
     this.handlePointerMove = this.handlePointerMove.bind(this)
     this.handlePointerUp = this.handlePointerUp.bind(this)
     this.handleMotionPreferenceChange = this.handleMotionPreferenceChange.bind(this)
+    this.handleViewportChange = this.handleViewportChange.bind(this)
     this.measure = this.measure.bind(this)
 
     const { signal } = this.abortController
@@ -40,6 +45,7 @@ export default class extends Controller {
     window.addEventListener("pointerup", this.handlePointerUp, { signal })
     window.addEventListener("pointercancel", this.handlePointerUp, { signal })
     this.mediaQuery.addEventListener("change", this.handleMotionPreferenceChange, { signal })
+    this.viewportQuery?.addEventListener("change", this.handleViewportChange, { signal })
 
     if (typeof ResizeObserver !== "undefined") {
       this.resizeObserver = new ResizeObserver(this.measure)
@@ -84,6 +90,7 @@ export default class extends Controller {
   }
 
   handlePointerDown(event) {
+    if (this.mediaQuery.matches || !this.viewportMatches()) return
     if (event.button !== undefined && event.button !== 0) return
     if (event.target.closest?.(".reference-marquee-controls")) return
     if (event.target.closest?.(".reference-marquee-cta")) return
@@ -126,7 +133,7 @@ export default class extends Controller {
   }
 
   handleMotionPreferenceChange() {
-    if (this.mediaQuery.matches) {
+    if (this.mediaQuery.matches || !this.viewportMatches()) {
       if (this.frame) window.cancelAnimationFrame(this.frame)
       this.frame = null
       this.previousTimestamp = null
@@ -135,6 +142,16 @@ export default class extends Controller {
     }
 
     if (!this.frame) this.frame = window.requestAnimationFrame(this.animate)
+  }
+
+  handleViewportChange() {
+    this.position = 0
+    this.measure()
+    this.handleMotionPreferenceChange()
+  }
+
+  viewportMatches() {
+    return !this.viewportQuery || this.viewportQuery.matches
   }
 
   measure() {

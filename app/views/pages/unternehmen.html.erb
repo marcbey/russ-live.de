@@ -101,7 +101,7 @@
     </div>
   </section>
 
-  <section class="public-section section about-editorial-section" aria-labelledby="about-award-title">
+  <section class="public-section section about-editorial-section" aria-labelledby="about-editorial-title">
     <div class="about-editorial-visuals" aria-hidden="true">
       <figure class="about-editorial-image about-editorial-image-founder">
         <%= image_tag "russ_live/about/michael-michaela.jpg",
@@ -111,43 +111,18 @@
                       width: 857,
                       height: 785 %>
       </figure>
-
-      <figure class="about-editorial-image about-editorial-image-team">
-        <%= image_tag "russ_live/about/paul-michi.jpg",
-                      alt: "",
-                      loading: "lazy",
-                      decoding: "async",
-                      width: 1122,
-                      height: 879 %>
-      </figure>
     </div>
 
     <div class="about-editorial-copy">
       <article class="about-editorial-block">
-        <h2 id="about-award-title"><%= t("pages.about.award.title") %></h2>
+        <h2 id="about-editorial-title"><%= t("pages.about.award.title") %></h2>
         <p><%= t("pages.about.award.first") %></p>
-      </article>
-
-      <article class="about-editorial-block">
-        <h2 id="about-city-title"><%= t("pages.about.city.title") %></h2>
-        <p><%= t("pages.about.city.first") %></p>
-        <p><%= t("pages.about.city.second") %></p>
-      </article>
-
-      <article class="about-editorial-block about-editorial-block-closing">
-        <p><%= t("pages.about.closing.text") %></p>
-        <% t("pages.about.closing.placeholder_paragraphs").each do |paragraph| %>
-          <p><%= paragraph %></p>
-        <% end %>
+        <p><%= t("pages.about.award.second") %></p>
+        <p><%= t("pages.about.award.third") %></p>
+        <p><%= t("pages.about.award.fourth") %></p>
+        <p><%= t("pages.about.award.fifth") %></p>
       </article>
     </div>
   </section>
 
-  <section class="about-quote-band" aria-labelledby="about-quote-title">
-    <h2 id="about-quote-title">
-      <span aria-hidden="true">»</span>
-      <%= t("pages.about.closing.title") %>
-      <span aria-hidden="true">«</span>
-    </h2>
-  </section>
 </main>
