@@ -1,9 +1,39 @@
 module Backend
   class JobsController < BaseController
     FILTERS = %w[all draft published].freeze
+    JOB_PARAMETER_KEYS = %i[
+      contact_id
+      slug
+      title
+      title_en
+      badge
+      badge_en
+      employment
+      location
+      intro
+      intro_en
+      highlight_label
+      highlight_title
+      highlight_text
+      highlight_text_en
+      optional_text
+      optional_text_en
+      category_list
+      responsibilities_text
+      responsibilities_en_text
+      requirements_text
+      requirements_en_text
+      join_recruiting_url
+      meta_title
+      meta_title_en
+      meta_description
+      meta_description_en
+      status
+      position
+    ].freeze
 
     before_action :set_filters
-    before_action :set_job, only: %i[edit update destroy]
+    before_action :set_job, only: %i[edit update destroy preview]
 
     def index
       prepare_index_state
@@ -24,11 +54,12 @@ module Backend
 
     def create
       @selected_job = Job.new(create_job_params)
+      publish_job(@selected_job) if publish_job_requested?
       @selected_job.position = next_position if @selected_job.position.blank?
       prepare_job_image(@selected_job)
 
       if save_job_with_upload(@selected_job)
-        redirect_to backend_jobs_path(job_id: @selected_job.id, status: @selected_job.status, editor_tab: editor_tab_param), notice: "Job wurde erstellt."
+        redirect_to backend_jobs_path(job_id: @selected_job.id, editor_tab: editor_tab_param), notice: "Job wurde erstellt."
       else
         flash.now[:alert] = "Job konnte nicht gespeichert werden."
         render_invalid_state(:unprocessable_entity)
@@ -38,10 +69,11 @@ module Backend
     def update
       @selected_job = @job
       @selected_job.assign_attributes(job_params) if params[:job].present?
+      publish_job(@selected_job) if publish_job_requested?
       prepare_job_image(@selected_job)
 
       if save_job_with_upload(@selected_job)
-        redirect_to backend_jobs_path(job_id: @selected_job.id, status: status_param(@status_filter), query: @query_filter.presence, editor_tab: editor_tab_param), notice: "Job wurde gespeichert."
+        redirect_to backend_jobs_path(job_id: @selected_job.id, editor_tab: editor_tab_param), notice: "Job wurde gespeichert."
       else
         flash.now[:alert] = "Job konnte nicht gespeichert werden."
         render_invalid_state(:unprocessable_entity)
@@ -51,6 +83,25 @@ module Backend
     def destroy
       @job.destroy!
       redirect_to backend_jobs_path(status: status_param(@status_filter), query: @query_filter.presence), notice: "Job wurde gelöscht."
+    end
+
+    def reorder
+      Job.reorder_by_ids!(reorder_job_ids)
+      head :ok
+    end
+
+    def preview
+      @selected_job = @job
+      @jobs = Job.published.with_contact_and_image.ordered.to_a
+      @job_overview_hero_image = "russ_live/jobs/overview-hero.jpg"
+      @job_preview = true
+      @page_key = :job
+      @page_meta = ::PagesController::PAGE_META.fetch(:job).merge(
+        title: @selected_job.localized_meta_title.presence || t("pages.job.meta.dynamic_title", title: @selected_job.localized_title),
+        description: @selected_job.localized_meta_description.presence || t("pages.job.meta.description")
+      )
+
+      render "pages/job"
     end
 
     private
@@ -88,31 +139,12 @@ module Backend
       end
 
       def job_params
-        params.require(:job).permit(
-          :contact_id,
-          :slug,
-          :title,
-          :badge,
-          :employment,
-          :location,
-          :intro,
-          :highlight_label,
-          :highlight_title,
-          :highlight_text,
-          :category_list,
-          :responsibilities_text,
-          :requirements_text,
-          :join_recruiting_url,
-          :meta_title,
-          :meta_description,
-          :status,
-          :position
-        )
+        params.require(:job).permit(*JOB_PARAMETER_KEYS)
       end
 
       def create_job_params
         params.fetch(:job, ActionController::Parameters.new)
-          .permit(:contact_id, :slug, :title, :badge, :employment, :location, :intro, :highlight_label, :highlight_title, :highlight_text, :category_list, :responsibilities_text, :requirements_text, :join_recruiting_url, :meta_title, :meta_description, :status, :position)
+          .permit(*JOB_PARAMETER_KEYS)
           .reverse_merge(title: fallback_job_title, location: "Stuttgart", status: "draft")
       end
 
@@ -122,6 +154,18 @@ module Backend
 
       def uploaded_image
         params.dig(:job_image, :file)
+      end
+
+      def reorder_job_ids
+        params.fetch(:job_ids, [])
+      end
+
+      def publish_job(job)
+        job.status = "published"
+      end
+
+      def publish_job_requested?
+        ActiveModel::Type::Boolean.new.cast(params[:publish_job])
       end
 
       def fallback_job_title

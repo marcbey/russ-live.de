@@ -1,7 +1,7 @@
 # Russ Live
 
-Rails-Anwendung für den Relaunch von `russ-live.de`. Das Projekt wurde mit Ruby
-`4.0.2` über `mise` und Rails `8.1.3` initialisiert.
+Rails-Anwendung für den Relaunch von `russ-live.de`. Die Anwendung verwendet Ruby
+`4.0.2` über `mise` und Rails `8.1.3.1`.
 
 ## Wichtig
 
@@ -117,10 +117,10 @@ Webgröße gebracht werden:
 mise exec -- bin/rails images:optimize_uploads
 ```
 
-Der Task verarbeitet Referenz-, Slider-, Job- und Ansprechpartnerbilder im
-Russ-Live-Storage.
+Der Task verarbeitet Referenz-, Slider-, Job-, Ansprechpartner- und Teambilder
+im Russ-Live-Storage.
 
-## Jobs und Ansprechpartner
+## Jobs, Ansprechpartner und Team
 
 Jobs und Ansprechpartner werden ebenfalls als Russ-eigene Domain-Daten in der
 `russ`-Datenbank gepflegt. Das Backend bietet dafür `/backend/jobs` und
@@ -135,6 +135,30 @@ Profil, den hinterlegten Ansprechpartner und den Bewerbungslink, falls eine
 JOIN-URL gepflegt ist. Job- und Ansprechpartnerbilder werden unter
 `storage/job_images` beziehungsweise `storage/contact_images` abgelegt und beim
 Upload ebenfalls als komprimierte WebP-Dateien gespeichert.
+
+Job-Inhalte sind zweisprachig pflegbar. Neben den deutschen Hauptfeldern gibt
+es im Job-Editor optionale englische Felder für Titel, Badge, Intro,
+optionalen Text, Tätigkeitsfeld und Anforderungen. Wenn ein englisches Feld leer
+bleibt, nutzt die englische öffentliche Seite automatisch den deutschen Inhalt
+als Fallback.
+
+Das Team wird unter `/backend/team_members` gepflegt. Dort können Name,
+deutsche und englische Rolle sowie das Porträt bearbeitet werden. In der
+ungefilterten Liste lässt sich die Reihenfolge per Drag-and-drop ändern; sie
+wird direkt für die öffentliche Teamseite übernommen. Teamfotos liegen unter
+`storage/team_member_images`.
+
+## Seitenpflege
+
+Die redaktionellen Seiten `Kontakt`, `Impressum`, `Datenschutz`, `AGB` und
+`Jugendschutz` werden im Backend unter `/backend/pages` gepflegt. Jede Seite
+gibt es getrennt für Deutsch und Englisch. `Speichern` legt Änderungen als
+Entwurf ab; erst `Veröffentlichen` übernimmt sie auf die öffentliche Seite.
+Über `Vorschau anzeigen` kann der aktuelle Entwurf vor dem Veröffentlichen
+kontrolliert werden.
+
+Die Kontaktseite verwaltet zunächst nur Titel und einen Kontakttext als ein
+HTML-Feld. Das Kontaktformular selbst bleibt vorerst statisch.
 
 ## Mehrsprachigkeit
 
