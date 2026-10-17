@@ -382,3 +382,15 @@ Nach jedem Image-Build ist der HTTP-Test verpflichtend:
 `APP_IMAGE=<gebautes-image> mise exec -- ruby test/ops/nginx_runtime_check.rb`.
 Er startet ausschließlich isolierte Testcontainer mit synthetischen Dateien und
 prüft Weiterleitungen, Zugriffsschutz sowie beide Medien-Signaturverfahren.
+
+Alle Deployments beider Projekte und Umgebungen müssen dieselbe Sperre auf dem
+Hetzner-Host halten. Der Wrapper `mise exec -- script/ops/deploy_with_lock --host
+46.225.224.194 --key ~/.ssh/stgt-live-hetzner-github -- BEFEHL` hält sie während
+des gesamten Befehls. Geht die SSH-Verbindung verloren, wird der verwaltete
+Prozess samt Unterprozessen beendet. Gemeinsame Proxy-Neustarts gehören in einen
+separat koordinierten Host-Eingriff und nicht in einen automatischen Deploy-Retry.
+
+Die tatsächlichen Staging-Rechte werden nach Einrichtung und Datenübernahme mit
+`bin/rails runner script/ops/check_staging_acl.rb` im jeweiligen Staging-Container
+geprüft. Schreibprüfungen verwenden ausschließlich `WHERE FALSE` und Rollback;
+Produktionsdatenbanken werden nur auf die erwartete Verbindungsverweigerung geprüft.

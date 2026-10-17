@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+require "optparse"
+require_relative "deploy_lock"
+require_relative "managed_command"
+
+options = { timeout: 900 }
+separator = ARGV.index("--")
+abort "Aufruf: mise exec -- script/ops/deploy_with_lock --host HOST --key PATH [--timeout SEK] -- BEFEHL" unless separator
+flags = ARGV.take(separator)
+command = ARGV.drop(separator + 1)
+OptionParser.new do |parser|
+  parser.on("--host HOST") { |value| options[:host] = value }
+  parser.on("--key PATH") { |value| options[:key_path] = value }
+  parser.on("--timeout SECONDS", Integer) { |value| options[:timeout] = value }
+end.parse!(flags)
+abort "Host, Schlüssel und Befehl fehlen" if !options[:host] || !options[:key_path] || command.empty? || flags.any?
+
+begin
+  status = Ops::DeployLock.with_lock(**options) { Ops::ManagedCommand.run(command) }
+  exit(status.exitstatus || 128 + status.termsig)
+rescue Ops::DeployLock::Error => error
+  warn error.message
+  exit 75
+end
