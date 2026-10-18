@@ -244,6 +244,12 @@ verbleibende Detektorheuristik bei geschlossenen Referenzkarten.
 
 ## Deployment und Betrieb
 
+Die gemeinsame Architektur und die verbleibenden Betriebsnachweise stehen in
+[INFRA.md im Stuttgart-Repository](https://github.com/marcbey/stuttgart-live.de/blob/main/INFRA.md).
+Dort liegen auch das
+[Betriebsrunbook für Domainwechsel und Host-Eingriffe](https://github.com/marcbey/stuttgart-live.de/blob/main/docs/operations/domainumzug-und-staging.md)
+und die zentrale Terraform-/Ansible-Konfiguration.
+
 Production läuft auf demselben Hetzner-Host wie `stuttgart-live.de` und wird
 ebenfalls mit Kamal ausgerollt. Die öffentliche Domain
 `https://russ-live.de` zeigt auf `46.225.224.194`; `kamal-proxy` routet anhand
@@ -256,12 +262,10 @@ und Puma intern auf Port `3000`. `nginx` liefert Assets und signierte
 `/media/...`-Dateien direkt aus `/rails/public` beziehungsweise
 `/rails/storage` aus.
 
-Das bisherige Hetzner-Produktionsziel `https://russ-live.schopp3r.de/` behält bis
-zur Domainumschaltung `STAGING_NOINDEX=true`. Die getrennte Staging-Umgebung heißt
-`https://staging.russ-live.de/` und erzwingt zusätzlich Basic Auth.
-`nginx` setzt dadurch global den Header `X-Robots-Tag: noindex, nofollow`,
-auch für Assets, Media-Dateien und den Healthcheck `/up`. `robots.txt` wird
-dafür bewusst nicht gesperrt, damit Suchmaschinen das `noindex` crawlen können.
+Die getrennte Staging-Umgebung `https://staging.russ-live.de/` erzwingt
+Basic Auth und `STAGING_NOINDEX=true`. nginx setzt dort global den Header
+`X-Robots-Tag: noindex, nofollow`, auch für Assets, Media-Dateien und den
+Healthcheck `/up`. Produktion unter der neuen Hauptdomain wird indexiert.
 
 Für manuelle Produktions-Kommandos brauchst du lokal:
 
@@ -279,11 +283,21 @@ Vor manuellen Kamal-Eingriffen sollte immer dieser Check laufen:
 mise exec -- bin/hetzner-check
 ```
 
-Reguläre Produktionsfreigabe nach Staging-Abnahme:
+Für die reguläre Freigabe den nach Staging automatisch gestarteten
+[`Deploy Production`](https://github.com/marcbey/russ-live.de/actions/workflows/deploy-production.yml)-Lauf
+öffnen, die Versionszusammenfassung prüfen und `production` freigeben. Ein
+manueller Rollback wird auf `main` mit der Run-ID des gewünschten erfolgreichen
+[`Deploy Staging`](https://github.com/marcbey/russ-live.de/actions/workflows/deploy-staging.yml)-Laufs gestartet:
 
 ```bash
-gh workflow run deploy-production.yml -f staging_run_id=RUN_ID
+gh workflow run deploy-production.yml --ref main -f staging_run_id=RUN_ID -f mode=rollback
 ```
+
+Alternativ in GitHub Actions **Run workflow** öffnen, Branch `main`,
+`staging_run_id` und Modus `rollback` wählen. Auch dieser Lauf zeigt zuerst die
+Versionen und wartet danach auf dieselbe Produktionsfreigabe. Für eine bewusst
+manuell gestartete reguläre Freigabe `mode=promote` verwenden; dafür gelten die
+Aktualitätsprüfungen des automatischen Ablaufs.
 
 Direkte lokale Deploys ersetzen den Freigabenachweis nicht. Das initiale
 Staging-Bootstrap wird gesondert mit festem Image-Digest und gemeinsamer
@@ -298,14 +312,38 @@ mise exec -- bin/kamal app logs -f -d hetzner -r web
 mise exec -- bin/kamal app logs -f -d hetzner -r job
 ```
 
+### CI, Staging und Produktionsfreigabe über GitHub
+
 Pull Requests und `main` durchlaufen die vollständige CI mit `mise exec -- bin/ci`.
 Ein erfolgreicher Main-Push startet `Deploy Staging`: derselbe geprüfte Commit wird
 einmal gebaut, per Digest mit realen HTTP-Tests geprüft und auf Staging ausgerollt.
-Produktion wird anschließend ausschließlich manuell über `Deploy Production` mit
-der `staging_run_id` freigegeben. Das geprüfte Image wird ohne Neubau übernommen;
-Registry-Digest, laufende Container und der tatsächlich produktive Stuttgart-Peer
-müssen zum Nachweis passen. Bei Fehlern gibt es keinen `latest`-Fallback und keinen
-automatischen Neustart des gemeinsamen Proxys.
+Ein erfolgreicher `Deploy Staging` auf `main` startet automatisch
+`Deploy Production`. Die Vorbereitung prüft den Staging-Nachweis und zeigt in
+der Laufzusammenfassung die aktuelle Produktionsversion, den Kandidaten, den
+Versionsvergleich und die zugehörigen Pull Requests. Danach wartet der
+Produktionsjob auf **Review deployments** für das Environment `production`.
+Marc (`marcbey`) oder Katharina (`kasch0`) kann die Freigabe erteilen; eine der
+beiden Freigaben reicht aus. Beide dürfen auch einen selbst gestarteten Rollback
+freigeben. Für diesen Ablauf brauchen sie Repository-Schreibzugriff und müssen
+als erforderliche Reviewer im Environment eingetragen sein. Administratoren
+dürfen den Schutz nicht umgehen. Das Environment beschränkt Deployments auf
+`main`.
+
+Ändert sich während der Wartezeit der Produktionsstand, muss die Freigabe mit
+aktuellem Versionsvergleich neu vorbereitet werden.
+
+Neuere erfolgreiche Staging-Versionen ersetzen ältere noch wartende automatische
+Produktionsfreigaben. Laufende Deployments werden dabei nicht abgebrochen.
+Wartende Freigaben blockieren weder Staging noch Stuttgart. Vor dem eigentlichen
+Deploy prüft der Ablauf erneut, ob der freigegebene Stand weiterhin aktuell ist;
+ein inzwischen überholter normaler Freigabelauf wird abgewiesen.
+
+Vorbereitung und Deployment prüfen Repository, Main-CI, Artefakt, Konfiguration,
+Registry-Digest und den tatsächlich produktiven Stuttgart-Peer. Das geprüfte
+Image wird ohne Neubau mit dem bei der Vorbereitung festgelegten Kontrollcode
+übernommen. Nach dem Kamal-Pull und nach dem Start müssen Image-Digest und
+laufende Container zum Nachweis passen. Bei Fehlern gibt es keinen
+`latest`-Fallback und keinen automatischen Neustart des gemeinsamen Proxys.
 
 Im GitHub-Environment `production` bleiben diese Secrets erforderlich:
 
@@ -343,9 +381,9 @@ Das Docker-Volume für Active Storage ist bewusst gemeinsam:
 - `app/assets/images/russ_live`: in Rails übernommene Logos, Keyvisuals, Team-, Job- und Referenzbilder
 - `app/assets/fonts/russ_live`: lokal ausgelieferte Neue-Rational-Webfonts
 
-## Getrennte Umgebungen vorbereiten
+## Getrennte Umgebungen betreiben
 
-Das neue Kamal-Ziel `staging` verwendet weiterhin `RAILS_ENV=production`, aber
+Das Kamal-Ziel `staging` verwendet weiterhin `RAILS_ENV=production`, aber
 `APP_ENVIRONMENT=staging`. Datenbanken, PostgreSQL-Rollen, Credentials und das
 Medienvolume sind von Produktion getrennt. Beide Staging-Apps teilen sich nur
 `stuttgart_live_de_staging_storage`; Russ liest ausschließlich die
@@ -361,9 +399,9 @@ Das Beispiel `.kamal/secrets.staging.example` liest ausschließlich ausdrücklic
 bereitgestellte Staging-Werte. `bin/hetzner-check --destination staging` lädt
 keine Produktions-`.env` und lehnt `.kamal/secrets-common` für Staging ab. Der bisherige Check verwendet `--destination hetzner`.
 
-Die Staging-Profile sind erst nach Einrichtung der Datenbanken, bereinigten Daten,
-Zugriffsschutz und Deployment-Prüfungen betriebsbereit. Der vollständige Ablauf
-steht im freigegebenen Umzugsplan; vor Abschluss dieser Vorbereitung nicht deployen.
+Die Staging-Umgebungen sind eingerichtet. Bei einem Neuaufbau müssen zuerst
+Datenbanken, bereinigte Daten, Zugriffsschutz und Deployment-Prüfungen vollständig
+vorliegen; der Bereitstellungsablauf steht im gemeinsamen Betriebsrunbook.
 
 Staging versendet E-Mails ausschließlich an das gemeinsame interne Mailpit-Postfach.
 Die Oberfläche ist auf Hetzner nur über `127.0.0.1:8025` erreichbar. Für den lokalen
@@ -440,7 +478,10 @@ benötigt deshalb eine laufende Docker-Engine.
 ### Nachweis und gekoppelte Freigabe
 
 Das GitHub-Environment `staging` verwendet eigene Anwendungsschlüssel und
-Datenbankpasswörter. Es gibt keinen Rückfall auf unpräfixierte Production-Secrets:
+Datenbankpasswörter. Die Produktionsvorbereitung nutzt daraus nur den SSH-Key zum
+Lesen der laufenden Versionen und zum geordneten Ersetzen wartender Freigaben;
+sie erzeugt kein Staging-Deployment und erhält keine Produktions-Secrets.
+Staging-Deployments verwenden ausschließlich diese präfixierten Secrets:
 
 - `STAGING_RAILS_MASTER_KEY` und `STAGING_PEER_RAILS_MASTER_KEY`
 - `STAGING_RUSS_LIVE_PRIMARY_DB_PASSWORD` und `STAGING_RUSS_LIVE_OPERATIONAL_DB_PASSWORD`
@@ -473,10 +514,28 @@ Abbruch; der Prüfclient protokolliert die Phase und die Fehlerklasse ohne Nutzd
 
 Der 14 Tage aufbewahrte Nachweis `staging-release` nennt den gemeinsam getesteten
 Staging-Peer und die kompatiblen Produktions-Commits. Diese müssen nicht identisch
-sein; so bleiben aufeinanderfolgende Freigaben beider Projekte möglich. Andere
-Peer-Versionen, abgelaufene oder ersetzte Artefakte benötigen einen neuen Nachweis.
+sein; so bleiben aufeinanderfolgende Freigaben beider Projekte möglich. Fehlende,
+abgelaufene oder nachträglich ersetzte Artefakte werden abgewiesen. Eine reguläre
+Freigabe (`promote`) verlangt zusätzlich den neuesten erfolgreichen Staging-Lauf
+und dessen weiterhin laufendes Staging-Image. Ein ausdrücklich gewählter
+`rollback` darf einen älteren gültigen Nachweis verwenden und überspringt nur
+diese beiden Aktualitätsprüfungen. Image-Digest, Konfiguration und der aktuelle
+Produktions-Peer bleiben auch beim Rollback geprüft. Der gewählte Code muss mit
+dem aktuellen Datenbankschema kompatibel sein; Migrationen werden nicht
+rückgängig gemacht. Bei einem anderen produktiven Peer ist ein neuer
+Staging-Nachweis erforderlich.
 Schemamigrationen benötigen weiterhin eine Prüfung auf Verträglichkeit mit
-laufenden Prozessen. Eine Code-Rückkehr setzt keine Datenbank oder Medien zurück.
+laufenden Prozessen.
+
+Für die Rückkehr zu einem älteren Code-Stand in `Deploy Production` auf `main`
+den Modus `rollback` und einen weiterhin gültigen Staging-Lauf für die gewünschte
+Version auswählen; das Kommando steht oben unter „Deployment und Betrieb“.
+Vorher prüfen, dass dessen Code mit dem inzwischen vorhandenen Datenbankschema
+arbeitet und der aktuelle Produktions-Peer im Nachweis enthalten ist. Die
+Freigabe durch Marc oder Katharina bleibt erforderlich. Bei abweichendem Schema,
+geändertem Produktions-Peer oder abgelaufenem Artefakt zuerst einen neuen
+konkreten Staging-Nachweis erstellen. Ein Code-Rollback setzt weder Datenbank
+noch Uploads zurück.
 
 Interne Stuttgart-Verweise, darunter Passwort-Reset, Veranstaltungsdetails und
 Highlights, bleiben aus Russ-Staging innerhalb des Staging-Paars. Produktive

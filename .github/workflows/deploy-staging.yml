@@ -9,7 +9,7 @@ permissions:
   actions: read
   packages: write
 concurrency:
-  group: live-deploy-${{ github.repository }}
+  group: live-staging-${{ github.repository }}
   cancel-in-progress: false
 jobs:
   deploy:

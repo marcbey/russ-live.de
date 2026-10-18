@@ -1,6 +1,7 @@
 require "test_helper"
 require "open3"
 require "timeout"
+require_relative "../../script/ops/production_approval"
 
 lock_file = File.expand_path("../../script/ops/deploy_lock.rb", __dir__)
 require lock_file if File.file?(lock_file)
@@ -135,6 +136,30 @@ class DeployLockTest < ActiveSupport::TestCase
     assert_equal 75, status.exitstatus, output
     sleep 0.6
     refute File.exist?(marker), "Managed subprocess survived the lost host lock"
+  end
+
+  test "unconfirmed approval cancellation keeps the host fenced against an approved deployment" do
+    repository = "marcbey/stuttgart-live.de"
+    candidate = { "id" => 10, "event" => "workflow_run", "status" => "waiting", "head_branch" => "main",
+      "path" => ".github/workflows/deploy-production.yml", "repository" => { "full_name" => repository }, "head_repository" => { "full_name" => repository } }
+    api = Object.new
+    api.define_singleton_method(:github_json) do |path|
+      path.include?("/workflows/") ? { "workflow_runs" => [ candidate.deep_dup ] } : [ { "environment" => { "name" => "production" } } ]
+    end
+    api.define_singleton_method(:run) { |*| candidate.deep_dup }
+    api.define_singleton_method(:capture) { |*| candidate["status"] = "in_progress" }
+    ticks = [ 0, 61 ]
+    approval = Ops::ProductionApproval.new(repository:, api:, clock: -> { ticks.shift || 61 }, sleeper: ->(_) { })
+    with_lock_env do
+      assert_raises(Ops::ReleaseSupport::Error) do
+        Ops::DeployLock.with_lock(host: "test.invalid", key_path: @key) { approval.supersede_waiting!(current_run_id: 20) }
+      end
+      assert File.directory?("#{@env.fetch('LOCK_TEST_FILE')}.fence")
+      assert_raises(Ops::DeployLock::PendingOperation) do
+        Ops::DeployLock.with_lock(host: "test.invalid", key_path: @key, timeout: 0) { flunk "Unconfirmed cancellation allowed deployment" }
+      end
+      recover_fixture
+    end
   end
 
   private
