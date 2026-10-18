@@ -2,6 +2,7 @@
 
 ## Agent Rules
 
+- Die gemeinsame Infrastruktur ist in [INFRA.md im Stuttgart-Repository](https://github.com/marcbey/stuttgart-live.de/blob/main/INFRA.md) dokumentiert. Host-, Datenbank-, DNS- und Refresh-Eingriffe müssen zusätzlich dem dort verlinkten Betriebsrunbook folgen. Historische Pläne ersetzen keine aktuelle Betriebsanleitung.
 - Der Deployment-Ablauf steht in der README unter „CI, Staging und Produktionsfreigabe über GitHub“ und ist für Agenten verbindlich: Änderungen laufen über PR, Main-CI und `Deploy Staging`; Produktion verwendet ausschließlich das dabei geprüfte Image und den gültigen Freigabenachweis.
 - Reguläre Produktionsfreigaben werden nach erfolgreichem Staging automatisch vorbereitet. Vor der Freigabe müssen Commit, Änderungen seit dem Produktionsstand und die zugehörige Staging-Seite geprüft werden. Freigaben erfolgen über das GitHub-Environment `production` durch `marcbey` oder Katharina Schopper (`kasch0`); bestehende Freigaberegeln dürfen nicht umgangen werden.
 - Ein manueller Rollback startet `Deploy Production` auf `main` mit `mode=rollback` und der `staging_run_id` des gewünschten erfolgreichen Staging-Laufs. Er benötigt ebenfalls die Produktionsfreigabe und gültige Image-/Kompatibilitätsnachweise. Die Aufbewahrung beträgt derzeit 14 Tage; Datenbankmigrationen und Inhalte werden nicht zurückgesetzt.

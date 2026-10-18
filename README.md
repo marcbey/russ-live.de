@@ -244,6 +244,12 @@ verbleibende Detektorheuristik bei geschlossenen Referenzkarten.
 
 ## Deployment und Betrieb
 
+Die gemeinsame Architektur und die verbleibenden Betriebsnachweise stehen in
+[INFRA.md im Stuttgart-Repository](https://github.com/marcbey/stuttgart-live.de/blob/main/INFRA.md).
+Dort liegen auch das
+[Betriebsrunbook für Domainwechsel und Host-Eingriffe](https://github.com/marcbey/stuttgart-live.de/blob/main/docs/operations/domainumzug-und-staging.md)
+und die zentrale Terraform-/Ansible-Konfiguration.
+
 Production läuft auf demselben Hetzner-Host wie `stuttgart-live.de` und wird
 ebenfalls mit Kamal ausgerollt. Die öffentliche Domain
 `https://russ-live.de` zeigt auf `46.225.224.194`; `kamal-proxy` routet anhand
@@ -256,12 +262,10 @@ und Puma intern auf Port `3000`. `nginx` liefert Assets und signierte
 `/media/...`-Dateien direkt aus `/rails/public` beziehungsweise
 `/rails/storage` aus.
 
-Das bisherige Hetzner-Produktionsziel `https://russ-live.schopp3r.de/` behält bis
-zur Domainumschaltung `STAGING_NOINDEX=true`. Die getrennte Staging-Umgebung heißt
-`https://staging.russ-live.de/` und erzwingt zusätzlich Basic Auth.
-`nginx` setzt dadurch global den Header `X-Robots-Tag: noindex, nofollow`,
-auch für Assets, Media-Dateien und den Healthcheck `/up`. `robots.txt` wird
-dafür bewusst nicht gesperrt, damit Suchmaschinen das `noindex` crawlen können.
+Die getrennte Staging-Umgebung `https://staging.russ-live.de/` erzwingt
+Basic Auth und `STAGING_NOINDEX=true`. nginx setzt dort global den Header
+`X-Robots-Tag: noindex, nofollow`, auch für Assets, Media-Dateien und den
+Healthcheck `/up`. Produktion unter der neuen Hauptdomain wird indexiert.
 
 Für manuelle Produktions-Kommandos brauchst du lokal:
 
@@ -377,9 +381,9 @@ Das Docker-Volume für Active Storage ist bewusst gemeinsam:
 - `app/assets/images/russ_live`: in Rails übernommene Logos, Keyvisuals, Team-, Job- und Referenzbilder
 - `app/assets/fonts/russ_live`: lokal ausgelieferte Neue-Rational-Webfonts
 
-## Getrennte Umgebungen vorbereiten
+## Getrennte Umgebungen betreiben
 
-Das neue Kamal-Ziel `staging` verwendet weiterhin `RAILS_ENV=production`, aber
+Das Kamal-Ziel `staging` verwendet weiterhin `RAILS_ENV=production`, aber
 `APP_ENVIRONMENT=staging`. Datenbanken, PostgreSQL-Rollen, Credentials und das
 Medienvolume sind von Produktion getrennt. Beide Staging-Apps teilen sich nur
 `stuttgart_live_de_staging_storage`; Russ liest ausschließlich die
@@ -395,9 +399,9 @@ Das Beispiel `.kamal/secrets.staging.example` liest ausschließlich ausdrücklic
 bereitgestellte Staging-Werte. `bin/hetzner-check --destination staging` lädt
 keine Produktions-`.env` und lehnt `.kamal/secrets-common` für Staging ab. Der bisherige Check verwendet `--destination hetzner`.
 
-Die Staging-Profile sind erst nach Einrichtung der Datenbanken, bereinigten Daten,
-Zugriffsschutz und Deployment-Prüfungen betriebsbereit. Der vollständige Ablauf
-steht im freigegebenen Umzugsplan; vor Abschluss dieser Vorbereitung nicht deployen.
+Die Staging-Umgebungen sind eingerichtet. Bei einem Neuaufbau müssen zuerst
+Datenbanken, bereinigte Daten, Zugriffsschutz und Deployment-Prüfungen vollständig
+vorliegen; der Bereitstellungsablauf steht im gemeinsamen Betriebsrunbook.
 
 Staging versendet E-Mails ausschließlich an das gemeinsame interne Mailpit-Postfach.
 Die Oberfläche ist auf Hetzner nur über `127.0.0.1:8025` erreichbar. Für den lokalen
