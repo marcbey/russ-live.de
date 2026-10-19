@@ -38,6 +38,11 @@ http {
 ${APP_ALLOWED_HOST_MAP}
   }
 
+  map $host $homepage_redirect {
+    default 0;
+${HOMEPAGE_REDIRECT_MAP}
+  }
+
   map $host $canonical_redirect {
     default 0;
 ${CANONICAL_REDIRECT_MAP}
@@ -89,6 +94,7 @@ ${CANONICAL_REDIRECT_MAP}
     ${STAGING_AUTH_CONFIG}
 
     if ($reject_app_host = 1) { return 421; }
+    if ($homepage_redirect = 1) { return 301 https://${CANONICAL_HOST}/; }
     if ($perform_canonical_redirect = 1) { return 308 https://${CANONICAL_HOST}$request_uri; }
 
     location = /up {

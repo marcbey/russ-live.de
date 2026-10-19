@@ -43,6 +43,25 @@ for host in "${allowed_hosts[@]}"; do
 done
 [[ "$canonical_present" == true ]] || fail APP_ALLOWED_HOSTS
 
+# These former website hosts always lead to the homepage, including /up.
+export HOMEPAGE_REDIRECT_MAP=''
+homepage_hosts="${HOMEPAGE_REDIRECT_HOSTS:-}"
+if [[ -n "$homepage_hosts" ]]; then
+  [[ "$APP_ENVIRONMENT" == production && "$redirects" == true ]] || fail HOMEPAGE_REDIRECT_HOSTS
+  [[ "$homepage_hosts" =~ ^[a-z0-9.,\ -]+$ ]] || fail HOMEPAGE_REDIRECT_HOSTS
+  IFS=', ' read -ra homepage_redirect_hosts <<< "$homepage_hosts"
+  for host in "${homepage_redirect_hosts[@]}"; do
+    valid_host "$host" || fail HOMEPAGE_REDIRECT_HOSTS
+    [[ "$host" != "$APP_HOST" ]] || fail HOMEPAGE_REDIRECT_HOSTS
+    found=false
+    for allowed in "${allowed_hosts[@]}"; do
+      [[ "$host" != "$allowed" ]] || found=true
+    done
+    [[ "$found" == true ]] || fail HOMEPAGE_REDIRECT_HOSTS
+    HOMEPAGE_REDIRECT_MAP+="    $host 1;"$'\n'
+  done
+fi
+
 export STAGING_AUTH_CONFIG=''
 export STAGING_NOINDEX_HEADER=''
 export STAGING_PRIVATE_CACHE_HEADER=''
@@ -65,6 +84,6 @@ fi
 
 mkdir -p /tmp/nginx/{client_body,proxy,fastcgi,uwsgi,scgi,denied-media}
 app_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-envsubst '${MEDIA_PROXY_SECRET} ${STAGING_NOINDEX_HEADER} ${STAGING_AUTH_CONFIG} ${STAGING_PRIVATE_CACHE_HEADER} ${STATIC_EXPIRES} ${STATIC_CACHE_CONTROL_HEADER} ${CANONICAL_HOST} ${APP_ALLOWED_HOST_MAP} ${CANONICAL_REDIRECT_MAP}' \
+envsubst '${MEDIA_PROXY_SECRET} ${STAGING_NOINDEX_HEADER} ${STAGING_AUTH_CONFIG} ${STAGING_PRIVATE_CACHE_HEADER} ${STATIC_EXPIRES} ${STATIC_CACHE_CONTROL_HEADER} ${CANONICAL_HOST} ${APP_ALLOWED_HOST_MAP} ${CANONICAL_REDIRECT_MAP} ${HOMEPAGE_REDIRECT_MAP}' \
   < "$app_root/config/nginx.conf.template" > /tmp/nginx.conf
 chmod 600 /tmp/nginx.conf

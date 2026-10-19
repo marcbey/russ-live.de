@@ -58,6 +58,7 @@ env:
   clear:
     APP_ENVIRONMENT: production
     APP_ALLOWED_HOSTS: <%= HetznerDeployConfig.production_hosts.join(",") %>
+    HOMEPAGE_REDIRECT_HOSTS: <%= HetznerDeployConfig.production_homepage_redirect_hosts.join(",").to_json %>
     CANONICAL_REDIRECT_ENABLED: "<%= HetznerDeployConfig.production_redirect? %>"
     STORAGE_VOLUME: stuttgart_live_de_storage
     APP_HOST: <%= HetznerDeployConfig.app_host %>
