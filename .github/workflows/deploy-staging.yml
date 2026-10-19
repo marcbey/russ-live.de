@@ -7,7 +7,7 @@ on:
 permissions:
   contents: read
   actions: read
-  packages: write
+  packages: read
 concurrency:
   group: live-staging-${{ github.repository }}
   cancel-in-progress: false
@@ -22,6 +22,7 @@ jobs:
     environment: staging
     timeout-minutes: 60
     env:
+      BUNDLE_PATH: vendor/bundle
       GH_TOKEN: ${{ github.token }}
       RELEASE_IMAGE: ghcr.io/marcbey/russ-live-de
     steps:
@@ -40,6 +41,11 @@ jobs:
           ref: ${{ github.event.workflow_run.head_sha }}
           persist-credentials: false
           fetch-depth: 0
+      - name: Restore installed gems
+        uses: actions/cache@v5
+        with:
+          path: vendor/bundle
+          key: gems-v1-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.ruby-version', 'Gemfile.lock') }}
       - name: Install source runtime and dependencies
         run: |
           mise install
@@ -50,20 +56,23 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ github.token }}
-      - name: Build the image once with its commit tag
-        id: build
-        uses: docker/build-push-action@v7
+      - name: Download the image identity from the validated CI run
+        uses: actions/download-artifact@v8
         with:
-          context: .
-          push: true
-          platforms: linux/amd64
-          tags: ghcr.io/marcbey/russ-live-de:${{ steps.source.outputs.commit }}
-          labels: |
-            org.opencontainers.image.source=https://github.com/${{ github.repository }}
-            org.opencontainers.image.revision=${{ steps.source.outputs.commit }}
+          name: main-image
+          path: ${{ runner.temp }}/main-image
+          github-token: ${{ github.token }}
+          run-id: ${{ steps.source.outputs.ci_run_id }}
+      - name: Bind the image digest to the successful source commit
+        id: image
+        env:
+          CI_IMAGE_PATH: ${{ runner.temp }}/main-image/main-image.json
+          RELEASE_COMMIT: ${{ steps.source.outputs.commit }}
+          RELEASE_CI_RUN_ID: ${{ steps.source.outputs.ci_run_id }}
+        run: mise exec -- ruby script/ops/ci_image.rb
       - name: Mandatory HTTP runtime checks before staging secrets
         env:
-          RELEASE_DIGEST: ${{ steps.build.outputs.digest }}
+          RELEASE_DIGEST: ${{ steps.image.outputs.digest }}
         run: |
           docker pull "${RELEASE_IMAGE}@${RELEASE_DIGEST}"
           APP_IMAGE="${RELEASE_IMAGE}@${RELEASE_DIGEST}" mise exec -- ruby test/ops/nginx_runtime_check.rb
@@ -71,7 +80,7 @@ jobs:
         env:
           RELEASE_COMMIT: ${{ steps.source.outputs.commit }}
           RELEASE_CI_RUN_ID: ${{ steps.source.outputs.ci_run_id }}
-          RELEASE_DIGEST: ${{ steps.build.outputs.digest }}
+          RELEASE_DIGEST: ${{ steps.image.outputs.digest }}
           STAGING_RAILS_MASTER_KEY: ${{ secrets.STAGING_RAILS_MASTER_KEY }}
           STAGING_PEER_RAILS_MASTER_KEY: ${{ secrets.STAGING_PEER_RAILS_MASTER_KEY }}
           STAGING_MEDIA_PROXY_SECRET: ${{ secrets.STAGING_MEDIA_PROXY_SECRET }}

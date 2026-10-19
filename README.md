@@ -339,8 +339,33 @@ Nicht-Web-Einträge bleiben einschließlich Werten, Prioritäten und TTLs erhalt
 ## CI, Staging und Produktionsfreigabe über GitHub
 
 Pull Requests und `main` durchlaufen die vollständige CI mit `mise exec -- bin/ci`.
-Ein erfolgreicher Main-Push startet `Deploy Staging`: derselbe geprüfte Commit wird
-einmal gebaut, per Digest mit realen HTTP-Tests geprüft und auf Staging ausgerollt.
+Bei einem Main-Push baut ein zweiter Job parallel das Image mit dem SHA-Tag des
+Commits und hält dessen Digest im Artefakt `main-image` fest. Erst nach grünen
+Prüfungen und erfolgreichem Build startet `Deploy Staging`. Der Workflow übernimmt
+das Image aus demselben geprüften CI-Lauf, prüft den Nachweis gegen Repository,
+Commit und Run-ID und führt die realen HTTP-Tests vor Bereitstellung der
+Staging-Secrets aus. Pull Requests veröffentlichen kein Image. Ein fehlendes
+oder ungültiges Artefakt führt zum Abbruch; es gibt keinen Ersatz-Build in Staging.
+
+Installierte Gems werden in CI, Staging und beim Produktionsdeploy anhand von
+Betriebssystem, Architektur, Ruby-Version und `Gemfile.lock` wiederverwendet.
+Produktion liest den Cache passend zum festgelegten Kontrollcode und führt
+weiterhin `bundle install` aus. Docker speichert zusätzlich die Build-Layer im
+eigenen Russ-Cache. Ein fehlender Cache führt zur regulären Installation oder
+zum vollständigen Build. Der erste Lauf füllt die Caches; Zeitvergleiche sind
+erst bei Folgeläufen mit unveränderten Abhängigkeiten aussagekräftig.
+
+Ältere CI-Läufe enthalten noch kein `main-image`. Ein daraus gestarteter
+Staging-Deploy bricht ab; ein neuer Main-Push muss zuerst einen erfolgreichen
+CI-Lauf mit Image-Artefakt erzeugen.
+
+Jeder neue Web- und Job-Container hält den freigegebenen Digest im Label
+`live.release_digest` fest. Das ermöglicht eindeutige Nachweise auch bei
+wiederholten Builds desselben Commits mit identischen Image-Bytes und mehreren
+Registry-Digests. Das Label muss weiterhin zur laufenden Image-ID und den lokalen
+Image-Digests passen. Ältere Container ohne Label werden nur bei genau einem
+Digest akzeptiert; mehrdeutige Altcontainer benötigen einen regulären neuen Deploy.
+
 Ein erfolgreicher `Deploy Staging` auf `main` startet automatisch
 `Deploy Production`. Die Vorbereitung prüft den Staging-Nachweis und zeigt in
 der Laufzusammenfassung die aktuelle Produktionsversion, den Kandidaten, den
@@ -368,6 +393,17 @@ Image wird ohne Neubau mit dem bei der Vorbereitung festgelegten Kontrollcode
 übernommen. Nach dem Kamal-Pull und nach dem Start müssen Image-Digest und
 laufende Container zum Nachweis passen. Bei Fehlern gibt es keinen
 `latest`-Fallback und keinen automatischen Neustart des gemeinsamen Proxys.
+
+Die Produktionsjobs verwenden die vorhandene Buildx-CLI für Registry-Prüfungen,
+ohne einen zusätzlichen BuildKit-Container zu starten. Die abschließende Prüfung
+aller App-Rollen bündelt die Docker-Abfragen in einer SSH-Verbindung und prüft
+weiterhin Image-ID, Digest-Label sowie fehlende oder doppelte Rollen. Auch die
+Prüfungen nach der Freigabe bleiben erhalten.
+
+Im isolierten Kompatibilitätstest werden beide App-Images und PostgreSQL in
+einem gemeinsamen Archiv übertragen. Dadurch werden gemeinsame Image-Layer nur
+einmal kopiert. Jedes geladene Image wird weiterhin gegen seine ursprüngliche
+Laufzeitidentität geprüft; der Prüfserver bleibt vom externen Netzwerk getrennt.
 
 Im GitHub-Environment `production` bleiben diese Secrets erforderlich:
 

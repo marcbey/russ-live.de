@@ -12,6 +12,7 @@ module Ops
         Array(image_metadata["digests"]).include?("#{match[1]}@#{expected_digest}")
       if container_metadata
         valid &&= container_metadata["image"] == expected_image && container_metadata["id"] == image_metadata["id"]
+        valid &&= container_metadata["digest"] == expected_digest unless container_metadata["digest"].to_s.empty?
       end
       raise Error, "Lokales oder laufendes Image entspricht nicht dem geprüften Digest" unless valid
       true
@@ -20,6 +21,7 @@ module Ops
 
   class DeploymentRemote
     PROJECTS = { "stuttgart_live_de" => "ghcr.io/marcbey/stuttgart-live-de", "russ_live_de" => "ghcr.io/marcbey/russ-live-de" }.freeze
+    IMAGE_FORMAT = '{"id":{{json .Id}},"digests":{{json .RepoDigests}}}'.freeze
 
     def initialize(key_path:, host: "46.225.224.194")
       raise ReleaseSupport::Error, "Unbekannter Deployment-Host" unless host == "46.225.224.194"
@@ -32,8 +34,8 @@ module Ops
     end
 
     def image_metadata(reference)
-      raise ReleaseSupport::Error, "Unbekannte Image-Referenz" unless reference.match?(/\Aghcr\.io\/marcbey\/(?:stuttgart|russ)-live-de:[a-f0-9]{40}\z/)
-      JSON.parse(capture("docker image inspect --format #{q('{"id":{{json .Id}},"digests":{{json .RepoDigests}}}')} #{q(reference)}"))
+      validate_image_reference!(reference)
+      JSON.parse(capture("docker image inspect --format #{q(IMAGE_FORMAT)} #{q(reference)}"))
     end
 
     def running(project:, destination:)
@@ -41,28 +43,30 @@ module Ops
       ids = capture("docker ps -q --filter label=service=#{project} --filter label=destination=#{destination} --filter label=role=web").split
       raise ReleaseSupport::Error, "Kein eindeutig laufender Web-Container" unless ids.one? && ids.first.match?(/\A[a-f0-9]{12,64}\z/)
       container = ids.first
-      metadata = JSON.parse(capture("docker inspect --format #{q('{"image":{{json .Config.Image}},"id":{{json .Image}}}')} #{container}"))
+      metadata = JSON.parse(capture("docker inspect --format #{q('{"image":{{json .Config.Image}},"id":{{json .Image}},"digest":{{json (index .Config.Labels "live.release_digest")}}}')} #{container}"))
       image = PROJECTS.fetch(project)
       match = metadata.fetch("image").match(/\A#{Regexp.escape(image)}:([a-f0-9]{40})\z/)
       raise ReleaseSupport::Error, "Laufender Commit nicht eindeutig bestimmbar" unless match
       local_image = image_metadata(metadata.fetch("image"))
       digests = Array(local_image["digests"]).filter_map { |value| value.delete_prefix("#{image}@") if value.start_with?("#{image}@") }.uniq
-      raise ReleaseSupport::Error, "Laufender Digest fehlt" unless digests.one? && digests.first.match?(/\Asha256:[a-f0-9]{64}\z/)
-      DeployImageProof.validate!(image_metadata: local_image, container_metadata: metadata, expected_image: metadata.fetch("image"), expected_digest: digests.first)
-      { "container" => container, "commit" => match[1], "image" => image, "digest" => digests.first }
+      recorded_digest = metadata["digest"].to_s
+      digest = recorded_digest.empty? ? (digests.first if digests.one?) : recorded_digest
+      raise ReleaseSupport::Error, "Laufender Digest fehlt oder ist ohne Deploy-Label mehrdeutig" unless digest.to_s.match?(/\Asha256:[a-f0-9]{64}\z/)
+      DeployImageProof.validate!(image_metadata: local_image, container_metadata: metadata, expected_image: metadata.fetch("image"), expected_digest: digest)
+      { "container" => container, "commit" => match[1], "image" => image, "digest" => digest }
     end
 
     def verify_running!(project:, destination:, commit:, digest:, roles: %w[web job])
       validate_target!(project, destination)
       tag = "#{PROJECTS.fetch(project)}:#{commit}"
-      image = image_metadata(tag)
+      validate_image_reference!(tag)
+      snapshot = role_snapshot(project:, destination:, image: tag)
+      containers = snapshot.fetch("containers")
+      raise ReleaseSupport::Error, "Keine laufenden App-Container" unless containers.is_a?(Array) && containers.any?
       seen = []
-      ids = capture("docker ps -q --filter label=service=#{project} --filter label=destination=#{destination}").split
-      raise ReleaseSupport::Error, "Keine laufenden App-Container" if ids.empty?
-      ids.each do |id|
-        raise ReleaseSupport::Error, "Ungültige Container-ID" unless id.match?(/\A[a-f0-9]{12,64}\z/)
-        metadata = JSON.parse(capture("docker inspect --format #{q('{"image":{{json .Config.Image}},"id":{{json .Image}},"role":{{json (index .Config.Labels "role")}}}')} #{id}"))
-        DeployImageProof.validate!(image_metadata: image, container_metadata: metadata, expected_image: tag, expected_digest: digest)
+      containers.each do |metadata|
+        raise ReleaseSupport::Error, "Ungültige Container-ID" unless metadata.fetch("container").to_s.match?(/\A[a-f0-9]{12,64}\z/)
+        DeployImageProof.validate!(image_metadata: snapshot.fetch("image"), container_metadata: metadata, expected_image: tag, expected_digest: digest)
         seen << metadata.fetch("role")
       end
       raise ReleaseSupport::Error, "App-Rolle fehlt oder ist doppelt aktiv" unless seen.sort == roles.sort
@@ -86,6 +90,28 @@ module Ops
     end
 
     private
+
+    def role_snapshot(project:, destination:, image:)
+      format = '{"container":{{json .Id}},"image":{{json .Config.Image}},"id":{{json .Image}},"role":{{json (index .Config.Labels "role")}},"digest":{{json (index .Config.Labels "live.release_digest")}}}'
+      JSON.parse(capture(<<~SH))
+        set -eu
+        ids=$(docker ps -q --filter label=service=#{project} --filter label=destination=#{destination})
+        printf '{"image":'
+        docker image inspect --format #{q(IMAGE_FORMAT)} #{q(image)}
+        printf ',"containers":['
+        separator=''
+        for id in $ids; do
+          printf '%s' "$separator"
+          docker inspect --format #{q(format)} "$id"
+          separator=','
+        done
+        printf ']}\n'
+      SH
+    end
+
+    def validate_image_reference!(reference)
+      raise ReleaseSupport::Error, "Unbekannte Image-Referenz" unless reference.match?(/\Aghcr\.io\/marcbey\/(?:stuttgart|russ)-live-de:[a-f0-9]{40}\z/)
+    end
 
     def validate_target!(project, destination)
       raise ReleaseSupport::Error, "Unbekanntes App-Ziel" unless PROJECTS.key?(project) && %w[staging hetzner].include?(destination)

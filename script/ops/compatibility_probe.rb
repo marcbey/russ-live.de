@@ -52,8 +52,9 @@ module Ops
       puts "Kompatibilität: isolierter Docker-Prüfserver bereit"
       disconnected = JSON.parse(ReleaseSupport.capture("docker", "inspect", "--format", "{{json .HostConfig.NetworkMode}}", @daemon))
       raise ReleaseSupport::Error, "Prüfserver besitzt externes Netzwerk" unless disconnected == "none"
-      image_aliases = apps.to_h { |project, settings| [ project, load_image(settings.fetch("reference"), project) ] }
-      postgres_alias = load_image(POSTGRES, "postgres")
+      references = apps.transform_values { |settings| settings.fetch("reference") }.merge("postgres" => POSTGRES)
+      image_aliases = load_images(references)
+      postgres_alias = image_aliases.delete("postgres")
       inner("network", "create", "--internal", "--subnet", "172.18.0.0/16", "kamal")
       inner("volume", "create", "stuttgart_live_de_staging_storage")
       puts "Kompatibilität: isolierte Eingaben und PostgreSQL vorbereiten"
@@ -116,23 +117,29 @@ module Ops
       end
     end
 
-    def load_image(reference, role)
-      puts "Kompatibilität: Registry-Image #{role} laden"
-      pull(reference)
-      name = "#{@daemon}-#{role}:input"
-      source = JSON.parse(ReleaseSupport.capture("docker", "image", "inspect", reference)).first
-      fingerprint = ImageFingerprint.call(source)
-      ReleaseSupport.capture("docker", "tag", reference, name)
-      @aliases << name
-      # Load only locally verified image bytes: the nested daemon has no registry access.
-      puts "Kompatibilität: Image #{role} isoliert übertragen"
-      Open3.pipeline([ "docker", "save", name ], [ "docker", "exec", "--interactive", @daemon, "docker", "load" ], out: File::NULL, err: File::NULL).each do |status|
+    def load_images(references)
+      fingerprints = {}
+      aliases = references.to_h do |role, reference|
+        puts "Kompatibilität: Registry-Image #{role} laden"
+        pull(reference)
+        name = "#{@daemon}-#{role}:input"
+        source = JSON.parse(ReleaseSupport.capture("docker", "image", "inspect", reference)).first
+        fingerprints[role] = ImageFingerprint.call(source)
+        ReleaseSupport.capture("docker", "tag", reference, name)
+        @aliases << name
+        [ role, name ]
+      end
+      # One archive deduplicates shared layers; the nested daemon stays disconnected.
+      puts "Kompatibilität: alle Images gemeinsam isoliert übertragen"
+      Open3.pipeline([ "docker", "save", *aliases.values ], [ "docker", "exec", "--interactive", @daemon, "docker", "load" ], out: File::NULL, err: File::NULL).each do |status|
         raise ReleaseSupport::Error, "Prüfimage konnte nicht isoliert geladen werden" unless status.success?
       end
-      puts "Kompatibilität: Laufzeitidentität #{role} prüfen"
-      loaded = JSON.parse(inner("image", "inspect", name)).first
-      raise ReleaseSupport::Error, "Image-Identität beim Laden verändert" unless ImageFingerprint.call(loaded) == fingerprint
-      name
+      aliases.each do |role, name|
+        puts "Kompatibilität: Laufzeitidentität #{role} prüfen"
+        loaded = JSON.parse(inner("image", "inspect", name)).first
+        raise ReleaseSupport::Error, "Image-Identität beim Laden verändert" unless ImageFingerprint.call(loaded) == fingerprints.fetch(role)
+      end
+      aliases
     end
 
     def prepare_files(directory, apps, aliases)

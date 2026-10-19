@@ -6,6 +6,9 @@ require_destination: true
 service: russ_live_de
 image: <%= ENV.fetch("KAMAL_IMAGE", "marcbey/russ-live-de") %>
 
+labels:
+  live.release_digest: <%= ENV.fetch("RELEASE_DIGEST", "").inspect %>
+
 aliases:
   console: app exec --interactive --reuse "bin/rails console"
   shell: app exec --interactive --reuse "bash"
