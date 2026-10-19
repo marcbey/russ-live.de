@@ -24,7 +24,11 @@ module HetznerDeployConfig
 
     def production_hosts
       host = app_host(destination: "hetzner")
-      production_domain_mode == "legacy" ? [ host ] : [ host, "www.#{host}" ]
+      production_domain_mode == "legacy" ? [ host ] : [ host, "www.#{host}", *production_homepage_redirect_hosts ]
+    end
+
+    def production_homepage_redirect_hosts
+      production_redirect? ? %w[michaelrussgmbh.de www.michaelrussgmbh.de] : []
     end
 
     def production_redirect?

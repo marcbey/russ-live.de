@@ -8,6 +8,22 @@ class HetznerDeployConfigTest < ActiveSupport::TestCase
     assert_match(/ssh-ed25519/, HetznerDeployConfig.ssh_host_key)
   end
 
+  test "live production includes both homepage aliases but legacy and prepared do not" do
+    original = ENV["PRODUCTION_DOMAIN_MODE"]
+    %w[live live_preissued].each do |mode|
+      ENV["PRODUCTION_DOMAIN_MODE"] = mode
+      assert_equal %w[michaelrussgmbh.de www.michaelrussgmbh.de], HetznerDeployConfig.production_homepage_redirect_hosts
+      assert_equal %w[russ-live.de www.russ-live.de michaelrussgmbh.de www.michaelrussgmbh.de], HetznerDeployConfig.production_hosts
+    end
+    %w[legacy prepared].each do |mode|
+      ENV["PRODUCTION_DOMAIN_MODE"] = mode
+      assert_empty HetznerDeployConfig.production_homepage_redirect_hosts
+      refute_includes HetznerDeployConfig.production_hosts, "michaelrussgmbh.de"
+    end
+  ensure
+    ENV["PRODUCTION_DOMAIN_MODE"] = original
+  end
+
   test "returns nil for optional app host when config is missing" do
     original_config_path = HetznerDeployConfig::CONFIG_PATH
     original_defined = HetznerDeployConfig.instance_variable_defined?(:@config)

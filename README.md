@@ -312,7 +312,31 @@ mise exec -- bin/kamal app logs -f -d hetzner -r web
 mise exec -- bin/kamal app logs -f -d hetzner -r job
 ```
 
-### CI, Staging und Produktionsfreigabe über GitHub
+### Frühere Website michaelrussgmbh.de
+
+Nach der Web-DNS-Umschaltung leiten `http://michaelrussgmbh.de`,
+`https://michaelrussgmbh.de` und die jeweiligen `www`-Adressen dauerhaft auf
+`https://russ-live.de/` weiter. Alte Unterseiten und Querystrings werden dabei
+verworfen. Die abschließende Weiterleitung verwendet HTTP 301; die bestehende
+`www.russ-live.de`-Weiterleitung behält HTTP 308 und den ursprünglichen Pfad.
+
+Die beiden früheren Website-Hosts gehören ausschließlich zum produktiven
+Routing. Staging bleibt auf seiner eigenen Domain passwortgeschützt und von
+Suchmaschinen ausgeschlossen. Der Container prüft die Regeln einschließlich
+alter `/up`-, Asset- und Medienpfade vor jedem Staging-Deploy mit echten
+nginx-Anfragen.
+
+Vor dem DNS-Wechsel müssen beide zusätzlichen Hosts gültige HTTPS-Zertifikate
+besitzen. Der gemeinsame Proxy verwaltet deren Verlängerung automatisch in
+seinem persistenten Zertifikatsspeicher; bestehende Russ-Zertifikate bleiben
+bestehen. Die genaue Erstbereitstellung und ihre Nachweise gehören ins private
+Betriebsprotokoll. Bei Host Europe werden nur die beiden Web-A-Werte auf
+`46.225.224.194` geändert und die alten Web-AAAA-Werte entfernt; ihre TTL von
+600 Sekunden bleibt erhalten. Vor und nach jedem Eingriff wird die vollständige
+Zone gesichert und abgeglichen. MX, Microsoft 365, Autodiscover und alle anderen
+Nicht-Web-Einträge bleiben einschließlich Werten, Prioritäten und TTLs erhalten.
+
+## CI, Staging und Produktionsfreigabe über GitHub
 
 Pull Requests und `main` durchlaufen die vollständige CI mit `mise exec -- bin/ci`.
 Ein erfolgreicher Main-Push startet `Deploy Staging`: derselbe geprüfte Commit wird
@@ -434,7 +458,11 @@ Puma, damit ein noch nicht gestarteter oder defekter App-Prozess nicht als berei
 `CANONICAL_REDIRECT_ENABLED=false` hält die Weiterleitung bis zum Umschaltfenster
 ausgeschaltet. Bei aktivierter Weiterleitung führen erlaubte Alias-Hosts mit
 HTTP 308 auf den festen HTTPS-Host aus `APP_HOST`; Pfad und Suchparameter bleiben
-erhalten. Fremde Hosts werden abgewiesen. Die bisherige Produktionsdomain und ihre
+erhalten. Die ausdrücklich in `HOMEPAGE_REDIRECT_HOSTS` benannten früheren
+Website-Hosts erhalten stattdessen HTTP 301 zur Startseite ohne Pfad/Querystring,
+auch für `/up`. Diese Liste ist nur bei aktivierter Produktionsweiterleitung
+zulässig und muss aus erlaubten, nicht kanonischen Hosts bestehen.
+Fremde Hosts werden abgewiesen. Die bisherige Produktionsdomain und ihre
 Medien-Signierschlüssel bleiben bis zur geplanten Umschaltung erhalten.
 
 Nach jedem Image-Build ist der HTTP-Test verpflichtend:
@@ -546,12 +574,13 @@ Der Domainwechsel verwendet ausschließlich die Production-Environment-Variable
 `PRODUCTION_DOMAIN_MODE`: `legacy` (Standard) erhält den bisherigen schopp3r-Host;
 `prepared` bedient Hauptdomain und `www` mit vorab ausgestelltem Zertifikat,
 ohne kanonische Weiterleitung und mit noindex; `live_preissued` aktiviert
-308-Weiterleitungen und Indexierung mit demselben Zertifikat; `live` wechselt
+Weiterleitungen und Indexierung mit einem Vorabzertifikat für sämtliche dann
+aktiven Hosts einschließlich der Homepage-Aliasse; `live` wechselt
 nach bestätigter DNS-Propagation zur automatischen Zertifikatsverwaltung.
 Für die beiden Zwischenmodi müssen `SSL_CERTIFICATE_PEM` (vollständige Kette) und
 `SSL_PRIVATE_KEY_PEM` als Production-Environment-Secrets vorhanden sein; sie
-werden ausschließlich dem Proxy übergeben. Schlüssel, Laufzeit und beide SANs
-werden vor dem Deploy geprüft. Jeder Lauf protokolliert Modus, Hosts,
+werden ausschließlich dem Proxy übergeben. Schlüssel, Laufzeit und alle
+produktiven Hostnamen des gewählten Modus werden vor dem Deploy geprüft. Jeder Lauf protokolliert Modus, Hosts,
 Weiterleitung, Indexierung und TLS-Art. Derselbe geprüfte Commit/Digest kann
 zur Änderung dieser Laufzeitwerte erneut freigegeben werden; Kamal ersetzt dabei
 auch Container derselben Version. Die beiden Modi mit Vorabzertifikat prüfen HTTPS direkt gegen die feste

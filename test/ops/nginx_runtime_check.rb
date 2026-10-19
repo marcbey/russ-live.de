@@ -68,6 +68,33 @@ class NginxRuntimeCheck < Minitest::Test
     assert_equal "200", request("/").code
   end
 
+  def test_homepage_aliases_redirect_every_path_before_health_assets_or_media
+    start_nginx({ "CANONICAL_REDIRECT_ENABLED" => "true", "HOMEPAGE_REDIRECT_HOSTS" => "legacy.example.invalid" })
+    [ "/", ENCODED_PATH, "/up", "/up?q=1", "/assets/runtime.css", "/media/invalid/file.png" ].each do |path|
+      response = request(path, host: "legacy.example.invalid", method: "POST")
+      assert_equal "301", response.code, path
+      assert_equal "https://app.example.invalid/", response["Location"], path
+    end
+    assert_equal "200", request("/up", host: "46.225.224.194").code
+    assert_equal "200", request("/").code
+    assert_equal "308", request(ENCODED_PATH, host: "www.app.example.invalid").code
+    assert_equal "421", request("/", host: "foreign.example.invalid").code
+  end
+
+  def test_homepage_aliases_require_production_an_allowed_noncanonical_host_and_enabled_redirects
+    [
+      { "HOMEPAGE_REDIRECT_HOSTS" => "foreign.example.invalid", "CANONICAL_REDIRECT_ENABLED" => "true" },
+      { "HOMEPAGE_REDIRECT_HOSTS" => "app.example.invalid", "CANONICAL_REDIRECT_ENABLED" => "true" },
+      { "HOMEPAGE_REDIRECT_HOSTS" => "legacy.example.invalid", "CANONICAL_REDIRECT_ENABLED" => "false" },
+      { "HOMEPAGE_REDIRECT_HOSTS" => "legacy.example.invalid", "APP_ENVIRONMENT" => "staging", "STAGING_BASIC_AUTH_HTPASSWD" => HTPASSWD }
+    ].each do |env|
+      start_nginx(env, expect_failure: true)
+      assert_equal "exited", docker!("inspect", "--format", "{{.State.Status}}", @container).strip
+      docker!("rm", "--force", @container)
+      @container = nil
+    end
+  end
+
   def test_redirects_remain_disabled_until_cutover
     start_nginx({ "CANONICAL_REDIRECT_ENABLED" => "false" })
     assert_equal "200", request("/", host: "legacy.example.invalid").code
