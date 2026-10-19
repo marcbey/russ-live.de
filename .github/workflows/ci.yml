@@ -20,6 +20,7 @@ jobs:
           --health-cmd "pg_isready -U postgres"
           --health-interval 10s --health-timeout 5s --health-retries 5
     env:
+      BUNDLE_PATH: vendor/bundle
       RAILS_ENV: test
       PGHOST: localhost
       PGUSER: postgres
@@ -37,6 +38,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y libpq-dev libvips node-gyp
       - uses: jdx/mise-action@v5
+      - name: Restore installed gems
+        uses: actions/cache@v5
+        with:
+          path: vendor/bundle
+          key: gems-v1-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.ruby-version', 'Gemfile.lock') }}
       - uses: actions/setup-node@v7
         with:
           node-version: '24'
@@ -63,3 +69,48 @@ jobs:
           name: screenshots
           path: tmp/screenshots
           if-no-files-found: ignore
+  image:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4.5.2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      - name: Build the main image once while checks run
+        id: build
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64
+          tags: ghcr.io/marcbey/russ-live-de:${{ github.sha }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+          cache-from: type=gha,scope=russ-live-amd64
+          cache-to: type=gha,scope=russ-live-amd64,mode=max
+      - name: Record the image identity for this CI run
+        env:
+          RELEASE_DIGEST: ${{ steps.build.outputs.digest }}
+        run: |
+          jq -n --arg repository "$GITHUB_REPOSITORY" --arg commit "$GITHUB_SHA" \
+            --arg digest "$RELEASE_DIGEST" --argjson ci_run_id "$GITHUB_RUN_ID" \
+            '{repository: $repository, commit: $commit, ci_run_id: $ci_run_id,
+              image: "ghcr.io/marcbey/russ-live-de", digest: $digest}' > main-image.json
+      - uses: actions/upload-artifact@v7
+        with:
+          name: main-image
+          path: main-image.json
+          if-no-files-found: error
+          retention-days: 14
+          overwrite: true

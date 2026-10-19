@@ -111,15 +111,22 @@ class DeploymentWorkflowsTest < ActiveSupport::TestCase
     trigger = stage["on"] || stage[true]
     assert_equal [ "workflow_run" ], trigger.keys
     assert_equal [ "completed" ], trigger.dig("workflow_run", "types")
+    assert_equal [ workflow("ci").fetch("name") ], trigger.dig("workflow_run", "workflows")
     job = stage.fetch("jobs").fetch("deploy")
     assert_equal "staging", job["environment"]
     assert_includes job["if"], "head_repository.full_name == github.repository"
     assert_includes job["if"], "conclusion == 'success'"
     steps = job.fetch("steps")
-    build = steps.index { |step| step["uses"].to_s.start_with?("docker/build-push-action") }
+    source = steps.index { |step| step["run"].to_s.include?("ci_source.rb") }
+    download = steps.index { |step| step["uses"].to_s.start_with?("actions/download-artifact") }
+    image = steps.index { |step| step["run"].to_s.include?("ci_image.rb") }
     runtime = steps.index { |step| step["run"].to_s.include?("nginx_runtime_check.rb") }
     deploy = steps.index { |step| step["run"].to_s.include?("stage_release.rb") }
-    assert build < runtime && runtime < deploy
+    assert download, "staging must consume the image from its successful CI run"
+    assert source < download && download < image && image < runtime && runtime < deploy
+    assert_equal "${{ steps.source.outputs.ci_run_id }}", steps.fetch(download).dig("with", "run-id")
+    assert_equal "main-image", steps.fetch(download).dig("with", "name")
+    assert_not steps.any? { |step| step["uses"].to_s.start_with?("docker/build-push-action") }
     secret_names = steps.to_json.scan(/secrets\.([A-Z_]+)/).flatten
     assert secret_names.all? { |name| name.start_with?("STAGING_") }, secret_names.inspect
     assert_includes steps.to_json, "workflow_run.head_sha"
@@ -137,6 +144,18 @@ class DeploymentWorkflowsTest < ActiveSupport::TestCase
     assert triggers.key?("pull_request")
     assert_equal [ "main" ], triggers.dig("push", "branches")
     assert_includes ci.to_json, "mise exec -- bin/ci"
+  end
+
+  test "only main pushes publish an image in parallel with the complete checks" do
+    jobs = workflow("ci").fetch("jobs")
+    image = jobs["image"]
+    assert image, "main must build its image while checks are running"
+    assert_not image.key?("needs")
+    assert_equal "github.event_name == 'push' && github.ref == 'refs/heads/main'", image["if"]
+    assert_equal "write", image.dig("permissions", "packages")
+    assert_not_includes image.to_json, "secrets."
+    upload = image.fetch("steps").find { |step| step["uses"].to_s.start_with?("actions/upload-artifact") }
+    assert_equal "main-image", upload.dig("with", "name")
   end
 
   private
