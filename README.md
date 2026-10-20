@@ -212,6 +212,28 @@ mise exec -- bin/ci
 
 `bin/ci` bündelt die relevanten Tests, Security-Checks und Linter.
 
+Die vollständige Prüfung benötigt eine laufende Docker-Engine, weil die
+Staging-Tests darin vorübergehende PostgreSQL-Datenbanken starten. Unter macOS
+kann dafür zum Beispiel [Colima](https://colima.run/docs/installation/) verwendet
+werden:
+
+```bash
+brew install colima docker
+colima start --profile russ-ci --cpus 2 --memory 2 --disk 6 --root-disk 8 \
+  --mount none --ssh-config=false --activate=false
+
+DOCKER_CONTEXT=colima-russ-ci \
+MISE_DATA_DIR="$HOME/.local/share/mise" \
+MISE_RUBY_VERSION=4.0.2 \
+mise exec -- bin/ci
+```
+
+Die feste Ruby-Auswahl gilt damit auch für Tests in temporären Ordnern ohne
+eigene `mise.toml`. `MISE_DATA_DIR` hält die installierte Laufzeit erreichbar,
+wenn ein Test sein Benutzerverzeichnis vorübergehend ersetzt. Das Colima-Profil
+teilt keine lokalen Ordner mit den Testcontainern und lässt sich nach den Tests
+mit `colima stop --profile russ-ci` stoppen.
+
 Für die Tastatur-, Dialog- und mobilen Layoutregressionen zusätzlich mit
 installiertem Chrome ausführen:
 
