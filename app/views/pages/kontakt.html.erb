@@ -1,86 +1,32 @@
-<% company_areas = [
-  {
-    key: "klassik",
-    logo: "russ_live/about/russ-klassik-logo.png",
-    title: "Russ Klassik",
-    url: "https://russ-klassik.de/",
-    text: t("pages.about.company.areas.klassik")
-  },
-  {
-    key: "live",
-    logo: "russ_live/about/russ-live-area-logo.png",
-    title: "Russ Live",
-    url: "https://www.michaelrussgmbh.de/",
-    text: t("pages.about.company.areas.live")
-  },
-  {
-    key: "artists",
-    logo: "russ_live/about/russ-artists-logo.png",
-    title: "Russ Artists",
-    url: "https://russ-artists.de/",
-    text: t("pages.about.company.areas.artists")
-  },
-  {
-    key: "service",
-    logo: "russ_live/about/russ-service-logo.png",
-    title: "Russ Service",
-    url: "https://www.ordnerdienste-stuttgart.de/",
-    text: t("pages.about.company.areas.service")
-  }
-] %>
-
 <% contact_page = @editable_page %>
 
 <main id="main-content" class="page-main public-page contact-page" tabindex="-1">
-      <section class="public-section section split" aria-labelledby="contact-title">
-        <div class="contact-details">
-          <h1 id="contact-title" class="contact-title"><%= contact_page.title %></h1>
-          <div class="contact-quick-actions">
-            <%= link_to "#{t("pages.contact.quick_actions.phone")}: +49 (0) 711 16 353 11", "tel:+497111635311", class: "public-button public-button-secondary" %>
-            <%= mail_to "info@russ-live.de", "info@russ-live.de", class: "public-button public-button-secondary" %>
-            <%= link_to t("pages.contact.quick_actions.timetable"), "https://www.vvs.de/verbindungen-und-mobilitaet/fahrplanauskunft", class: "public-button public-button-secondary" %>
-          </div>
-          <%= public_backend_link(
-                label: "Bearbeiten",
-                path: backend_pages_path(page_id: contact_page.id),
-                aria_label: "Kontaktseite bearbeiten"
-              ) %>
+  <section class="public-section section split" aria-labelledby="contact-title">
+    <div class="contact-details">
+      <h1 id="contact-title" class="contact-title"><%= contact_page.title %></h1>
+      <div class="contact-quick-actions">
+        <%= link_to "#{t("pages.contact.quick_actions.phone")}: +49 (0) 711 16 353 11", "tel:+497111635311", class: "public-button public-button-secondary" %>
+        <%= mail_to "info@russ-live.de", "info@russ-live.de", class: "public-button public-button-secondary" %>
+        <%= link_to t("pages.contact.quick_actions.timetable"), "https://www.vvs.de/verbindungen-und-mobilitaet/fahrplanauskunft", class: "public-button public-button-secondary" %>
+      </div>
+      <%= public_backend_link(
+            label: "Bearbeiten",
+            path: backend_pages_path(page_id: contact_page.id),
+            aria_label: "Kontaktseite bearbeiten"
+          ) %>
 
-          <address class="public-contact-card rich-copy">
-            <%= contact_page.content_value("body_html").html_safe %>
-          </address>
-        </div>
-        <div class="contact-location-visual">
-          <%= image_tag "russ_live/contact/kontakt-charlottenplatz.jpg",
-                        alt: t("pages.contact.image_alt"),
-                        class: "contact-location-image",
-                        width: 1086,
-                        height: 1448,
-                        loading: "lazy",
-                        decoding: "async" %>
-        </div>
-      </section>
-
-      <section class="public-section about-company-band" aria-labelledby="contact-company-band-title">
-        <div class="about-company-band-copy">
-          <h2 id="contact-company-band-title"><%= t("pages.about.company.title_html") %></h2>
-        </div>
-
-        <div class="about-company-band-grid">
-          <% (company_areas + company_areas).each_with_index do |area, index| %>
-            <% duplicate = index >= company_areas.length %>
-            <article class="public-card about-company-card about-company-card-<%= area[:key] %><%= " about-company-card-duplicate" if duplicate %>"<%= " aria-hidden=\"true\"".html_safe if duplicate %>>
-              <a href="<%= area[:url] %>" target="_blank" rel="noopener noreferrer" aria-label="<%= t("pages.about.company.open_aria", title: area[:title]) %>"<%= " tabindex=\"-1\"".html_safe if duplicate %>>
-                <figure class="about-company-logo">
-                  <%= image_tag area[:logo], alt: area[:title] %>
-                </figure>
-                <div class="about-company-hover-copy">
-                  <h3><%= area[:title] %></h3>
-                  <p><%= area[:text] %></p>
-                </div>
-              </a>
-            </article>
-          <% end %>
-        </div>
-      </section>
-    </main>
+      <address class="public-contact-card rich-copy">
+        <%= contact_page.content_value("body_html").html_safe %>
+      </address>
+    </div>
+    <div class="contact-location-visual">
+      <%= image_tag "russ_live/contact/kontakt-charlottenplatz.jpg",
+                    alt: t("pages.contact.image_alt"),
+                    class: "contact-location-image",
+                    width: 1086,
+                    height: 1448,
+                    loading: "lazy",
+                    decoding: "async" %>
+    </div>
+  </section>
+</main>
