@@ -113,7 +113,7 @@ jobs:
         with:
           working_directory: release-control
       - name: Restore trusted control dependencies
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         with:
           path: vendor/bundle
           key: gems-v1-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('release-control/.ruby-version', 'release-control/Gemfile.lock') }}
