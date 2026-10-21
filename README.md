@@ -272,12 +272,17 @@ Dort liegen auch das
 [Betriebsrunbook für Domainwechsel und Host-Eingriffe](https://github.com/marcbey/stuttgart-live.de/blob/main/docs/operations/domainumzug-und-staging.md)
 und die zentrale Terraform-/Ansible-Konfiguration.
 
-Production läuft auf demselben Hetzner-Host wie `stuttgart-live.de` und wird
+Produktion läuft auf demselben Hetzner-Host wie `stuttgart-live.de` und wird
 ebenfalls mit Kamal ausgerollt. Die öffentliche Domain
 `https://russ-live.de` zeigt auf `46.225.224.194`; `kamal-proxy` routet anhand
 des Hostnamens zum Kamal-Service `russ_live_de`. `www.russ-live.de` leitet mit
 HTTP 308 und erhaltenem Pfad und Querystring zum Apex weiter. Das GitHub-Environment
 `production` verwendet `PRODUCTION_DOMAIN_MODE=live` mit automatischem HTTPS.
+Die tatsächlich ausgelieferten Zertifikate liegen im persistenten Volume
+`kamal-proxy-config`. Das gilt auch für die beiden Michael-Russ-Webweiterleitungen.
+Der [aktuelle Betriebsstand mit DNS-Werten und Abschlussaufgaben](https://github.com/marcbey/stuttgart-live.de/blob/main/docs/operations/domainumzug-und-staging.md#betriebsstand-nach-dem-domainumzug)
+führt die gemeinsame Nachkontrolle; Staging-Daten werden weiterhin nur durch den
+bewusst manuell gestarteten Refresh aus dem Stuttgart-Projekt erneuert.
 
 Die Runtime entspricht Stuttgart: Der Container startet `nginx` auf Port `80`
 und Puma intern auf Port `3000`. `nginx` liefert Assets und signierte
@@ -348,15 +353,18 @@ Suchmaschinen ausgeschlossen. Der Container prüft die Regeln einschließlich
 alter `/up`-, Asset- und Medienpfade vor jedem Staging-Deploy mit echten
 nginx-Anfragen.
 
-Vor dem DNS-Wechsel müssen beide zusätzlichen Hosts gültige HTTPS-Zertifikate
-besitzen. Der gemeinsame Proxy verwaltet deren Verlängerung automatisch in
+Beide zusätzlichen Hosts wurden vor dem DNS-Wechsel mit gültigem HTTPS geprüft.
+Der gemeinsame Proxy verwaltet deren Verlängerung automatisch in
 seinem persistenten Zertifikatsspeicher; bestehende Russ-Zertifikate bleiben
 bestehen. Die genaue Erstbereitstellung und ihre Nachweise gehören ins private
-Betriebsprotokoll. Bei Host Europe werden nur die beiden Web-A-Werte auf
+Betriebsprotokoll. Bei Host Europe wurden nur die beiden Web-A-Werte auf
 `46.225.224.194` geändert und die alten Web-AAAA-Werte entfernt; ihre TTL von
-600 Sekunden bleibt erhalten. Vor und nach jedem Eingriff wird die vollständige
+600 Sekunden blieb erhalten. Vor und nach jedem Eingriff wird die vollständige
 Zone gesichert und abgeglichen. MX, Microsoft 365, Autodiscover und alle anderen
 Nicht-Web-Einträge bleiben einschließlich Werten, Prioritäten und TTLs erhalten.
+Die zwei eigenen temporären ACME-TXT-Werte sind noch zur gezielten Bereinigung
+mit frischen Provider- und DNS-Nachweisen vorgemerkt. Die Mailprüfung belegt den
+DNS-Bestand; ein erfolgreicher Postfachversand oder -empfang wurde nicht getestet.
 
 ## CI, Staging und Produktionsfreigabe über GitHub
 
