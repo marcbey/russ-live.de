@@ -1,11 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["salutation", "firstName", "lastName", "address", "city", "phone", "email", "position", "message"]
+  static targets = ["salutation", "firstName", "lastName", "address", "city", "phone", "email", "position", "status", "message"]
   static values = {
     recipient: String,
     subject: String,
-    greeting: String,
     interestLine: String,
     personalDetailsHeading: String,
     salutationLabel: String,
@@ -16,6 +15,7 @@ export default class extends Controller {
     phoneLabel: String,
     emailLabel: String,
     positionLabel: String,
+    statusLabel: String,
     messageLabel: String,
   }
 
@@ -25,7 +25,6 @@ export default class extends Controller {
     event.preventDefault()
 
     const body = [
-      this.greeting,
       this.interestLine,
       "",
       this.messageTarget.value.trim(),
@@ -39,6 +38,7 @@ export default class extends Controller {
       `${this.phoneLabelValue}: ${this.phoneTarget.value.trim()}`,
       `${this.emailLabelValue}: ${this.emailTarget.value.trim()}`,
       `${this.positionLabelValue}: ${this.positionTarget.value.trim()}`,
+      ...this.statusDetails,
     ].join("\n")
 
     window.location.href = `mailto:${this.recipientValue}?subject=${encodeURIComponent(this.subject)}&body=${encodeURIComponent(body)}`
@@ -48,8 +48,9 @@ export default class extends Controller {
     return this.subjectValue || "Bewerbung"
   }
 
-  get greeting() {
-    return this.greetingValue || "Hallo,"
+  get statusDetails() {
+    const statuses = this.statusTargets.filter(input => input.checked).map(input => input.value)
+    return statuses.length ? [`${this.statusLabelValue}: ${statuses.join(", ")}`] : []
   }
 
   get interestLine() {

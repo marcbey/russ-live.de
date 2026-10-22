@@ -119,18 +119,6 @@
     opacity: 1;
   }
 
-  .site-header::after {
-    background: var(--header-hero-gradient, none);
-    content: "";
-    height: calc(var(--header-nav-height) + 100px);
-    left: 0;
-    pointer-events: none;
-    position: fixed;
-    right: 0;
-    top: 0;
-    z-index: -1;
-  }
-
   .site-header .brand,
   .site-header .brand img {
     transition: padding .18s ease, width .18s ease, filter .18s ease;
@@ -514,11 +502,10 @@
   .jobs-body .page-header:not(.is-scrolled):not(.is-menu-open),
   .press-body .page-header:not(.is-scrolled):not(.is-menu-open) {
     --header-logo-filter: brightness(0) invert(1);
-    --header-nav-bg: transparent;
-    --header-hero-gradient: linear-gradient(to bottom, rgba(0, 0, 0, .68) 0%, rgba(0, 0, 0, .42) 45%, transparent 100%);
-    --header-nav-color: #fff;
-    --header-nav-hover-bg: transparent;
-    --header-nav-hover-color: #fff;
+    --header-nav-bg: #fff;
+    --header-nav-color: var(--ink);
+    --header-nav-hover-bg: rgba(0, 0, 0, .06);
+    --header-nav-hover-color: var(--ink);
     --header-submenu-bg: #fff;
   }
 }
@@ -5216,7 +5203,6 @@
 }
 
 .jobs-body:has(.job-detail-page) .page-header:not(.is-scrolled):not(.is-menu-open) {
-  --header-hero-gradient: none;
   --header-logo-filter: none;
   --header-nav-color: var(--ink);
   --header-nav-bg: #fff;
@@ -5376,6 +5362,34 @@
   color: var(--muted);
 }
 
+.job-application-status {
+  border: 0;
+  margin: 0;
+  min-width: 0;
+  padding: 0;
+}
+
+.job-application-status-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.5rem;
+}
+
+.job-application-status-option {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  gap: .625rem;
+  min-height: 2.75rem;
+}
+
+.job-application-status-option input {
+  accent-color: var(--ink);
+  flex-shrink: 0;
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
 .job-application-submit {
   justify-self: start;
 }
@@ -5469,9 +5483,6 @@
 @media (min-width: 1071px) {
   .press-body .page-header:not(.is-scrolled):not(.is-menu-open) {
     --header-logo-filter: brightness(0) invert(1);
-    --header-nav-color: #fff;
-    --header-nav-hover-bg: transparent;
-    --header-nav-hover-color: #fff;
     --header-submenu-bg: #fff;
   }
 
@@ -6025,7 +6036,6 @@
 }
 
 .press-body:has(.press-detail-page) .page-header:not(.is-scrolled):not(.is-menu-open) {
-  --header-hero-gradient: none;
   --header-logo-filter: none;
   --header-nav-color: var(--ink);
   --header-nav-bg: #fff;

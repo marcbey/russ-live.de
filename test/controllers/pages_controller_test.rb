@@ -845,7 +845,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select ".job-overview-hero", 0
     assert_select "#job-application .job-application-form"
     assert_includes response.body, 'data-controller="job-application-mail"'
-    assert_includes response.body, 'data-job-application-mail-greeting-value="Hallo Michael,"'
+    assert_not_includes response.body, "data-job-application-mail-greeting-value"
     assert_includes response.body, 'data-job-application-mail-interest-line-value="Ich interessiere mich für die Stelle Stagehands."'
     assert_includes response.body, 'data-job-application-mail-personal-details-heading-value="Meine Daten:"'
     assert_includes response.body, 'id="job_application_salutation"'
@@ -857,6 +857,12 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'id="job_application_email"'
     assert_includes response.body, 'id="job_application_position"'
     assert_includes response.body, 'id="job_application_message"'
+    assert_select ".job-application-status legend", text: "Ich bin:"
+    assert_select '.job-application-status input[type="checkbox"][name="status[]"]', count: 4
+    assert_select ".job-application-status-option span", text: "Schüler:in"
+    assert_select ".job-application-status-option span", text: "Student:in"
+    assert_select ".job-application-status-option span", text: "Erwerbstätig"
+    assert_select ".job-application-status-option span", text: "Arbeitslos gemeldet"
     assert_includes response.body, "Erzähle uns etwas von dir"
     assert_includes response.body, "Es wird eine E-Mail vorbereitet."
     assert_includes response.body, "Anschreiben, Zeugnisse und Lebenslauf"
@@ -951,6 +957,12 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Teamwork"
     assert_includes response.body, "Stage crew | Jobs"
     assert_select ".job-detail-apply-button[href=?]", "#job-application", text: "Apply now"
+    assert_select ".job-application-status legend", text: "I am:"
+    assert_select ".job-application-status-option span", text: "School student"
+    assert_select ".job-application-status-option span", text: "University student"
+    assert_select ".job-application-status-option span", text: "Employed"
+    assert_select ".job-application-status-option span", text: "Registered unemployed"
+    assert_not_includes response.body, "data-job-application-mail-greeting-value"
 
     Job.find_by!(slug: "cateringhilfen").update!(title_en: "")
 
