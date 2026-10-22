@@ -131,8 +131,11 @@ auf einen Ansprechpartner.
 
 Auf `/jobs` erscheinen nur veröffentlichte Jobs. Die Bereichs-Kategorien werden
 dort als Filter angeboten; Job-Detailseiten zeigen dagegen nur das ausgewählte
-Profil, den hinterlegten Ansprechpartner und den Bewerbungslink, falls eine
-JOIN-URL gepflegt ist. Job- und Ansprechpartnerbilder werden unter
+Profil, den hinterlegten Ansprechpartner und das Bewerbungsformular. Das Formular
+bereitet eine E-Mail mit den persönlichen Angaben und den angekreuzten Angaben
+zu Schule, Studium oder Erwerbsstatus vor. Mehrere Angaben sind möglich;
+Bewerbungsunterlagen werden anschließend im eigenen E-Mail-Programm angehängt.
+Job- und Ansprechpartnerbilder werden unter
 `storage/job_images` beziehungsweise `storage/contact_images` abgelegt und beim
 Upload ebenfalls als komprimierte WebP-Dateien gespeichert.
 
@@ -367,6 +370,19 @@ mit frischen Provider- und DNS-Nachweisen vorgemerkt. Die Mailprüfung belegt de
 DNS-Bestand; ein erfolgreicher Postfachversand oder -empfang wurde nicht getestet.
 
 ## CI, Staging und Produktionsfreigabe über GitHub
+
+Für die Zusammenarbeit mit Agenten bedeutet **„Commit und Push“** den gesamten
+Weg bis Staging: lokale Prüfungen, Commit und Push, PR mit erfolgreicher CI,
+Merge nach `main` sowie erfolgreiche Main-CI und `Deploy Staging`. Der Agent
+begleitet den Ablauf ohne weitere Rückfrage zum PR oder Merge und meldet danach
+den Staging-Link zum Testen. Schlägt ein notwendiger Schritt fehl, nennt er den
+konkreten Blocker.
+
+Erst **„Push auf Production“** beauftragt die Veröffentlichung des auf Staging
+geprüften Stands. Dafür gilt der unten beschriebene GitHub-Freigabeprozess mit
+dem bereits geprüften Image. Die erforderliche Freigabe durch Marc oder
+Katharina bleibt bestehen; falls der Agent sie nicht über ein berechtigtes Konto
+erteilen kann, nennt er den nötigen manuellen Schritt.
 
 Pull Requests und `main` durchlaufen die vollständige CI mit `mise exec -- bin/ci`.
 Bei einem Main-Push baut ein zweiter Job parallel das Image mit dem SHA-Tag des
