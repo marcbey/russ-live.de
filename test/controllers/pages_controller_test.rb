@@ -89,7 +89,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
       unternehmen_path => "Veranstaltungen",
       team_path => "Michaela Russ",
       services_path => "Live",
-      referenzen_path => "Projekte auf die wir stolz sind",
+      referenzen_path => "Referenzen",
       jobs_path => "Aktuelle Jobangebote",
       job_path("stagehands") => "Stagehands",
       presse_path => "Presseinfos für",

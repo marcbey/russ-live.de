@@ -34,6 +34,17 @@ class Backend::PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Vorschau anzeigen"
   end
 
+  test "public page link follows the selected page and language" do
+    sign_in_as(@admin)
+    EditablePage.ensure_defaults!
+    page = EditablePage.find_by!(key: "impressum", locale: "en")
+
+    get backend_pages_path(page_id: page.id)
+
+    assert_response :success
+    assert_select ".backend-global-nav-actions a[href=?][target='_blank']", "/impressum?locale=en", text: "Seite anschauen"
+  end
+
   test "saves draft without changing published content" do
     sign_in_as(@admin)
     EditablePage.ensure_defaults!

@@ -7,6 +7,12 @@
     <%= link_to "Team", backend_team_members_path, class: ("is-active" if controller_path == "backend/team_members") %>
   </div>
   <div class="backend-global-nav-actions">
+    <% if (page_path = backend_public_page_path) %>
+      <%= link_to "Seite anschauen", page_path,
+                  class: "button button-secondary button-compact",
+                  target: "_blank", rel: "noopener",
+                  title: "Öffentliche Seite in einem neuen Tab öffnen. Änderungen vorher speichern und gegebenenfalls veröffentlichen." %>
+    <% end %>
     <%= link_to "Zur Website", root_path, class: "button button-secondary button-compact" %>
     <%= button_to "Logout", session_path, method: :delete, class: "button button-ghost button-compact" %>
   </div>

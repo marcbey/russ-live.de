@@ -32,6 +32,7 @@ class Backend::JobsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Ansprechpartner"
     assert_includes response.body, "Logout"
     assert_includes response.body, "Stagehands"
+    assert_select ".backend-global-nav-actions a[href=?][target='_blank']", job_path("stagehands"), text: "Seite anschauen"
     assert_includes response.body, "Titel (Header)"
     assert_includes response.body, "Titel EN"
     assert_includes response.body, "Englisch"
@@ -47,6 +48,16 @@ class Backend::JobsControllerTest < ActionDispatch::IntegrationTest
     assert_operator response.body.index("Speichern"), :<, response.body.index("Veröffentlichen")
     assert_operator response.body.index("Veröffentlichen"), :<, response.body.index("Vorschau anzeigen")
     assert_operator response.body.index("Job löschen"), :<, response.body.index("Neuer Job")
+  end
+
+  test "draft job links to public overview instead of an unavailable detail page" do
+    sign_in_as(@admin)
+    job = create_job!(title: "Entwurf", slug: "entwurf", status: "draft")
+
+    get backend_jobs_path(job_id: job.id)
+
+    assert_response :success
+    assert_select ".backend-global-nav-actions a[href=?][target='_blank']", jobs_path, text: "Seite anschauen"
   end
 
   test "searches jobs by categories and contact" do

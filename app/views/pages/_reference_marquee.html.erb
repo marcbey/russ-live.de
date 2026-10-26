@@ -11,6 +11,11 @@
      data-controller="reference-marquee"
      data-reference-marquee-base-speed-value="<%= base_speed %>">
   <div class="reference-marquee-controls" aria-label="<%= marquee_label %>">
+    <% if local_assigns[:heading].present? %>
+      <div class="section-head">
+        <h2 id="references-title"><%= heading %></h2>
+      </div>
+    <% end %>
     <button class="reference-marquee-arrow reference-marquee-arrow-prev"
             type="button"
             aria-label="<%= t("references.slider.previous") %>"
