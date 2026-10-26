@@ -402,6 +402,8 @@ oder ungültiges Artefakt führt zum Abbruch; es gibt keinen Ersatz-Build in Sta
 
 Installierte Gems werden in CI, Staging und beim Produktionsdeploy anhand von
 Betriebssystem, Architektur, Ruby-Version und `Gemfile.lock` wiederverwendet.
+Für die CSS-Bereinigung ist `crass` mindestens in Version `1.0.8` erforderlich;
+das Sicherheitsupdate schließt eine Umgehung der CSS-Filterung.
 Produktion liest den Cache passend zum festgelegten Kontrollcode und führt
 weiterhin `bundle install` aus. Docker speichert zusätzlich die Build-Layer im
 eigenen Russ-Cache. Ein fehlender Cache führt zur regulären Installation oder
