@@ -25,6 +25,7 @@ class Backend::ReferencesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_includes response.body, "Referenzen"
+    assert_select ".backend-global-nav-actions a[href=?][target='_blank'][rel='noopener']", referenzen_path, text: "Seite anschauen"
     assert_select ".backend-list-toolbar-actions .button-success", "Neue Referenz"
     assert_select ".backend-status-row .status-chip", "Slider"
     assert_includes response.body, "KISS"

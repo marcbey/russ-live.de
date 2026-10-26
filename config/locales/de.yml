@@ -133,7 +133,7 @@ de:
         legal_links_html: "© SKS Michael Russ GmbH <br>Impressum<br>Datenschutz<br>AGB<br>Jugendschutz"
         staff_equal_opportunity: "Chancengleichheit und Gleichbehandlung ungeachtet ethnischer Herkunft, Hautfarbe, Geschlecht, Religion Staatsangehörigkeit, sexueller Ausrichtung, sozialer Herkunft oder politischer Einstellung, soweit diese auf demokratischen Prinzipien und Toleranz gegenüber Andersdenkenden beruht, wird gewährleistet. Mitarbeiter werden grundsätzlich auf der Grundlage ihrer Qualifikation und ihrer Fähigkeiten ausgesucht, eingestellt und gefördert."
       references:
-        title: "Projekte auf die wir stolz sind"
+        title: "Referenzen"
         show_all: "Alle Referenzen"
       events:
         eyebrow: "<strong>STUTTGART</strong>LIVE"
@@ -209,7 +209,7 @@ de:
         eyebrow: "Geschichte"
         title: "Unsere Geschichte. Drei Generationen. Eine Haltung."
         image_alt: "Michaela Russ, Michael Russ und ein historisches Familienportrait"
-        first: "Michael Russ ist mit einer ruhigen Nähe, viel Herz und echtem Unternehmergeist in die Welt von Russ Klassik gewachsen. Im Laufe der Jahre wurde daraus Verantwortung, Erfahrung und ein klarer Blick dafür, wie man Kultur dauerhaft möglich macht."
+        first: "Michael Russ steigt 1966 mit viel Herz und echtem Unternehmergeist in den väterlichen Betrieb ein. Mit den Jahren wurde daraus Verantwortung, Erfahrung und ein klarer Blick dafür, wie man Kultur dauerhaft möglich macht."
         second: "Michael erweitert die traditionsreiche Arbeit der Konzertdirektion Erwin Russ im Bereich Klassik um Pop, Rock, Shows und Entertainment. Gemeinsam mit seinem Team entwickelt er das Unternehmen weiter, bringt Künstlerinnen und Künstler auf die Bühne, realisiert eigene Veranstaltungskonzepte und schafft mit Konzerten, Shows und Firmenevents besondere Erlebnisse für das Publikum."
       award:
         eyebrow: "Verantwortung"
@@ -278,7 +278,7 @@ de:
         description: "Referenzen von Russ Live: Konzerte, Shows und Kulturformate aus Stuttgart und der Region."
     references:
       hero:
-        title: "Projekte auf die wir stolz sind"
+        title: "Referenzen"
         intro: "Projekte, die begeistern, bewegen und in Erinnerung bleiben. Von großen Konzerten bis zu außergewöhnlichen Live-Erlebnissen. Ein Einblick in Veranstaltungen, auf die wir mit Stolz zurückblicken."
     jobs:
       meta:
@@ -469,7 +469,7 @@ de:
       contact:
         eyebrow: "Ansprechpartner"
         title: "Pressekontakt"
-        text: "Für Interview-, Akkreditierungs- und Materialanfragen ist der Pressebereich direkt vorbereitet."
+        text: "Für Interview-, Akkreditierungs- und Materialanfragen."
         role: "Presse- & Öffentlichkeitsarbeit"
         phone: "Telefon"
     detail:

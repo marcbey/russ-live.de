@@ -133,7 +133,7 @@ en:
         legal_links_html: "© SKS Michael Russ GmbH <br>Imprint<br>Privacy<br>Terms<br>Youth protection"
         staff_equal_opportunity: "Equal opportunity and equal treatment regardless of ethnic origin, skin color, gender, religion, nationality, sexual orientation, social background or political views, insofar as these are based on democratic principles and tolerance toward different opinions, are ensured. Employees are selected, hired and supported on the basis of their qualifications and abilities."
       references:
-        title: "Projects we are proud of"
+        title: "References"
         show_all: "All references"
       events:
         eyebrow: "<strong>STUTTGART</strong>LIVE"
@@ -209,7 +209,7 @@ en:
         eyebrow: "History"
         title: "Our history. Three generations. One attitude."
         image_alt: "Michaela Russ, Michael Russ and a historic family portrait"
-        first: "Michael Russ grew into the world of Russ Klassik with calm closeness, heart and genuine entrepreneurial spirit. Over the years, this became responsibility, experience and a clear sense of how to make culture last."
+        first: "In 1966, Michael Russ joins his father's business with great heart and genuine entrepreneurial spirit. Over the years, this became responsibility, experience and a clear sense of how to make culture last."
         second: "Michael expands the long-standing work of Konzertdirektion Erwin Russ in classical music to include pop, rock, shows and entertainment. Together with his team, he continues to develop the company, brings artists to the stage, creates original event concepts and gives audiences special experiences through concerts, shows and corporate events."
       award:
         eyebrow: "Responsibility"
@@ -278,7 +278,7 @@ en:
         description: "Russ Live references: concerts, shows and cultural formats from Stuttgart and the region."
     references:
       hero:
-        title: "Projects we are proud of"
+        title: "References"
         intro: "Projects that inspire, move people and stay in their memories. From major concerts to extraordinary live experiences. A look at events we are proud to look back on."
     jobs:
       meta:
@@ -469,7 +469,7 @@ en:
       contact:
         eyebrow: "Contact person"
         title: "Press contact"
-        text: "For interview, accreditation and material requests, the press area is directly prepared."
+        text: "For interview, accreditation and material requests."
         role: "Press & Public Relations"
         phone: "Phone"
     detail:

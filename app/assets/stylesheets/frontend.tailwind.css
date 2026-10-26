@@ -1,6 +1,12 @@
 @import "tailwindcss";
 @import "./shared.css";
 
+@layer base {
+  b, strong {
+    font-weight: 800;
+  }
+}
+
 @media (min-width: 1800px) {
   .page-header {
     --header-nav-height: 84px;
@@ -432,7 +438,7 @@
   font-size: clamp(4.2rem, 8vw, 8.6rem);
   font-weight: 600;
   hyphens: none;
-  line-height: 1;
+  line-height: .85;
   max-width: 8ch;
   overflow-wrap: normal;
 }
@@ -447,7 +453,7 @@
 
 .home-hero-copy > #hero-intro {
   color: rgba(255, 255, 255, .82);
-  font-size: clamp(1.12rem, 1.25vw, 1.42rem);
+  font-size: clamp(1.15rem, 1.45vw, 1.58rem);
   line-height: 1.45;
   margin: 44px 0 0;
   max-width: 50ch;
@@ -472,7 +478,7 @@
   }
 
   .home-hero-copy > #hero-intro {
-    max-width: 50ch;
+    max-width: 47ch;
   }
 
   .home-body .site-header:not(.is-scrolled):not(.is-menu-open),
@@ -1283,15 +1289,32 @@
 }
 
 .home-references-band .reference-marquee {
+  margin-top: 0;
   margin-left: 0;
   margin-right: 0;
   width: 100%;
 }
 
 .home-references-band .reference-marquee-controls {
+  align-items: center;
   justify-content: flex-end;
   margin-bottom: clamp(1rem, 2vw, 1.5rem);
   position: static;
+}
+
+.home-references-band .reference-marquee-controls .section-head {
+  flex: 1;
+  margin: 0;
+  min-width: 0;
+}
+
+.home-references-band .reference-marquee-controls h2 {
+  font-size: clamp(1.75rem, 4vw, 4rem);
+  margin: 0;
+}
+
+.home-references-band .reference-marquee-arrow {
+  flex-shrink: 0;
 }
 
 .reference-marquee {
@@ -7781,7 +7804,6 @@
 
   .home-hero h1 {
     font-size: clamp(3.5rem, 20vw, 6rem);
-    line-height: .84;
     max-width: min(760px, calc(100vw - 48px));
   }
 
@@ -8978,13 +9000,11 @@
   }
 
   .home-hero h1 {
-    line-height: .9;
     margin-top: 4rem;
     max-width: calc(100vw - 48px);
   }
 
   .home-hero-copy > #hero-intro {
-    font-size: clamp(1.05rem, 4vw, 1.26rem);
     margin-top: 34px;
   }
 

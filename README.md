@@ -153,6 +153,13 @@ wird direkt für die öffentliche Teamseite übernommen. Teamfotos liegen unter
 
 ## Seitenpflege
 
+Über `Seite anschauen` neben `Zur Website` öffnet sich die zum Backend-Bereich
+gehörende öffentliche Seite in einem neuen Tab. Bei veröffentlichten Jobs führt
+der Button direkt zur ausgewählten Jobseite, bei Ansprechpartnern zur Jobübersicht.
+Bei redaktionellen Seiten wird die ausgewählte Sprachversion geöffnet.
+Änderungen müssen vorher gespeichert und gegebenenfalls veröffentlicht werden;
+ungespeicherte Änderungen und Entwürfe erscheinen dort nicht.
+
 Die redaktionellen Seiten `Kontakt`, `Impressum`, `Datenschutz`, `AGB` und
 `Jugendschutz` werden im Backend unter `/backend/pages` gepflegt. Jede Seite
 gibt es getrennt für Deutsch und Englisch. `Speichern` legt Änderungen als
