@@ -1,14 +1,18 @@
 class PressArtist
   FALLBACK_HERO_IMAGE = "russ_live/keyvisuals/Keyvisual_RussLive.jpg".freeze
 
-  attr_reader :events, :name, :normalized_name, :slug
+  attr_reader :events, :schedule_events, :name, :normalized_name, :slug
 
-  def self.from_events(events)
+  def self.from_events(events, series_events: [])
+    series_events_by_id = series_events.group_by(&:event_series_id)
     grouped_events = events.group_by { |event| event.normalized_artist_name.presence || event.artist_name.to_s.downcase }
     artists = grouped_events.filter_map do |normalized_name, artist_events|
       next if normalized_name.blank?
 
-      new(normalized_name:, events: artist_events.sort_by { |event| [ event.start_at || Time.zone.at(0), event.id.to_i ] })
+      ordered_events = artist_events.sort_by { |event| [ event.start_at || Time.zone.at(0), event.id.to_i ] }
+      schedule_events = schedule_for(ordered_events, series_events_by_id)
+
+      new(normalized_name:, events: ordered_events, schedule_events:)
     end
 
     assign_slugs(artists.sort_by { |artist| artist.name.downcase })
@@ -18,9 +22,10 @@ class PressArtist
     artists.group_by(&:letter).sort.to_h
   end
 
-  def initialize(normalized_name:, events:)
+  def initialize(normalized_name:, events:, schedule_events: events)
     @normalized_name = normalized_name
     @events = events
+    @schedule_events = schedule_events
     @name = display_name_from(events)
   end
 
@@ -42,15 +47,19 @@ class PressArtist
   end
 
   def additional_events
-    events - [ primary_event ]
+    schedule_events - [ primary_performance ]
+  end
+
+  def primary_performance
+    @primary_performance ||= schedule_events.find { |event| event.start_at >= Time.current } || schedule_events.last
   end
 
   def multiple_venues?
-    events.filter_map(&:venue).uniq.many?
+    schedule_events.filter_map(&:venue).uniq.many?
   end
 
   def multiple_cities?
-    events.filter_map { |event| event.city.to_s.strip.presence }.map(&:downcase).uniq.many?
+    schedule_events.filter_map { |event| event.city.to_s.strip.presence }.map(&:downcase).uniq.many?
   end
 
   def press_body
@@ -73,8 +82,7 @@ class PressArtist
   end
 
   def ticket_url
-    primary_event.public_ticket_offer&.resolved_ticket_url.presence ||
-      "#{StuttgartLiveUrls.base_url}/events/#{primary_event.slug}"
+    primary_performance.public_ticket_offer&.resolved_ticket_url.presence || primary_performance.public_detail_url
   end
 
   def self.assign_slugs(artists)
@@ -91,6 +99,13 @@ class PressArtist
     name.to_s.parameterize.presence || "kuenstler"
   end
   private_class_method :base_slug
+
+  def self.schedule_for(events, series_events_by_id)
+    events.flat_map do |event|
+      series_events_by_id.empty? ? [ event ] : series_events_by_id.fetch(event.event_series_id, [ event ])
+    end.uniq(&:id).sort_by { |event| [ event.start_at || Time.zone.at(0), event.id.to_i ] }
+  end
+  private_class_method :schedule_for
 
   private
 

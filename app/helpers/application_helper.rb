@@ -232,7 +232,7 @@ module ApplicationHelper
   end
 
   def press_event_date_label(artist)
-    artist.events.map { |event| event.start_at.to_date }.minmax.uniq
+    artist.schedule_events.map { |event| event.start_at.to_date }.minmax.uniq
       .map { |date| l(date, format: "%d. %B %Y") }.join(" – ")
   end
 
