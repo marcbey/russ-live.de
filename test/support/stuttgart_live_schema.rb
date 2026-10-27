@@ -49,6 +49,7 @@ module StuttgartLiveSchema
     end
 
     ensure_column(connection, :events, :promoter_id, :string)
+    ensure_column(connection, :events, :city, :string)
     ensure_column(connection, :events, :promoter_name, :string)
     ensure_column(connection, :events, :highlighted, :boolean, default: false, null: false)
     ensure_column(connection, :events, :event_series_id, :integer)

@@ -3,6 +3,7 @@ require "zip"
 
 class PressControllerTest < ActionDispatch::IntegrationTest
   setup do
+    travel_to Time.zone.local(2026, 5, 1, 12)
     StuttgartLiveSchema.ensure!
     clear_stuttgart_live_records
   end
@@ -98,6 +99,97 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "1 Presseeintrag"
   end
 
+  test "press access expires at Berlin midnight after the third calendar day including daylight saving changes" do
+    berlin = ActiveSupport::TimeZone["Europe/Berlin"]
+    travel_to berlin.local(2026, 10, 27, 23, 59, 59)
+    event = create_event!(
+      artist_name: "Recent Artist",
+      normalized_artist_name: "recent artist",
+      publish_on_russ_live: true,
+      start_at: berlin.local(2026, 10, 24),
+      event_info: "Aktueller Pressetext"
+    )
+    create_event_image!(event:, purpose: EventImage::PURPOSE_SLIDER, alt_text: "Aktuelles Foto")
+    paths = [ press_artist_path("recent-artist"), press_artist_download_path("recent-artist"),
+      press_artist_text_download_path("recent-artist") ]
+
+    get presse_path
+    assert_includes response.body, "Recent Artist"
+    paths.each do |path|
+      get path
+      assert_response :success
+    end
+
+    travel_to berlin.local(2026, 10, 28)
+
+    get presse_path
+    assert_not_includes response.body, "Recent Artist"
+    paths.each do |path|
+      get path
+      assert_response :not_found
+    end
+    assert Event.exists?(event.id)
+  end
+
+  test "show excludes expired additional dates for an artist with a future show" do
+    current_event = create_event!(artist_name: "Returning Artist", normalized_artist_name: "returning artist",
+      publish_on_russ_live: true, start_at: 1.week.from_now, title: "Aktuelle Show")
+    create_event!(artist_name: "Returning Artist", normalized_artist_name: "returning artist",
+      publish_on_russ_live: true, start_at: 4.days.ago, title: "Abgelaufene Show")
+
+    get press_artist_path("returning-artist")
+
+    assert_response :success
+    assert_select "a[href=?]", current_event.public_detail_url
+    assert_not_includes response.body, "Abgelaufene Show"
+    assert_not_includes response.body, "Weitere Termine"
+  end
+
+  test "gallery and zip use only images uploaded to the primary event" do
+    events = [ 1.day.ago, 1.week.from_now, 1.month.from_now ].map do |start_at|
+      create_event!(artist_name: "Tour Artist", normalized_artist_name: "tour artist",
+        publish_on_russ_live: true, start_at:)
+    end
+    events.each_with_index do |event, index|
+      create_event_image!(event:, purpose: EventImage::PURPOSE_SLIDER,
+        alt_text: "Showfoto #{index}", filename: "show-#{index}.jpg", content: "show #{index}")
+    end
+
+    get press_artist_path("tour-artist")
+
+    assert_response :success
+    assert_select ".press-gallery-item", 1
+    assert_includes response.body, "Showfoto 1"
+    assert_not_includes response.body, "Showfoto 0"
+    assert_not_includes response.body, "Showfoto 2"
+
+    get press_artist_download_path("tour-artist")
+
+    assert_response :success
+    Zip::File.open_buffer(StringIO.new(response.body)) do |zip|
+      assert_equal [ "1-show-1.jpg" ], zip.map(&:name)
+      assert_equal "show 1", zip.first.get_input_stream.read
+    end
+  end
+
+  test "primary event without images does not borrow images from another show" do
+    create_event!(artist_name: "Separate Shows", normalized_artist_name: "separate shows",
+      publish_on_russ_live: true, start_at: 1.week.from_now)
+    other_event = create_event!(artist_name: "Separate Shows", normalized_artist_name: "separate shows",
+      publish_on_russ_live: true, start_at: 1.month.from_now)
+    create_event_image!(event: other_event, purpose: EventImage::PURPOSE_DETAIL_HERO, alt_text: "Anderes Eventbild")
+
+    get press_artist_path("separate-shows")
+
+    assert_response :success
+    assert_select ".press-gallery-item", 0
+    assert_not_includes response.body, "Anderes Eventbild"
+
+    get press_artist_download_path("separate-shows")
+
+    assert_response :not_found
+  end
+
   test "index renders artist letters in continuous columns" do
     %w[A B C D E F].each_with_index do |letter, index|
       create_event!(
@@ -191,7 +283,7 @@ class PressControllerTest < ActionDispatch::IntegrationTest
       artist_name: "Past Artist",
       normalized_artist_name: "past artist",
       publish_on_russ_live: true,
-      start_at: 1.year.ago
+      start_at: 1.day.ago
     )
     create_event_offer!(event_id: event.id, ticket_url: "https://tickets.example/%{event_id}", source_event_id: "past")
 
@@ -201,6 +293,107 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Vergangene Veranstaltung"
     assert_not_includes response.body, "https://tickets.example/past"
     assert_select ".press-event-ticket-button", 0
+  end
+
+  test "show displays the date range and multiple performances hint in both languages" do
+    [ Time.zone.local(2027, 1, 3, 15), Time.zone.local(2026, 12, 28, 20) ].each do |start_at|
+      create_event!(artist_name: "Musical", normalized_artist_name: "musical",
+        publish_on_russ_live: true, start_at:)
+    end
+
+    get press_artist_path("musical")
+
+    assert_response :success
+    assert_select ".press-event-details dl > div:nth-child(1) dd", "28. Dezember 2026 – 03. Januar 2027"
+    assert_select ".press-event-details dl > div:nth-child(2) dd", "Mehrere Vorstellungen"
+
+    post locale_path(:en), params: { return_to: press_artist_path("musical") }
+    get press_artist_path("musical")
+
+    assert_response :success
+    assert_select ".press-event-details dl > div:nth-child(1) dd", "28. December 2026 – 03. January 2027"
+    assert_select ".press-event-details dl > div:nth-child(2) dd", "Multiple performances"
+  end
+
+  test "multiple performances on the same day show the date once" do
+    [ 15, 20 ].each do |hour|
+      create_event!(artist_name: "Matinee", normalized_artist_name: "matinee",
+        publish_on_russ_live: true, start_at: Time.zone.local(2026, 6, 1, hour))
+    end
+
+    get press_artist_path("matinee")
+
+    assert_response :success
+    assert_select ".press-event-details dl > div:nth-child(1) dd", "01. Juni 2026"
+    assert_select ".press-event-details dl > div:nth-child(2) dd", "Mehrere Vorstellungen"
+  end
+
+  test "shows all dates with venues and cities when an artist performs in different cities" do
+    [ [ "Stuttgart", "Theaterhaus", 1 ], [ "Kempten", "kultBOX", 2 ], [ "Aalen", "Stadthalle", 3 ] ].each do |city, venue, day|
+      create_event!(artist_name: "Touring Artist", normalized_artist_name: "touring artist",
+        publish_on_russ_live: true, start_at: Time.zone.local(2026, 6, day, 20),
+        city:, venue_id: create_venue!(name: venue))
+    end
+
+    get press_artist_path("touring-artist")
+
+    assert_response :success
+    assert_select ".press-event-details dt", text: "Termine und Veranstaltungsorte"
+    assert_select ".press-event-details dd", text: "Verschiedene Städte"
+    assert_select ".press-event-details dd span", text: "01.06.2026 · Theaterhaus, Stuttgart"
+    assert_select ".press-event-details dd span", text: "02.06.2026 · kultBOX, Kempten"
+    assert_select ".press-event-details dd span", text: "03.06.2026 · Stadthalle, Aalen"
+
+    post locale_path(:en), params: { return_to: press_artist_path("touring-artist") }
+    get press_artist_path("touring-artist")
+
+    assert_response :success
+    assert_select ".press-event-details dt", text: "Dates and venues"
+    assert_select ".press-event-details dd", text: "Various cities"
+  end
+
+  test "different venues do not imply different cities when cities are identical or missing" do
+    [ "Stuttgart", nil ].each_with_index do |city, index|
+      [ "Theaterhaus", "Liederhalle" ].each_with_index do |venue, day|
+        create_event!(artist_name: "Local Artist #{index}", normalized_artist_name: "local artist #{index}",
+          publish_on_russ_live: true, start_at: Time.zone.local(2026, 6, day + 1, 20),
+          city:, venue_id: create_venue!(name: venue))
+      end
+
+      get press_artist_path("local-artist-#{index}")
+
+      assert_response :success
+      assert_select ".press-event-details dd", text: "Verschiedene Veranstaltungsorte"
+      assert_select ".press-event-details dd", text: "Verschiedene Städte", count: 0
+      assert_select ".press-event-details dd span", 2
+    end
+  end
+
+  test "repeated performances at one venue retain the specific location" do
+    venue_id = create_venue!(name: "Theaterhaus")
+    [ "Stuttgart", " stuttgart " ].each_with_index do |city, day|
+      create_event!(artist_name: "Local Musical", normalized_artist_name: "local musical",
+        publish_on_russ_live: true, start_at: Time.zone.local(2026, 6, day + 1, 20), city:, venue_id:)
+    end
+
+    get press_artist_path("local-musical")
+
+    assert_response :success
+    assert_select ".press-event-details dd", text: "Theaterhaus, Stuttgart"
+    assert_select ".press-event-details dt", text: "Weitere Termine"
+    assert_not_includes response.body, "Verschiedene Städte"
+    assert_not_includes response.body, "Verschiedene Veranstaltungsorte"
+  end
+
+  test "single performance retains its exact date and time" do
+    create_event!(artist_name: "Solo", normalized_artist_name: "solo",
+      publish_on_russ_live: true, start_at: Time.zone.local(2026, 6, 1, 20, 30))
+
+    get press_artist_path("solo")
+
+    assert_response :success
+    assert_select ".press-event-details dl > div:nth-child(1) dd", "01. Juni 2026"
+    assert_select ".press-event-details dl > div:nth-child(2) dd", "20:30 Uhr"
   end
 
   test "show prefers rich press text over event info" do
@@ -442,6 +635,7 @@ class PressControllerTest < ActionDispatch::IntegrationTest
         published_at: attributes.fetch(:published_at, 1.day.ago),
         start_at: attributes.fetch(:start_at),
         event_info: attributes[:event_info],
+        city: attributes[:city],
         publish_on_russ_live: attributes.fetch(:publish_on_russ_live),
         venue_id:,
         created_at: Time.current,
