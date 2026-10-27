@@ -46,7 +46,7 @@
               <dt><%= t(multiple_locations ? "press.detail.event.dates_and_venues" : "press.detail.event.more_dates") %></dt>
               <dd>
                 <% (multiple_locations ? @press_artist.schedule_events : @press_artist.additional_events).each do |event| %>
-                  <span><%= l(event.start_at.to_date, format: "%d.%m.%Y") %><%= " · #{press_event_location_label(event)}" if press_event_location_label(event).present? %></span><br>
+                  <span><%= link_to event.public_detail_url, class: "underline underline-offset-2", target: "_blank", rel: "noreferrer" do %><%= l(event.start_at.to_date, format: "%d.%m.%Y") %><%= " · #{press_event_location_label(event)}" if press_event_location_label(event).present? %><% end %></span><br>
                 <% end %>
               </dd>
             </div>

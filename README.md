@@ -212,9 +212,11 @@ den Zeitraum vom ersten bis zum letzten Termin und unter „Uhrzeit“ den Hinwe
 Datum nur einmal angezeigt. Einzeltermine behalten ihre konkrete Uhrzeit.
 Bei Terminen in mehreren Städten steht unter „Location“ der Hinweis
 „Verschiedene Städte“, bei unterschiedlichen Spielstätten in derselben Stadt
-oder ohne Stadtangaben „Verschiedene Veranstaltungsorte“. Darunter werden alle
-sichtbaren Termine mit ihrer Spielstätte und der am Event hinterlegten Stadt
-aufgeführt, einschließlich des Haupttermins.
+oder ohne Stadtangaben „Verschiedene Locations“. Unter „Termine und Locations“
+werden alle sichtbaren Termine mit ihrer Spielstätte und der am Event hinterlegten
+Stadt aufgeführt, einschließlich des Haupttermins. Jeder Eintrag unter diesem
+Hinweis oder „Weitere Termine“ verlinkt auf die jeweilige Veranstaltungsseite
+bei Stuttgart Live und öffnet sie in einem neuen Tab.
 
 Pressebild-Galerie und ZIP enthalten ausschließlich Bilder des für die Presse
 freigegebenen Events, zu dem auch der Pressetext gehört. Die ergänzten
