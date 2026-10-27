@@ -231,6 +231,15 @@ module ApplicationHelper
     ].select { |_, value| value.present? }
   end
 
+  def press_event_date_label(artist)
+    artist.events.map { |event| event.start_at.to_date }.minmax.uniq
+      .map { |date| l(date, format: "%d. %B %Y") }.join(" – ")
+  end
+
+  def press_event_location_label(event)
+    [ event.venue, event.city.to_s.strip.presence ].compact_blank.uniq.join(", ")
+  end
+
   def press_image_credit(image)
     formatted_image_credit(image&.sub_text)
   end

@@ -189,8 +189,27 @@ bleiben vorerst einsprachig aus den jeweiligen Datenquellen.
 ## Pressebilder aus Stuttgart Live
 
 Der Pressebereich zeigt nur veröffentlichte Stuttgart-Live-Events, die über den
-Haken „Auf Russ Live veröffentlichen“ freigegeben sind. Für die
-Pressebild-Galerie und das ZIP werden zuerst die im Stuttgart-Live-Tab
+Haken „Auf Russ Live veröffentlichen“ freigegeben sind. Vergangene Termine bleiben
+bis einschließlich des dritten Kalendertags nach dem Veranstaltungstag sichtbar
+(Zeitzone Europe/Berlin). Ab dem vierten Tag entfallen sie automatisch aus der
+Presseübersicht und den weiteren Terminen. Ohne verbleibenden Termin sind auch
+die Künstlerseite und ihre Downloads nicht mehr erreichbar. Die Eventdaten
+werden nicht gelöscht. Die Veranstaltungsslider auf Start- und Serviceseite
+zeigen weiterhin nur bevorstehende Termine.
+
+Bei mehreren sichtbaren Vorstellungen zeigt die Künstlerseite unter „Datum“
+den Zeitraum vom ersten bis zum letzten Termin und unter „Uhrzeit“ den Hinweis
+„Mehrere Vorstellungen“. Liegen alle Vorstellungen am selben Tag, wird das
+Datum nur einmal angezeigt. Einzeltermine behalten ihre konkrete Uhrzeit.
+Bei Terminen in mehreren Städten steht unter „Location“ der Hinweis
+„Verschiedene Städte“, bei unterschiedlichen Spielstätten in derselben Stadt
+oder ohne Stadtangaben „Verschiedene Veranstaltungsorte“. Darunter werden alle
+sichtbaren Termine mit ihrer Spielstätte und der am Event hinterlegten Stadt
+aufgeführt, einschließlich des Haupttermins.
+
+Pressebild-Galerie und ZIP enthalten ausschließlich Bilder des angezeigten
+Haupttermins, zu dem auch der Pressetext gehört. Bilder anderer Shows desselben
+Künstlers werden nicht beigemischt. Zuerst werden die im Stuttgart-Live-Tab
 „Presse“ gepflegten Sliderbilder verwendet. Wenn für ein freigegebenes Event
 keine Sliderbilder vorhanden sind, verwendet Russ Live stattdessen das Eventbild
 aus dem Tab „Eventbild“ zusätzlich zum Header als Pressebild und nimmt es in das
@@ -404,6 +423,9 @@ Installierte Gems werden in CI, Staging und beim Produktionsdeploy anhand von
 Betriebssystem, Architektur, Ruby-Version und `Gemfile.lock` wiederverwendet.
 Für die CSS-Bereinigung ist `crass` mindestens in Version `1.0.8` erforderlich;
 das Sicherheitsupdate schließt eine Umgehung der CSS-Filterung.
+Die für Deployments verwendete SSH-Bibliothek `net-ssh` ist auf `7.3.8`
+aktualisiert; damit sind die von der Sicherheitsprüfung gemeldeten Lücken
+der bisherigen Version `7.3.3` geschlossen.
 Produktion liest den Cache passend zum festgelegten Kontrollcode und führt
 weiterhin `bundle install` aus. Docker speichert zusätzlich die Build-Layer im
 eigenen Russ-Cache. Ein fehlender Cache führt zur regulären Installation oder

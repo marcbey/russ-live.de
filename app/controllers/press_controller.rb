@@ -79,6 +79,7 @@ class PressController < ApplicationController
 
     Event
       .published_on_russ_live
+      .within_public_display_period
       .includes(
         :venue_record,
         :event_offers,

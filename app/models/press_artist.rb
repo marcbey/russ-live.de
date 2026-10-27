@@ -45,6 +45,14 @@ class PressArtist
     events - [ primary_event ]
   end
 
+  def multiple_venues?
+    events.filter_map(&:venue).uniq.many?
+  end
+
+  def multiple_cities?
+    events.filter_map { |event| event.city.to_s.strip.presence }.map(&:downcase).uniq.many?
+  end
+
   def press_body
     rich_text = primary_event.press_text&.body
     return rich_text if rich_text.present?
@@ -60,8 +68,7 @@ class PressArtist
   end
 
   def gallery_images
-    events.flat_map { |event| press_images_for(event) }
-      .select { |image| image.file.attached? }
+    press_images_for(primary_event)
       .uniq { |image| image.file.blob_id }
   end
 

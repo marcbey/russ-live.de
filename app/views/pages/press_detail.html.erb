@@ -24,18 +24,29 @@
         <dl>
           <% primary_event = @press_artist.primary_event %>
           <% primary_event_current = primary_event.start_at.future? %>
-          <div><dt><%= t("press.detail.event.date") %></dt><dd><%= l(primary_event.start_at.to_date, format: "%d. %B %Y") %></dd></div>
-          <div><dt><%= t("press.detail.event.time") %></dt><dd><%= l(primary_event.start_at, format: t("time.formats.event_time")) %></dd></div>
-          <% if primary_event.venue.present? %>
-            <div><dt><%= t("press.detail.event.location") %></dt><dd><%= primary_event.venue %></dd></div>
+          <% multiple_cities = @press_artist.multiple_cities? %>
+          <% multiple_locations = multiple_cities || @press_artist.multiple_venues? %>
+          <div><dt><%= t("press.detail.event.date") %></dt><dd><%= press_event_date_label(@press_artist) %></dd></div>
+          <div><dt><%= t("press.detail.event.time") %></dt><dd><%= @press_artist.events.many? ? t("press.detail.event.multiple_performances") : l(primary_event.start_at, format: t("time.formats.event_time")) %></dd></div>
+          <% if multiple_locations || press_event_location_label(primary_event).present? %>
+            <div>
+              <dt><%= t("press.detail.event.location") %></dt>
+              <dd>
+                <% if multiple_locations %>
+                  <%= t(multiple_cities ? "press.detail.event.multiple_cities" : "press.detail.event.multiple_venues") %>
+                <% else %>
+                  <%= press_event_location_label(primary_event) %>
+                <% end %>
+              </dd>
+            </div>
           <% end %>
           <div><dt><%= t("press.detail.event.status") %></dt><dd><%= primary_event_current ? t("press.detail.event.current") : t("press.detail.event.past") %></dd></div>
           <% if @press_artist.additional_events.any? %>
             <div>
-              <dt><%= t("press.detail.event.more_dates") %></dt>
+              <dt><%= t(multiple_locations ? "press.detail.event.dates_and_venues" : "press.detail.event.more_dates") %></dt>
               <dd>
-                <% @press_artist.additional_events.each do |event| %>
-                  <span><%= l(event.start_at.to_date, format: "%d.%m.%Y") %><%= " · #{event.venue}" if event.venue.present? %></span><br>
+                <% (multiple_locations ? @press_artist.events : @press_artist.additional_events).each do |event| %>
+                  <span><%= l(event.start_at.to_date, format: "%d.%m.%Y") %><%= " · #{press_event_location_label(event)}" if press_event_location_label(event).present? %></span><br>
                 <% end %>
               </dd>
             </div>

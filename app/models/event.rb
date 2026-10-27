@@ -22,6 +22,9 @@ class Event < SharedStuttgartRecord
     relation.where(publish_on_russ_live: true)
   }
   scope :upcoming, -> { where("start_at >= ?", Time.zone.today.beginning_of_day) }
+  scope :within_public_display_period, lambda {
+    where("start_at >= ?", (Time.current.in_time_zone("Europe/Berlin") - 3.days).beginning_of_day)
+  }
   scope :sks_promoters, lambda {
     sks_promoter_ids = AppSetting.sks_promoter_ids
     sks_promoter_ids.any? ? where(promoter_id: sks_promoter_ids).or(where(promoter_name: sks_promoter_ids)) : none
