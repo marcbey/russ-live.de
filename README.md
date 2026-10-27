@@ -189,11 +189,20 @@ bleiben vorerst einsprachig aus den jeweiligen Datenquellen.
 ## Pressebilder aus Stuttgart Live
 
 Der Pressebereich zeigt nur veröffentlichte Stuttgart-Live-Events, die über den
-Haken „Auf Russ Live veröffentlichen“ freigegeben sind. Vergangene Termine bleiben
+Haken „Auf Russ Live veröffentlichen“ freigegeben sind. Gehört ein freigegebenes
+Presse-Event zu einer Veranstaltungsreihe, ergänzt Russ Live deren weitere auf
+Stuttgart Live veröffentlichte Termine für Datum, Uhrzeit und Orte. Dafür müssen
+nicht alle Vorstellungen einzeln für Russ Live angehakt werden. Entwürfe,
+zukünftig freigeschaltete Events und andere Reihen werden nicht ergänzt.
+
+Vergangene Termine bleiben
 bis einschließlich des dritten Kalendertags nach dem Veranstaltungstag sichtbar
 (Zeitzone Europe/Berlin). Ab dem vierten Tag entfallen sie automatisch aus der
 Presseübersicht und den weiteren Terminen. Ohne verbleibenden Termin sind auch
-die Künstlerseite und ihre Downloads nicht mehr erreichbar. Die Eventdaten
+die Künstlerseite und ihre Downloads nicht mehr erreichbar. Eine Reihe bleibt
+bis drei Tage nach ihrer letzten Vorstellung verfügbar, auch wenn der für die
+Presse freigegebene Einzeltermin bereits älter ist. Links und Status beziehen
+sich auf die nächste beziehungsweise letzte noch sichtbare Vorstellung. Die Eventdaten
 werden nicht gelöscht. Die Veranstaltungsslider auf Start- und Serviceseite
 zeigen weiterhin nur bevorstehende Termine.
 
@@ -207,8 +216,9 @@ oder ohne Stadtangaben „Verschiedene Veranstaltungsorte“. Darunter werden al
 sichtbaren Termine mit ihrer Spielstätte und der am Event hinterlegten Stadt
 aufgeführt, einschließlich des Haupttermins.
 
-Pressebild-Galerie und ZIP enthalten ausschließlich Bilder des angezeigten
-Haupttermins, zu dem auch der Pressetext gehört. Bilder anderer Shows desselben
+Pressebild-Galerie und ZIP enthalten ausschließlich Bilder des für die Presse
+freigegebenen Events, zu dem auch der Pressetext gehört. Die ergänzten
+Reihentermine liefern keine Bilder oder Pressetexte. Bilder anderer Shows desselben
 Künstlers werden nicht beigemischt. Zuerst werden die im Stuttgart-Live-Tab
 „Presse“ gepflegten Sliderbilder verwendet. Wenn für ein freigegebenes Event
 keine Sliderbilder vorhanden sind, verwendet Russ Live stattdessen das Eventbild

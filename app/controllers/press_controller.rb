@@ -71,21 +71,31 @@ class PressController < ApplicationController
   end
 
   def press_artists
-    @press_artists ||= PressArtist.from_events(press_events.to_a)
+    @press_artists ||= begin
+      events = press_events.to_a
+      series_ids = events.filter_map(&:event_series_id).uniq
+      series_events = series_ids.empty? ? [] : visible_press_dates.where(event_series_id: series_ids).includes(:venue_record, :event_offers).to_a
+
+      PressArtist.from_events(events, series_events:)
+    end
   end
 
   def press_events
     return [] unless shared_events_table_available?
 
-    Event
-      .published_on_russ_live
-      .within_public_display_period
+    approved_events = Event.published_on_russ_live
+    approved_events.where(id: visible_press_dates.select(:id))
+      .or(approved_events.where(event_series_id: visible_press_dates.select(:event_series_id)))
       .includes(
         :venue_record,
         :event_offers,
         :rich_text_press_text,
         event_images: [ file_attachment: :blob ]
       )
+  end
+
+  def visible_press_dates
+    Event.published_live.within_public_display_period
   end
 
   def shared_events_table_available?

@@ -315,6 +315,103 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_select ".press-event-details dl > div:nth-child(2) dd", "Multiple performances"
   end
 
+  test "one approved press event includes public series dates without borrowing their press material" do
+    anchor = create_event!(artist_name: "Series Musical", normalized_artist_name: "series musical",
+      publish_on_russ_live: true, event_series_id: 101, start_at: Time.zone.local(2026, 6, 1, 20),
+      event_info: "Freigegebener Pressetext")
+    create_event_image!(event: anchor, purpose: EventImage::PURPOSE_SLIDER, alt_text: "Freigegebenes Foto", filename: "approved.jpg")
+    sibling = create_event!(artist_name: "Series Musical", normalized_artist_name: "series musical",
+      publish_on_russ_live: false, event_series_id: 101, start_at: Time.zone.local(2026, 6, 5, 20),
+      event_info: "Nicht freigegebener Pressetext")
+    create_event_image!(event: sibling, purpose: EventImage::PURPOSE_SLIDER, alt_text: "Anderes Foto", filename: "other.jpg")
+    create_event!(artist_name: "Series Musical", normalized_artist_name: "series musical",
+      publish_on_russ_live: false, event_series_id: 202, start_at: Time.zone.local(2026, 7, 1, 20))
+    create_event!(artist_name: "Series Musical", normalized_artist_name: "series musical",
+      publish_on_russ_live: false, event_series_id: 101, status: "draft", start_at: Time.zone.local(2026, 8, 1, 20))
+    create_event!(artist_name: "Series Musical", normalized_artist_name: "series musical",
+      publish_on_russ_live: false, event_series_id: 101, published_at: 1.day.from_now, start_at: Time.zone.local(2026, 9, 1, 20))
+    create_event!(artist_name: "Series Musical", normalized_artist_name: "series musical",
+      publish_on_russ_live: false, event_series_id: 101, start_at: 4.days.ago)
+
+    get press_artist_path("series-musical")
+
+    assert_response :success
+    assert_select ".press-event-details dl > div:nth-child(1) dd", "01. Juni 2026 – 05. Juni 2026"
+    assert_select ".press-event-details dl > div:nth-child(2) dd", "Mehrere Vorstellungen"
+    assert_includes response.body, "Freigegebener Pressetext"
+    assert_not_includes response.body, "Nicht freigegebener Pressetext"
+    assert_includes response.body, "Freigegebenes Foto"
+    assert_not_includes response.body, "Anderes Foto"
+
+    get press_artist_download_path("series-musical")
+
+    assert_response :success
+    Zip::File.open_buffer(StringIO.new(response.body)) do |zip|
+      assert_equal [ "1-approved.jpg", "series-musical-pressetext.pdf" ], zip.map(&:name)
+    end
+  end
+
+  test "series dates in other cities are included even when only one event is approved" do
+    [ [ "Stuttgart", true ], [ "Kempten", nil ], [ "Aalen", false ] ].each_with_index do |(city, approved), day|
+      create_event!(artist_name: "Series Speaker", normalized_artist_name: "series speaker",
+        publish_on_russ_live: approved, event_series_id: 303,
+        start_at: Time.zone.local(2026, 11, 10 + day, 19), city:)
+    end
+
+    get press_artist_path("series-speaker")
+
+    assert_response :success
+    assert_select ".press-event-details dd", text: "10. November 2026 – 12. November 2026"
+    assert_select ".press-event-details dd", text: "Verschiedene Städte"
+    assert_select ".press-event-details dd span", 3
+    %w[Stuttgart Kempten Aalen].each { |city| assert_includes response.body, city }
+  end
+
+  test "series retains approved content until three days after its last public performance" do
+    anchor = create_event!(artist_name: "Continuing Series", normalized_artist_name: "continuing series",
+      publish_on_russ_live: true, event_series_id: 404, start_at: 5.days.ago, event_info: "Reihenpressetext")
+    next_event = create_event!(artist_name: "Continuing Series", normalized_artist_name: "continuing series",
+      publish_on_russ_live: false, event_series_id: 404, start_at: 1.day.from_now)
+
+    get presse_path
+    assert_includes response.body, "Continuing Series"
+
+    get press_artist_path("continuing-series")
+
+    assert_response :success
+    assert_includes response.body, "Reihenpressetext"
+    assert_select ".press-event-details dd", text: "02. Mai 2026"
+    assert_select ".press-event-detail-button[href=?]", next_event.public_detail_url
+    assert_select ".press-event-ticket-button[href=?]", next_event.public_detail_url
+    assert_not_includes response.body, "Weitere Termine"
+
+    travel_to Time.find_zone!("Europe/Berlin").local(2026, 5, 5, 23, 59, 59)
+    get press_artist_path("continuing-series")
+    assert_response :success
+
+    travel 1.second
+    get press_artist_path("continuing-series")
+    assert_response :not_found
+    assert Event.exists?(anchor.id)
+  end
+
+  test "an unapproved series does not create a press entry or extend an unrelated artist entry" do
+    create_event!(artist_name: "Separate Series", normalized_artist_name: "separate series",
+      publish_on_russ_live: true, event_series_id: 505, start_at: 5.days.ago)
+    create_event!(artist_name: "Separate Series", normalized_artist_name: "separate series",
+      publish_on_russ_live: false, event_series_id: 606, start_at: 1.day.from_now)
+    create_event!(artist_name: "No Series", normalized_artist_name: "no series",
+      publish_on_russ_live: true, start_at: 5.days.ago)
+    create_event!(artist_name: "No Series", normalized_artist_name: "no series",
+      publish_on_russ_live: false, start_at: 1.day.from_now)
+
+    get presse_path
+
+    assert_response :success
+    assert_not_includes response.body, "Separate Series"
+    assert_not_includes response.body, "No Series"
+  end
+
   test "multiple performances on the same day show the date once" do
     [ 15, 20 ].each do |hour|
       create_event!(artist_name: "Matinee", normalized_artist_name: "matinee",
@@ -636,6 +733,7 @@ class PressControllerTest < ActionDispatch::IntegrationTest
         start_at: attributes.fetch(:start_at),
         event_info: attributes[:event_info],
         city: attributes[:city],
+        event_series_id: attributes[:event_series_id],
         publish_on_russ_live: attributes.fetch(:publish_on_russ_live),
         venue_id:,
         created_at: Time.current,
