@@ -338,6 +338,7 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select ".press-event-details dl > div:nth-child(1) dd", "01. Juni 2026 – 05. Juni 2026"
     assert_select ".press-event-details dl > div:nth-child(2) dd", "Mehrere Vorstellungen"
+    assert_select ".press-event-details dd a[href=?][target='_blank'][rel='noreferrer']", sibling.public_detail_url, text: /05\.06\.2026/
     assert_includes response.body, "Freigegebener Pressetext"
     assert_not_includes response.body, "Nicht freigegebener Pressetext"
     assert_includes response.body, "Freigegebenes Foto"
@@ -426,7 +427,7 @@ class PressControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "shows all dates with venues and cities when an artist performs in different cities" do
-    [ [ "Stuttgart", "Theaterhaus", 1 ], [ "Kempten", "kultBOX", 2 ], [ "Aalen", "Stadthalle", 3 ] ].each do |city, venue, day|
+    events = [ [ "Stuttgart", "Theaterhaus", 1 ], [ "Kempten", "kultBOX", 2 ], [ "Aalen", "Stadthalle", 3 ] ].map do |city, venue, day|
       create_event!(artist_name: "Touring Artist", normalized_artist_name: "touring artist",
         publish_on_russ_live: true, start_at: Time.zone.local(2026, 6, day, 20),
         city:, venue_id: create_venue!(name: venue))
@@ -435,7 +436,10 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     get press_artist_path("touring-artist")
 
     assert_response :success
-    assert_select ".press-event-details dt", text: "Termine und Veranstaltungsorte"
+    assert_select ".press-event-details dt", text: "Termine und Locations"
+    events.each do |event|
+      assert_select ".press-event-details dd a[href=?][target='_blank'][rel='noreferrer']", event.public_detail_url, text: /#{event.city}/
+    end
     assert_select ".press-event-details dd", text: "Verschiedene Städte"
     assert_select ".press-event-details dd span", text: "01.06.2026 · Theaterhaus, Stuttgart"
     assert_select ".press-event-details dd span", text: "02.06.2026 · kultBOX, Kempten"
@@ -445,7 +449,7 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     get press_artist_path("touring-artist")
 
     assert_response :success
-    assert_select ".press-event-details dt", text: "Dates and venues"
+    assert_select ".press-event-details dt", text: "Dates and locations"
     assert_select ".press-event-details dd", text: "Various cities"
   end
 
@@ -460,7 +464,7 @@ class PressControllerTest < ActionDispatch::IntegrationTest
       get press_artist_path("local-artist-#{index}")
 
       assert_response :success
-      assert_select ".press-event-details dd", text: "Verschiedene Veranstaltungsorte"
+      assert_select ".press-event-details dd", text: "Verschiedene Locations"
       assert_select ".press-event-details dd", text: "Verschiedene Städte", count: 0
       assert_select ".press-event-details dd span", 2
     end
@@ -479,7 +483,7 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     assert_select ".press-event-details dd", text: "Theaterhaus, Stuttgart"
     assert_select ".press-event-details dt", text: "Weitere Termine"
     assert_not_includes response.body, "Verschiedene Städte"
-    assert_not_includes response.body, "Verschiedene Veranstaltungsorte"
+    assert_not_includes response.body, "Verschiedene Locations"
   end
 
   test "single performance retains its exact date and time" do
