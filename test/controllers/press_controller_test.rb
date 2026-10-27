@@ -336,7 +336,7 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     get press_artist_path("series-musical")
 
     assert_response :success
-    assert_select ".press-event-details dl > div:nth-child(1) dd", "01. Juni 2026 – 05. Juni 2026"
+    assert_select ".press-event-details dl > div:nth-child(1) dd", "01.-05. Juni 2026"
     assert_select ".press-event-details dl > div:nth-child(2) dd", "Mehrere Vorstellungen"
     assert_select ".press-event-details dd a[href=?][target='_blank'][rel='noreferrer']", sibling.public_detail_url, text: /05\.06\.2026/
     assert_includes response.body, "Freigegebener Pressetext"
@@ -362,10 +362,16 @@ class PressControllerTest < ActionDispatch::IntegrationTest
     get press_artist_path("series-speaker")
 
     assert_response :success
-    assert_select ".press-event-details dd", text: "10. November 2026 – 12. November 2026"
+    assert_select ".press-event-details dd", text: "10.-12. November 2026"
     assert_select ".press-event-details dd", text: "Verschiedene Städte"
     assert_select ".press-event-details dd span", 3
     %w[Stuttgart Kempten Aalen].each { |city| assert_includes response.body, city }
+
+    post locale_path(:en), params: { return_to: press_artist_path("series-speaker") }
+    get press_artist_path("series-speaker")
+
+    assert_response :success
+    assert_select ".press-event-details dd", text: "10.-12. November 2026"
   end
 
   test "series retains approved content until three days after its last public performance" do

@@ -232,8 +232,12 @@ module ApplicationHelper
   end
 
   def press_event_date_label(artist)
-    artist.schedule_events.map { |event| event.start_at.to_date }.minmax.uniq
-      .map { |date| l(date, format: "%d. %B %Y") }.join(" – ")
+    dates = artist.schedule_events.map { |event| event.start_at.to_date }.minmax.uniq
+    if dates.many? && dates.first.beginning_of_month == dates.last.beginning_of_month
+      "#{l(dates.first, format: "%d.")}-#{l(dates.last, format: "%d. %B %Y")}"
+    else
+      dates.map { |date| l(date, format: "%d. %B %Y") }.join(" – ")
+    end
   end
 
   def press_event_location_label(event)
