@@ -208,7 +208,9 @@ zeigen weiterhin nur bevorstehende Termine.
 
 Bei mehreren sichtbaren Vorstellungen zeigt die Künstlerseite unter „Datum“
 den Zeitraum vom ersten bis zum letzten Termin und unter „Uhrzeit“ den Hinweis
-„Mehrere Vorstellungen“. Liegen alle Vorstellungen am selben Tag, wird das
+„Mehrere Vorstellungen“. Innerhalb desselben Monats wird der Zeitraum kompakt
+geschrieben, zum Beispiel „10.-13. November 2026“. Bei einem Monats- oder
+Jahreswechsel bleiben beide Daten vollständig. Liegen alle Vorstellungen am selben Tag, wird das
 Datum nur einmal angezeigt. Einzeltermine behalten ihre konkrete Uhrzeit.
 Bei Terminen in mehreren Städten steht unter „Location“ der Hinweis
 „Verschiedene Städte“, bei unterschiedlichen Spielstätten in derselben Stadt
@@ -284,6 +286,10 @@ mise exec -- bin/rails test:system
 ```
 
 Der GitHub-Systemtest baut diese Assets ebenfalls vor dem Browserlauf.
+
+Textlinks im öffentlichen Seiteninhalt und im Footer verwenden beim Hover und
+Tastaturfokus den gemeinsamen Goldton. Header-Menü, Buttons und Bildlinks
+behalten ihre eigenen Interaktionszustände.
 
 ### Frontend mit Impeccable prüfen
 

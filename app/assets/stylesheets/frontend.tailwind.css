@@ -5942,11 +5942,6 @@
   border-top: 0;
 }
 
-.press-artist-card:hover,
-.press-artist-card:focus-visible {
-  color: var(--gold);
-}
-
 .press-artist-card span {
   display: block;
   max-width: 100%;
@@ -6785,6 +6780,12 @@
 
 .site-footer nav a {
   color: rgba(255, 255, 255, .72);
+}
+
+/* Text links share the press accent; header, buttons and media links keep their own states. */
+.page-main a[href]:not(:where(.public-button, .press-detail-back-button, .press-outline-button, .press-gallery-download, .legal-action-button, [role="button"])):not(:has(img, picture, video)):is(:hover, :focus-visible),
+.site-footer nav a:is(:hover, :focus-visible) {
+  color: var(--gold);
 }
 
 .scroll-top-button {
