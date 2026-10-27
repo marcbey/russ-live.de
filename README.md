@@ -423,6 +423,9 @@ Installierte Gems werden in CI, Staging und beim Produktionsdeploy anhand von
 Betriebssystem, Architektur, Ruby-Version und `Gemfile.lock` wiederverwendet.
 Für die CSS-Bereinigung ist `crass` mindestens in Version `1.0.8` erforderlich;
 das Sicherheitsupdate schließt eine Umgehung der CSS-Filterung.
+Die für Deployments verwendete SSH-Bibliothek `net-ssh` ist auf `7.3.8`
+aktualisiert; damit sind die von der Sicherheitsprüfung gemeldeten Lücken
+der bisherigen Version `7.3.3` geschlossen.
 Produktion liest den Cache passend zum festgelegten Kontrollcode und führt
 weiterhin `bundle install` aus. Docker speichert zusätzlich die Build-Layer im
 eigenen Russ-Cache. Ein fehlender Cache führt zur regulären Installation oder
