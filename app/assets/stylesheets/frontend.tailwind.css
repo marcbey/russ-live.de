@@ -7808,6 +7808,10 @@
     max-width: min(760px, calc(100vw - 48px));
   }
 
+  .home-hero h1:lang(en) {
+    font-size: clamp(2.5rem, 14vw, 6rem);
+  }
+
   .home-hero-copy > #hero-intro {
     max-width: min(620px, calc(100vw - 56px));
   }

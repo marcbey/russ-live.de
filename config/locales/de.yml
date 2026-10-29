@@ -115,6 +115,9 @@ de:
         title: "Russ Live | Kulturproduktionen auf höchstem Niveau"
         description: "Russ Live ist örtlicher Veranstalter, Produktionspartner und Full-Service-Dienstleister für Live Entertainment in Stuttgart und der Region."
       hero:
+        title_first: "Events"
+        title_second: "erleben"
+        title_live: "Live."
         image_alt: "Goldene Gitarre als Russ Live Keyvisual"
         intro_html: "Wir sind Ihr örtlicher Veranstalter für Stuttgart. Im Blick haben wir dabei immer die Künstler und das Publikum zugleich. So schaffen wir einzigartige emotionale Momente für bis zu 1 Million Besucher – jedes Jahr."
       services:
