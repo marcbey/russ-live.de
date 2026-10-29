@@ -115,6 +115,9 @@ en:
         title: "Russ Live | Cultural productions at the highest level"
         description: "Russ Live is a local promoter, production partner and full-service provider for live entertainment in Stuttgart and the region."
       hero:
+        title_first: "Experience"
+        title_second: "Events"
+        title_live: "Live."
         image_alt: "Golden guitar as the Russ Live key visual"
         intro_html: "We are your local promoter for Stuttgart. We always keep both artists and audiences in view. That is how we create unique emotional moments for up to 1 million visitors – every year."
       services:
