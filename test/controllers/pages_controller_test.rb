@@ -752,7 +752,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
       assert_select "#services-events-title.services-events-title", text: I18n.t("pages.services.events.title")
       assert_select ".home-events-head", count: 0
       assert_select ".event-slider-card", text: /Services Artist/
-      assert_select ".services-events-all-button[href=?]", "https://www.stuttgart-live.de/highlights?filter=sks",
+      assert_select ".services-events-all-button[href=?]", "https://stuttgart-live.de/russ-live",
                     text: I18n.t("pages.services.events.show_all")
     end
   end
@@ -1000,7 +1000,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "WILHELMINE - magisch Tour 2026 auf STUTTGARTLIVE"
     assert_includes response.body, "https://www.stuttgart-live.de/events/wilhelmine-magisch-tour-2026"
     assert_not_includes response.body, "https://tickets.example.test/evt-1"
-    assert_select ".home-events-all-button[href=?]", "https://www.stuttgart-live.de/highlights?filter=sks",
+    assert_select ".home-events-all-button[href=?]", "https://stuttgart-live.de/russ-live",
                   text: I18n.t("pages.home.events.show_all")
     assert_operator response.body.index("home-events-all-button"), :>, response.body.index("home-events-viewport")
     assert_not_includes response.body, "Alle Veranstaltungen auf Stuttgart-live.de"
