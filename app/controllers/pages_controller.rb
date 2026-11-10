@@ -31,7 +31,7 @@ class PagesController < ApplicationController
     @home_events_page = home_events_page
     @home_events = @home_events_page.events
     @home_events_next_cursor = @home_events_page.next_cursor
-    @stuttgart_live_sks_highlights_url = "#{StuttgartLiveUrls.base_url}/highlights?filter=sks"
+    @stuttgart_live_russ_live_url = StuttgartLiveUrls.russ_live_url
   end
 
   def homepage_lane
@@ -53,7 +53,7 @@ class PagesController < ApplicationController
     @home_events_page = home_events_page
     @home_events = @home_events_page.events
     @home_events_next_cursor = @home_events_page.next_cursor
-    @stuttgart_live_sks_highlights_url = "#{StuttgartLiveUrls.base_url}/highlights?filter=sks"
+    @stuttgart_live_russ_live_url = StuttgartLiveUrls.russ_live_url
   end
   def referenzen
     references = Reference.published.with_image.ordered.to_a
