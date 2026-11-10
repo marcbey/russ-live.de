@@ -1,7 +1,7 @@
 # Russ Live
 
 Rails-Anwendung für den Relaunch von `russ-live.de`. Die Anwendung verwendet Ruby
-`4.0.2` über `mise` und Rails `8.1.3.1`.
+`4.0.2` über `mise` und Rails `8.1.4.1`.
 
 ## Wichtig
 
@@ -439,6 +439,10 @@ oder ungültiges Artefakt führt zum Abbruch; es gibt keinen Ersatz-Build in Sta
 
 Installierte Gems werden in CI, Staging und beim Produktionsdeploy anhand von
 Betriebssystem, Architektur, Ruby-Version und `Gemfile.lock` wiederverwendet.
+Rails ist mindestens auf `8.1.4.1` festgelegt. Die Sicherheitsupdates für Rails,
+Rack, Nokogiri, Addressable, Loofah und den Rails-HTML-Sanitizer sind in
+`Gemfile.lock` enthalten; nach dem Aktualisieren des Repositorys installiert
+`mise exec -- bundle install` die geprüften Versionen.
 Für die CSS-Bereinigung ist `crass` mindestens in Version `1.0.8` erforderlich;
 das Sicherheitsupdate schließt eine Umgehung der CSS-Filterung.
 Die für Deployments verwendete SSH-Bibliothek `net-ssh` ist auf `7.3.8`
