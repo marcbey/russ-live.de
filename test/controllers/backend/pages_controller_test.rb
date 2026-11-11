@@ -22,10 +22,11 @@ class Backend::PagesControllerTest < ActionDispatch::IntegrationTest
     get backend_pages_path
 
     assert_response :success
-    assert_equal 10, EditablePage.count
+    assert_equal 12, EditablePage.count
     assert_includes response.body, "Kontakt"
     assert_includes response.body, "Impressum"
     assert_includes response.body, "Datenschutz"
+    assert_includes response.body, "Bewerber-Datenschutz"
     assert_includes response.body, "AGB"
     assert_includes response.body, "Jugendschutz"
     assert_includes response.body, "Kontakttext"
@@ -65,6 +66,36 @@ class Backend::PagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_not_includes response.body, "Nur im Entwurf sichtbar"
+  end
+
+  test "applicant privacy supports preview publishing and later editing" do
+    sign_in_as(@admin)
+    EditablePage.ensure_defaults!
+    page = EditablePage.find_by!(key: "bewerber_datenschutz", locale: "de")
+
+    get backend_pages_path(page_id: page.id)
+    assert_select ".backend-global-nav-actions a[href=?]", "/datenschutz/bewerber?locale=de"
+
+    patch backend_page_path(page), params: page_payload(
+      title: "Bewerberinformation aktualisiert",
+      content: { body_html: "<p>Geprüfter neuer Text</p>" }
+    )
+    get preview_backend_page_path(page)
+    assert_response :success
+    assert_includes response.body, "Geprüfter neuer Text"
+
+    get bewerber_datenschutz_path
+    assert_not_includes response.body, "Geprüfter neuer Text"
+
+    patch backend_page_path(page), params: page_payload(
+      title: "Bewerberinformation aktualisiert",
+      content: { body_html: "<p>Geprüfter neuer Text</p>" },
+      publish_page: "1"
+    )
+    EditablePage.ensure_defaults!
+    get bewerber_datenschutz_path
+    assert_response :success
+    assert_includes response.body, "Geprüfter neuer Text"
   end
 
   test "publishes page content" do

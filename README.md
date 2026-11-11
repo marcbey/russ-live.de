@@ -135,6 +135,11 @@ Profil, den hinterlegten Ansprechpartner und das Bewerbungsformular. Das Formula
 bereitet eine E-Mail mit den persönlichen Angaben und den angekreuzten Angaben
 zu Schule, Studium oder Erwerbsstatus vor. Mehrere Angaben sind möglich;
 Bewerbungsunterlagen werden anschließend im eigenen E-Mail-Programm angehängt.
+Die gesonderte Datenschutzinformation für Bewerberinnen und Bewerber steht unter
+`/datenschutz/bewerber`. Sie ist auf der Jobübersicht und bei jeder Stelle direkt
+am Bewerbungsbutton, vor `E-Mail vorbereiten` und beim E-Mail-Kontakt verlinkt.
+Die Links öffnen einen neuen Tab, damit bereits eingegebene Angaben erhalten
+bleiben. Eine zusätzliche Einwilligungs-Checkbox gibt es nicht.
 Job- und Ansprechpartnerbilder werden unter
 `storage/job_images` beziehungsweise `storage/contact_images` abgelegt und beim
 Upload ebenfalls als komprimierte WebP-Dateien gespeichert.
@@ -160,12 +165,33 @@ Bei redaktionellen Seiten wird die ausgewählte Sprachversion geöffnet.
 Änderungen müssen vorher gespeichert und gegebenenfalls veröffentlicht werden;
 ungespeicherte Änderungen und Entwürfe erscheinen dort nicht.
 
-Die redaktionellen Seiten `Kontakt`, `Impressum`, `Datenschutz`, `AGB` und
+Die redaktionellen Seiten `Kontakt`, `Impressum`, `Datenschutz`, `Bewerber-Datenschutz`, `AGB` und
 `Jugendschutz` werden im Backend unter `/backend/pages` gepflegt. Jede Seite
 gibt es getrennt für Deutsch und Englisch. `Speichern` legt Änderungen als
 Entwurf ab; erst `Veröffentlichen` übernimmt sie auf die öffentliche Seite.
 Über `Vorschau anzeigen` kann der aktuelle Entwurf vor dem Veröffentlichen
 kontrolliert werden.
+
+Die Rechtstexte für Impressum und Datenschutz entsprechen den gelieferten
+Fassungen vom 9. November 2026, die Bewerberinformation der Fassung vom
+6. November 2026. Die deutschen Texte wurden übernommen und für Englisch
+übersetzt. Die englischen Übersetzungen wurden nicht gesondert vom
+Datenschutzbeauftragten geliefert und sollten bei der inhaltlichen Abnahme
+mitgeprüft werden.
+
+Die zugehörige Datenmigration übernimmt die Texte einmalig in die gespeicherten
+Seiten beider Sprachen. Auch schon vorhandene veröffentlichte Texte werden
+aktualisiert; spätere Bearbeitungen im Backend bleiben maßgeblich. Bestehende
+unveröffentlichte Entwürfe werden erhalten und als `Änderungen gespeichert`
+angezeigt. Vor einer späteren Veröffentlichung solcher Entwürfe die neuen
+Rechtstexte berücksichtigen, damit keine alte Fassung zurückkehrt. Bei lokalen
+oder neuen Installationen ohne gespeicherte Seiten liefern die Vorlagen dieselben
+Texte. Die Migration enthält dafür einen festen Stand unter `db/data`; dieser
+wird bei späteren Textänderungen nicht nachträglich bearbeitet.
+
+Die Textübernahme ändert weder Cookie-Laufzeiten noch die Aufbewahrung von
+Server-Logs oder Bewerbungs-E-Mails. Die tatsächliche Log-Aufbewahrung und die
+Löschung in Microsoft 365 müssen getrennt betrieblich geprüft werden.
 
 Die Kontaktseite verwaltet Titel und Kontakttext als ein HTML-Feld.
 Direkte Aktionen für Telefon, E-Mail und die VVS-Fahrplanauskunft stehen

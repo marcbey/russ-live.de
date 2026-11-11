@@ -235,8 +235,10 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get datenschutz_path
 
     assert_response :success
-    assert_includes response.body, "Host Europe"
-    assert_includes response.body, "Google Analytics"
+    assert_includes response.body, "Hetzner Online GmbH"
+    assert_includes response.body, "Microsoft 365 / Exchange Online"
+    assert_not_includes response.body, "Google Analytics"
+    assert_select "a[href=?]", bewerber_datenschutz_path
 
     post locale_path(:en), params: { return_to: agb_path }
     assert_redirected_to agb_path
@@ -273,6 +275,33 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Live Impressum"
     assert_includes response.body, "Live Rechtstext"
     assert_not_includes response.body, "Entwurfstext"
+  end
+
+  test "applicant privacy is available in both languages before applying to every published job" do
+    { de: "Datenschutzinformation für Bewerberinnen und Bewerber", en: "Privacy information for job applicants" }.each do |locale, label|
+      post locale_path(locale), params: { return_to: jobs_path }
+      get jobs_path
+      assert_select ".job-privacy-link[href=?]", bewerber_datenschutz_path, text: label
+
+      Job.published.each do |job|
+        get job_path(job.slug)
+        assert_response :success
+        assert_select ".job-detail-application-action .job-privacy-link[href=?][target='_blank'][rel='noopener']", bewerber_datenschutz_path, text: label
+        assert_select ".job-application-form .job-privacy-note + button[type='submit']"
+        assert_select ".job-application-form .job-privacy-link[href=?]", bewerber_datenschutz_path, text: label
+        assert_select ".job-contact .job-privacy-link[href=?]", bewerber_datenschutz_path, text: label if job.contact.present?
+        assert_select ".job-application-form input[type='checkbox']:not([name='status[]'])", count: 0
+      end
+
+      get bewerber_datenschutz_path
+      assert_response :success
+      assert_select "html[lang=?]", locale.to_s
+      assert_select "h1", text: /#{Regexp.escape(label)}/
+      assert_select ".legal-copy h2", count: 12
+      assert_includes response.body, "Microsoft 365 / Exchange Online"
+      assert_includes response.body, locale == :de ? "sechs Monate nach Abschluss" : "six months after completion"
+      assert_not_includes response.body, "translation missing"
+    end
   end
 
   test "hides rails view annotation comments from editable page content" do
