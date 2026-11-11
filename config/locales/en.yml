@@ -356,16 +356,22 @@ en:
     impressum:
       meta:
         title: "Imprint | Russ Live"
-        description: "Imprint of SKS Michael Russ GmbH."
+        description: "Legal notice of Südwestdeutsche Konzertdirektion Michael Russ GmbH."
       title: "Imprint"
       member: "Member of the Association of German Concert Agencies."
       liability: "Despite careful content checks, we assume no liability for the content of external links. The operators of the linked pages are solely responsible for their content."
     datenschutz:
       meta:
         title: "Privacy | Russ Live"
-        description: "Privacy information of SKS Michael Russ GmbH."
-      title: "Privacy"
+        description: "Privacy notice of Südwestdeutsche Konzertdirektion Michael Russ GmbH."
+      title: "Privacy notice"
       placeholder: "Sorry, you are looking for something that is not here."
+    bewerber_datenschutz:
+      meta:
+        title: "Privacy information for job applicants | Russ Live"
+        description: "Information about the processing of personal data during recruitment at Russ Live."
+      title: "Privacy information for job applicants under Article 13 GDPR"
+      edit: "Edit applicant privacy information"
     agb:
       meta:
         title: "Terms | Russ Live"
@@ -410,6 +416,7 @@ en:
       fallback_partner: "Reference"
       service_reference: "Service reference"
   jobs:
+    applicant_privacy: "Privacy information for job applicants"
     apply_now: "Apply now"
     back_to_overview: "Back to overview"
     list_action: "More info"

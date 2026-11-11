@@ -14,6 +14,7 @@ class PagesController < ApplicationController
     kontakt: {},
     impressum: {},
     datenschutz: {},
+    bewerber_datenschutz: {},
     agb: {},
     jugendschutz: {}
   }.freeze
@@ -88,6 +89,10 @@ class PagesController < ApplicationController
 
   def datenschutz
     set_editable_page(:datenschutz)
+  end
+
+  def bewerber_datenschutz
+    set_editable_page(:bewerber_datenschutz)
   end
 
   def agb

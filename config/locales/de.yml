@@ -356,16 +356,22 @@ de:
     impressum:
       meta:
         title: "Impressum | Russ Live"
-        description: "Impressum der SKS Michael Russ GmbH."
+        description: "Impressum der Südwestdeutschen Konzertdirektion Michael Russ GmbH."
       title: "Impressum"
       member: "Mitglied des Verbandes Deutscher Konzertdirektionen e.V."
       liability: "Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich."
     datenschutz:
       meta:
         title: "Datenschutz | Russ Live"
-        description: "Datenschutz der SKS Michael Russ GmbH."
-      title: "Datenschutz"
+        description: "Datenschutzerklärung der Südwestdeutschen Konzertdirektion Michael Russ GmbH."
+      title: "Datenschutzerklärung"
       placeholder: "Sorry, aber Du suchst gerade nach etwas, was hier nicht ist."
+    bewerber_datenschutz:
+      meta:
+        title: "Datenschutz für Bewerberinnen und Bewerber | Russ Live"
+        description: "Informationen zur Verarbeitung personenbezogener Daten im Bewerbungsverfahren bei Russ Live."
+      title: "Datenschutzinformation für Bewerberinnen und Bewerber nach Art. 13 DSGVO"
+      edit: "Bewerber-Datenschutz bearbeiten"
     agb:
       meta:
         title: "AGB | Russ Live"
@@ -410,6 +416,7 @@ de:
       fallback_partner: "Referenz"
       service_reference: "Service-Referenz"
   jobs:
+    applicant_privacy: "Datenschutzinformation für Bewerberinnen und Bewerber"
     apply_now: "Jetzt bewerben"
     back_to_overview: "Zur Übersicht"
     list_action: "Mehr Infos"

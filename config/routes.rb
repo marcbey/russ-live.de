@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   get "kontakt", to: "pages#kontakt"
   get "impressum", to: "pages#impressum"
   get "datenschutz", to: "pages#datenschutz"
+  get "datenschutz/bewerber", to: "pages#bewerber_datenschutz", as: :bewerber_datenschutz
   get "agb", to: "pages#agb"
   get "jugendschutz", to: "pages#jugendschutz"
 
