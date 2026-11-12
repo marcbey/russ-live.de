@@ -1,0 +1,48 @@
+name: Read-only Log Retention Audit
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment:
+      name: staging
+      deployment: false
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Test privacy filtering before providing SSH access
+        run: python3 -m unittest discover -s test/ops -p log_retention_audit_test.py
+      - name: Read production log metadata without changing the host
+        env:
+          AUDIT_SSH_PRIVATE_KEY: ${{ secrets.STAGING_SSH_PRIVATE_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          audit_dir=$(mktemp -d "$RUNNER_TEMP/log-audit.XXXXXX")
+          trap 'rm -rf "$audit_dir"' EXIT
+          printf '%s\n' "$AUDIT_SSH_PRIVATE_KEY" > "$audit_dir/key"
+          printf '%s\n' '46.225.224.194 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJujRkpEFAqgU0MJ4VfkmbT8V1TfqLPKTGO1fD3aRXG+' > "$audit_dir/known_hosts"
+          ssh -T -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile="$audit_dir/known_hosts" -o ConnectTimeout=10 \
+            -o ServerAliveInterval=10 -o ServerAliveCountMax=2 -i "$audit_dir/key" \
+            deploy@46.225.224.194 'python3 -' < script/ops/log_retention_audit.py > "$RUNNER_TEMP/log-retention-audit.json"
+          python3 -m json.tool "$RUNNER_TEMP/log-retention-audit.json"
+          {
+            echo '## Read-only log retention audit'
+            echo 'Only log configuration and timestamps; no request contents. No deployment or host configuration changes.'
+            echo '```json'
+            cat "$RUNNER_TEMP/log-retention-audit.json"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: log-retention-audit
+          path: ${{ runner.temp }}/log-retention-audit.json
+          if-no-files-found: error
+          retention-days: 3
