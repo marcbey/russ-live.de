@@ -441,6 +441,33 @@ DNS-Bestand; ein erfolgreicher Postfachversand oder -empfang wurde nicht geteste
 
 ## CI, Staging und Produktionsfreigabe über GitHub
 
+### Rein lesende Log-Diagnose
+
+`Read-only Log Retention Audit` lässt sich unter GitHub Actions manuell auf
+`main` starten. Der Lauf verwendet den bestehenden SSH-Zugang des Environments
+`staging`, liest aber ausschließlich Metadaten der Russ-Produktionscontainer
+und des gemeinsamen Proxys. Er startet keine Container und ändert keine
+Serverkonfiguration. Besucherdaten, Logmeldungen und Secret-Werte werden nicht
+ausgegeben; der Bericht enthält Logoptionen und Zeitstempel einer begrenzten
+Stichprobe. Das Ergebnis ist drei Tage als GitHub-Artefakt verfügbar.
+
+Die Stichprobe belegt keine feste Löschfrist. Externe Sicherungen und eigene
+Aufräumjobs sind damit nicht vollständig geprüft. Fehlende Leserechte werden
+als Einschränkung berichtet. Vor Änderungen an der gemeinsamen Logaufbewahrung
+ist weiterhin das Betriebsrunbook maßgeblich.
+
+Für ausdrücklich beauftragte Diagnoseänderungen ohne Servereingriff kann der
+Merge-Commit die Markierung `[no deploy]` tragen. PR- und Main-CI laufen normal,
+aber `Deploy Staging` wird für diesen Commit übersprungen; dadurch entsteht
+auch keine automatische Produktionsfreigabe. Die Markierung ersetzt keine
+Prüfung oder Freigabe und veröffentlicht auch keine App-Änderungen. Der nächste
+reguläre Deploy enthält wieder alle bis dahin gemergten Änderungen.
+
+Den Datenschutzfilter lokal prüfen:
+`python3 -m unittest discover -s test/ops -p log_retention_audit_test.py`.
+
+### Regulärer Veröffentlichungsablauf
+
 Für die Zusammenarbeit mit Agenten bedeutet **„Commit und Push“** den gesamten
 Weg bis Staging: lokale Prüfungen, Commit und Push, PR mit erfolgreicher CI,
 Merge nach `main` sowie erfolgreiche Main-CI und `Deploy Staging`. Der Agent
