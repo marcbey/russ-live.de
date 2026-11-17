@@ -4,7 +4,8 @@ class ApplicationController < ActionController::Base
   LOCALE_COOKIE_NAME = :russ_live_locale
 
   around_action :switch_locale
-  before_action :redirect_legacy_locale_param
+  before_action :remove_legacy_locale_cookie
+  before_action :redirect_invalid_locale_param
 
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
@@ -15,18 +16,28 @@ class ApplicationController < ActionController::Base
     end
 
     def requested_locale
-      cookie_locale || browser_locale || I18n.default_locale
+      legacy_link_locale || cookie_locale || browser_locale || I18n.default_locale
     end
 
     def cookie_locale
-      normalized_locale(cookies[LOCALE_COOKIE_NAME])
+      normalized_locale(cookies.signed[LOCALE_COOKIE_NAME])
     end
 
-    def redirect_legacy_locale_param
-      return unless request.get? && params.key?(:locale)
+    def legacy_link_locale
+      normalized_locale(request.query_parameters["locale"])
+    end
 
-      locale = normalized_locale(params[:locale])
-      write_locale_cookie(locale) if locale.present?
+    def remove_legacy_locale_cookie
+      # Old unsigned cookies had a 20-year lifetime and could also be set by links.
+      # Remove them on the next visit; only a new explicit choice is remembered.
+      if cookies[LOCALE_COOKIE_NAME].present? && cookie_locale.nil?
+        cookies.delete(LOCALE_COOKIE_NAME, path: "/")
+      end
+    end
+
+    def redirect_invalid_locale_param
+      return unless request.get? && params.key?(:locale)
+      return if legacy_link_locale.present?
 
       redirect_to clean_current_url_without_locale, allow_other_host: false
     end
@@ -51,8 +62,10 @@ class ApplicationController < ActionController::Base
     end
 
     def write_locale_cookie(locale)
-      cookies.permanent[LOCALE_COOKIE_NAME] = {
+      cookies.signed[LOCALE_COOKIE_NAME] = {
         value: locale.to_s,
+        expires: 3.months.from_now,
+        httponly: true,
         same_site: :lax
       }
     end

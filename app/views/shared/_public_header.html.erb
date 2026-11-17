@@ -40,20 +40,23 @@
     <%= link_to t("public.header.press"), presse_path, public_nav_aria(%i[presse press_detail]) || {} %>
     <%= link_to t("public.header.contact"), kontakt_path, public_nav_aria(:kontakt) || {} %>
     <div class="language-switch" aria-label="<%= t("public.header.language_aria") %>">
-      <% I18n.available_locales.each_with_index do |locale, index| %>
-        <% if index.positive? %>
-          <span class="language-switch-separator" aria-hidden="true">/</span>
+      <div class="language-switch-options">
+        <% I18n.available_locales.each_with_index do |locale, index| %>
+          <% if index.positive? %>
+            <span class="language-switch-separator" aria-hidden="true">/</span>
+          <% end %>
+          <%= button_to locale.to_s.upcase,
+                        locale_path(locale),
+                        method: :post,
+                        params: { return_to: locale_return_to_path },
+                        form_class: "language-switch-form",
+                        class: [ "language-switch-button", ("is-active" if I18n.locale == locale) ],
+                        form: { aria: { label: t("public.header.language_switch", language: t("public.languages.#{locale}")) } },
+                        lang: locale,
+                        aria: { current: ("true" if I18n.locale == locale), describedby: "language-storage-notice" } %>
         <% end %>
-        <%= button_to locale.to_s.upcase,
-                      locale_path(locale),
-                      method: :post,
-                      params: { return_to: locale_return_to_path },
-                      form_class: "language-switch-form",
-                      class: [ "language-switch-button", ("is-active" if I18n.locale == locale) ],
-                      form: { aria: { label: t("public.header.language_switch", language: t("public.languages.#{locale}")) } },
-                      lang: locale,
-                      aria: { current: ("true" if I18n.locale == locale) } %>
-      <% end %>
+      </div>
+      <p class="language-storage-notice" id="language-storage-notice"><%= t("public.header.language_storage_notice") %></p>
     </div>
   </nav>
 

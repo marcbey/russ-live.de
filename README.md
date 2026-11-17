@@ -204,7 +204,17 @@ Englisch ausgeliefert. Ohne gespeicherte Auswahl nutzt die App die im Browser
 bevorzugte Sprache, sofern sie `de` oder `en` ist; andernfalls fällt sie auf
 Deutsch zurück.
 
-Die Sprache wird über den Header gewechselt und in einem Cookie gespeichert.
+Nur die aktive Sprachwahl über DE/EN im Header speichert das Sprachcookie
+`russ_live_locale` für drei Monate. Der Hinweis steht direkt bei der Auswahl.
+Normale Seitenbesuche verlängern diese Frist nicht; die Browsersprache allein
+setzt kein Sprachcookie. Das Cookie enthält nur die Sprachwahl, technisch
+signiert und mit Ablaufdatum, und dient keinem weiteren Zweck.
+Alte unsignierte Sprachcookies mit der bisherigen langen Laufzeit werden beim
+nächsten Besuch gelöscht. Danach gilt die Browsersprache, bis erneut aktiv eine
+Sprache gewählt wird. Ohne erneuten Besuch kann die Website ein bereits im
+Browser gespeichertes Cookie nicht nachträglich entfernen.
+Bestehende Links mit gültigem `locale`-Parameter (auch aus dem Backend) zeigen
+die angegebene Sprache nur für diesen Aufruf, ohne sie zu speichern.
 Dadurch bleiben die öffentlichen URLs sauber; es gibt keine lokalisierten Pfade
 und keinen sichtbaren `locale`-Query-Parameter in den generierten Links.
 Statische UI-, Marketing-, Presse-, Job- und Rechtstexte liegen in
@@ -263,6 +273,9 @@ mise exec -- bin/dev
 ```
 
 Die Anwendung läuft danach standardmäßig unter `http://127.0.0.1:3001`.
+Beim Rails-Start werden zuerst die in `Gemfile.lock` festgelegten Bibliotheken
+aktiviert. So lädt auch die anschließende Staging-Prüfung die passende
+`json`-Version, wenn lokal mehrere Versionen installiert sind.
 
 Öffentliche Seiten laden die `frontend`-Bundles, Login und Backoffice die
 `backend`-Bundles. Die Einstiegspunkte liegen unter `app/javascript` und
@@ -280,6 +293,8 @@ mise exec -- bin/ci
 ```
 
 `bin/ci` bündelt die relevanten Tests, Security-Checks und Linter.
+Die Gem-Sicherheitsprüfung aktualisiert vorher ihre Meldungsdatenbank, damit
+lokale Prüfungen dieselben aktuellen Hinweise wie GitHub berücksichtigen.
 
 Die vollständige Prüfung benötigt eine laufende Docker-Engine, weil die
 Staging-Tests darin vorübergehende PostgreSQL-Datenbanken starten. Unter macOS
@@ -501,6 +516,8 @@ das Sicherheitsupdate schließt eine Umgehung der CSS-Filterung.
 Die für Deployments verwendete SSH-Bibliothek `net-ssh` ist auf `7.3.8`
 aktualisiert; damit sind die von der Sicherheitsprüfung gemeldeten Lücken
 der bisherigen Version `7.3.3` geschlossen.
+Puma `8.0.4` und MessagePack (`msgpack`) `1.8.7` enthalten die im November 2026
+gemeldeten Sicherheitskorrekturen für diese Bibliotheken.
 Produktion liest den Cache passend zum festgelegten Kontrollcode und führt
 weiterhin `bundle install` aus. Docker speichert zusätzlich die Build-Layer im
 eigenen Russ-Cache. Ein fehlender Cache führt zur regulären Installation oder
