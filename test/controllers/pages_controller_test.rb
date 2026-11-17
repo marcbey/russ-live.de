@@ -383,15 +383,76 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "?locale=fr"
   end
 
-  test "legacy locale query parameter sets cookie and redirects to clean url" do
+  test "legacy locale query parameter selects language only for that request" do
     get root_path(locale: :en)
 
-    assert_redirected_to root_path
-    follow_redirect!
     assert_response :success
     assert_select "html[lang=?]", "en"
     assert_includes response.body, "We are your local promoter for Stuttgart"
-    assert_not_includes response.body, "?locale="
+    assert_nil cookies[:russ_live_locale]
+
+    get root_path, headers: { "HTTP_ACCEPT_LANGUAGE" => "de" }
+    assert_select "html[lang=?]", "de"
+  end
+
+  test "language choice expires after three calendar months without renewal on visits" do
+    travel_to Time.utc(2026, 11, 30, 12) do
+      post locale_path(:en), params: { return_to: jobs_path }
+      header = Array(response.headers["set-cookie"]).find { |value| value.start_with?("russ_live_locale=") }
+      assert header
+      assert_equal 3.months.from_now, Time.httpdate(header[/expires=([^;]+)/i, 1])
+      assert_includes header.downcase, "httponly"
+      assert_includes header.downcase, "samesite=lax"
+    end
+
+    travel_to Time.utc(2027, 2, 27, 12) do
+      get jobs_path, headers: { "HTTP_ACCEPT_LANGUAGE" => "de" }
+      assert_select "html[lang=?]", "en"
+      assert_not Array(response.headers["set-cookie"]).any? { |value| value.start_with?("russ_live_locale=") }
+    end
+
+    travel_to Time.utc(2027, 3, 1, 12) do
+      get jobs_path, headers: { "HTTP_ACCEPT_LANGUAGE" => "de" }
+      assert_select "html[lang=?]", "de"
+    end
+  end
+
+  test "browser language and invalid choices do not create a language cookie" do
+    get root_path, headers: { "HTTP_ACCEPT_LANGUAGE" => "en" }
+    assert_select "html[lang=?]", "en"
+    assert_nil cookies[:russ_live_locale]
+
+    post locale_path(:fr), params: { return_to: root_path }
+    assert_nil cookies[:russ_live_locale]
+  end
+
+  test "old long lived language cookies are deleted without carrying over the preference" do
+    cookies[:russ_live_locale] = "en"
+    get jobs_path, headers: { "HTTP_ACCEPT_LANGUAGE" => "de" }
+
+    assert_select "html[lang=?]", "de"
+    header = Array(response.headers["set-cookie"]).find { |value| value.start_with?("russ_live_locale=") }
+    assert header
+    assert_operator Time.httpdate(header[/expires=([^;]+)/i, 1]), :<, Time.current
+    assert_not cookies[:russ_live_locale].present?
+  end
+
+  test "active language choice replaces an old cookie immediately" do
+    cookies[:russ_live_locale] = "de"
+    post locale_path(:en), params: { return_to: jobs_path }
+    follow_redirect!
+
+    assert_select "html[lang=?]", "en"
+    assert cookies[:russ_live_locale].present?
+    assert_not_equal "en", cookies[:russ_live_locale]
+  end
+
+  test "language controls explain storage duration in both languages" do
+    { de: "Sprachwahl wird für 3 Monate gespeichert.", en: "Your language choice is saved for 3 months." }.each do |locale, notice|
+      get jobs_path, headers: { "HTTP_ACCEPT_LANGUAGE" => locale.to_s }
+      assert_select ".language-switch #language-storage-notice", text: notice
+      assert_select ".language-switch-button[aria-describedby='language-storage-notice']", count: 2
+    end
   end
 
   test "language switch posts current route and non-locale query parameters without visible locale" do
