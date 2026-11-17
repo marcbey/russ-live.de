@@ -293,6 +293,8 @@ mise exec -- bin/ci
 ```
 
 `bin/ci` bündelt die relevanten Tests, Security-Checks und Linter.
+Die Gem-Sicherheitsprüfung aktualisiert vorher ihre Meldungsdatenbank, damit
+lokale Prüfungen dieselben aktuellen Hinweise wie GitHub berücksichtigen.
 
 Die vollständige Prüfung benötigt eine laufende Docker-Engine, weil die
 Staging-Tests darin vorübergehende PostgreSQL-Datenbanken starten. Unter macOS
@@ -514,6 +516,8 @@ das Sicherheitsupdate schließt eine Umgehung der CSS-Filterung.
 Die für Deployments verwendete SSH-Bibliothek `net-ssh` ist auf `7.3.8`
 aktualisiert; damit sind die von der Sicherheitsprüfung gemeldeten Lücken
 der bisherigen Version `7.3.3` geschlossen.
+Puma `8.0.4` und MessagePack (`msgpack`) `1.8.7` enthalten die im November 2026
+gemeldeten Sicherheitskorrekturen für diese Bibliotheken.
 Produktion liest den Cache passend zum festgelegten Kontrollcode und führt
 weiterhin `bundle install` aus. Docker speichert zusätzlich die Build-Layer im
 eigenen Russ-Cache. Ein fehlender Cache führt zur regulären Installation oder
