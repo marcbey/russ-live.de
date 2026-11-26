@@ -678,12 +678,12 @@ zulässig und muss aus erlaubten, nicht kanonischen Hosts bestehen.
 Fremde Hosts werden abgewiesen. Die bisherige Produktionsdomain und ihre
 Medien-Signierschlüssel bleiben bis zur geplanten Umschaltung erhalten.
 
-Nach jedem Image-Build ist der HTTP-Test verpflichtend:
-`APP_IMAGE=<gebautes-image> mise exec -- ruby test/ops/nginx_runtime_check.rb`.
-Er startet ausschließlich isolierte Testcontainer mit synthetischen Dateien und
+Nach jedem Image-Build muss die Laufzeitprüfung mit
+`APP_IMAGE=<gebautes-image> mise exec -- ruby test/ops/nginx_runtime_check.rb`
+bestehen. Sie startet isolierte Testcontainer mit synthetischen Daten und
 prüft Weiterleitungen, Zugriffsschutz sowie beide Medien-Signaturverfahren.
-Außerdem prüft er das von Kamal benötigte `service`-Label, das der Dockerfile
-auch für direkte Docker- und GitHub-Action-Builds im fertigen Image setzt.
+Sie prüft außerdem das von Kamal benötigte `service`-Label und ruft
+`bin/jobs --help` auf, um Fehler beim Laden der Gems vor dem Deployment zu erkennen.
 
 Alle Deployments beider Projekte und Umgebungen müssen dieselbe Sperre auf dem
 Hetzner-Host halten. Der Wrapper `mise exec -- script/ops/deploy_with_lock --host
@@ -747,6 +747,10 @@ Staging-Umgebung geprüft. Der Image-Vergleich berücksichtigt die leeren
 Standardfelder, die ältere Docker-Versionen ergänzen; geänderte Laufzeitwerte,
 unbekannte Zusatzfelder und Dateischichten führen weiterhin zum Abbruch. Der Lauf nennt
 die jeweilige Prüfphase, ohne Daten oder Schlüssel auszugeben.
+
+Der HTTPS-Smoke-Test prüft per `HEAD` die erste Medien-URL, deren aufgelöster Pfad
+mit `/media/` beginnt. Im Staging muss diese URL auf eine der beiden
+Staging-Domains zeigen.
 
 Die HTTPS-Prüfung erlaubt Staging pro Leseversuch bis zu 60 Sekunden, damit auch
 eine kalte Seite auf den bewusst kleinen Ressourcen fertig rendern kann.
