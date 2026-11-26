@@ -508,6 +508,8 @@ das Image aus demselben geprüften CI-Lauf, prüft den Nachweis gegen Repository
 Commit und Run-ID und führt die realen HTTP-Tests vor Bereitstellung der
 Staging-Secrets aus. Pull Requests veröffentlichen kein Image. Ein fehlendes
 oder ungültiges Artefakt führt zum Abbruch; es gibt keinen Ersatz-Build in Staging.
+Die Laufzeitprüfung ruft `bin/jobs --help` im gebauten Image auf. So fallen
+Konflikte beim Laden der im Lockfile festgelegten Gems vor dem Deploy auf.
 
 Installierte Gems werden in CI, Staging und beim Produktionsdeploy anhand von
 Betriebssystem, Architektur, Ruby-Version und `Gemfile.lock` wiederverwendet.
@@ -752,6 +754,9 @@ Die HTTPS-Prüfung erlaubt Staging pro Leseversuch bis zu 60 Sekunden, damit auc
 eine kalte Seite auf den bewusst kleinen Ressourcen fertig rendern kann.
 Produktion behält 15 Sekunden. Ein hängender Staging-Aufruf führt weiterhin zum
 Abbruch; der Prüfclient protokolliert die Phase und die Fehlerklasse ohne Nutzdaten.
+Für den Medientest prüft der Client per `HEAD` die erste URL, deren aufgelöster
+Pfad mit `/media/` beginnt. In Staging muss diese URL auf eine der beiden
+Staging-Domains zeigen.
 
 Der 14 Tage aufbewahrte Nachweis `staging-release` nennt den gemeinsam getesteten
 Staging-Peer und die kompatiblen Produktions-Commits. Diese müssen nicht identisch
