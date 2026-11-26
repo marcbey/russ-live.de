@@ -9,7 +9,18 @@ http {
   include /etc/nginx/mime.types;
   default_type application/octet-stream;
 
-  access_log /dev/stdout;
+  map $uri $log_route {
+    default other;
+    / /;
+    /up /up;
+    ~^/(?:de/|en/)?(?:login|session)(?:/|$) auth;
+    ~^/(?:de/|en/)?(?:konzerte|concerts|events)(?:/|$) concerts;
+    ~^/(?:de/|en/)?(?:kontakt|contact)(?:/|$) contact;
+    ~^/assets/ /assets/*;
+  }
+  log_format website_timing escape=json
+    '{"event":"proxy_timing","route":"$log_route","status":$status,"request_s":$request_time}';
+  access_log /dev/stdout website_timing;
   error_log /dev/stderr warn;
 
   sendfile on;

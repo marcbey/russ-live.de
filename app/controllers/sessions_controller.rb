@@ -14,11 +14,11 @@ class SessionsController < ApplicationController
     authenticated_user = User.authenticate_by(email_address: normalized_email_address, password: params[:password].to_s)
 
     if authenticated_user&.russ_access?
-      log_login_attempt(user: authenticated_user, outcome: "successful")
+      LoginAttempt.log(outcome: "successful")
       start_new_session_for(authenticated_user)
       redirect_to after_authentication_url
     else
-      log_login_attempt(user: candidate_user, outcome: "failed")
+      LoginAttempt.log(outcome: "failed")
       redirect_to new_session_path, alert: "E-Mail oder Passwort ist ungültig."
     end
   end
@@ -31,19 +31,5 @@ class SessionsController < ApplicationController
   private
     def normalized_email_address
       params[:email_address].to_s.strip.downcase
-    end
-
-    def candidate_user
-      @candidate_user ||= User.find_by(email_address: normalized_email_address)
-    end
-
-    def log_login_attempt(user:, outcome:)
-      LoginAttempt.create!(
-        user: user,
-        email_address: normalized_email_address.presence,
-        ip_address: request.remote_ip,
-        user_agent: request.user_agent,
-        outcome: outcome
-      )
     end
 end

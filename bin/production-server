@@ -13,7 +13,7 @@ mkdir -p /tmp/pids /tmp/nginx /tmp/nginx/client_body /tmp/nginx/proxy /tmp/nginx
 bundle exec puma -C config/puma.rb &
 puma_pid=$!
 
-nginx -c /tmp/nginx.conf -g 'daemon off;' &
+nginx -e stderr -c /tmp/nginx.conf -g 'daemon off;' &
 nginx_pid=$!
 
 shutdown() {

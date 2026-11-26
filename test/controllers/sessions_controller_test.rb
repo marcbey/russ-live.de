@@ -6,7 +6,12 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     clear_auth_records
     clear_stuttgart_users
     @admin = create_stuttgart_user!(email_address: "admin@russ-live.de", role: "admin")
+    @login_logs = StringIO.new
+    @login_log_sink = ActiveSupport::Logger.new(@login_logs)
+    Rails.logger.broadcast_to(@login_log_sink)
   end
+
+  teardown { Rails.logger.stop_broadcasting_to(@login_log_sink) }
 
   test "new renders login with STUTTGARTLIVE password reset link" do
     get new_session_path
@@ -35,7 +40,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   test "login creates a local Russ session and redirects to backend" do
     assert_difference -> { Session.count }, 1 do
-      assert_difference -> { LoginAttempt.where(outcome: "successful").count }, 1 do
+      assert_no_difference -> { LoginAttempt.count } do
         sign_in_as(@admin)
       end
     end
@@ -43,11 +48,12 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to backend_root_url
     assert cookies[:session_id].present?
     assert_equal @admin, Session.last.user
+    assert_equal "successful", last_login_log.fetch("outcome")
   end
 
-  test "login rejects invalid credentials and stores a local failed attempt" do
+  test "login rejects invalid credentials and logs a failed attempt" do
     assert_no_difference -> { Session.count } do
-      assert_difference -> { LoginAttempt.where(outcome: "failed").count }, 1 do
+      assert_no_difference -> { LoginAttempt.count } do
         post session_path, params: {
           email_address: @admin.email_address,
           password: "falsch"
@@ -56,6 +62,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to new_session_url
+    assert_equal({ "event" => "login_attempt", "outcome" => "failed" }, last_login_log)
   end
 
   test "login rejects Stuttgart users without Russ backend role" do
@@ -79,5 +86,13 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to root_url
     assert_not Session.exists?(session_id)
+  end
+
+  private
+
+  def last_login_log
+    line = @login_logs.string.lines.reverse.find { |entry| entry.start_with?('{"event":"login_attempt"') }
+    assert line, "expected a login attempt in the application log"
+    JSON.parse(line)
   end
 end
