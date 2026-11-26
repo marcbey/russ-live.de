@@ -1,7 +1,7 @@
 # Russ Live
 
 Rails-Anwendung für den Relaunch von `russ-live.de`. Die Anwendung verwendet Ruby
-`4.0.2` über `mise` und Rails `8.1.4.1`.
+`4.0.10` über `mise` und Rails `8.1.4.1`.
 
 ## Wichtig
 
@@ -196,6 +196,10 @@ Löschung in Microsoft 365 müssen getrennt betrieblich geprüft werden.
 Die Kontaktseite verwaltet Titel und Kontakttext als ein HTML-Feld.
 Direkte Aktionen für Telefon, E-Mail und die VVS-Fahrplanauskunft stehen
 vor dem längeren Text und dem Standortfoto.
+Die Textkorrektur vom 26. November 2026 wird einmalig auch in gespeicherte
+Kontaktseiten beider Sprachen übernommen. Dabei werden nur die bisherigen
+Standortbeschreibungen und der zusätzliche Fahrplanhinweis ersetzt; andere
+Inhalte und der Veröffentlichungsstatus bleiben erhalten.
 
 ## Mehrsprachigkeit
 
@@ -308,7 +312,7 @@ colima start --profile russ-ci --cpus 2 --memory 2 --disk 6 --root-disk 8 \
 
 DOCKER_CONTEXT=colima-russ-ci \
 MISE_DATA_DIR="$HOME/.local/share/mise" \
-MISE_RUBY_VERSION=4.0.2 \
+MISE_RUBY_VERSION=4.0.10 \
 mise exec -- bin/ci
 ```
 
@@ -507,15 +511,19 @@ oder ungültiges Artefakt führt zum Abbruch; es gibt keinen Ersatz-Build in Sta
 
 Installierte Gems werden in CI, Staging und beim Produktionsdeploy anhand von
 Betriebssystem, Architektur, Ruby-Version und `Gemfile.lock` wiederverwendet.
+Ruby `4.0.10` enthält die [Sicherheitskorrekturen vom 18. November 2026](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/)
+für reguläre Ausdrücke und Zeichenumwandlungen. Lokal, in CI und im App-Image
+gilt dieselbe Ruby-Version; nach dem Aktualisieren zuerst `mise install` ausführen.
 Rails ist mindestens auf `8.1.4.1` festgelegt. Die Sicherheitsupdates für Rails,
 Rack, Nokogiri, Addressable, Loofah und den Rails-HTML-Sanitizer sind in
 `Gemfile.lock` enthalten; nach dem Aktualisieren des Repositorys installiert
 `mise exec -- bundle install` die geprüften Versionen.
 Für die CSS-Bereinigung ist `crass` mindestens in Version `1.0.8` erforderlich;
 das Sicherheitsupdate schließt eine Umgehung der CSS-Filterung.
-Die für Deployments verwendete SSH-Bibliothek `net-ssh` ist auf `7.3.8`
-aktualisiert; damit sind die von der Sicherheitsprüfung gemeldeten Lücken
-der bisherigen Version `7.3.3` geschlossen.
+Die für Deployments verwendete SSH-Bibliothek `net-ssh` ist auf `7.3.10`
+aktualisiert; damit sind auch die im November 2026 gemeldeten Lücken bei
+widerrufenen Host-Schlüsseln und der TLS-Prüfung des HTTPS-Proxys geschlossen.
+Die statische Sicherheitsprüfung verwendet Brakeman `8.1.1`.
 Puma `8.0.4` und MessagePack (`msgpack`) `1.8.7` enthalten die im November 2026
 gemeldeten Sicherheitskorrekturen für diese Bibliotheken.
 Produktion liest den Cache passend zum festgelegten Kontrollcode und führt
