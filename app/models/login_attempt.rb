@@ -8,4 +8,8 @@ class LoginAttempt < AuthRecord
   validates :outcome, inclusion: { in: OUTCOMES }
 
   scope :recent_first, -> { order(created_at: :desc) }
+
+  def self.log(outcome:)
+    Rails.logger.info { { event: "login_attempt", outcome: }.to_json }
+  end
 end

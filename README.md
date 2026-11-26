@@ -431,6 +431,18 @@ mise exec -- bin/kamal app logs -f -d hetzner -r web
 mise exec -- bin/kamal app logs -f -d hetzner -r job
 ```
 
+Rails protokolliert Fehler in Web- und Job-Containern mit Schweregrad und
+zugelassener Fehlerklasse. Anfrageinhalte, freie Fehlermeldungen und
+Benutzerangaben werden vor der Ausgabe verworfen. Neue Login-Ereignisse
+enthalten nur das Ergebnis. Stündliche Jobs entfernen alte Einträge aus
+`login_attempts` und alte Fehlerdetails aus Solid Queue ab sechs Tagen.
+Fehlgeschlagene Jobs können weiterhin erneut gestartet werden.
+
+nginx protokolliert Routenmuster, HTTP-Status und Laufzeit. Der gemeinsame
+Kamal-Proxy wird im abgestimmten Wartungsfenster auf das
+[Websitejournal](https://github.com/marcbey/stuttgart-live.de/blob/main/infra/ansible/README.md#logaufbewahrung-f%C3%BCr-beide-websites)
+umgestellt. Bis zu diesem Wechsel laufen die Containerlogs über Docker.
+
 ### Frühere Website michaelrussgmbh.de
 
 Nach der Web-DNS-Umschaltung leiten `http://michaelrussgmbh.de`,
