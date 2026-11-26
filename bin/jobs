@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require_relative "../config/boot"
 require_relative "../app/lib/staging_readiness"
 StagingReadiness.verify!(project: "russ_live_de")
 require_relative "../config/environment"

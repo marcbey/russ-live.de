@@ -21,9 +21,10 @@ module Ops
       page = request(base, auth, connect_ip:)
       valid = page.code == "200" && page["x-request-id"] && page.body.bytesize > 200 && (!staging || noindex?(page))
       raise ReleaseSupport::Error, "Rails-HTTP-Smoke fehlgeschlagen" unless valid
-      media = page.body[/(?:src|poster)=["']([^"']*\/media\/[^"']+)["']/, 1]
-      if media
-        uri = base + CGI.unescapeHTML(media)
+      uri = page.body.scan(/(?:src|poster)=["']([^"']*\/media\/[^"']+)["']/).lazy
+        .map { |match| base + CGI.unescapeHTML(match.first) }
+        .find { |candidate| candidate.path&.start_with?("/media/") }
+      if uri
         allowed = staging ? STAGING_HOSTS : HOSTS
         raise ReleaseSupport::Error, "Medium verweist außerhalb des Zielprofils" unless uri.scheme == "https" && allowed.include?(uri.host)
         response = request(uri, auth, method: :head, connect_ip:)
