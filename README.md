@@ -427,8 +427,6 @@ Status und Logs:
 ```bash
 mise exec -- bin/kamal details -d hetzner
 mise exec -- bin/kamal app containers -d hetzner
-mise exec -- bin/kamal app logs -f -d hetzner -r web
-mise exec -- bin/kamal app logs -f -d hetzner -r job
 ```
 
 Rails protokolliert Fehler in Web- und Job-Containern mit Schweregrad und
@@ -441,7 +439,11 @@ Fehlgeschlagene Jobs können weiterhin erneut gestartet werden.
 nginx protokolliert Routenmuster, HTTP-Status und Laufzeit. Der gemeinsame
 Kamal-Proxy wird im abgestimmten Wartungsfenster auf das
 [Websitejournal](https://github.com/marcbey/stuttgart-live.de/blob/main/infra/ansible/README.md#logaufbewahrung-f%C3%BCr-beide-websites)
-umgestellt. Bis zu diesem Wechsel laufen die Containerlogs über Docker.
+umgestellt. Das Journal bleibt auf der Systemplatte über Neustarts hinweg
+abrufbar. Seine Einträge werden stündlich ab sechs Tagen gelöscht.
+
+Als Host-Administrator liest du die letzten Einträge mit
+`sudo journalctl --namespace=live-web --since '15 min ago'`.
 
 ### Frühere Website michaelrussgmbh.de
 

@@ -1,7 +1,34 @@
 require "test_helper"
 require "tempfile"
+require "support/deploy_config_helper"
 
 class HetznerDeployConfigTest < ActiveSupport::TestCase
+  include DeployConfigHelper
+
+  test "app roles and the shared proxy use the local journal in staging and production" do
+    %w[hetzner staging].each do |destination|
+      raw = render_deploy_config(destination:)
+      config = Kamal::Configuration.new(raw.symbolize_keys, destination:)
+      config.roles.each do |role|
+        assert_includes role.logging_args, '"syslog"'
+        assert_includes role.logging_args, 'cache-disabled="true"'
+        assert_includes role.logging_args, 'syslog-address="unixgram:///run/website-log-filter.sock"'
+        assert_includes role.logging_args, 'syslog-format="rfc5424micro"'
+      end
+      assert_equal "", raw.dig("proxy", "run", "log_max_size")
+      assert_equal "syslog", raw.dig("proxy", "run", "options", "log-driver")
+      config = Kamal::Configuration.new(raw.symbolize_keys, destination:)
+      proxy_command = Kamal::Commands::Proxy.new(config, host: config.primary_host).run.join(" ")
+      assert_includes proxy_command, '--log-driver "syslog"'
+      assert_includes proxy_command, "cache-disabled=true"
+      refute_includes proxy_command, "max-size="
+      assert_includes raw.dig("proxy", "run", "options", "log-opt"),
+        "syslog-address=unixgram:///run/website-log-filter.sock"
+      assert_includes raw.dig("proxy", "run", "options", "log-opt"), "syslog-format=rfc5424micro"
+      assert_includes raw.dig("proxy", "run", "options", "log-opt"), "cache-disabled=true"
+    end
+  end
+
   test "reads shared deploy config values" do
     assert_equal "russ-live.schopp3r.de", HetznerDeployConfig.app_host
     assert_equal "46.225.224.194", HetznerDeployConfig.web_host
