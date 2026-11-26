@@ -3,7 +3,10 @@
     <article class="job-content">
       <div class="job-detail-actions">
         <%= link_to t("jobs.detail.back_short"), jobs_path(anchor: "jobs-list"), class: "press-detail-back-button job-detail-back-button" %>
-        <%= link_to t("jobs.apply_now"), "#job-application", class: "public-button public-button-primary section-button job-detail-apply-button" %>
+        <div class="job-detail-application-action">
+          <%= link_to t("jobs.apply_now"), "#job-application", class: "public-button public-button-primary section-button job-detail-apply-button" %>
+          <%= render "pages/applicant_privacy_link" %>
+        </div>
         <%= public_backend_link(
               label: t("public.actions.edit"),
               path: backend_jobs_path(job_id: @selected_job.id),
@@ -197,6 +200,7 @@
 
           <p class="form-hint job-application-mail-hint"><%= t("jobs.detail.form.email_hint") %></p>
 
+          <%= render "pages/applicant_privacy_link" %>
           <button class="public-button public-button-primary section-button job-application-submit" type="submit"><%= t("jobs.detail.form.submit") %></button>
         </form>
       </div>
@@ -219,6 +223,7 @@
             <a href="tel:<%= @selected_job.contact.tel_href %>"><%= @selected_job.contact.phone_number %></a>
           </p>
           <p class="job-contact-email"><%= mail_to @selected_job.contact.email, @selected_job.contact.email, subject: @selected_job.application_email_subject %></p>
+          <%= render "pages/applicant_privacy_link" %>
           <%= public_backend_link(
                 label: t("public.actions.edit"),
                 path: backend_contacts_path(contact_id: @selected_job.contact.id),

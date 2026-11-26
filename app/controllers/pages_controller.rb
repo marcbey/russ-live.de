@@ -14,6 +14,7 @@ class PagesController < ApplicationController
     kontakt: {},
     impressum: {},
     datenschutz: {},
+    bewerber_datenschutz: {},
     agb: {},
     jugendschutz: {}
   }.freeze
@@ -31,7 +32,7 @@ class PagesController < ApplicationController
     @home_events_page = home_events_page
     @home_events = @home_events_page.events
     @home_events_next_cursor = @home_events_page.next_cursor
-    @stuttgart_live_sks_highlights_url = "#{StuttgartLiveUrls.base_url}/highlights?filter=sks"
+    @stuttgart_live_russ_live_url = StuttgartLiveUrls.russ_live_url
   end
 
   def homepage_lane
@@ -53,7 +54,7 @@ class PagesController < ApplicationController
     @home_events_page = home_events_page
     @home_events = @home_events_page.events
     @home_events_next_cursor = @home_events_page.next_cursor
-    @stuttgart_live_sks_highlights_url = "#{StuttgartLiveUrls.base_url}/highlights?filter=sks"
+    @stuttgart_live_russ_live_url = StuttgartLiveUrls.russ_live_url
   end
   def referenzen
     references = Reference.published.with_image.ordered.to_a
@@ -88,6 +89,10 @@ class PagesController < ApplicationController
 
   def datenschutz
     set_editable_page(:datenschutz)
+  end
+
+  def bewerber_datenschutz
+    set_editable_page(:bewerber_datenschutz)
   end
 
   def agb

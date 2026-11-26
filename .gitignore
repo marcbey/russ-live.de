@@ -1,4 +1,5 @@
 output/
+.DS_Store
 
 # Environment and deploy secrets
 /.env

@@ -1,7 +1,7 @@
 class EditablePage < RussRecord
   STATUSES = %w[draft published].freeze
   LOCALES = %w[de en].freeze
-  PAGE_KEYS = %w[kontakt impressum datenschutz agb jugendschutz].freeze
+  PAGE_KEYS = %w[kontakt impressum datenschutz bewerber_datenschutz agb jugendschutz].freeze
   CONTACT_LEGACY_FIELDS = %w[location directions address_html office_contact_html ticket_hotline].freeze
 
   PAGE_DEFINITIONS = {
@@ -24,6 +24,13 @@ class EditablePage < RussRecord
       public_path: "/datenschutz",
       i18n_key: "datenschutz",
       meta_key: "datenschutz",
+      fields: [ { name: "body_html", label: "Text", rows: 28 } ]
+    },
+    "bewerber_datenschutz" => {
+      label: "Bewerber-Datenschutz",
+      public_path: "/datenschutz/bewerber",
+      i18n_key: "bewerber_datenschutz",
+      meta_key: "bewerber_datenschutz",
       fields: [ { name: "body_html", label: "Text", rows: 28 } ]
     },
     "agb" => {

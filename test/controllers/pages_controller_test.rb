@@ -235,8 +235,10 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get datenschutz_path
 
     assert_response :success
-    assert_includes response.body, "Host Europe"
-    assert_includes response.body, "Google Analytics"
+    assert_includes response.body, "Hetzner Online GmbH"
+    assert_includes response.body, "Microsoft 365 / Exchange Online"
+    assert_not_includes response.body, "Google Analytics"
+    assert_select "a[href=?]", bewerber_datenschutz_path
 
     post locale_path(:en), params: { return_to: agb_path }
     assert_redirected_to agb_path
@@ -273,6 +275,33 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Live Impressum"
     assert_includes response.body, "Live Rechtstext"
     assert_not_includes response.body, "Entwurfstext"
+  end
+
+  test "applicant privacy is available in both languages before applying to every published job" do
+    { de: "Datenschutzinformation für Bewerberinnen und Bewerber", en: "Privacy information for job applicants" }.each do |locale, label|
+      post locale_path(locale), params: { return_to: jobs_path }
+      get jobs_path
+      assert_select ".job-privacy-link[href=?]", bewerber_datenschutz_path, text: label
+
+      Job.published.each do |job|
+        get job_path(job.slug)
+        assert_response :success
+        assert_select ".job-detail-application-action .job-privacy-link[href=?][target='_blank'][rel='noopener']", bewerber_datenschutz_path, text: label
+        assert_select ".job-application-form .job-privacy-note + button[type='submit']"
+        assert_select ".job-application-form .job-privacy-link[href=?]", bewerber_datenschutz_path, text: label
+        assert_select ".job-contact .job-privacy-link[href=?]", bewerber_datenschutz_path, text: label if job.contact.present?
+        assert_select ".job-application-form input[type='checkbox']:not([name='status[]'])", count: 0
+      end
+
+      get bewerber_datenschutz_path
+      assert_response :success
+      assert_select "html[lang=?]", locale.to_s
+      assert_select "h1", text: /#{Regexp.escape(label)}/
+      assert_select ".legal-copy h2", count: 12
+      assert_includes response.body, "Microsoft 365 / Exchange Online"
+      assert_includes response.body, locale == :de ? "sechs Monate nach Abschluss" : "six months after completion"
+      assert_not_includes response.body, "translation missing"
+    end
   end
 
   test "hides rails view annotation comments from editable page content" do
@@ -354,15 +383,76 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "?locale=fr"
   end
 
-  test "legacy locale query parameter sets cookie and redirects to clean url" do
+  test "legacy locale query parameter selects language only for that request" do
     get root_path(locale: :en)
 
-    assert_redirected_to root_path
-    follow_redirect!
     assert_response :success
     assert_select "html[lang=?]", "en"
     assert_includes response.body, "We are your local promoter for Stuttgart"
-    assert_not_includes response.body, "?locale="
+    assert_nil cookies[:russ_live_locale]
+
+    get root_path, headers: { "HTTP_ACCEPT_LANGUAGE" => "de" }
+    assert_select "html[lang=?]", "de"
+  end
+
+  test "language choice expires after three calendar months without renewal on visits" do
+    travel_to Time.utc(2026, 11, 30, 12) do
+      post locale_path(:en), params: { return_to: jobs_path }
+      header = Array(response.headers["set-cookie"]).find { |value| value.start_with?("russ_live_locale=") }
+      assert header
+      assert_equal 3.months.from_now, Time.httpdate(header[/expires=([^;]+)/i, 1])
+      assert_includes header.downcase, "httponly"
+      assert_includes header.downcase, "samesite=lax"
+    end
+
+    travel_to Time.utc(2027, 2, 27, 12) do
+      get jobs_path, headers: { "HTTP_ACCEPT_LANGUAGE" => "de" }
+      assert_select "html[lang=?]", "en"
+      assert_not Array(response.headers["set-cookie"]).any? { |value| value.start_with?("russ_live_locale=") }
+    end
+
+    travel_to Time.utc(2027, 3, 1, 12) do
+      get jobs_path, headers: { "HTTP_ACCEPT_LANGUAGE" => "de" }
+      assert_select "html[lang=?]", "de"
+    end
+  end
+
+  test "browser language and invalid choices do not create a language cookie" do
+    get root_path, headers: { "HTTP_ACCEPT_LANGUAGE" => "en" }
+    assert_select "html[lang=?]", "en"
+    assert_nil cookies[:russ_live_locale]
+
+    post locale_path(:fr), params: { return_to: root_path }
+    assert_nil cookies[:russ_live_locale]
+  end
+
+  test "old long lived language cookies are deleted without carrying over the preference" do
+    cookies[:russ_live_locale] = "en"
+    get jobs_path, headers: { "HTTP_ACCEPT_LANGUAGE" => "de" }
+
+    assert_select "html[lang=?]", "de"
+    header = Array(response.headers["set-cookie"]).find { |value| value.start_with?("russ_live_locale=") }
+    assert header
+    assert_operator Time.httpdate(header[/expires=([^;]+)/i, 1]), :<, Time.current
+    assert_not cookies[:russ_live_locale].present?
+  end
+
+  test "active language choice replaces an old cookie immediately" do
+    cookies[:russ_live_locale] = "de"
+    post locale_path(:en), params: { return_to: jobs_path }
+    follow_redirect!
+
+    assert_select "html[lang=?]", "en"
+    assert cookies[:russ_live_locale].present?
+    assert_not_equal "en", cookies[:russ_live_locale]
+  end
+
+  test "language controls explain storage duration in both languages" do
+    { de: "Sprachwahl wird für 3 Monate gespeichert.", en: "Your language choice is saved for 3 months." }.each do |locale, notice|
+      get jobs_path, headers: { "HTTP_ACCEPT_LANGUAGE" => locale.to_s }
+      assert_select ".language-switch #language-storage-notice", text: notice
+      assert_select ".language-switch-button[aria-describedby='language-storage-notice']", count: 2
+    end
   end
 
   test "language switch posts current route and non-locale query parameters without visible locale" do
@@ -752,7 +842,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
       assert_select "#services-events-title.services-events-title", text: I18n.t("pages.services.events.title")
       assert_select ".home-events-head", count: 0
       assert_select ".event-slider-card", text: /Services Artist/
-      assert_select ".services-events-all-button[href=?]", "https://www.stuttgart-live.de/highlights?filter=sks",
+      assert_select ".services-events-all-button[href=?]", "https://stuttgart-live.de/russ-live",
                     text: I18n.t("pages.services.events.show_all")
     end
   end
@@ -1000,7 +1090,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "WILHELMINE - magisch Tour 2026 auf STUTTGARTLIVE"
     assert_includes response.body, "https://www.stuttgart-live.de/events/wilhelmine-magisch-tour-2026"
     assert_not_includes response.body, "https://tickets.example.test/evt-1"
-    assert_select ".home-events-all-button[href=?]", "https://www.stuttgart-live.de/highlights?filter=sks",
+    assert_select ".home-events-all-button[href=?]", "https://stuttgart-live.de/russ-live",
                   text: I18n.t("pages.home.events.show_all")
     assert_operator response.body.index("home-events-all-button"), :>, response.body.index("home-events-viewport")
     assert_not_includes response.body, "Alle Veranstaltungen auf Stuttgart-live.de"

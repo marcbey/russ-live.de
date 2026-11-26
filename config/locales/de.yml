@@ -43,6 +43,7 @@ de:
       contact: "Kontakt"
       language_aria: "Sprache wechseln"
       language_switch: "Zur Sprache %{language} wechseln"
+      language_storage_notice: "Sprachwahl wird für 3 Monate gespeichert."
       menu_open: "Menü öffnen"
       menu_close: "Menü schließen"
       submenu_open: "%{menu} Untermenü öffnen"
@@ -342,8 +343,8 @@ de:
         phone: "Telefon"
         timetable: "VVS-Fahrplanauskunft"
       paragraphs:
-        location: "Die Konzertdirektion Russ befindet sich im Herzen der Stuttgarter Innenstadt am Charlottenplatz 17. In direkter Nachbarschaft liegen das Neue Schloss und das Landesmuseum Württemberg."
-        directions: "Vom Hauptbahnhof kommend, nehmen Sie die Stadtbahn bis zur Haltestelle Charlottenplatz und gehen zum Ausgang Holzstraße oder Planie. Hier geht es zum Fahrplan."
+        location: "Die Konzertdirektion Russ befindet sich mitten in Stuttgart am Charlottenplatz 17. Gleich nebenan liegen das ifa und das Amadeus im ruhigen Innenhof des Alten Waisenhauses."
+        directions: "Vom Hauptbahnhof kommend, nehmen Sie die Stadtbahn bis zur Haltestelle Charlottenplatz und gehen zum Ausgang Holzstraße oder Planie."
       form:
         title: "Nachricht schreiben"
         name: "Name"
@@ -356,16 +357,22 @@ de:
     impressum:
       meta:
         title: "Impressum | Russ Live"
-        description: "Impressum der SKS Michael Russ GmbH."
+        description: "Impressum der Südwestdeutschen Konzertdirektion Michael Russ GmbH."
       title: "Impressum"
       member: "Mitglied des Verbandes Deutscher Konzertdirektionen e.V."
       liability: "Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich."
     datenschutz:
       meta:
         title: "Datenschutz | Russ Live"
-        description: "Datenschutz der SKS Michael Russ GmbH."
-      title: "Datenschutz"
+        description: "Datenschutzerklärung der Südwestdeutschen Konzertdirektion Michael Russ GmbH."
+      title: "Datenschutzerklärung"
       placeholder: "Sorry, aber Du suchst gerade nach etwas, was hier nicht ist."
+    bewerber_datenschutz:
+      meta:
+        title: "Datenschutz für Bewerberinnen und Bewerber | Russ Live"
+        description: "Informationen zur Verarbeitung personenbezogener Daten im Bewerbungsverfahren bei Russ Live."
+      title: "Datenschutzinformation für Bewerberinnen und Bewerber nach Art. 13 DSGVO"
+      edit: "Bewerber-Datenschutz bearbeiten"
     agb:
       meta:
         title: "AGB | Russ Live"
@@ -410,6 +417,7 @@ de:
       fallback_partner: "Referenz"
       service_reference: "Service-Referenz"
   jobs:
+    applicant_privacy: "Datenschutzinformation für Bewerberinnen und Bewerber"
     apply_now: "Jetzt bewerben"
     back_to_overview: "Zur Übersicht"
     list_action: "Mehr Infos"

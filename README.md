@@ -1,7 +1,7 @@
 # Russ Live
 
 Rails-Anwendung für den Relaunch von `russ-live.de`. Die Anwendung verwendet Ruby
-`4.0.2` über `mise` und Rails `8.1.3.1`.
+`4.0.10` über `mise` und Rails `8.1.4.1`.
 
 ## Wichtig
 
@@ -135,6 +135,11 @@ Profil, den hinterlegten Ansprechpartner und das Bewerbungsformular. Das Formula
 bereitet eine E-Mail mit den persönlichen Angaben und den angekreuzten Angaben
 zu Schule, Studium oder Erwerbsstatus vor. Mehrere Angaben sind möglich;
 Bewerbungsunterlagen werden anschließend im eigenen E-Mail-Programm angehängt.
+Die gesonderte Datenschutzinformation für Bewerberinnen und Bewerber steht unter
+`/datenschutz/bewerber`. Sie ist auf der Jobübersicht und bei jeder Stelle direkt
+am Bewerbungsbutton, vor `E-Mail vorbereiten` und beim E-Mail-Kontakt verlinkt.
+Die Links öffnen einen neuen Tab, damit bereits eingegebene Angaben erhalten
+bleiben. Eine zusätzliche Einwilligungs-Checkbox gibt es nicht.
 Job- und Ansprechpartnerbilder werden unter
 `storage/job_images` beziehungsweise `storage/contact_images` abgelegt und beim
 Upload ebenfalls als komprimierte WebP-Dateien gespeichert.
@@ -160,16 +165,41 @@ Bei redaktionellen Seiten wird die ausgewählte Sprachversion geöffnet.
 Änderungen müssen vorher gespeichert und gegebenenfalls veröffentlicht werden;
 ungespeicherte Änderungen und Entwürfe erscheinen dort nicht.
 
-Die redaktionellen Seiten `Kontakt`, `Impressum`, `Datenschutz`, `AGB` und
+Die redaktionellen Seiten `Kontakt`, `Impressum`, `Datenschutz`, `Bewerber-Datenschutz`, `AGB` und
 `Jugendschutz` werden im Backend unter `/backend/pages` gepflegt. Jede Seite
 gibt es getrennt für Deutsch und Englisch. `Speichern` legt Änderungen als
 Entwurf ab; erst `Veröffentlichen` übernimmt sie auf die öffentliche Seite.
 Über `Vorschau anzeigen` kann der aktuelle Entwurf vor dem Veröffentlichen
 kontrolliert werden.
 
+Die Rechtstexte für Impressum und Datenschutz entsprechen den gelieferten
+Fassungen vom 9. November 2026, die Bewerberinformation der Fassung vom
+6. November 2026. Die deutschen Texte wurden übernommen und für Englisch
+übersetzt. Die englischen Übersetzungen wurden nicht gesondert vom
+Datenschutzbeauftragten geliefert und sollten bei der inhaltlichen Abnahme
+mitgeprüft werden.
+
+Die zugehörige Datenmigration übernimmt die Texte einmalig in die gespeicherten
+Seiten beider Sprachen. Auch schon vorhandene veröffentlichte Texte werden
+aktualisiert; spätere Bearbeitungen im Backend bleiben maßgeblich. Bestehende
+unveröffentlichte Entwürfe werden erhalten und als `Änderungen gespeichert`
+angezeigt. Vor einer späteren Veröffentlichung solcher Entwürfe die neuen
+Rechtstexte berücksichtigen, damit keine alte Fassung zurückkehrt. Bei lokalen
+oder neuen Installationen ohne gespeicherte Seiten liefern die Vorlagen dieselben
+Texte. Die Migration enthält dafür einen festen Stand unter `db/data`; dieser
+wird bei späteren Textänderungen nicht nachträglich bearbeitet.
+
+Die Textübernahme ändert weder Cookie-Laufzeiten noch die Aufbewahrung von
+Server-Logs oder Bewerbungs-E-Mails. Die tatsächliche Log-Aufbewahrung und die
+Löschung in Microsoft 365 müssen getrennt betrieblich geprüft werden.
+
 Die Kontaktseite verwaltet Titel und Kontakttext als ein HTML-Feld.
 Direkte Aktionen für Telefon, E-Mail und die VVS-Fahrplanauskunft stehen
 vor dem längeren Text und dem Standortfoto.
+Die Textkorrektur vom 26. November 2026 wird einmalig auch in gespeicherte
+Kontaktseiten beider Sprachen übernommen. Dabei werden nur die bisherigen
+Standortbeschreibungen und der zusätzliche Fahrplanhinweis ersetzt; andere
+Inhalte und der Veröffentlichungsstatus bleiben erhalten.
 
 ## Mehrsprachigkeit
 
@@ -178,7 +208,17 @@ Englisch ausgeliefert. Ohne gespeicherte Auswahl nutzt die App die im Browser
 bevorzugte Sprache, sofern sie `de` oder `en` ist; andernfalls fällt sie auf
 Deutsch zurück.
 
-Die Sprache wird über den Header gewechselt und in einem Cookie gespeichert.
+Nur die aktive Sprachwahl über DE/EN im Header speichert das Sprachcookie
+`russ_live_locale` für drei Monate. Der Hinweis steht direkt bei der Auswahl.
+Normale Seitenbesuche verlängern diese Frist nicht; die Browsersprache allein
+setzt kein Sprachcookie. Das Cookie enthält nur die Sprachwahl, technisch
+signiert und mit Ablaufdatum, und dient keinem weiteren Zweck.
+Alte unsignierte Sprachcookies mit der bisherigen langen Laufzeit werden beim
+nächsten Besuch gelöscht. Danach gilt die Browsersprache, bis erneut aktiv eine
+Sprache gewählt wird. Ohne erneuten Besuch kann die Website ein bereits im
+Browser gespeichertes Cookie nicht nachträglich entfernen.
+Bestehende Links mit gültigem `locale`-Parameter (auch aus dem Backend) zeigen
+die angegebene Sprache nur für diesen Aufruf, ohne sie zu speichern.
 Dadurch bleiben die öffentlichen URLs sauber; es gibt keine lokalisierten Pfade
 und keinen sichtbaren `locale`-Query-Parameter in den generierten Links.
 Statische UI-, Marketing-, Presse-, Job- und Rechtstexte liegen in
@@ -237,6 +277,9 @@ mise exec -- bin/dev
 ```
 
 Die Anwendung läuft danach standardmäßig unter `http://127.0.0.1:3001`.
+Beim Rails-Start werden zuerst die in `Gemfile.lock` festgelegten Bibliotheken
+aktiviert. So lädt auch die anschließende Staging-Prüfung die passende
+`json`-Version, wenn lokal mehrere Versionen installiert sind.
 
 Öffentliche Seiten laden die `frontend`-Bundles, Login und Backoffice die
 `backend`-Bundles. Die Einstiegspunkte liegen unter `app/javascript` und
@@ -254,6 +297,8 @@ mise exec -- bin/ci
 ```
 
 `bin/ci` bündelt die relevanten Tests, Security-Checks und Linter.
+Die Gem-Sicherheitsprüfung aktualisiert vorher ihre Meldungsdatenbank, damit
+lokale Prüfungen dieselben aktuellen Hinweise wie GitHub berücksichtigen.
 
 Die vollständige Prüfung benötigt eine laufende Docker-Engine, weil die
 Staging-Tests darin vorübergehende PostgreSQL-Datenbanken starten. Unter macOS
@@ -267,7 +312,7 @@ colima start --profile russ-ci --cpus 2 --memory 2 --disk 6 --root-disk 8 \
 
 DOCKER_CONTEXT=colima-russ-ci \
 MISE_DATA_DIR="$HOME/.local/share/mise" \
-MISE_RUBY_VERSION=4.0.2 \
+MISE_RUBY_VERSION=4.0.10 \
 mise exec -- bin/ci
 ```
 
@@ -415,6 +460,33 @@ DNS-Bestand; ein erfolgreicher Postfachversand oder -empfang wurde nicht geteste
 
 ## CI, Staging und Produktionsfreigabe über GitHub
 
+### Rein lesende Log-Diagnose
+
+`Read-only Log Retention Audit` lässt sich unter GitHub Actions manuell auf
+`main` starten. Der Lauf verwendet den bestehenden SSH-Zugang des Environments
+`staging`, liest aber ausschließlich Metadaten der Russ-Produktionscontainer
+und des gemeinsamen Proxys. Er startet keine Container und ändert keine
+Serverkonfiguration. Besucherdaten, Logmeldungen und Secret-Werte werden nicht
+ausgegeben; der Bericht enthält Logoptionen und Zeitstempel einer begrenzten
+Stichprobe. Das Ergebnis ist drei Tage als GitHub-Artefakt verfügbar.
+
+Die Stichprobe belegt keine feste Löschfrist. Externe Sicherungen und eigene
+Aufräumjobs sind damit nicht vollständig geprüft. Fehlende Leserechte werden
+als Einschränkung berichtet. Vor Änderungen an der gemeinsamen Logaufbewahrung
+ist weiterhin das Betriebsrunbook maßgeblich.
+
+Für ausdrücklich beauftragte Diagnoseänderungen ohne Servereingriff kann der
+Merge-Commit die Markierung `[no deploy]` tragen. PR- und Main-CI laufen normal,
+aber `Deploy Staging` wird für diesen Commit übersprungen; dadurch entsteht
+auch keine automatische Produktionsfreigabe. Die Markierung ersetzt keine
+Prüfung oder Freigabe und veröffentlicht auch keine App-Änderungen. Der nächste
+reguläre Deploy enthält wieder alle bis dahin gemergten Änderungen.
+
+Den Datenschutzfilter lokal prüfen:
+`python3 -m unittest discover -s test/ops -p log_retention_audit_test.py`.
+
+### Regulärer Veröffentlichungsablauf
+
 Für die Zusammenarbeit mit Agenten bedeutet **„Commit und Push“** den gesamten
 Weg bis Staging: lokale Prüfungen, Commit und Push, PR mit erfolgreicher CI,
 Merge nach `main` sowie erfolgreiche Main-CI und `Deploy Staging`. Der Agent
@@ -439,11 +511,21 @@ oder ungültiges Artefakt führt zum Abbruch; es gibt keinen Ersatz-Build in Sta
 
 Installierte Gems werden in CI, Staging und beim Produktionsdeploy anhand von
 Betriebssystem, Architektur, Ruby-Version und `Gemfile.lock` wiederverwendet.
+Ruby `4.0.10` enthält die [Sicherheitskorrekturen vom 18. November 2026](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/)
+für reguläre Ausdrücke und Zeichenumwandlungen. Lokal, in CI und im App-Image
+gilt dieselbe Ruby-Version; nach dem Aktualisieren zuerst `mise install` ausführen.
+Rails ist mindestens auf `8.1.4.1` festgelegt. Die Sicherheitsupdates für Rails,
+Rack, Nokogiri, Addressable, Loofah und den Rails-HTML-Sanitizer sind in
+`Gemfile.lock` enthalten; nach dem Aktualisieren des Repositorys installiert
+`mise exec -- bundle install` die geprüften Versionen.
 Für die CSS-Bereinigung ist `crass` mindestens in Version `1.0.8` erforderlich;
 das Sicherheitsupdate schließt eine Umgehung der CSS-Filterung.
-Die für Deployments verwendete SSH-Bibliothek `net-ssh` ist auf `7.3.8`
-aktualisiert; damit sind die von der Sicherheitsprüfung gemeldeten Lücken
-der bisherigen Version `7.3.3` geschlossen.
+Die für Deployments verwendete SSH-Bibliothek `net-ssh` ist auf `7.3.10`
+aktualisiert; damit sind auch die im November 2026 gemeldeten Lücken bei
+widerrufenen Host-Schlüsseln und der TLS-Prüfung des HTTPS-Proxys geschlossen.
+Die statische Sicherheitsprüfung verwendet Brakeman `8.1.1`.
+Puma `8.0.4` und MessagePack (`msgpack`) `1.8.7` enthalten die im November 2026
+gemeldeten Sicherheitskorrekturen für diese Bibliotheken.
 Produktion liest den Cache passend zum festgelegten Kontrollcode und führt
 weiterhin `bundle install` aus. Docker speichert zusätzlich die Build-Layer im
 eigenen Russ-Cache. Ein fehlender Cache führt zur regulären Installation oder

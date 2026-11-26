@@ -43,6 +43,7 @@ en:
       contact: "Contact"
       language_aria: "Change language"
       language_switch: "Switch to %{language}"
+      language_storage_notice: "Your language choice is saved for 3 months."
       menu_open: "Open menu"
       menu_close: "Close menu"
       submenu_open: "Open %{menu} submenu"
@@ -342,8 +343,8 @@ en:
         phone: "Phone"
         timetable: "VVS journey planner"
       paragraphs:
-        location: "Konzertdirektion Russ is located in the heart of downtown Stuttgart at Charlottenplatz 17. The New Palace and the Landesmuseum Württemberg are nearby."
-        directions: "Coming from the main station, take the Stadtbahn to Charlottenplatz and use the Holzstraße or Planie exit. This is the way to the timetable."
+        location: "Konzertdirektion Russ is located in central Stuttgart at Charlottenplatz 17. Right next door are the ifa and Amadeus in the quiet courtyard of the Old Orphanage (Altes Waisenhaus)."
+        directions: "Coming from the main station, take the Stadtbahn to Charlottenplatz and use the Holzstraße or Planie exit."
       form:
         title: "Write a message"
         name: "Name"
@@ -356,16 +357,22 @@ en:
     impressum:
       meta:
         title: "Imprint | Russ Live"
-        description: "Imprint of SKS Michael Russ GmbH."
+        description: "Legal notice of Südwestdeutsche Konzertdirektion Michael Russ GmbH."
       title: "Imprint"
       member: "Member of the Association of German Concert Agencies."
       liability: "Despite careful content checks, we assume no liability for the content of external links. The operators of the linked pages are solely responsible for their content."
     datenschutz:
       meta:
         title: "Privacy | Russ Live"
-        description: "Privacy information of SKS Michael Russ GmbH."
-      title: "Privacy"
+        description: "Privacy notice of Südwestdeutsche Konzertdirektion Michael Russ GmbH."
+      title: "Privacy notice"
       placeholder: "Sorry, you are looking for something that is not here."
+    bewerber_datenschutz:
+      meta:
+        title: "Privacy information for job applicants | Russ Live"
+        description: "Information about the processing of personal data during recruitment at Russ Live."
+      title: "Privacy information for job applicants under Article 13 GDPR"
+      edit: "Edit applicant privacy information"
     agb:
       meta:
         title: "Terms | Russ Live"
@@ -410,6 +417,7 @@ en:
       fallback_partner: "Reference"
       service_reference: "Service reference"
   jobs:
+    applicant_privacy: "Privacy information for job applicants"
     apply_now: "Apply now"
     back_to_overview: "Back to overview"
     list_action: "More info"
