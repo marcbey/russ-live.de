@@ -343,8 +343,8 @@ de:
         phone: "Telefon"
         timetable: "VVS-Fahrplanauskunft"
       paragraphs:
-        location: "Die Konzertdirektion Russ befindet sich im Herzen der Stuttgarter Innenstadt am Charlottenplatz 17. In direkter Nachbarschaft liegen das Neue Schloss und das Landesmuseum Württemberg."
-        directions: "Vom Hauptbahnhof kommend, nehmen Sie die Stadtbahn bis zur Haltestelle Charlottenplatz und gehen zum Ausgang Holzstraße oder Planie. Hier geht es zum Fahrplan."
+        location: "Die Konzertdirektion Russ befindet sich mitten in Stuttgart am Charlottenplatz 17. Gleich nebenan liegen das ifa und das Amadeus im ruhigen Innenhof des Alten Waisenhauses."
+        directions: "Vom Hauptbahnhof kommend, nehmen Sie die Stadtbahn bis zur Haltestelle Charlottenplatz und gehen zum Ausgang Holzstraße oder Planie."
       form:
         title: "Nachricht schreiben"
         name: "Name"
