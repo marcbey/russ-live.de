@@ -44,6 +44,7 @@ de:
       language_aria: "Sprache wechseln"
       language_switch: "Zur Sprache %{language} wechseln"
       language_storage_notice: "Sprachwahl wird für 3 Monate gespeichert."
+      language_notice_close: "Hinweis schließen"
       menu_open: "Menü öffnen"
       menu_close: "Menü schließen"
       submenu_open: "%{menu} Untermenü öffnen"

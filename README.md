@@ -136,8 +136,8 @@ bereitet eine E-Mail mit den persönlichen Angaben und den angekreuzten Angaben
 zu Schule, Studium oder Erwerbsstatus vor. Mehrere Angaben sind möglich;
 Bewerbungsunterlagen werden anschließend im eigenen E-Mail-Programm angehängt.
 Die gesonderte Datenschutzinformation für Bewerberinnen und Bewerber steht unter
-`/datenschutz/bewerber`. Sie ist auf der Jobübersicht und bei jeder Stelle direkt
-am Bewerbungsbutton, vor `E-Mail vorbereiten` und beim E-Mail-Kontakt verlinkt.
+`/datenschutz/bewerber`. Sie ist bei jeder Stelle einmal unten im Bewerbungsformular direkt
+vor `E-Mail vorbereiten` verlinkt. Der obere Bewerbungsbutton führt zu diesem Formular.
 Die Links öffnen einen neuen Tab, damit bereits eingegebene Angaben erhalten
 bleiben. Eine zusätzliche Einwilligungs-Checkbox gibt es nicht.
 Job- und Ansprechpartnerbilder werden unter
@@ -209,7 +209,9 @@ bevorzugte Sprache, sofern sie `de` oder `en` ist; andernfalls fällt sie auf
 Deutsch zurück.
 
 Nur die aktive Sprachwahl über DE/EN im Header speichert das Sprachcookie
-`russ_live_locale` für drei Monate. Der Hinweis steht direkt bei der Auswahl.
+`russ_live_locale` für drei Monate. Am Desktop erscheint der Hinweis bei Hover oder Tastaturfokus
+an der Sprachauswahl. Mobil erscheint nach der aktiven Auswahl ein schließbarer
+Hinweis, der beim nächsten Seitenwechsel wieder verschwindet.
 Normale Seitenbesuche verlängern diese Frist nicht; die Browsersprache allein
 setzt kein Sprachcookie. Das Cookie enthält nur die Sprachwahl, technisch
 signiert und mit Ablaufdatum, und dient keinem weiteren Zweck.

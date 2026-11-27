@@ -281,15 +281,15 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     { de: "Datenschutzinformation für Bewerberinnen und Bewerber", en: "Privacy information for job applicants" }.each do |locale, label|
       post locale_path(locale), params: { return_to: jobs_path }
       get jobs_path
-      assert_select ".job-privacy-link[href=?]", bewerber_datenschutz_path, text: label
+      assert_select ".job-privacy-link", count: 0
 
       Job.published.each do |job|
         get job_path(job.slug)
         assert_response :success
-        assert_select ".job-detail-application-action .job-privacy-link[href=?][target='_blank'][rel='noopener']", bewerber_datenschutz_path, text: label
+        assert_select ".job-privacy-link", count: 1
+        assert_select ".job-application-form .job-privacy-link[href=?][target='_blank'][rel='noopener']", bewerber_datenschutz_path, text: label
         assert_select ".job-application-form .job-privacy-note + button[type='submit']"
         assert_select ".job-application-form .job-privacy-link[href=?]", bewerber_datenschutz_path, text: label
-        assert_select ".job-contact .job-privacy-link[href=?]", bewerber_datenschutz_path, text: label if job.contact.present?
         assert_select ".job-application-form input[type='checkbox']:not([name='status[]'])", count: 0
       end
 
@@ -445,6 +445,27 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "html[lang=?]", "en"
     assert cookies[:russ_live_locale].present?
     assert_not_equal "en", cookies[:russ_live_locale]
+  end
+
+  test "language change notice appears only after an active valid selection" do
+    get jobs_path
+    assert_select ".language-change-notice", count: 0
+
+    post locale_path(:en), params: { return_to: jobs_path }
+    follow_redirect!
+    assert_select ".language-change-notice [role='status']", text: "Your language choice is saved for 3 months."
+    assert_select ".language-change-notice button[aria-label='Close notice']"
+
+    get jobs_path
+    assert_select ".language-change-notice", count: 0
+
+    post locale_path(:de), params: { return_to: jobs_path }
+    follow_redirect!
+    assert_select ".language-change-notice [role='status']", text: "Sprachwahl wird für 3 Monate gespeichert."
+
+    post locale_path(:invalid), params: { return_to: jobs_path }
+    follow_redirect!
+    assert_select ".language-change-notice", count: 0
   end
 
   test "language controls explain storage duration in both languages" do
