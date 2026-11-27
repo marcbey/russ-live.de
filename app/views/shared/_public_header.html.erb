@@ -56,7 +56,7 @@
                         aria: { current: ("true" if I18n.locale == locale), describedby: "language-storage-notice" } %>
         <% end %>
       </div>
-      <p class="language-storage-notice" id="language-storage-notice"><%= t("public.header.language_storage_notice") %></p>
+      <div class="language-storage-notice" id="language-storage-notice"><%= t("public.header.language_storage_notice") %></div>
     </div>
   </nav>
 
@@ -66,3 +66,10 @@
     <span></span>
   </button>
 </header>
+
+<% if flash[:language_changed] %>
+  <div class="language-change-notice" data-controller="language-notice" data-turbo-temporary>
+    <div role="status"><%= t("public.header.language_storage_notice") %></div>
+    <button type="button" data-action="language-notice#dismiss" aria-label="<%= t("public.header.language_notice_close") %>">×</button>
+  </div>
+<% end %>

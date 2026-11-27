@@ -3,7 +3,10 @@ class LocalesController < ApplicationController
 
   def update
     locale = normalized_locale(params[:locale])
-    write_locale_cookie(locale) if locale.present?
+    if locale.present?
+      write_locale_cookie(locale)
+      flash[:language_changed] = true
+    end
 
     redirect_to safe_return_to_path, status: :see_other, allow_other_host: false
   end

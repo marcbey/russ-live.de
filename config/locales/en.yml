@@ -44,6 +44,7 @@ en:
       language_aria: "Change language"
       language_switch: "Switch to %{language}"
       language_storage_notice: "Your language choice is saved for 3 months."
+      language_notice_close: "Close notice"
       menu_open: "Open menu"
       menu_close: "Close menu"
       submenu_open: "Open %{menu} submenu"

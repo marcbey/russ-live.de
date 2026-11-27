@@ -269,6 +269,8 @@
   font-size: clamp(.85rem, 1vw, 1rem);
   font-weight: 600;
   gap: 0;
+  justify-content: center;
+  position: relative;
   min-height: var(--header-nav-height);
   padding: 0 clamp(16px, 1.6vw, 24px);
 }
@@ -280,12 +282,65 @@
 }
 
 .language-storage-notice {
-  font-size: .75rem;
+  display: none;
+  background: #fff;
+  border: 1px solid var(--line);
+  color: #111;
+  font-size: .875rem;
   font-weight: 400;
-  line-height: 1.3;
-  margin: 0 0 .5rem;
-  max-width: 11rem;
-  text-align: center;
+  line-height: 1.4;
+  padding: .75rem 1rem;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  width: 15rem;
+  text-align: left;
+  z-index: 1;
+}
+
+@media (min-width: 1071px) {
+  .language-switch:focus-within .language-storage-notice {
+    display: block;
+  }
+}
+
+@media (min-width: 1071px) and (hover: hover) {
+  .language-switch:hover .language-storage-notice {
+    display: block;
+  }
+}
+
+.language-change-notice {
+  display: none;
+}
+
+@media (max-width: 1070px), (hover: none) {
+  .language-change-notice:not([hidden]) {
+    align-items: center;
+    background: #fff;
+    border: 1px solid var(--line);
+    box-shadow: 0 .25rem 1rem #0002;
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    color: #111;
+    display: flex;
+    font-size: .875rem;
+    gap: .5rem;
+    left: 1rem;
+    line-height: 1.4;
+    max-width: 24rem;
+    padding: .5rem .5rem .5rem 1rem;
+    position: fixed;
+    right: 1rem;
+    z-index: 120;
+  }
+
+  .language-change-notice button {
+    cursor: pointer;
+    flex-shrink: 0;
+    font-size: 1.5rem;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+  }
 }
 
 @media (min-width: 1071px) and (max-width: 1279px) {
@@ -617,7 +672,13 @@
 }
 
 @media (min-width: 1071px) {
+  .contact-quick-actions {
+    align-items: flex-start;
+    align-self: start;
+  }
+
   .contact-details {
+    align-content: start;
     grid-column: 2;
     grid-row: 1;
   }
@@ -3909,7 +3970,7 @@
 .home-events-brand-logo {
   display: block;
   height: auto;
-  margin: 0 0 10px;
+  margin: 0 0 clamp(1.5rem, 2vw, 2rem);
   width: clamp(118px, 8vw, 160px);
 }
 
@@ -7076,7 +7137,7 @@
   }
 
   .home-events-brand-logo {
-    margin-bottom: 12px;
+    margin-bottom: 1.5rem;
     width: clamp(112px, 34vw, 148px);
   }
 
@@ -7343,11 +7404,6 @@
     justify-content: flex-start;
     min-height: 62px;
     padding: 0 36px;
-  }
-
-  .site-header.is-menu-open .language-storage-notice {
-    max-width: none;
-    text-align: left;
   }
 
   .mobile-menu-button {
