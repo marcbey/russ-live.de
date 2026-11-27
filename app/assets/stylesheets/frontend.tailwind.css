@@ -3970,7 +3970,7 @@
 .home-events-brand-logo {
   display: block;
   height: auto;
-  margin: 0 0 10px;
+  margin: 0 0 clamp(1.5rem, 2vw, 2rem);
   width: clamp(118px, 8vw, 160px);
 }
 
@@ -7137,7 +7137,7 @@
   }
 
   .home-events-brand-logo {
-    margin-bottom: 12px;
+    margin-bottom: 1.5rem;
     width: clamp(112px, 34vw, 148px);
   }
 
