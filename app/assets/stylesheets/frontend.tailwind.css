@@ -678,6 +678,7 @@
   }
 
   .contact-details {
+    align-content: start;
     grid-column: 2;
     grid-row: 1;
   }
